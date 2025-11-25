@@ -11,21 +11,21 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PitchWall
+  - GoalBackArea
+  - PlayerForWall
+  - ScoringArea
+  - BallForPlayer
+  - BallForWallAndGoalKeeper
+  - PlayerProximityArea
+  - PlayerForTeammate
+  - PlayerForBall
+  - PlayerForTackle
+  - PlayerForOpponent
+  - PlayerForTackleAccept
+  - PlayerForPlayer
+  - InvisibleWall
+  - CameraTrigger
   - 
   - 
   - 

@@ -1,0 +1,4 @@
+
+    public class PlayerStatePassing: PlayerState {
+        
+    }

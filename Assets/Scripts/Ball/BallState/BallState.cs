@@ -1,0 +1,153 @@
+
+    using System;
+    using UnityEngine;
+
+    public class BallState {
+        public const float GRAVITY = 10.0f;
+        protected Animator animator; 
+        protected Rigidbody2D rb;
+        protected Ball ball=null;
+        public Player carrier=null;
+        protected ParticleSystem shotParticles;
+        protected BallStateData stateData = new BallStateData();
+        protected TriggerDetection playerDetectArea;
+        public event Action<Ball.State, BallStateData> StateTransitionRequested;
+        public Transform ballSprite;
+        public const float BOUNCINESS = 0.8f;
+        public LayerMask mask;
+        private RaycastHit2D[] hitBuffer = new RaycastHit2D[20];
+        private ContactFilter2D filter;
+        private CircleCollider2D colliderForWall;
+
+        public virtual void Setup(Ball contextBall,BallStateData ContextBallStateData,Animator ContextAnimator,ParticleSystem ContextParticles,TriggerDetection ContextplayerDetectArea,Player ContextCarrier,Transform ContextBallSprite,Rigidbody2D ContextRigidBody,LayerMask ContextLayerMask,CircleCollider2D ContextColliderForWall) {
+            animator = ContextAnimator;
+            ball = contextBall;
+            stateData = ContextBallStateData;
+            shotParticles=ContextParticles;
+            playerDetectArea=ContextplayerDetectArea;
+            carrier = ContextCarrier;
+            ballSprite=ContextBallSprite;
+            rb= ContextRigidBody;
+            mask=ContextLayerMask;
+            colliderForWall=ContextColliderForWall;
+        }
+        public void TransitionState(Ball.State newState, BallStateData data = null)
+        {
+            if (data == null) 
+                data = BallStateData.Build();
+
+            StateTransitionRequested?.Invoke(newState, data);
+        }
+
+        public void ProcessGravity(float bounciness= 0.0f) {
+            if (ball.height > 0f || ball.heightVelocity > 0f)
+            {
+                ball.heightVelocity -= GRAVITY * Time.deltaTime;
+                ball.height += ball.heightVelocity;
+                if (ball.height < 0f)
+                {
+                    ball.height = 0f;
+                    if (bounciness > 0f && ball.heightVelocity < 0f)
+                    {
+                        ball.heightVelocity = -ball.heightVelocity * bounciness;
+                        
+                        ball.velocity *= bounciness;
+                    }
+                }
+            }
+        }
+        public void SetBallAnimationFromVelocity()
+        {
+            if (ball.velocity == Vector2.zero)
+            {
+                animator.Play("idle");
+                animator.speed = 1;
+                return;
+            }
+            if (ball.velocity.x > 0)
+            {
+                animator.Play("roll", 0, 0f);
+                animator.speed = 1;
+            }
+            else
+            {
+                animator.Play("rollback");
+                animator.speed = 1;
+            }
+        }
+        public virtual void _Update() {
+        }
+        public virtual void _FixedUpdate() {
+        
+        }
+
+
+
+
+
+        public virtual void OnExit() {
+        
+        }
+
+        public virtual bool CanAirInteract() {
+            return false;
+        }
+        public virtual void OnEnter() {
+            filter = new ContactFilter2D();
+            filter.SetLayerMask(mask);
+            filter.useLayerMask = true;
+            filter.useTriggers = false;
+            
+        }
+        
+        // string layerName = LayerMask.LayerToName(hit.collider.gameObject.layer);
+        // Debug.Log($"Hit {hit.collider.name}, Layer: {layerName}, Tag: {hit.collider.tag}");
+        public void MoveAndBounce()
+        {
+            Vector2 move = ball.velocity * Time.fixedDeltaTime;
+            if (move.sqrMagnitude < 0.000001f)
+                return;
+
+            Vector2 dir = move.normalized;
+            
+            float radius = colliderForWall.radius;
+            
+            RaycastHit2D hit = Physics2D.CircleCast(
+                rb.position,
+                radius,
+                dir,
+                move.magnitude + colliderForWall.radius,
+                mask 
+            );
+            if (hit.collider != null)
+            {
+                Vector2 contactPos =rb.position + dir * hit.distance;
+                rb.MovePosition(contactPos);
+                ball.velocity = Vector2.Reflect(ball.velocity, hit.normal) * BOUNCINESS;
+                ball.SwitchState(Ball.State.FREEFORM);
+            }
+            else
+            {
+                rb.MovePosition(rb.position + move);
+            }
+        }
+        public void ApplyGravity(float bounciness = 0.0f)
+        {
+            float dt = Time.fixedDeltaTime;
+            
+            ball.heightVelocity -= GRAVITY * dt;
+            ball.height += ball.heightVelocity * dt;
+            
+            if (ball.height < 0f)
+            {
+                ball.height = 0f;
+                
+                if (ball.heightVelocity < 0f)
+                {
+                    ball.heightVelocity = -ball.heightVelocity * bounciness;
+                    ball.velocity *= bounciness;
+                }
+            }
+        }
+        
+    }
