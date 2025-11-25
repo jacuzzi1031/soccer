@@ -178,6 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2005901773257270094}
   - component: {fileID: 1269710056799845875}
+  - component: {fileID: 8929648292942069638}
   m_Layer: 13
   m_Name: TeammateDetectionArea
   m_TagString: Untagged
@@ -229,7 +230,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -251,6 +252,18 @@ PolygonCollider2D:
       - {x: 9.903408, y: -7.16548}
       - {x: 12.790732, y: -5.244347}
   m_UseDelaunayMesh: 0
+--- !u!114 &8929648292942069638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810298020138287685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c1dee8a20f63547b3e5f4867e72eff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3330586638594298323
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,7 +392,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.8}
@@ -439,16 +452,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2ed8090fb4e8964b9a02b348647e004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameInput: {fileID: 0}
-  ball: {fileID: 0}
-  targetGoal: {fileID: 0}
-  _cameraFollowObject: {fileID: 0}
   controlSchemeSO: {fileID: 11400000, guid: 2b77bfc7f8ca05d4ea8cfd6825ea7e86, type: 2}
   power: 5.55
   speed: 80
   role: 2
   country: FRANCE
   controlScheme: 1
+  KickoffPosition: {x: 0, y: 0}
+  ownGoal: {fileID: 0}
+  targetGoal: {fileID: 0}
+  ball: {fileID: 0}
+  skinColor: 0
+  fullName: 
   controlSprite: {fileID: 544563676402007411}
   animator: {fileID: 4813953148699080707}
   TeammateDetectionArea: {fileID: 1269710056799845875}
@@ -613,7 +628,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5152708754985245100}
   - component: {fileID: 4847591383571971054}
-  m_Layer: 0
+  - component: {fileID: 929454569649615721}
+  m_Layer: 16
   m_Name: OpponentDetectionArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -664,12 +680,24 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 1.2510648, y: 0.5002483}
   m_Size: {x: 7.5407395, y: 4.912122}
   m_Direction: 1
+--- !u!114 &929454569649615721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5297465238096267811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c1dee8a20f63547b3e5f4867e72eff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5300810911037956797
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,6 +708,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3032538110859441391}
   - component: {fileID: 1343350776078232924}
+  - component: {fileID: 5757719174918626694}
   m_Layer: 17
   m_Name: TackleAcceptArea
   m_TagString: Untagged
@@ -731,7 +760,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -747,6 +776,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &5757719174918626694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5300810911037956797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c1dee8a20f63547b3e5f4867e72eff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5700191534035474803
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-
+    
+    public event EventHandler OnSwap;
 
     [Header("References")]
 
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour {
     [HideInInspector] public float speed;
     [HideInInspector] public Role role = Role.MIDFIELD;
     [HideInInspector] public string country;
+    [HideInInspector] public enum ControlScheme{ CPU,P1,P2};
     public ControlScheme controlScheme = ControlScheme.CPU;
     [HideInInspector] public Vector2 KickoffPosition;
     [HideInInspector] public Goal ownGoal;
@@ -70,12 +72,8 @@ public Ball ball;
     private PlayerStateFactory playerStateFactory = new PlayerStateFactory();
     private PlayerState currentState;
     private const float BALL_CONTROL_HEIGHT_MAX = 0.55f;
-    public enum ControlScheme{ CPU,P1,P2};
-
-
-
-
     private float minVelocityThreshold = 0.01f;
+    
 
     private void Start() {
          controlSprite.sprite = controlSchemeSO.GetSprite(controlScheme);
@@ -114,7 +112,11 @@ public Ball ball;
     }
     public void SwitchState(State type, PlayerStateData data = null)
     {
-        currentState?.OnExit();
+        if (currentState != null) {
+            currentState.StateTransitionRequested -= SwitchState;
+            currentState.OnExit();
+        }
+
 
         currentState = playerStateFactory.GetFreshState(type);
         currentState.Setup(this, data ?? new PlayerStateData(),rb,animator,ball,runParticles);
@@ -168,11 +170,6 @@ public Ball ball;
         currentState?.OnAnimationComplete();
     }
 
-
-    public void Swap() {
-        
-    }
-
     public void Initialize(
         Vector2 contextPosition,
         Vector2 contextKickoffPosition,
@@ -218,6 +215,22 @@ public Ball ball;
     }
 
     public void SetControlTexture() {
-        
+        controlSprite.sprite=controlSchemeSO.GetSprite(controlScheme);
     }
+
+    public void CallSwap() {
+        OnSwap.Invoke(this,EventArgs.Empty);
+    }
+    //.net version
+    // public class PlayerEventArgs : EventArgs
+    // {
+    //     public Player{ get; }
+    //
+    //     public PlayerEventArgs(Player player)
+    //     {
+    //         Player = player;
+    //     }
+    // }
+    // public event EventHandler<PlayerEventArgs> OnSwap;
+    // OnSwap?.Invoke(this, new PlayerEventArgs(this));
 }

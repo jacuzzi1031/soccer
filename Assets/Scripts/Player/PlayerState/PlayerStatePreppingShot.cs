@@ -19,7 +19,9 @@
             
             CameraManager.Instance.PowerShotZoom(zoomSize, zoomTime,true);
         }
+        
         public override void OnExit() {
+            GameInput.Instance.OnShootCancelAction-= InstanceOnOnShootCancelAction;
             CameraManager.Instance.PowerShotZoom(zoomSize, zoomTime,false);
         }
 
@@ -29,7 +31,6 @@
             float easeTime = durationPress / DURATION_MAX_BONUS;
             float bonus = Mathf.Pow(easeTime, EASE_REWARD_FACTOR);
             float shotPower = player.power * (1 + 1.5f*bonus);
-            Debug.Log("shotPower:"+shotPower);
             shotDirection = shotDirection.normalized;
             PlayerStateData data = PlayerStateData.Build().SetShotPower(shotPower).SetShotDirection(shotDirection);
             TransitionState(Player.State.SHOOTING, data);

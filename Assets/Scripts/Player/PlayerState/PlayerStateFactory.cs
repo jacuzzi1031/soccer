@@ -17,7 +17,7 @@ public class PlayerStateFactory
             { Player.State.PASSING, () => new PlayerStatePassing() },
             { Player.State.PREPPING_SHOT, () => new PlayerStatePreppingShot() },
             { Player.State.RESETING, () => new PlayerStateReseting() },
-            { Player.State.RECOVERING, () => new PlayerStateRecovering() },
+            { Player.State.RECOVERING, () => new PlayerStateRecovering()},
             { Player.State.SHOOTING, () => new PlayerStateShooting() },
             { Player.State.TACKLING, () => new PlayerStateTackling() },
             { Player.State.VOLLEY_KICK, () => new PlayerStateVolleyKick() },

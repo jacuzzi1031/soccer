@@ -17,7 +17,7 @@ TagManager:
   - ScoringArea
   - BallForPlayer
   - BallForWallAndGoalKeeper
-  - PlayerProximityArea
+  - 
   - PlayerForTeammate
   - PlayerForBall
   - PlayerForTackle

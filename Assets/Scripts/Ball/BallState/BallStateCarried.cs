@@ -7,6 +7,7 @@ using UnityEngine;
         private readonly Vector2 OFFSET_FROM_PLAYER = new Vector2(0.60f, 0.22f);
 
         private float dribbleTime = 0f;
+        //Carried  
         public override void _Update()
         {
             if (carrier.rb.velocity !=Vector2.zero)
@@ -25,7 +26,7 @@ using UnityEngine;
                 animator.Play("idle");
             }
             
-            ProcessGravity();
+            // ProcessGravity();
         }
 
         public override void _FixedUpdate() {
@@ -47,6 +48,7 @@ using UnityEngine;
             Debug.Assert(carrier != null, "Carrier must not be null.");
             ball.velocity=Vector2.zero;
             ball.heightVelocity=0.0f;
+            ball.height = 0f;
         }
         
         public override void OnExit()

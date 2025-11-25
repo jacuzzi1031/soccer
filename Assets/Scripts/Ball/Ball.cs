@@ -52,12 +52,15 @@ public class Ball : MonoBehaviour
     
     public void SwitchState(State type, BallStateData data = null)
     {
-        currentState?.OnExit();
-
+        if (currentState != null)
+        {
+            currentState.StateTransitionRequested -= SwitchState;
+            currentState.OnExit();
+        }
         currentState = ballStateFactory.GetFreshState(type);
         currentState.Setup(this, data ?? new BallStateData(),animator,shotParticles,playerDetectArea,carrier,ballSprite,rb,LayerMask,colliderForWall);
         currentState.StateTransitionRequested += SwitchState;
-        currentState?.OnEnter();
+        currentState.OnEnter();
     }
     bool IsHeadedForScoringArea(Collider2D scoringArea)
     {

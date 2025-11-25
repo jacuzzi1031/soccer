@@ -22,8 +22,14 @@ public class ActorsContainer : MonoBehaviour
 
     private const float DURATION_WEIGHT_CACHE = 0.2f;
     private bool isCheckForKickOffReadiness = false;
-    private Player[] squadHome;
-    private Player[] squadAway;
+    private List<Player> squadHome;
+    private List<Player> squadAway;
+    
+    public static ActorsContainer Instance{get; private set;}
+
+    private void Awake() {
+        Instance = this;
+    }
 
     private void Start() {
         squadHome = SpawnPlayers(GameManager.Instance.currentMatch.countryHome,goalHome);
@@ -40,19 +46,19 @@ public class ActorsContainer : MonoBehaviour
         string p1Country=GameManager.Instance.playerSetup[0];
         if (GameManager.Instance.IsCoop())
         {
-            Player[] playerSquad = squadHome[0].country == p1Country ? squadHome : squadAway;
+            List<Player> playerSquad = squadHome[0].country == p1Country ? squadHome : squadAway;
             playerSquad[4].SetControlScheme(Player.ControlScheme.P1);
             playerSquad[5].SetControlScheme(Player.ControlScheme.P2);
         }
         else if (GameManager.Instance.IsSinglePlayer())
         {
-            Player[] playerSquad = squadHome[0].country == p1Country ? squadHome : squadAway;
+            List<Player> playerSquad = squadHome[0].country == p1Country ? squadHome : squadAway;
             playerSquad[5].SetControlScheme(Player.ControlScheme.P1);
         }
         else // Versus
         {
-            Player[] p1Squad = squadHome[0].country == p1Country ? squadHome : squadAway;
-            Player[] p2Squad = p1Squad == squadAway ? squadHome : squadAway;
+            List<Player> p1Squad = squadHome[0].country == p1Country ? squadHome : squadAway;
+            List<Player> p2Squad = p1Squad == squadAway ? squadHome : squadAway;
 
             p1Squad[5].SetControlScheme(Player.ControlScheme.P1);
             p2Squad[5].SetControlScheme(Player.ControlScheme.P2);
@@ -60,12 +66,14 @@ public class ActorsContainer : MonoBehaviour
     }
 
     public void ResetControlSchemes() {
-        foreach (Player[] squad in new Player[][] { squadHome, squadAway })
+        foreach (Player player in squadHome)
         {
-            foreach (Player player in squad)
-            {
-                player.SetControlScheme(Player.ControlScheme.CPU);
-            }
+            player.SetControlScheme(Player.ControlScheme.CPU);
+        }
+
+        foreach (Player player in squadAway)
+        {
+            player.SetControlScheme(Player.ControlScheme.CPU);
         }
     }
     
@@ -86,7 +94,7 @@ public class ActorsContainer : MonoBehaviour
     //     FindObjectOfType<GameManager>().Init();
     // }
 
-    public Player[] SpawnPlayers(string country, Goal ownGoal) {
+    public List<Player> SpawnPlayers(string country, Goal ownGoal) {
         List<Player> players=new List<Player>();
         List<PlayerResource> playerResources = DataLoader.Instance.GetSquad(country);
         for (int i = 0; i < playerResources.Count; i++) {
@@ -106,12 +114,10 @@ public class ActorsContainer : MonoBehaviour
                 playerData,
                 country
             );
-
             players.Add(player);
-            player.transform.SetParent(this.transform);
         }
 
-        return players.ToArray();
+        return players;
     }
     
     public Player SpawnPlayer(
@@ -122,15 +128,45 @@ public class ActorsContainer : MonoBehaviour
         PlayerResource playerData,
         string country)
     {
-        Player player = Instantiate(playerPrefab);
+        Player player = Instantiate(playerPrefab,transform);
         player.Initialize(playerPosition, kickoffPosition, ball, ownGoal, targetGoal, playerData, country);
 
-        GameInput.Instance.OnSwapAction+= InstanceOnOnSwapAction;
-
+        // GameInput.Instance.OnSwapAction+= InstanceOnOnSwapAction;
+        player.OnSwap+= PlayerOnOnSwap;
         return player;
     }
 
-    private void InstanceOnOnSwapAction(object sender, EventArgs e) {
-        throw new NotImplementedException();
+    private void PlayerOnOnSwap(object sender, EventArgs e)
+    {
+        Player senderPlayer = (Player)sender;
+        List<Player> squad = senderPlayer.country == squadHome[0].country ? squadHome : squadAway;
+
+        Player closestCpuToBall = null;
+        float closestDist = float.MaxValue;
+
+        foreach (var p in squad)
+        {
+            if (p.controlScheme != Player.ControlScheme.CPU || p.role == Player.Role.GOALIE)
+                continue;
+
+            float dist = (p.transform.position - ball.transform.position).sqrMagnitude;
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                closestCpuToBall = p;
+            }
+        }
+
+        if (closestCpuToBall == null) return;
+
+        float senderDist = (senderPlayer.transform.position - ball.transform.position).sqrMagnitude;
+
+        if (closestDist < senderDist)
+        {
+            var playerControlScheme = senderPlayer.controlScheme;
+            senderPlayer.SetControlScheme(Player.ControlScheme.CPU);
+            closestCpuToBall.SetControlScheme(playerControlScheme);
+        }
     }
+
 }

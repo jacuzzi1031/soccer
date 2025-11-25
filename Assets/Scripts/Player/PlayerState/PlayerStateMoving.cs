@@ -11,15 +11,23 @@
             animator.Play("movement");
             speedHash = Animator.StringToHash("Speed");
             GameInput.Instance.OnShootAction+= InstanceOnOnShootAction;
+            GameInput.Instance.OnSwapAction+= InstanceOnOnSwapAction;
         }
 
+
+
+        public override void OnExit() {
+            GameInput.Instance.OnShootAction-= InstanceOnOnShootAction;
+            GameInput.Instance.OnSwapAction-= InstanceOnOnSwapAction;
+        }
         private void InstanceOnOnSwapAction(object sender, EventArgs e) {
-            if (!player.HasBall()) {
-                player.Swap();
-            }
+            if(!player.HasBall())
+                player.CallSwap();
         }
-
         private void InstanceOnOnShootAction(object sender, EventArgs e) {
+            
+            if (player.controlScheme == Player.ControlScheme.CPU) return;
+            
             if (player.HasBall())
             {
                 TransitionState(Player.State.PREPPING_SHOT);
