@@ -34,8 +34,10 @@ public class CameraFollowObject : MonoBehaviour
     }
     public void CallTurn()
     {
-        //Tracked Object Offset由于是乘以目标的 Transform 的旋转矩阵，所以也会反过来
-        _turnCoroutine = StartCoroutine(FlipYLerp() );
+        if (_turnCoroutine != null)
+            StopCoroutine(_turnCoroutine);
+
+        _turnCoroutine = StartCoroutine(FlipYLerp());
     }
     private IEnumerator FlipYLerp()
     {
@@ -51,6 +53,8 @@ public class CameraFollowObject : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
             yield return null;
         }
+        transform.rotation = Quaternion.Euler(0f, endRotationAmount, 0f);
+        _turnCoroutine = null;
     }
 
     private float DetermineEndRotation()

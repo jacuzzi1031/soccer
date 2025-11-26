@@ -35,7 +35,6 @@ public class Ball : MonoBehaviour
     public float frictionAir = 1.94f;
     public float frictionGround = 13.8f;
     
-    public event EventHandler<bool> OnBallFreeformAction;
     private void Awake() {
 
         SwitchState(State.FREEFORM);
@@ -94,10 +93,4 @@ public class Ball : MonoBehaviour
         SwitchState(Ball.State.SHOT);
     }
     
-
-
-    public void TriggerBallFreeform(bool value)
-    {
-        OnBallFreeformAction?.Invoke(this, value);
-    }
 }

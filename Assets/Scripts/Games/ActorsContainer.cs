@@ -119,7 +119,11 @@ public class ActorsContainer : MonoBehaviour
 
         return players;
     }
-    
+
+    private void OnDestroy() {
+        GameInterface.Interface.EventSystem.Unsubscribe<PlayerSwapEvent>(PlayerOnOnSwap);
+    }
+
     public Player SpawnPlayer(
         Vector2 playerPosition,
         Vector2 kickoffPosition,
@@ -132,13 +136,13 @@ public class ActorsContainer : MonoBehaviour
         player.Initialize(playerPosition, kickoffPosition, ball, ownGoal, targetGoal, playerData, country);
 
         // GameInput.Instance.OnSwapAction+= InstanceOnOnSwapAction;
-        player.OnSwap+= PlayerOnOnSwap;
+        GameInterface.Interface.EventSystem.Subscribe<PlayerSwapEvent>(PlayerOnOnSwap);
         return player;
     }
 
-    private void PlayerOnOnSwap(object sender, EventArgs e)
+    private void PlayerOnOnSwap(PlayerSwapEvent e)
     {
-        Player senderPlayer = (Player)sender;
+        Player senderPlayer=e.player;
         List<Player> squad = senderPlayer.country == squadHome[0].country ? squadHome : squadAway;
 
         Player closestCpuToBall = null;

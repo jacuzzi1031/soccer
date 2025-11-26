@@ -22,7 +22,7 @@
         }
         private void InstanceOnOnSwapAction(object sender, EventArgs e) {
             if(!player.HasBall())
-                player.CallSwap();
+                GameInterface.Interface.EventSystem.Publish(new PlayerSwapEvent(player));
         }
         private void InstanceOnOnShootAction(object sender, EventArgs e) {
             
@@ -51,25 +51,21 @@
                 }
             }
         }
-
-        public override void _FixedUpdate() {
-            // Transform.position +=或者rb.MovePosition(rb.position + ) 直接赋值位置 绕过 Rigidbody2D 的物理计算不碰撞
-            rb.velocity = moveDir * player.speed;
-        }
-
         public override void _Update() {
             if (player.controlScheme == Player.ControlScheme.CPU) {
-                //ai
+                // aiBehavior.ProcessAI();                  
+                // moveDir = aiBehavior.GetAIMove();  
             }
             else {
-                HandleMovement();
+                moveDir = GameInput.Instance.GetMovementVectorNormalized();
             }
+
             SetMovementAnimation();
         }
-
-        private void HandleMovement() {
-            moveDir = GameInput.Instance.GetMovementVectorNormalized();
+        public override void _FixedUpdate() {
+            rb.velocity = moveDir * player.speed;
         }
+        
         public void SetMovementAnimation() {
             animator.SetFloat(speedHash, rb.velocity.magnitude);
             AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);

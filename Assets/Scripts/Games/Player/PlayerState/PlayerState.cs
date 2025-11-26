@@ -51,10 +51,7 @@ public class PlayerState
     
     public void TransitionState(Player.State newState, PlayerStateData data = null)
     {
-        if (data == null) 
-            data = PlayerStateData.Build();
-
-        StateTransitionRequested?.Invoke(newState, data);
+        StateTransitionRequested?.Invoke(newState, data ?? PlayerStateData.Build());
     }
 
     public virtual void _Update() {

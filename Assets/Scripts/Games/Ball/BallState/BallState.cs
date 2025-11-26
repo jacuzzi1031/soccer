@@ -33,10 +33,7 @@
         }
         public void TransitionState(Ball.State newState, BallStateData data = null)
         {
-            if (data == null) 
-                data = BallStateData.Build();
-
-            StateTransitionRequested?.Invoke(newState, data);
+            StateTransitionRequested?.Invoke(newState, data ?? BallStateData.Build());
         }
 
         public void ProcessGravity(float bounciness= 0.0f) {

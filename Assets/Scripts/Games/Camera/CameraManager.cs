@@ -13,7 +13,7 @@ public class CameraManager : MonoBehaviour
     [Header("Controls for Screen Y during player up/down")]
     [SerializeField] private float _downScreenYAmount = 0.3f;
     [SerializeField] private float _upScreenYAmount = 0.65f;
-    [SerializeField] private float _tranScreenYTime = 1.00f; 
+    [SerializeField] private float _tranScreenYTime = 0.7f; 
  
     
 
@@ -60,18 +60,18 @@ public class CameraManager : MonoBehaviour
         _startingTrackedObjectOffset = _freeformTrackedObjectOffset;
         //set the Lens.OrthographicSize
         _startingOrthographicSize = _currentCamera.m_Lens.OrthographicSize;
-    }
-
-    public void OnEnable() {
-        //每次都是currentState会new一个新的 所以不能ball.currentState.OnBallFreeformAction+=
-        ball.OnBallFreeformAction+= CurrentStateOnOnBallFreeformAction;
-    }
-
-
-    private void CurrentStateOnOnBallFreeformAction(object sender, bool e) {
-        _startingTrackedObjectOffset=e?_freeformTrackedObjectOffset:_carriedTrackedObjectOffset;
-        LerpOffsetX(e);
         
+        GameInterface.Interface.EventSystem.Subscribe<BallFreeformToLerpCameraOffsetEvent>(CurrentStateOnOnBallFreeformAction);
+    }
+    void OnDestroy()
+    {
+        GameInterface.Interface.EventSystem.Unsubscribe<BallFreeformToLerpCameraOffsetEvent>(CurrentStateOnOnBallFreeformAction);
+    }
+
+
+    private void CurrentStateOnOnBallFreeformAction(BallFreeformToLerpCameraOffsetEvent e) {
+        _startingTrackedObjectOffset=e.IsFreeform?_freeformTrackedObjectOffset:_carriedTrackedObjectOffset;
+        LerpOffsetX(e.IsFreeform);
     }
     #region Lerp offsetX
 
@@ -127,58 +127,44 @@ public class CameraManager : MonoBehaviour
 
     public void LerpScreenY(float velocityY)
     {
-        // 更新目标 Y 值，基于玩家的速度
-        if (velocityY > 0) // 上升
-        {
+        if (velocityY > 0)
             _currentTargetScreenY = _upScreenYAmount;
-        }
-        else if (velocityY < 0) // 下降
-        {
+        else if (velocityY < 0)
             _currentTargetScreenY = _downScreenYAmount;
-        }
-        else // 速度接近 0
-        {
+        else
             _currentTargetScreenY = _normScreenYAmount;
-        }
-
+        
         if (Mathf.Approximately(_currentTargetScreenY, _framingTransposer.m_ScreenY))
             return;
-
-        // 如果当前没有在 lerp，就启动一个新的协程
-        if (!IsLerpingScreenY)
-        {
-            IsLerpingScreenY = true;
-            _lerpYPanCoroutine = StartCoroutine(LerpYAction());
-        }
+        
+        if (_lerpYPanCoroutine != null)
+            StopCoroutine(_lerpYPanCoroutine);
+        _lerpYPanCoroutine = StartCoroutine(LerpYAction());
     }
 
     private IEnumerator LerpYAction()
     {
-        float startScreenY = _framingTransposer.m_ScreenY;
-        float endScreenY = _currentTargetScreenY;
-
-        // 进行平滑过渡
-        float elapsedTime = 0f;
-        while (elapsedTime < _tranScreenYTime)
+        while (!Mathf.Approximately(_framingTransposer.m_ScreenY, _currentTargetScreenY))
         {
-            elapsedTime += Time.deltaTime;
-            float lerpedPanAmount = Mathf.Lerp(startScreenY, endScreenY, elapsedTime / _tranScreenYTime);
-            _framingTransposer.m_ScreenY = lerpedPanAmount;
+            _framingTransposer.m_ScreenY = Mathf.Lerp(
+                _framingTransposer.m_ScreenY,
+                _currentTargetScreenY,
+                Time.deltaTime * (1f / _tranScreenYTime)
+            );
+
             yield return null;
         }
 
-        // 最终设置目标位置
-        _framingTransposer.m_ScreenY = endScreenY;
-
-        // 协程结束，重置 lerp 标记
-        IsLerpingScreenY = false;
+        _framingTransposer.m_ScreenY = _currentTargetScreenY;
     }
     #endregion
     
     #region Pan Camera
     
     public void PanCameraOnContact(float panDistance, float panTime, PanDirection panDirection, bool panToStartingPos)
-    {
+    {   
+        if (_panCameraCoroutine != null)
+            StopCoroutine(_panCameraCoroutine);
         _panCameraCoroutine = StartCoroutine(PanCamera(panDistance, panTime, panDirection, panToStartingPos));
     }
 
@@ -231,6 +217,8 @@ public class CameraManager : MonoBehaviour
             _framingTransposer.m_TrackedObjectOffset = panLerp;
             yield return null;
         }
+        _framingTransposer.m_TrackedObjectOffset = endPos;
+        _panCameraCoroutine = null;
     }
     #endregion
 
@@ -242,32 +230,32 @@ public class CameraManager : MonoBehaviour
         _PowerShotZoomCoroutine = StartCoroutine(ZoomAction( zoomSize, zoomTime, isShot));
     }
 
-    private IEnumerator ZoomAction(float zoomSize, float zoomTime, bool isShot) {
-        float startingSize;
-        float endSize;
-        if (isShot) {
-            startingSize=_currentCamera.m_Lens.OrthographicSize;
-            endSize=zoomSize;
-        }
-        else {
-            startingSize = _currentCamera.m_Lens.OrthographicSize;
-            endSize = _startingOrthographicSize;
-        }
+    private IEnumerator ZoomAction(float zoomSize, float zoomTime, bool isShot)
+    {
+        float startingSize = _currentCamera.m_Lens.OrthographicSize;
+        float endSize = isShot ? zoomSize : _startingOrthographicSize;
+
         float elapsedTime = 0f;
-        while(elapsedTime < zoomTime)
+
+        while (elapsedTime < zoomTime)
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / zoomTime;
+
             var lens = _currentCamera.m_Lens;
             lens.OrthographicSize = Mathf.Lerp(startingSize, endSize, t);
             _currentCamera.m_Lens = lens;
+
             yield return null;
         }
+        var finalLens = _currentCamera.m_Lens;
+        finalLens.OrthographicSize = endSize;
+        _currentCamera.m_Lens = finalLens;
     }
 
     #endregion
     
-    #region Swap Cameras
+    #region Swap Cameras withoutUse
     
     public void SwapCamera(CinemachineVirtualCamera cameraForBall, CinemachineVirtualCamera cameraForPlayer,bool isFreeform)
     {

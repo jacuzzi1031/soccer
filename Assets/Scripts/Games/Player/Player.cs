@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
     
-    public event EventHandler OnSwap;
 
     [Header("References")]
 
@@ -72,7 +71,7 @@ public Ball ball;
     private PlayerStateFactory playerStateFactory = new PlayerStateFactory();
     private PlayerState currentState;
     private const float BALL_CONTROL_HEIGHT_MAX = 0.55f;
-    private float minVelocityThreshold = 0.01f;
+
     
 
     private void Start() {
@@ -89,23 +88,11 @@ public Ball ball;
         currentState?._Update();
         FlipSprite();
 
-        CameraYdamping();
+
         // set_sprite_visibility();
         // process_gravity(delta);
     }
-    public void CameraYdamping()
-    {
-        float velocityY = rb.velocity.y;
-        if (!HasBall()) return;
-        if (CameraManager.Instance.IsLerpingScreenY) return;
-        if (Mathf.Abs(velocityY) > minVelocityThreshold)
-        {
-            CameraManager.Instance.LerpScreenY(velocityY);
-        }
-        else {
-            CameraManager.Instance.LerpScreenY(0);
-        }
-    }
+
 
     private void FixedUpdate() {
         currentState?._FixedUpdate();
@@ -217,20 +204,4 @@ public Ball ball;
     public void SetControlTexture() {
         controlSprite.sprite=controlSchemeSO.GetSprite(controlScheme);
     }
-
-    public void CallSwap() {
-        OnSwap.Invoke(this,EventArgs.Empty);
-    }
-    //.net version
-    // public class PlayerEventArgs : EventArgs
-    // {
-    //     public Player{ get; }
-    //
-    //     public PlayerEventArgs(Player player)
-    //     {
-    //         Player = player;
-    //     }
-    // }
-    // public event EventHandler<PlayerEventArgs> OnSwap;
-    // OnSwap?.Invoke(this, new PlayerEventArgs(this));
 }

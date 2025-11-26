@@ -52,7 +52,7 @@ MonoBehaviour:
     cameraOnRight: {fileID: 0}
     panDirection: 0
     panDistance: 3
-    panTime: 1
+    panTime: 0.7
 --- !u!70 &1023660855471937192
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -86,5 +86,5 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -17, y: -1}
-  m_Size: {x: 12, y: 20}
+  m_Size: {x: 14, y: 20}
   m_Direction: 0

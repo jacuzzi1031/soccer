@@ -8,12 +8,12 @@
         private const float MAX_CAPTURE_HEIGHT = 1.39f;
         public override  void OnEnter() {
             playerDetectArea.OnTriggered+= PlayerDetectAreaOnOnEnter;
-            ball.TriggerBallFreeform(true);
+            GameInterface.Interface.EventSystem.Publish(new BallFreeformToLerpCameraOffsetEvent(true));
         }
 
         public override void OnExit() {
             playerDetectArea.OnTriggered-= PlayerDetectAreaOnOnEnter;
-            ball.TriggerBallFreeform(false);
+            GameInterface.Interface.EventSystem.Publish(new BallFreeformToLerpCameraOffsetEvent(false));
         }
         private void PlayerDetectAreaOnOnEnter(Collider2D obj) {
             Player body = obj.GetComponentInParent<Player>();
