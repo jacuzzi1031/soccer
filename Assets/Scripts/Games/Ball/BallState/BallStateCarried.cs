@@ -48,10 +48,11 @@ using UnityEngine;
                 vx = Mathf.Cos(dribbleTime * DRIBBLE_FREQUENCY) * DRIBBLE_INTENSITY;
 
             bool facingRight = carrier.headingRight;
-            ball.transform.position =
+            Vector2 targetPos  =
                 (Vector2)carrier.transform.position +
                 new Vector2((facingRight ? OFFSET_FROM_PLAYER.x : -OFFSET_FROM_PLAYER.x) + vx,
                     OFFSET_FROM_PLAYER.y);
+            rb.MovePosition(targetPos);
         }
 
         public override void OnEnter() {

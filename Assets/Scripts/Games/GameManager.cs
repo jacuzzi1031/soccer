@@ -6,8 +6,15 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get;private set; }
-    
-    
+
+    public enum MatchType {
+    Single,
+    Coop,
+    Versus
+    }
+
+    [HideInInspector]public MatchType currentMathType;
+
     public Match currentMatch;
     public string[] playerSetup = { "FRANCE", "" };
     private void Awake() {
@@ -18,6 +25,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         currentMatch = new Match("FRANCE", "SPAIN");
+        currentMathType=MatchType.Single;
     }
 
     private void Start() {

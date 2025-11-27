@@ -6,14 +6,12 @@
         private const float SHOT_HEIGHT = 0.27f;
         private const float DURATION_SHOT = 1.0f;
         private float timeSinceShot;
-        private ParticleSystem.VelocityOverLifetimeModule velocityModule;
         public override void OnEnter() {
             SetBallAnimationFromVelocity();
             ballSprite.localScale = new Vector3(1, SHOT_SPRITE_SCALE, 1);
             ball.height = SHOT_HEIGHT;
             timeSinceShot=Time.time;
 
-            velocityModule = shotParticles.velocityOverLifetime;
             shotParticles.Play();
         }
 
@@ -21,8 +19,6 @@
             if (Time.time - timeSinceShot >= DURATION_SHOT) {
                 TransitionState(Ball.State.FREEFORM);
             }
-            velocityModule.x = -ball.velocity.x; 
-            velocityModule.y = -ball.velocity.y;
         }
 
         public override void _FixedUpdate() {

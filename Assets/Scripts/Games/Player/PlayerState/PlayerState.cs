@@ -19,7 +19,7 @@ public class PlayerState
     protected ParticleSystem runParticles;
 
     
-    public virtual void Setup(
+    public void Setup(
         Player contextPlayer,
         PlayerStateData contextData,
         Rigidbody2D contextRb,
@@ -65,6 +65,14 @@ public class PlayerState
         
     }
     public virtual void OnExit() {
+        
+    }
+
+    public virtual void OnShoot() {
+        
+    }
+
+    public virtual void OnPass() {
         
     }
     

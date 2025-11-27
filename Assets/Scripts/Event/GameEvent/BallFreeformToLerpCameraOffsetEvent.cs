@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallFreeformToLerpCameraOffsetEvent : IEvent
+public struct BallFreeformToLerpCameraOffsetEvent : IEvent
 {
     public bool IsFreeform;
 

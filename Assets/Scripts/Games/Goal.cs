@@ -8,12 +8,7 @@ public class Goal : MonoBehaviour
     [SerializeField] private Transform targetsParent;
 
     private string country = "";
-
-    public void Initialize(string contextCountry)
-    {
-        country = contextCountry;
-    }
-
+    
     private void Start()
     {
         // Register triggers (assuming these colliders have isTrigger = true)
@@ -22,6 +17,8 @@ public class Goal : MonoBehaviour
 
         var scoring = scoringArea.gameObject.AddComponent<TriggerDetection>();
         scoring.OnTriggered += OnBallEnterScoringArea;
+        
+        country=GameManager.Instance.currentMatch.countryHome;
     }
 
 

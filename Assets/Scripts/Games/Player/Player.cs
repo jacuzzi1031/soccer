@@ -69,7 +69,7 @@ public Ball ball;
     private Vector3 lastInteractDir;
     [HideInInspector]public bool headingRight = true;
     private PlayerStateFactory playerStateFactory = new PlayerStateFactory();
-    private PlayerState currentState;
+    [HideInInspector]public PlayerState currentState;
     private const float BALL_CONTROL_HEIGHT_MAX = 0.55f;
 
     
@@ -81,9 +81,9 @@ public Ball ball;
          //充当player reseting state
          FaceTowardsTargetGoal();
          Flip(headingRight);
-    }
-    
+         
 
+    }
     private void Update() {
         currentState?._Update();
         FlipSprite();
@@ -196,11 +196,14 @@ public Ball ball;
         }
     }
 
-    public void SetControlScheme(ControlScheme scheme) {
-        controlScheme = scheme;
+    public void SetControlScheme(ControlScheme newScheme) {
+        if (controlScheme == newScheme) return;
+        controlScheme = newScheme;
         SetControlTexture();
     }
-
+    private void InstanceOnOnShootAction(object sender, EventArgs e) {
+        currentState?.OnShoot();
+    }
     public void SetControlTexture() {
         controlSprite.sprite=controlSchemeSO.GetSprite(controlScheme);
     }

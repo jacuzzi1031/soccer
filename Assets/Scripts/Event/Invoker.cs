@@ -33,7 +33,7 @@ public class Invoker : MonoBehaviour
         {
             try
             {
-                Debug.Log("Invoker Execute!!!!!");
+                // Debug.Log("Invoker Execute!!!!!");
                 DelegateList[i]?.Invoke();
             }
             catch (Exception e)
