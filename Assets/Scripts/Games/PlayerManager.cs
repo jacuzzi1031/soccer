@@ -18,7 +18,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Transform kickOffs;
 
     private const float DURATION_WEIGHT_CACHE = 0.2f;
-    private bool isCheckForKickOffReadiness = false;
+    // private bool isCheckForKickOffReadiness = false;
     private List<Player> squadHome;
     private List<Player> squadAway;
     private List<Player> currentTeam;
@@ -109,8 +109,8 @@ public class PlayerManager : MonoBehaviour
 
 
     private void OnShootInput(object sender, EventArgs e)
-    {
-        currentControlPlayer?.currentState.OnShoot();
+    {   
+        currentControlPlayer?.currentState?.OnShoot();
     }
 
     private void OnPassInput(object sender, EventArgs e)

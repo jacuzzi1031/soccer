@@ -3,20 +3,17 @@ using UnityEngine;
 public class Goal : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Collider2D backNetArea;
-    [SerializeField] private Collider2D scoringArea;
+    [SerializeField] private TriggerDetection backNetArea;
+    [SerializeField] private TriggerDetection scoringArea;
     [SerializeField] private Transform targetsParent;
 
     private string country = "";
     
     private void Start()
     {
-        // Register triggers (assuming these colliders have isTrigger = true)
-        var backNet = backNetArea.gameObject.AddComponent<TriggerDetection>();
-        backNet.OnTriggered += OnBallEnterBackNet;
-
-        var scoring = scoringArea.gameObject.AddComponent<TriggerDetection>();
-        scoring.OnTriggered += OnBallEnterScoringArea;
+        backNetArea.OnTriggered += OnBallEnterBackNet;
+        
+        scoringArea.OnTriggered += OnBallEnterScoringArea;
         
         country=GameManager.Instance.currentMatch.countryHome;
     }
@@ -62,10 +59,5 @@ public class Goal : MonoBehaviour
     {
         int count = targetsParent.childCount;
         return targetsParent.GetChild(count - 1).position;
-    }
-
-    public Collider2D GetScoringArea()
-    {
-        return scoringArea;
     }
 }

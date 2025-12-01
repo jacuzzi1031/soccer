@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        currentMatch = new Match("FRANCE", "SPAIN");
+        currentMatch = new Match("ARGENTINA", "SPAIN");
         currentMathType=MatchType.Single;
     }
 

@@ -7,11 +7,11 @@ public class Player : MonoBehaviour {
     
 
     [Header("References")]
-
     public ControlScriptObject controlSchemeSO;
+    public Texture2D teamPaletteTex;
+    public Texture2D skinPaletteTex;
     [Space]
     [Header("Settings")]
-
     [HideInInspector] public float power;
     [HideInInspector] public float speed;
     [HideInInspector] public Role role = Role.MIDFIELD;
@@ -20,18 +20,26 @@ public class Player : MonoBehaviour {
     public ControlScheme controlScheme = ControlScheme.CPU;
     [HideInInspector] public Vector2 KickoffPosition;
     [HideInInspector] public Goal ownGoal;
-public Goal targetGoal;
-public Ball ball;
+    [HideInInspector] private AIBehaviorFactory aiBehaviorFactory=new AIBehaviorFactory();
+    private AIBehavior currentAIBehavior;
+    public Goal targetGoal;
+    public Ball ball;
     [HideInInspector] public SkinColor skinColor;
     [HideInInspector] public string fullName;
     [Space]
     [Header("Components")]
+    [SerializeField] private SpriteRenderer playerSprite;
     [SerializeField] private SpriteRenderer controlSprite;
     [SerializeField] private Animator animator;
-    [SerializeField] private Collider2D TeammateDetectionArea;
+    [SerializeField] private TriggerDetection teammateDetectionArea;
+    [SerializeField] private TriggerDetection opponentDetectionArea;
+    [SerializeField] public TriggerDetection tackleAcceptArea;
+    [SerializeField] private Collider2D tackleEmitterArea;
+    [SerializeField] private Collider2D goalieHandsArea;
     [SerializeField] private ParticleSystem runParticles;
     [SerializeField] private Transform FlipComponent;
     public Rigidbody2D rb;
+    [SerializeField] private SpriteRenderer sr;
 
     public enum State {
         MOVING,
@@ -75,7 +83,10 @@ public Ball ball;
     
 
     private void Start() {
-         controlSprite.sprite = controlSchemeSO.GetSprite(controlScheme);
+         SetControlSprite();
+         SetupAIBehavior();
+         setShaderProperties();
+         if(role==Role.GOALIE) goalieHandsArea.gameObject.SetActive(true);
          SwitchState(State.MOVING, PlayerStateData.Build());
          
          //充当player reseting state
@@ -83,6 +94,57 @@ public Ball ball;
          Flip(headingRight);
          
 
+    }
+
+    private void setShaderProperties()
+    {
+        if(playerSprite == null || teamPaletteTex == null || skinPaletteTex == null)
+            return;
+        
+        sr = GetComponent<SpriteRenderer>();
+
+        // 关键：只实例化一次！！！
+        Material instMat = Instantiate(sr.sharedMaterial);
+        sr.material = instMat;
+        Material mat = sr.material;
+        mat.SetTexture("_TeamPalette", teamPaletteTex);
+        mat.SetVector("_TeamPalette_TexelSize", new Vector4(
+            1f / teamPaletteTex.width, 1f / teamPaletteTex.height,
+            teamPaletteTex.width, teamPaletteTex.height
+        ));
+
+        mat.SetTexture("_SkinPalette", skinPaletteTex);
+        mat.SetVector("_SkinPalette_TexelSize", new Vector4(
+            1f / skinPaletteTex.width, 1f / skinPaletteTex.height,
+            skinPaletteTex.width, skinPaletteTex.height
+        ));
+
+        // 设置行索引
+        mat.SetInt("_SkinColor", Mathf.Clamp((int)skinColor, 0, int.MaxValue));
+
+        var countries = DataLoader.Instance.GetCountries();
+        int countryColor = countries.IndexOf(country);
+        countryColor = Mathf.Clamp(countryColor, 0, countries.Count - 1);
+        mat.SetInt("_TeamColor", countryColor);
+        
+        print("_TeamPalette_TexelSize:"+new Vector4(
+            1f / teamPaletteTex.width, 1f / teamPaletteTex.height,
+            teamPaletteTex.width, teamPaletteTex.height
+        ));
+        print("_SkinPalette_TexelSize:"+new Vector4(
+            1f / skinPaletteTex.width, 1f / skinPaletteTex.height,
+            skinPaletteTex.width, skinPaletteTex.height
+        ));
+    }
+
+
+    private void SetControlSprite() {
+        controlSprite.sprite = controlSchemeSO.GetSprite(controlScheme);
+    }
+
+    private void SetupAIBehavior() {
+        currentAIBehavior = aiBehaviorFactory.GetFreshAIBehavior(role);
+        currentAIBehavior.Setup(this, ball, opponentDetectionArea, teammateDetectionArea);
     }
     private void Update() {
         currentState?._Update();
@@ -106,7 +168,7 @@ public Ball ball;
 
 
         currentState = playerStateFactory.GetFreshState(type);
-        currentState.Setup(this, data ?? new PlayerStateData(),rb,animator,ball,runParticles);
+        currentState.Setup(this, data ?? new PlayerStateData(),rb,animator,ball,runParticles,currentAIBehavior);
         currentState.StateTransitionRequested += SwitchState;
         currentState.OnEnter();
     }

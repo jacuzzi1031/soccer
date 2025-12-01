@@ -2512,6 +2512,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 5671396866889332008, guid: a00ee2378d8b64549a4324a554b92aa8, type: 3}
   spawns: {fileID: 1624780185}
   kickOffs: {fileID: 1946316642}
+  currentControlPlayer: {fileID: 0}
 --- !u!1 &1624780184
 GameObject:
   m_ObjectHideFlags: 0
@@ -2678,6 +2679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81d10dfedbcad884080cd384de7d8cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentMathType: 0
   playerSetup:
   - FRANCE
   - 

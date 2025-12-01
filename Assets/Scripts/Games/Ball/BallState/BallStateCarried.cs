@@ -60,10 +60,11 @@ using UnityEngine;
             ball.velocity=Vector2.zero;
             ball.heightVelocity=0.0f;
             ball.height = 0f;
+            // ball.carrier.tackleAcceptArea.EnableDetection(true);
         }
         
         public override void OnExit()
         {
-            // GameEvents.BallReleased?.Invoke();
+            // ball.carrier.tackleAcceptArea.EnableDetection(false);
         }
     }

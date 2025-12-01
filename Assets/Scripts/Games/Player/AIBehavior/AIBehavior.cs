@@ -2,21 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIBehavior : MonoBehaviour
-{
-    public Vector2 moveDir;
-
+public class AIBehavior
+{  
+    private Vector2 moveDir;
+    private Ball ball;
+    private TriggerDetection opponentDetectionArea;
+    private TriggerDetection teammateDetectionArea;
+    private Player player;
     public void UpdateAI()
     {
-        perform_ai_movement();
-        perform_ai_decisions();
+        PerformAIMovement();
+        PerformAIDecisions();
+    }
+    private void PerformAIMovement() {
+    }
+    private void PerformAIDecisions() {
+    }
+    public Vector2 GetAIMoveDir() {
+        return moveDir;
     }
 
-    private void perform_ai_decisions() {
-        throw new System.NotImplementedException();
-    }
-
-    private void perform_ai_movement() {
-        throw new System.NotImplementedException();
+    public void Setup(Player player, Ball ball, TriggerDetection opponentDetectionArea, TriggerDetection teammateDetectionArea) {
+        this.player=player;
+        this.ball=ball;
+        this.opponentDetectionArea=opponentDetectionArea;
+        this.teammateDetectionArea=teammateDetectionArea;
     }
 }

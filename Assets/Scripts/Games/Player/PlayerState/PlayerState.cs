@@ -9,13 +9,13 @@ public class PlayerState
     protected AIBehavior aiBehavior;
     protected Animator animator; 
     protected Ball ball;
-    protected Collider2D ballDetectionArea;
+    protected TriggerDetection ballDetectionArea;
     protected Goal ownGoal;
     protected Player player;
     protected PlayerStateData stateData = new PlayerStateData();
     protected Goal targetGoal;
-    // protected Collider2D tackleDamageEmitterArea;
-    protected Collider2D teammateDetectionArea;
+    // protected TriggerDetection tackleDamageEmitterArea;
+    protected TriggerDetection teammateDetectionArea;
     protected ParticleSystem runParticles;
 
     
@@ -25,13 +25,13 @@ public class PlayerState
         Rigidbody2D contextRb,
         Animator contextAnimationPlayer,
         Ball contextBall,
-        ParticleSystem contextParticles
-        // Collider2D contextTeammateDetectionArea,
-        // Collider2D contextBallDetectionArea,
+        ParticleSystem contextParticles,
+        // TriggerDetection contextTeammateDetectionArea,
+        // TriggerDetection contextBallDetectionArea,
         // Goal contextOwnGoal,
         // Goal contextTargetGoal,
-        // Collider2D contextTackleDamageEmitterArea,
-        // AIBehavior contextAiBehavior
+        // TriggerDetection contextTackleDamageEmitterArea,
+        AIBehavior contextAiBehavior
     )
     {
         player = contextPlayer;
@@ -44,7 +44,7 @@ public class PlayerState
         // ballDetectionArea = contextBallDetectionArea;
         // ownGoal = contextOwnGoal;
         // targetGoal = contextTargetGoal;
-        // aiBehavior = contextAiBehavior;
+        aiBehavior = contextAiBehavior;
         // tackleDamageEmitterArea = contextTackleDamageEmitterArea;
 
     }
@@ -69,7 +69,6 @@ public class PlayerState
     }
 
     public virtual void OnShoot() {
-        
     }
 
     public virtual void OnPass() {

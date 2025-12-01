@@ -11,4 +11,8 @@ public class TriggerDetection : MonoBehaviour
     {
         OnTriggered?.Invoke(other);
     }
+    public void EnableDetection(bool enable)
+    {
+        gameObject.SetActive(enable);
+    }
 }

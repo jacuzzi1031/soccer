@@ -581,8 +581,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7631a30ef9140aca299eed0f2a30357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backNetArea: {fileID: 6961726094453850351}
-  scoringArea: {fileID: 2483059260513790088}
+  backNetArea: {fileID: 8165335177391219731}
+  scoringArea: {fileID: 2135854604674903298}
   targetsParent: {fileID: 1233727680605340733}
 --- !u!1 &9126832033165575203
 GameObject:

@@ -38,8 +38,8 @@
         }
         public override void _Update() {
             if (player.controlScheme == Player.ControlScheme.CPU) {
-                // aiBehavior.ProcessAI();                  
-                // moveDir = aiBehavior.GetAIMove();  
+                // aiBehavior.UpdateAI();                  
+                // moveDir = aiBehavior.GetAIMoveDir();  
             }
             else {
                 moveDir = GameInput.Instance.GetMovementVectorNormalized();

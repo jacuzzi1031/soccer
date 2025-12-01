@@ -12,7 +12,6 @@ public class CameraControlTrigger : MonoBehaviour
 
     private void Start()
     {
-        _coll = GetComponent<Collider2D>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -31,14 +30,6 @@ public class CameraControlTrigger : MonoBehaviour
     {
         if (collision.GetComponentInParent<Ball>())
         {   
-            Vector3 exitDirection = (collision.transform.position - _coll.bounds.center).normalized;
-
-            if (customInspectorObjects.swapCameras && customInspectorObjects.cameraOnLeft != null && customInspectorObjects.cameraOnRight != null)
-            {
-                //swap cameras
-                CameraManager.Instance.SwapCameraCrossWall(customInspectorObjects.cameraOnLeft, customInspectorObjects.cameraOnRight,exitDirection );
-            }
-            
             if (customInspectorObjects.panCameraOnContact)
             {
                 // pan the camera

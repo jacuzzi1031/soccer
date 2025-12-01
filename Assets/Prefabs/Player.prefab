@@ -453,6 +453,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlSchemeSO: {fileID: 11400000, guid: 2b77bfc7f8ca05d4ea8cfd6825ea7e86, type: 2}
+  teamPaletteTex: {fileID: 2800000, guid: 82e7c9366dc6c994aac78c3095b9df7e, type: 3}
+  skinPaletteTex: {fileID: 2800000, guid: 4edb5619f7d4485459fa08c2ce43ae50, type: 3}
   power: 5.55
   speed: 80
   role: 2
@@ -464,9 +466,14 @@ MonoBehaviour:
   ball: {fileID: 0}
   skinColor: 0
   fullName: 
+  playerSprite: {fileID: 6264108591919923548}
   controlSprite: {fileID: 544563676402007411}
   animator: {fileID: 4813953148699080707}
-  TeammateDetectionArea: {fileID: 1269710056799845875}
+  teammateDetectionArea: {fileID: 8929648292942069638}
+  opponentDetectionArea: {fileID: 929454569649615721}
+  tackleAcceptArea: {fileID: 5757719174918626694}
+  tackleEmitterArea: {fileID: 8716551342432395059}
+  goalieHandsArea: {fileID: 7523934469206323416}
   runParticles: {fileID: 1204252572053807556}
   FlipComponent: {fileID: 1682230148597570969}
   rb: {fileID: 7394438100784923822}
@@ -507,7 +514,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8547074335225289193}
-  - component: {fileID: 8418984467019441705}
+  - component: {fileID: 6264108591919923548}
   - component: {fileID: 4813953148699080707}
   - component: {fileID: 553156924196139063}
   m_Layer: 0
@@ -526,13 +533,13 @@ Transform:
   m_GameObject: {fileID: 4921424399640328375}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9, z: -1}
+  m_LocalPosition: {x: 0, y: 0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1682230148597570969}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &8418984467019441705
+--- !u!212 &6264108591919923548
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -552,7 +559,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 924486e653e084b47866a2a33302915a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

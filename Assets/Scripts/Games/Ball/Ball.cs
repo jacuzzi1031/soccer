@@ -30,15 +30,34 @@ public class Ball : MonoBehaviour
     [HideInInspector]public BallState currentState;
     public LayerMask LayerMask;
     public CircleCollider2D  colliderForWall;
-    
+    private const float MAX_CAPTURE_HEIGHT = 1.39f;
 
     public float frictionAir = 1.94f;
     public float frictionGround = 13.8f;
-    
     private void Awake() {
 
         SwitchState(State.FREEFORM);
     }
+
+    private void Start() {
+        playerDetectArea.OnTriggered += PlayerDetectAreaOnOnEnter;
+    }
+    private void PlayerDetectAreaOnOnEnter(Collider2D obj) {
+        Player body = obj.GetComponentInParent<Player>();
+        if (!body) return;
+
+        if (body.CanCarryBall() && height < MAX_CAPTURE_HEIGHT)
+        {   
+            carrier = body;
+            body.ControlBall();
+            SwitchState(State.CARRIED);
+        }
+    }
+
+    private void OnDestroy() {
+        playerDetectArea.OnTriggered -= PlayerDetectAreaOnOnEnter;
+    }
+
     private void Update()
     {
         ballSprite.localPosition = Vector3.up * height;
@@ -90,7 +109,7 @@ public class Ball : MonoBehaviour
     public void shoot(Vector2 ShotVelocity) {
         velocity = ShotVelocity;
         carrier = null;
-        SwitchState(Ball.State.SHOT);
+        SwitchState(State.SHOT);
     }
     
 }
