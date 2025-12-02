@@ -10,6 +10,7 @@
         public override void OnEnter() {
             animator.Play("movement");
             speedHash = Animator.StringToHash("Speed");
+            
         }
         public override void OnShoot() {
             
@@ -36,6 +37,12 @@
                 }
             }
         }
+
+        public override void OnPass(GameInput.PlayerInputType passType) {
+            if (!player.HasBall()) return;
+            TransitionState(Player.State.PASSING,PlayerStateData.Build().SetInputType(passType).SetMoveDir(moveDir));
+        }
+
         public override void _Update() {
             if (player.controlScheme == Player.ControlScheme.CPU) {
                 // aiBehavior.UpdateAI();                  

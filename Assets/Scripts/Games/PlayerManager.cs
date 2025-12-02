@@ -21,10 +21,9 @@ public class PlayerManager : MonoBehaviour
     // private bool isCheckForKickOffReadiness = false;
     private List<Player> squadHome;
     private List<Player> squadAway;
-    private List<Player> currentTeam;
-    private List<Player> opponentTeam;
+    [HideInInspector]public List<Player> currentTeam;
+    [HideInInspector]public List<Player> opponentTeam;
     public Player currentControlPlayer;
-    
     
     public static PlayerManager Instance{get; private set;}
 
@@ -45,15 +44,23 @@ public class PlayerManager : MonoBehaviour
     {
         GameInput.Instance.OnSwapAction += PlayerOnOnSwap;
         GameInput.Instance.OnShootAction += OnShootInput;
-        // GameInput.Instance.OnPassAction += OnPassInput;
+        GameInput.Instance.OnShortPassAction += OnPassInput;
+        GameInput.Instance.OnLongPassAction += OnPassInput;
+        GameInput.Instance.OnIncesivePassAction += OnPassInput;
     }
 
+    private void OnPassInput(object sender, EventArgs e) {
+        var passType = GameInput.Instance.LocalPlayerInputType;
+        currentControlPlayer?.currentState.OnPass(passType);
+    }
 
 
     private void OnDestroy() {
         GameInput.Instance.OnSwapAction -= PlayerOnOnSwap;
         GameInput.Instance.OnShootAction -= OnShootInput;
-        // GameInput.Instance.OnPassAction -= OnPassInput;
+        GameInput.Instance.OnShortPassAction -= OnPassInput;
+        GameInput.Instance.OnLongPassAction -= OnPassInput;
+        GameInput.Instance.OnIncesivePassAction -= OnPassInput;
     }
     public void SetupControlSchemes()
     {
@@ -111,11 +118,6 @@ public class PlayerManager : MonoBehaviour
     private void OnShootInput(object sender, EventArgs e)
     {   
         currentControlPlayer?.currentState?.OnShoot();
-    }
-
-    private void OnPassInput(object sender, EventArgs e)
-    {
-        currentControlPlayer?.currentState.OnPass();
     }
     public Player SpawnPlayer(
         Vector2 playerPosition,

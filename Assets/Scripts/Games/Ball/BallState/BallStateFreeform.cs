@@ -29,10 +29,10 @@
         }
 
         public override void _FixedUpdate() {
-            float delta = Time.fixedDeltaTime;//0.02s
+            float delta = Time.fixedDeltaTime;
             float friction = ball.height > 0 ? ball.frictionAir : ball.frictionGround;
             ball.velocity = Vector2.MoveTowards(ball.velocity, Vector2.zero, friction * delta);
-            ApplyGravity(ball.BOUNCINESS);
+            ApplyGravity(BOUNCINESS);
             MoveAndBounce();
         }
 

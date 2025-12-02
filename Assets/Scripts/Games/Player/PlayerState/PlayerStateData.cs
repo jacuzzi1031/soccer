@@ -3,8 +3,9 @@ using UnityEngine;
 public class PlayerStateData
 {
     public Vector2 HurtDirection { get; private set; }
-    public Player PassTarget { get; private set; }
+    public GameInput.PlayerInputType InputType { get; private set; }
     public Vector2 ResetPosition { get; private set; }
+    public Vector2 MoveDir { get; private set; }
     public Vector2 ShotDirection { get; private set; }
     public float ShotPower { get; private set; }
 
@@ -30,10 +31,14 @@ public class PlayerStateData
         HurtDirection = direction;
         return this;
     }
-
-    public PlayerStateData SetPassTarget(Player player)
+    public PlayerStateData SetInputType(GameInput.PlayerInputType inputType)
     {
-        PassTarget = player;
+        InputType = inputType;
+        return this;
+    }
+    public PlayerStateData SetMoveDir(Vector2 moveDir)
+    {
+        MoveDir = moveDir;
         return this;
     }
 

@@ -83,6 +83,7 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _ColorMatchEpsilon: 0.01
+    - _ColorTolerance: 0.01
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -94,17 +95,18 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _SkinColor: 0
+    - _SkinColor: -0.52
     - _SkinIndex: 0
     - _SkinPaletteHeight: 3
     - _SkinRow: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TeamColor: 0
+    - _TeamColor: 2.18
     - _TeamIndex: 0
     - _TeamPaletteHeight: 9
     - _TeamRow: 0
+    - _Threshold: 0.1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

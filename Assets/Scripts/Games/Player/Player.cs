@@ -92,50 +92,54 @@ public class Player : MonoBehaviour {
          //充当player reseting state
          FaceTowardsTargetGoal();
          Flip(headingRight);
-         
+    }
 
+    public void OnDestroy() {
+    }
+    private void TeammateDetectionAreaOnOnTriggered(Collider2D obj) {
+        if (obj.CompareTag("PlayerCol")) {
+            
+        }
+        // Player body = obj.GetComponentInParent<Player>();
+        // if (!body) return;
+        //
+        // if (body.CanCarryBall() && height < MAX_CAPTURE_HEIGHT)
+        // {   
+        //     carrier = body;
+        //     body.ControlBall();
+        //     SwitchState(State.CARRIED);
+        // }
     }
 
     private void setShaderProperties()
     {
-        if(playerSprite == null || teamPaletteTex == null || skinPaletteTex == null)
+        if (playerSprite == null || teamPaletteTex == null || skinPaletteTex == null)
             return;
-        
-        sr = GetComponent<SpriteRenderer>();
-
-        // 关键：只实例化一次！！！
-        Material instMat = Instantiate(sr.sharedMaterial);
-        sr.material = instMat;
-        Material mat = sr.material;
+        Material mat = playerSprite.material;
         mat.SetTexture("_TeamPalette", teamPaletteTex);
         mat.SetVector("_TeamPalette_TexelSize", new Vector4(
-            1f / teamPaletteTex.width, 1f / teamPaletteTex.height,
-            teamPaletteTex.width, teamPaletteTex.height
+            1f / teamPaletteTex.width,  // x
+            1f / teamPaletteTex.height, // y
+            teamPaletteTex.width,       // z = 列数（Shader用）
+            teamPaletteTex.height       // w = 行数（Shader用）
         ));
-
+        
         mat.SetTexture("_SkinPalette", skinPaletteTex);
         mat.SetVector("_SkinPalette_TexelSize", new Vector4(
-            1f / skinPaletteTex.width, 1f / skinPaletteTex.height,
-            skinPaletteTex.width, skinPaletteTex.height
+            1f / skinPaletteTex.width,
+            1f / skinPaletteTex.height,
+            skinPaletteTex.width,
+            skinPaletteTex.height
         ));
-
-        // 设置行索引
-        mat.SetInt("_SkinColor", Mathf.Clamp((int)skinColor, 0, int.MaxValue));
+        
+        mat.SetInt("_SkinColor", Mathf.Clamp((int)skinColor, 0, skinPaletteTex.height - 1));
 
         var countries = DataLoader.Instance.GetCountries();
-        int countryColor = countries.IndexOf(country);
-        countryColor = Mathf.Clamp(countryColor, 0, countries.Count - 1);
-        mat.SetInt("_TeamColor", countryColor);
-        
-        print("_TeamPalette_TexelSize:"+new Vector4(
-            1f / teamPaletteTex.width, 1f / teamPaletteTex.height,
-            teamPaletteTex.width, teamPaletteTex.height
-        ));
-        print("_SkinPalette_TexelSize:"+new Vector4(
-            1f / skinPaletteTex.width, 1f / skinPaletteTex.height,
-            skinPaletteTex.width, skinPaletteTex.height
-        ));
+        int teamIndex = countries.IndexOf(country);
+        teamIndex = Mathf.Clamp(teamIndex, 0, teamPaletteTex.height - 1);
+        mat.SetInt("_TeamColor", teamIndex);
     }
+
 
 
     private void SetControlSprite() {

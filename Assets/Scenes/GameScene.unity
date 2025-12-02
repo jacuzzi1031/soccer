@@ -263,7 +263,7 @@ Transform:
   m_GameObject: {fileID: 32930702}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.28, y: -1.97, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -304,9 +304,9 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: -3.6383305, y: 5.195581}
-  - {x: -3.2345734, y: 4.6081524}
-  - {x: -3.9940033, y: -1.7390599}
+  - {x: 0.7072277, y: 3.499754}
+  - {x: 0.7576904, y: 3.3716118}
+  - {x: -0.037071228, y: -3.6115346}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -939,7 +939,8 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 0.2336235, y: -3.8597689}
+  - {x: -0.088537216, y: -3.783967}
+  - {x: 0.84215546, y: 2.6849337}
   - {x: 0.9252701, y: 2.8589978}
   - {x: 0.9252701, y: 2.8589978}
   - {x: 0.56339645, y: 3.0270102}
@@ -1059,7 +1060,7 @@ Transform:
   m_GameObject: {fileID: 422772012}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.06, y: 2.73, z: 0}
+  m_LocalPosition: {x: 0, y: 2.64, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1101,11 +1102,11 @@ EdgeCollider2D:
   m_EdgeRadius: 0
   m_Points:
   - {x: -20.592894, y: -6.2244415}
-  - {x: -20.029097, y: -5.4088054}
-  - {x: -19.37093, y: -0.1028018}
-  - {x: 19.341795, y: -0.14533949}
-  - {x: 19.917252, y: -5.6423087}
-  - {x: 20.305073, y: -6.129769}
+  - {x: -20.311735, y: -5.4088054}
+  - {x: -19.688896, y: -0.1028018}
+  - {x: 19.659763, y: -0.14533949}
+  - {x: 20.27055, y: -5.571648}
+  - {x: 20.729029, y: -6.200428}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -2512,6 +2513,8 @@ MonoBehaviour:
   playerPrefab: {fileID: 5671396866889332008, guid: a00ee2378d8b64549a4324a554b92aa8, type: 3}
   spawns: {fileID: 1624780185}
   kickOffs: {fileID: 1946316642}
+  currentTeam: []
+  opponentTeam: []
   currentControlPlayer: {fileID: 0}
 --- !u!1 &1624780184
 GameObject:

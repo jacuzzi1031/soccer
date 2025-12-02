@@ -21,7 +21,7 @@ public class GameInput : MonoBehaviour {
     public event EventHandler OnPauseAction;
     public event EventHandler OnBindingRebind;
 
-    // public GameFrameSyncManager.PlayerInputType LocalPlayerInputType { get; private set; }
+
     public Vector2 MoveVector { get; private set; }
 
     public enum Binding {
@@ -37,6 +37,19 @@ public class GameInput : MonoBehaviour {
         Pause,
 
     }
+    public enum PlayerInputType
+    {
+        None = 0,
+        Move = 1,
+        Shoot = 2,
+        ShortPass=3,
+        IncisivePass=4,
+        LongPass=5,
+        Tackle=6,
+        Swap=7,
+    }
+    // public GameFrameSyncManager.PlayerInputType LocalPlayerInputType { get; private set; }
+    public PlayerInputType LocalPlayerInputType { get; private set; }
 
 
     private PlayerInputActions playerInputActions;
@@ -77,13 +90,13 @@ public class GameInput : MonoBehaviour {
     
     private void Move_canceled(InputAction.CallbackContext obj)
     {
-        // LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.None;
+        LocalPlayerInputType = PlayerInputType.None;
         MoveVector = Vector2.zero;
     }
 
     private void Move_performed(InputAction.CallbackContext obj)
     {
-        // LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.Move;
+        LocalPlayerInputType = PlayerInputType.Move;
         MoveVector = obj.ReadValue<Vector2>();
     }
 
@@ -110,49 +123,49 @@ public class GameInput : MonoBehaviour {
 
     private void Swap_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.Swap;
+        LocalPlayerInputType = PlayerInputType.Swap;
         OnSwapAction?.Invoke(this, EventArgs.Empty);
     }
     private void Swap_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.None;
+        LocalPlayerInputType = PlayerInputType.None;
     }
     private void IncisivePass_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.IncisivePass;
+        LocalPlayerInputType = PlayerInputType.IncisivePass;
         OnIncesivePassAction?.Invoke(this, EventArgs.Empty);
     }
     private void IncisivePass_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.None;
+        LocalPlayerInputType = PlayerInputType.None;
     }
     private void ShortPass_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.ShortPass;
+        LocalPlayerInputType = PlayerInputType.ShortPass;
         OnShortPassAction?.Invoke(this, EventArgs.Empty);
     }
     private void ShortPass_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.None;
+        LocalPlayerInputType = PlayerInputType.None;
         
     }
     private void LongPass_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.LongPass;
+        LocalPlayerInputType = PlayerInputType.LongPass;
         OnLongPassAction?.Invoke(this, EventArgs.Empty);
     }
     private void LongPass_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.None;
+        LocalPlayerInputType = PlayerInputType.None;
     }
     private void Shoot_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.Shoot;
+        LocalPlayerInputType = PlayerInputType.Shoot;
         OnShootAction?.Invoke(this, EventArgs.Empty);
     }
     private void Shoot_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //LocalPlayerInputType = GameFrameSyncManager.PlayerInputType.None;
+        LocalPlayerInputType = PlayerInputType.None;
         OnShootCancelAction?.Invoke(this, EventArgs.Empty);
     }
 

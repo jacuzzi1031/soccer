@@ -71,7 +71,7 @@ public class PlayerState
     public virtual void OnShoot() {
     }
 
-    public virtual void OnPass() {
+    public virtual void OnPass(GameInput.PlayerInputType passType) {
         
     }
     

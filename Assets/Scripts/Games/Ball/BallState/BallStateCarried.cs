@@ -36,8 +36,6 @@ using UnityEngine;
             {
                 animator.Play("idle");
             }
-            
-            // ProcessGravity();
         }
 
         public override void _FixedUpdate() {
@@ -53,6 +51,7 @@ using UnityEngine;
                 new Vector2((facingRight ? OFFSET_FROM_PLAYER.x : -OFFSET_FROM_PLAYER.x) + vx,
                     OFFSET_FROM_PLAYER.y);
             rb.MovePosition(targetPos);
+            ApplyGravity();
         }
 
         public override void OnEnter() {

@@ -3,7 +3,7 @@
     using UnityEngine;
 
     public class BallState {
-        public const float GRAVITY = 10.0f;
+        public const float GRAVITY = 10f;
         protected Animator animator; 
         protected Rigidbody2D rb;
         protected Ball ball=null;
@@ -34,6 +34,24 @@
         public void TransitionState(Ball.State newState, BallStateData data = null)
         {
             StateTransitionRequested?.Invoke(newState, data ?? BallStateData.Build());
+        }
+        public void ApplyGravity(float bounciness = 0.0f)
+        {
+            float dt = Time.fixedDeltaTime;
+    
+            // heightVelocity 是"每秒"的速度
+            ball.heightVelocity -= GRAVITY * dt;  // 加速度 × 时间 = 速度变化
+            ball.height += ball.heightVelocity * dt;  // 速度 × 时间 = 位移
+    
+            if (ball.height < 0)
+            {
+                ball.height = 0;
+                if (ball.heightVelocity < 0)
+                {
+                    ball.heightVelocity = -ball.heightVelocity * bounciness;
+                    ball.velocity *= bounciness;
+                }
+            }
         }
 
         public void ProcessGravity(float bounciness= 0.0f) {
@@ -102,7 +120,7 @@
         public void MoveAndBounce()
         {
             Vector2 move = ball.velocity * Time.fixedDeltaTime;
-            if (move.sqrMagnitude < 0.000001f)
+            if (move.sqrMagnitude < 0.001f)
                 return;
 
             Vector2 dir = move.normalized;
@@ -128,23 +146,6 @@
                 rb.MovePosition(rb.position + move);
             }
         }
-        public void ApplyGravity(float bounciness = 0.0f)
-        {
-            float dt = Time.fixedDeltaTime;
-            
-            ball.heightVelocity -= GRAVITY * dt;
-            ball.height += ball.heightVelocity * dt;
-            
-            if (ball.height < 0f)
-            {
-                ball.height = 0f;
-                
-                if (ball.heightVelocity < 0f)
-                {
-                    ball.heightVelocity = -ball.heightVelocity * bounciness;
-                    ball.velocity *= bounciness;
-                }
-            }
-        }
+
         
     }

@@ -5,7 +5,6 @@
 
         public override void OnEnter() {
             animator.Play("kick");
-            
         }
 
 
