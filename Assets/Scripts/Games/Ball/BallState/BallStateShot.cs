@@ -3,7 +3,7 @@
 
     public class BallStateShot: BallState {
         private const float SHOT_SPRITE_SCALE = 0.8f;
-        private const float SHOT_HEIGHT = 0.27f;
+        private const float SHOT_HEIGHT = 5f;
         private const float DURATION_SHOT = 1.0f;
         private float timeSinceShot;
         public override void OnEnter() {

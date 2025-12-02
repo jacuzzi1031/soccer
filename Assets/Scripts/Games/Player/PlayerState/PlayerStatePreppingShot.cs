@@ -8,7 +8,7 @@
         private float timeStartShot;
         private const float DURATION_MAX_BONUS=1.0f;
         private const float EASE_REWARD_FACTOR = 2.0f;
-        private const float zoomSize=4f;
+        private const float zoomSize=70f;
         private const float zoomTime=1.0f;
         public override void OnEnter() {
             animator.Play("pre_kick");

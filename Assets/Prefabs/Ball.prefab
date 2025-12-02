@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 821897178029120521}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.17, z: 0}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -371,7 +371,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.4
+      scalar: 7.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -687,7 +687,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    gravitySource: 0
+    gravitySource: 1
     maxNumParticles: 1000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
@@ -4981,7 +4981,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 3.32
+  m_Radius: 55
 --- !u!114 &4348724343267150263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5021,7 +5021,7 @@ Transform:
   m_GameObject: {fileID: 3275775157742996993}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5044,7 +5044,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3b7466572759b4f8a37be0085cd1b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BOUNCINESS: 0.8
   velocity: {x: 0, y: 0}
   height: 0
   carrier: {fileID: 0}
@@ -5157,7 +5156,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.26
+  m_Radius: 4.68
 --- !u!1 &3895618871856610060
 GameObject:
   m_ObjectHideFlags: 0
@@ -5332,7 +5331,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.28
+  m_Radius: 5
 --- !u!114 &4516360750959452949
 MonoBehaviour:
   m_ObjectHideFlags: 0

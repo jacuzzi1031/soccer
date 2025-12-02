@@ -7,7 +7,6 @@ public class AIBehavior
     private Vector2 moveDir;
     private Ball ball;
     private TriggerDetection opponentDetectionArea;
-    private TriggerDetection teammateDetectionArea;
     private Player player;
     public void UpdateAI()
     {
@@ -22,10 +21,9 @@ public class AIBehavior
         return moveDir;
     }
 
-    public void Setup(Player player, Ball ball, TriggerDetection opponentDetectionArea, TriggerDetection teammateDetectionArea) {
+    public void Setup(Player player, Ball ball, TriggerDetection opponentDetectionArea) {
         this.player=player;
         this.ball=ball;
         this.opponentDetectionArea=opponentDetectionArea;
-        this.teammateDetectionArea=teammateDetectionArea;
     }
 }

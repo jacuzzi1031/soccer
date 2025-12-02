@@ -23,15 +23,33 @@ public class PlayerStatePassing: PlayerState {
                     break;
             }
             
-            if (passTarget == null) {
-                Vector2 direction = player.headingRight 
-                    ? Vector2.right * player.speed
-                    : Vector2.left * player.speed;
-                ball.passTo(ball.rb.position + direction,true);
-            }else if (stateData.InputType == GameInput.PlayerInputType.ShortPass) {
-                ball.passTo(passTarget.rb.position + passTarget.rb.velocity * 0.8f,true);
-            }else if (stateData.InputType == GameInput.PlayerInputType.LongPass) {
-                ball.passTo(passTarget.rb.position + passTarget.rb.velocity * 0.8f,false);
+            Vector2 passDestination;
+            Vector2 headingOffset = player.headingRight ? Vector2.right * player.speed : Vector2.left * player.speed;
+
+            if (passTarget == null)
+            {
+                passDestination = (Vector2)ball.transform.position + headingOffset;
+                ball.passTo(passDestination,true,passTarget);
+            }
+            else
+            {
+                switch (stateData.InputType)
+                {
+                    case GameInput.PlayerInputType.ShortPass:
+                        passDestination = (Vector2)passTarget.transform.position + passTarget.rb.velocity * 0.8f;
+                        ball.passTo(passDestination,true,passTarget);
+                        break;
+
+                    case GameInput.PlayerInputType.LongPass:
+                        passDestination = (Vector2)passTarget.transform.position + passTarget.rb.velocity * 0.8f;
+                        ball.passTo(passDestination,false,passTarget);
+                        break;
+
+                    case GameInput.PlayerInputType.IncisivePass:
+                        passDestination = (Vector2)passTarget.transform.position + passTarget.rb.velocity * 1.8f;
+                        ball.passTo(passDestination,true,passTarget);
+                        break;
+                }
             }
             TransitionState(Player.State.MOVING);
         }
@@ -71,7 +89,6 @@ public class PlayerStatePassing: PlayerState {
                 if (!IsInFront(p, self)) continue;
                 if (!IsInScreen(p.transform.position)) continue;
                 if (!IsWithinAngle(toTarget, moveDir)) continue;
-
                 list.Add(p);
             }
             return list.OrderBy(p =>
@@ -80,7 +97,8 @@ public class PlayerStatePassing: PlayerState {
         }
     
         public static Player GetShortPassTarget(Player self, List<Player> team, Vector2 moveDir)
-        {
+        { 
+            if(moveDir.sqrMagnitude <= 0.01f) moveDir=self.headingRight ? Vector2.right : Vector2.left;
             var list = GetEligibleTargets(self, team, moveDir);
             return list.Count > 0 ? list[0] : null;
         }

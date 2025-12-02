@@ -5,7 +5,7 @@
     public class PlayerStateMoving: PlayerState {
         
         private Vector2 moveDir;
-        private float runThreshold = 2.5f;
+        private float runThreshold = 45f;
         private int speedHash;
         public override void OnEnter() {
             animator.Play("movement");

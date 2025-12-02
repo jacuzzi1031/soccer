@@ -31,7 +31,6 @@ public class Player : MonoBehaviour {
     [SerializeField] private SpriteRenderer playerSprite;
     [SerializeField] private SpriteRenderer controlSprite;
     [SerializeField] private Animator animator;
-    [SerializeField] private TriggerDetection teammateDetectionArea;
     [SerializeField] private TriggerDetection opponentDetectionArea;
     [SerializeField] public TriggerDetection tackleAcceptArea;
     [SerializeField] private Collider2D tackleEmitterArea;
@@ -78,7 +77,7 @@ public class Player : MonoBehaviour {
     [HideInInspector]public bool headingRight = true;
     private PlayerStateFactory playerStateFactory = new PlayerStateFactory();
     [HideInInspector]public PlayerState currentState;
-    private const float BALL_CONTROL_HEIGHT_MAX = 0.55f;
+    private const float BALL_CONTROL_HEIGHT_MAX = 10f;
 
     
 
@@ -148,7 +147,7 @@ public class Player : MonoBehaviour {
 
     private void SetupAIBehavior() {
         currentAIBehavior = aiBehaviorFactory.GetFreshAIBehavior(role);
-        currentAIBehavior.Setup(this, ball, opponentDetectionArea, teammateDetectionArea);
+        currentAIBehavior.Setup(this, ball, opponentDetectionArea);
     }
     private void Update() {
         currentState?._Update();
@@ -205,7 +204,7 @@ public class Player : MonoBehaviour {
     }
     public void ControlBall() {
         if(ball.height > BALL_CONTROL_HEIGHT_MAX) {
-            SwitchState(Player.State.CHEST_CONTROL);
+            SwitchState(State.CHEST_CONTROL);
         }
     }
 

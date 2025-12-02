@@ -3,39 +3,42 @@ using UnityEngine;
 
     public class BallStateCarried: BallState {
         private const float DRIBBLE_FREQUENCY = 10f;
-        private const float DRIBBLE_INTENSITY = 0.167f;
-        private readonly Vector2 OFFSET_FROM_PLAYER = new Vector2(0.60f, 0.22f);
+        private const float DRIBBLE_INTENSITY = 3f;
+        private readonly Vector2 OFFSET_FROM_PLAYER = new Vector2(10.8f, 4f);
         private const float minVelocityThreshold = 0.01f;
         private float dribbleTime = 0f;
         //Carried  
+        private float cameraCheckTimer = 0f;
+        public float cameraCheckInterval = 0.2f;
+
         public override void _Update()
-        {
-            if (carrier.rb.velocity !=Vector2.zero)
+        {   
+            Vector2 currentVelocity = carrier.rb.velocity;
+            if (currentVelocity != Vector2.zero)
             {
-                if (carrier.headingRight)
+                animator.Play(carrier.headingRight ? "roll" : "rollback");
+
+                cameraCheckTimer += Time.deltaTime;
+                if (cameraCheckTimer > cameraCheckInterval)
                 {
-                    animator.Play("roll");
-                }
-                else
-                {
-                    animator.Play("rollback");
-                }
-                
-                //CameraYdamping
-                float velocityY = rb.velocity.y;
-                if (CameraManager.Instance.IsLerpingScreenY) return;
-                if (Mathf.Abs(velocityY) > minVelocityThreshold)
-                {
-                    CameraManager.Instance.LerpScreenY(velocityY);
-                }
-                else {
-                    CameraManager.Instance.LerpScreenY(0);
+                    cameraCheckTimer = 0f;
+                    CheckCameraY(currentVelocity.y);
                 }
             }
             else
             {
                 animator.Play("idle");
             }
+        }
+
+        void CheckCameraY(float velocityY)
+        {
+            if (CameraManager.Instance.IsLerpingScreenY) return;
+
+            if (Mathf.Abs(velocityY) > minVelocityThreshold)
+                CameraManager.Instance.LerpScreenY(velocityY);
+            else
+                CameraManager.Instance.LerpScreenY(0);
         }
 
         public override void _FixedUpdate() {

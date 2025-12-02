@@ -11,9 +11,9 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Ball ball;
 
     [Header("Controls for Screen Y during player up/down")]
-    [SerializeField] private float _downScreenYAmount = 0.3f;
-    [SerializeField] private float _upScreenYAmount = 0.65f;
-    [SerializeField] private float _tranScreenYTime = 0.7f; 
+    [SerializeField] private float _downScreenYAmount = 0.4f;
+    [SerializeField] private float _upScreenYAmount = 0.8f;
+    [SerializeField] private float _tranScreenYTime = 0.4f; 
  
     
 
@@ -27,7 +27,7 @@ public class CameraManager : MonoBehaviour
     [HideInInspector] public bool IsLerpingScreenY = false; 
     [HideInInspector] public bool isLerpOffsetXAction = false; 
     private float _currentTargetScreenY;
-    private Vector2 _carriedTrackedObjectOffset=new Vector2(1.0f,0f);
+    private Vector2 _carriedTrackedObjectOffset=new Vector2(18.0f,0f);
     private Vector2 _freeformTrackedObjectOffset=new Vector2(0f,0f);
     private Vector2 _currentTrackedObjectOffset;
     private Vector2 _startingTrackedObjectOffset;
@@ -133,10 +133,8 @@ public class CameraManager : MonoBehaviour
             _currentTargetScreenY = _downScreenYAmount;
         else
             _currentTargetScreenY = _normScreenYAmount;
-        
         if (Mathf.Approximately(_currentTargetScreenY, _framingTransposer.m_ScreenY))
             return;
-        
         if (_lerpYPanCoroutine != null)
             StopCoroutine(_lerpYPanCoroutine);
         _lerpYPanCoroutine = StartCoroutine(LerpYAction());
@@ -292,4 +290,9 @@ public class CameraManager : MonoBehaviour
         } 
     }
     #endregion
+    
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+    }
 }

@@ -3,7 +3,7 @@
     using UnityEngine;
 
     public class BallState {
-        public const float GRAVITY = 10f;
+        public const float GRAVITY = 8f;
         protected Animator animator; 
         protected Rigidbody2D rb;
         protected Ball ball=null;
@@ -14,6 +14,7 @@
         public event Action<Ball.State, BallStateData> StateTransitionRequested;
         public Transform ballSprite;
         public const float BOUNCINESS = 0.8f;
+        const float idleThreshold = 0.01f;
         public LayerMask mask;
         private RaycastHit2D[] hitBuffer = new RaycastHit2D[20];
         private ContactFilter2D filter;
@@ -36,22 +37,24 @@
             StateTransitionRequested?.Invoke(newState, data ?? BallStateData.Build());
         }
         public void ApplyGravity(float bounciness = 0.0f)
-        {
-            float dt = Time.fixedDeltaTime;
-    
-            // heightVelocity 是"每秒"的速度
-            ball.heightVelocity -= GRAVITY * dt;  // 加速度 × 时间 = 速度变化
-            ball.height += ball.heightVelocity * dt;  // 速度 × 时间 = 位移
-    
-            if (ball.height < 0)
-            {
-                ball.height = 0;
-                if (ball.heightVelocity < 0)
+        {   
+            //默认height不会是0，而是-0.888，导致一直削弱速度
+            if (ball.height > 0 || ball.heightVelocity > 0) {
+                float dt = Time.fixedDeltaTime;
+                ball.heightVelocity -= GRAVITY * dt;
+                ball.height += ball.heightVelocity ; 
+                // Debug.Log("ball.height"+ball.height+" ball.heightVelocity:"+ball.heightVelocity);
+                if (ball.height < 0)
                 {
-                    ball.heightVelocity = -ball.heightVelocity * bounciness;
-                    ball.velocity *= bounciness;
+                    ball.height = 0;
+                    if (ball.heightVelocity < 0)
+                    {
+                        ball.heightVelocity = -ball.heightVelocity * bounciness;
+                        ball.velocity *= bounciness;
+                    }
                 }
             }
+            
         }
 
         public void ProcessGravity(float bounciness= 0.0f) {
@@ -73,15 +76,16 @@
         }
         public void SetBallAnimationFromVelocity()
         {
-            if (ball.velocity == Vector2.zero)
+            if (ball.velocity.sqrMagnitude <= idleThreshold)
             {
                 animator.Play("idle");
                 animator.speed = 1;
                 return;
             }
+
             if (ball.velocity.x > 0)
             {
-                animator.Play("roll", 0, 0f);
+                animator.Play("roll");
                 animator.speed = 1;
             }
             else

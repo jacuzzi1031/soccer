@@ -39,6 +39,7 @@ public class PlayerManager : MonoBehaviour
         SetupControlSchemes();
         
         SubscribeGlobalInputs();
+        GameInterface.Interface.EventSystem.Subscribe<PassBallToSwapPlayer>(obj =>SwapTo(obj.ToSwapPlayer));
     }
     private void SubscribeGlobalInputs()
     {
@@ -165,6 +166,13 @@ public class PlayerManager : MonoBehaviour
             closestCpuToBall.SetControlScheme(playerControlScheme);
             currentControlPlayer=closestCpuToBall;
         }
+    }
+
+    public void SwapTo(Player player) {
+        var playerControlScheme = currentControlPlayer.controlScheme;
+        currentControlPlayer.SetControlScheme(Player.ControlScheme.CPU);
+        player.SetControlScheme(playerControlScheme);
+        currentControlPlayer=player;
     }
 
 }
