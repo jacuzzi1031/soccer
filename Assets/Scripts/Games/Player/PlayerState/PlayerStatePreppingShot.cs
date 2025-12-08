@@ -8,26 +8,33 @@
         private float timeStartShot;
         private const float DURATION_MAX_BONUS=1.0f;
         private const float EASE_REWARD_FACTOR = 2.0f;
-        private const float zoomSize=70f;
-        private const float zoomTime=1.0f;
+        private float pressRaw;
+        private bool hasTriggeredBonusEvent = false;
+        public PlayerStatePreppingShot(Sprite sprite) {
+            playStyleSprite=sprite;
+        }
         public override void OnEnter() {
             animator.Play("pre_kick");
             player.rb.velocity = Vector2.zero;
-            GameInput.Instance.OnShootCancelAction+= InstanceOnOnShootCancelAction;
+            
             timeStartShot = Time.time;
             shotDirection=player.headingRight? Vector2.right : Vector2.left;
             
-            CameraManager.Instance.PowerShotZoom(zoomSize, zoomTime,true);
+            CameraManager.Instance.PowerShotZoom(true);
+
+            hasTriggeredBonusEvent = false;
         }
         
         public override void OnExit() {
-            GameInput.Instance.OnShootCancelAction-= InstanceOnOnShootCancelAction;
-            CameraManager.Instance.PowerShotZoom(zoomSize, zoomTime,false);
+            CameraManager.Instance.PowerShotZoom(false);
         }
 
-        private void InstanceOnOnShootCancelAction(object sender, EventArgs e) {
+        public override void OnShootCancel() {
             if (ball.carrier != player) return;
-            float durationPress = Mathf.Clamp(Time.time - timeStartShot, 0f, DURATION_MAX_BONUS);
+            float durationPress = Mathf.Clamp(pressRaw, 0f, DURATION_MAX_BONUS);
+
+
+            
             float easeTime = durationPress / DURATION_MAX_BONUS;
             float bonus = Mathf.Pow(easeTime, EASE_REWARD_FACTOR);
             float shotPower = player.power * (1 + 1.5f*bonus);
@@ -38,6 +45,12 @@
 
         public override void _Update() {
             shotDirection += GameInput.Instance.GetMovementVector();
+            
+            pressRaw = Time.time - timeStartShot;
+            if (!hasTriggeredBonusEvent && Time.time - timeStartShot >= DURATION_MAX_BONUS/2f) {
+                GameInterface.Interface.EventSystem.Publish(new PlayStyleShowEvent(player.playerId,playStyleSprite));
+                hasTriggeredBonusEvent = true;
+            }
         }
 
         public override bool CanPass() {

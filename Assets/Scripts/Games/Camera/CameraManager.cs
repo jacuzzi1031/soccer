@@ -31,10 +31,13 @@ public class CameraManager : MonoBehaviour
     private Vector2 _freeformTrackedObjectOffset=new Vector2(0f,0f);
     private Vector2 _currentTrackedObjectOffset;
     private Vector2 _startingTrackedObjectOffset;
-    private float _tranOffsetTime = 1.0f;
+    [SerializeField]private float _CarryOrFreeBallTranOffsetTime = 0.5f;
     private float _startingOrthographicSize;
     private Coroutine _PowerShotZoomCoroutine;
     private LensSettings currentCameraMLens;
+    public float ShrinkZoomSizeWhileShoot = 90f;
+    public float ShrinkZoomSizeTime = 1.0f;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -57,7 +60,7 @@ public class CameraManager : MonoBehaviour
         _normScreenYAmount=_framingTransposer.m_ScreenY;
 
 
-        _startingTrackedObjectOffset = _freeformTrackedObjectOffset;
+        _startingTrackedObjectOffset = _carriedTrackedObjectOffset;
         //set the Lens.OrthographicSize
         _startingOrthographicSize = _currentCamera.m_Lens.OrthographicSize;
         
@@ -66,6 +69,7 @@ public class CameraManager : MonoBehaviour
     void OnDestroy()
     {
         GameInterface.Interface.EventSystem.Unsubscribe<BallFreeformToLerpCameraOffsetEvent>(CurrentStateOnOnBallFreeformAction);
+        StopAllCoroutines();
     }
 
 
@@ -101,10 +105,10 @@ public class CameraManager : MonoBehaviour
 
         float elapsedTime = 0f;
 
-        while (elapsedTime < _tranOffsetTime)
+        while (elapsedTime < _CarryOrFreeBallTranOffsetTime)
         {
             elapsedTime += Time.deltaTime;
-            float t = elapsedTime / _tranOffsetTime;
+            float t = elapsedTime / _CarryOrFreeBallTranOffsetTime;
             float lerped = Mathf.Lerp(startOffset, endOffset, t);
 
             var offset = _framingTransposer.m_TrackedObjectOffset; 
@@ -222,23 +226,23 @@ public class CameraManager : MonoBehaviour
 
     #region PowerShot
 
-    public void PowerShotZoom(float zoomSize,float zoomTime,bool isShot) {
+    public void PowerShotZoom(bool isShot) {
         if (_PowerShotZoomCoroutine != null)
             StopCoroutine(_PowerShotZoomCoroutine);
-        _PowerShotZoomCoroutine = StartCoroutine(ZoomAction( zoomSize, zoomTime, isShot));
+        _PowerShotZoomCoroutine = StartCoroutine(ZoomAction( isShot));
     }
 
-    private IEnumerator ZoomAction(float zoomSize, float zoomTime, bool isShot)
+    private IEnumerator ZoomAction( bool isShot)
     {
         float startingSize = _currentCamera.m_Lens.OrthographicSize;
-        float endSize = isShot ? zoomSize : _startingOrthographicSize;
+        float endSize = isShot ? ShrinkZoomSizeWhileShoot : _startingOrthographicSize;
 
         float elapsedTime = 0f;
 
-        while (elapsedTime < zoomTime)
+        while (elapsedTime < ShrinkZoomSizeTime)
         {
             elapsedTime += Time.deltaTime;
-            float t = elapsedTime / zoomTime;
+            float t = elapsedTime / ShrinkZoomSizeTime;
 
             var lens = _currentCamera.m_Lens;
             lens.OrthographicSize = Mathf.Lerp(startingSize, endSize, t);
@@ -291,8 +295,4 @@ public class CameraManager : MonoBehaviour
     }
     #endregion
     
-    private void OnDisable()
-    {
-        StopAllCoroutines();
-    }
 }

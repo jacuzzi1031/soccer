@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerStateData
 {
-    public Vector2 HurtDirection { get; private set; }
     public GameInput.PlayerInputType InputType { get; private set; }
     public Vector2 ResetPosition { get; private set; }
     public Vector2 MoveDir { get; private set; }
@@ -26,11 +25,7 @@ public class PlayerStateData
         return this;
     }
 
-    public PlayerStateData SetHurtDirection(Vector2 direction)
-    {
-        HurtDirection = direction;
-        return this;
-    }
+
     public PlayerStateData SetInputType(GameInput.PlayerInputType inputType)
     {
         InputType = inputType;

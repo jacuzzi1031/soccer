@@ -4927,7 +4927,7 @@ GameObject:
   - component: {fileID: 4348724343267150263}
   m_Layer: 10
   m_Name: PlayerProximityArea
-  m_TagString: Untagged
+  m_TagString: PlayerProximityArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5048,9 +5048,10 @@ MonoBehaviour:
   height: 0
   carrier: {fileID: 0}
   heightVelocity: 0
+  trainingSpawnPosition: {fileID: 0}
   collideForScoreAreaLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 2048
   playerDetectArea: {fileID: 4516360750959452949}
   playerProximityArea: {fileID: 4348724343267150263}
   animator: {fileID: 705614109788894057}
@@ -5277,7 +5278,7 @@ GameObject:
   - component: {fileID: 4516360750959452949}
   m_Layer: 10
   m_Name: PlayerDetectArea
-  m_TagString: Untagged
+  m_TagString: PlayerDetectArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

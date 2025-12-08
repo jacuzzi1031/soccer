@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+/// <summary>
+/// 逻辑型ScriptableObject适合做“控制模式图标” 因为这三种固定不变。
+/// </summary>
 [CreateAssetMenu(menuName = "Game/Control Scheme")]
 public class ControlScriptObject : ScriptableObject
 {

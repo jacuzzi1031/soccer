@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 253e32ec76be11243be5871a1ad32ab7, type: 3}
-  m_Name: ControlSo
+  m_Name: _ControlSo
   m_EditorClassIdentifier: 
   cpuSprite: {fileID: 21300000, guid: 76c27c9591157d04ea116773e22b0bc8, type: 3}
   p1Sprite: {fileID: 21300000, guid: 1bb52aea657e7dd4ca9d8b8a07372795, type: 3}

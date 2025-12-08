@@ -10,24 +10,27 @@ public class Player : MonoBehaviour {
     public ControlScriptObject controlSchemeSO;
     public Texture2D teamPaletteTex;
     public Texture2D skinPaletteTex;
+    [SerializeField] private PlayerStateFactory playerStateFactory = new PlayerStateFactory();
     [Space]
     [Header("Settings")]
-    [HideInInspector] public float power;
-    [HideInInspector] public float speed;
-    [HideInInspector] public Role role = Role.MIDFIELD;
-    [HideInInspector] public string country;
+    public string fullName;
+    public string country;
+    public float power;
+    public float speed;
+    public Role role = Role.MIDFIELD;
     [HideInInspector] public enum ControlScheme{ CPU,P1,P2};
-    public ControlScheme controlScheme = ControlScheme.CPU;
+    [HideInInspector] public ControlScheme controlScheme = ControlScheme.CPU;
     [HideInInspector] public Vector2 KickoffPosition;
     [HideInInspector] public Goal ownGoal;
     [HideInInspector] private AIBehaviorFactory aiBehaviorFactory=new AIBehaviorFactory();
     private AIBehavior currentAIBehavior;
-    public Goal targetGoal;
-    public Ball ball;
+    [HideInInspector]public Goal targetGoal;
+    [HideInInspector]public Ball ball;
     [HideInInspector] public SkinColor skinColor;
-    [HideInInspector] public string fullName;
+
     [Space]
     [Header("Components")]
+    [SerializeField] private SpriteRenderer playStyleRenderer;
     [SerializeField] private SpriteRenderer playerSprite;
     [SerializeField] private SpriteRenderer controlSprite;
     [SerializeField] private Animator animator;
@@ -38,8 +41,10 @@ public class Player : MonoBehaviour {
     [SerializeField] private ParticleSystem runParticles;
     [SerializeField] private Transform FlipComponent;
     public Rigidbody2D rb;
-    [SerializeField] private SpriteRenderer sr;
-
+    [SerializeField] private TriggerDetection ballDetectionArea;
+    [HideInInspector]public float height=0f;
+    [HideInInspector]public float heightVelocity=0f;
+    [HideInInspector]public float GRAVITY = 6f;
     public enum State {
         MOVING,
         TACKLING,
@@ -47,8 +52,7 @@ public class Player : MonoBehaviour {
         PREPPING_SHOT,
         SHOOTING,
         PASSING,
-        HEADER,
-        VOLLEY_KICK,
+        VOLLEY_KICK_OR_HEADER,
         BICYCLE_KICK,
         CHEST_CONTROL,
         HURT,
@@ -75,39 +79,82 @@ public class Player : MonoBehaviour {
 
     private Vector3 lastInteractDir;
     [HideInInspector]public bool headingRight = true;
-    private PlayerStateFactory playerStateFactory = new PlayerStateFactory();
+
     [HideInInspector]public PlayerState currentState;
     private const float BALL_CONTROL_HEIGHT_MAX = 10f;
+    private float originalPlayerSpriteY;
+    private float originalControlSpriteY;
+    [HideInInspector]public Vector2 spawnPosition;
 
-    
-
+    [HideInInspector]public int playerId;
+    private Coroutine traitRoutine;
+    [HideInInspector] public float weightOnDutySteering;
+    [HideInInspector]public List<Player> opponentListNearby = new List<Player>();
     private void Start() {
          SetControlSprite();
          SetupAIBehavior();
          setShaderProperties();
-         if(role==Role.GOALIE) goalieHandsArea.gameObject.SetActive(true);
+         if (role == Role.GOALIE) {
+             goalieHandsArea.enabled = true;
+         }
+         else {
+             goalieHandsArea.enabled = false;
+         }
+         tackleEmitterArea.enabled = false;
          SwitchState(State.MOVING, PlayerStateData.Build());
          
          //充当player reseting state
          FaceTowardsTargetGoal();
          Flip(headingRight);
+         
+         ballDetectionArea.OnStay+= BallDetectionAreaOnOnStay;
+         opponentDetectionArea.OnTriggered+= OpponentDetectionAreaOnOnTriggered;
+         opponentDetectionArea.OnTriggerExit+= OpponentDetectionAreaOnOnTriggerExit;
+         tackleAcceptArea.OnTriggered+= TackleAcceptAreaOnOnTriggered;
+         
+         originalPlayerSpriteY = playerSprite.transform.localPosition.y;
+         originalControlSpriteY = controlSprite.transform.localPosition.y;
+         spawnPosition=transform.position;
+    }
+
+    private void TackleAcceptAreaOnOnTriggered(Collider2D obj) {
+        Player p = obj.GetComponentInParent<Player>();
+        if (p != null)
+        {
+            TakeTackleHit(p.rb.velocity);
+        }
+    }
+
+    private void TakeTackleHit(Vector2 emitterVelocity) {
+        if (!HasBall()) return;
+        SwitchState(Player.State.HURT, PlayerStateData.Build().SetMoveDir(emitterVelocity.normalized));
+    }
+
+    private void OpponentDetectionAreaOnOnTriggerExit(Collider2D obj) {
+        Player p = obj.GetComponentInParent<Player>();
+        if (p != null)
+            opponentListNearby.Remove(p);
+    }
+
+    private void OpponentDetectionAreaOnOnTriggered(Collider2D obj) {
+        Player p = obj.GetComponentInParent<Player>();
+        if (p != null)
+            opponentListNearby.Add(p);
+    }
+    public bool HasOpponentsNearby() {
+        return opponentListNearby.Find(p => p.country != country);
+    }
+
+    private void BallDetectionAreaOnOnStay(Collider2D obj) {
+
+        if (obj.CompareTag("PlayerDetectArea")) {
+            if (!currentState.CanVolleyKickOrHeader()) return;
+            currentState?.VolleyShot(obj.GetComponentInParent<Ball>());
+        }
+
     }
 
     public void OnDestroy() {
-    }
-    private void TeammateDetectionAreaOnOnTriggered(Collider2D obj) {
-        if (obj.CompareTag("PlayerCol")) {
-            
-        }
-        // Player body = obj.GetComponentInParent<Player>();
-        // if (!body) return;
-        //
-        // if (body.CanCarryBall() && height < MAX_CAPTURE_HEIGHT)
-        // {   
-        //     carrier = body;
-        //     body.ControlBall();
-        //     SwitchState(State.CARRIED);
-        // }
     }
 
     private void setShaderProperties()
@@ -152,15 +199,44 @@ public class Player : MonoBehaviour {
     private void Update() {
         currentState?._Update();
         FlipSprite();
-
+        
 
         // set_sprite_visibility();
-        // process_gravity(delta);
+
     }
+
+    private void ApplyHeight()
+    {
+        Vector3 playerPos = playerSprite.transform.localPosition;
+        Vector3 controlPos = controlSprite.transform.localPosition;
+        float dt = Time.deltaTime;
+        if (height > 0f)
+        {
+            heightVelocity -= GRAVITY*dt;
+            height += heightVelocity;
+
+            if (height <= 0f)
+            {
+                height = 0f;
+                playerPos.y = originalPlayerSpriteY;
+                controlPos.y = originalControlSpriteY;
+            }
+            else
+            {
+                playerPos.y = originalPlayerSpriteY + height;
+                controlPos.y = originalControlSpriteY + height;
+            }
+
+            playerSprite.transform.localPosition = playerPos;
+            controlSprite.transform.localPosition = controlPos;
+        }
+    }
+
 
 
     private void FixedUpdate() {
         currentState?._FixedUpdate();
+        ApplyHeight();
     }
     public void SwitchState(State type, PlayerStateData data = null)
     {
@@ -171,18 +247,20 @@ public class Player : MonoBehaviour {
 
 
         currentState = playerStateFactory.GetFreshState(type);
-        currentState.Setup(this, data ?? new PlayerStateData(),rb,animator,ball,runParticles,currentAIBehavior);
+        currentState.Setup(this, data ?? new PlayerStateData(),rb,animator,ball,runParticles,ownGoal,targetGoal,currentAIBehavior,tackleEmitterArea);
         currentState.StateTransitionRequested += SwitchState;
         currentState.OnEnter();
     }
 
     public void FlipSprite() {
-        
-        if (rb.velocity.x > 0 && !headingRight)
+        float flipX = rb.velocity.x;
+        if (Mathf.Abs(flipX) < 0.001f) 
+            return;
+        if (flipX > 0 && !headingRight)
         {
             Flip(true);
         }
-        else if (rb.velocity.x < 0 && headingRight)
+        else if (flipX < 0 && headingRight)
         {
             Flip(false);
         }
@@ -200,7 +278,7 @@ public class Player : MonoBehaviour {
     }
 
     public bool CanCarryBall() {
-        return currentState != null && currentState.CanCarryBall();
+        return currentState != null && currentState.CanCarryBall()&&role!=Role.GOALIE;
     }
     public void ControlBall() {
         if(ball.height > BALL_CONTROL_HEIGHT_MAX) {
@@ -223,6 +301,7 @@ public class Player : MonoBehaviour {
     }
 
     public void Initialize(
+        int playerid,
         Vector2 contextPosition,
         Vector2 contextKickoffPosition,
         Ball contextBall,
@@ -230,8 +309,16 @@ public class Player : MonoBehaviour {
         Goal contextTargetGoal,
         PlayerResource contextPlayerData,
         string contextCountry)
-    {
-        transform.position = contextPosition;
+    {   
+        playerId=playerid;
+        playStyleRenderer.enabled=false;
+        GameManager.MatchType currentMatchType = GameManager.Instance.currentMathType;
+        if (currentMatchType != GameManager.MatchType.Training&&currentMatchType!= GameManager.MatchType.TrainingWithEnemy) {
+            transform.position = contextPosition;
+        }
+        else {
+            transform.position = contextKickoffPosition;
+        }
         KickoffPosition = contextKickoffPosition;
         ball = contextBall;
         ownGoal = contextOwnGoal;
@@ -253,7 +340,7 @@ public class Player : MonoBehaviour {
         
     }
     
-    void FaceTowardsTargetGoal()
+    public void FaceTowardsTargetGoal()
     {
         if (!IsFacingTargetGoal())
         {
@@ -272,4 +359,21 @@ public class Player : MonoBehaviour {
     public void SetControlTexture() {
         controlSprite.sprite=controlSchemeSO.GetSprite(controlScheme);
     }
+
+    public void ShowPlayStyle(Sprite playStyleSprite) {
+        playStyleRenderer.sprite = playStyleSprite;
+        
+        if (traitRoutine != null)
+            StopCoroutine(traitRoutine);
+
+        traitRoutine = StartCoroutine(ShowTraitRoutine());
+    }
+    private IEnumerator ShowTraitRoutine()
+    {   
+        playStyleRenderer.enabled = true;
+        yield return new WaitForSeconds(3f);
+        playStyleRenderer.enabled = false;
+    }
+
+
 }

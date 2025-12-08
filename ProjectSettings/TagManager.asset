@@ -4,6 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - PlayerDetectArea
+  - PlayerProximityArea
   - PlayerCol
   layers:
   - Default
@@ -24,7 +26,7 @@ TagManager:
   - PlayerForTackle
   - PlayerForOpponent
   - PlayerForTackleAccept
-  - PlayerForPlayer
+  - 
   - InvisibleWall
   - CameraTrigger
   - 

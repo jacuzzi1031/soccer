@@ -36,13 +36,13 @@
         {
             StateTransitionRequested?.Invoke(newState, data ?? BallStateData.Build());
         }
-        public void ApplyGravity(float bounciness = 0.0f)
+        public void MoveVertical(float bounciness = 0.0f)
         {   
             //默认height不会是0，而是-0.888，导致一直削弱速度
             if (ball.height > 0 || ball.heightVelocity > 0) {
                 float dt = Time.fixedDeltaTime;
-                ball.heightVelocity -= GRAVITY * dt;
-                ball.height += ball.heightVelocity ; 
+                ball.heightVelocity -= GRAVITY * dt;//heightVelocity 每帧位移
+                ball.height += ball.heightVelocity;
                 // Debug.Log("ball.height"+ball.height+" ball.heightVelocity:"+ball.heightVelocity);
                 if (ball.height < 0)
                 {
@@ -50,25 +50,6 @@
                     if (ball.heightVelocity < 0)
                     {
                         ball.heightVelocity = -ball.heightVelocity * bounciness;
-                        ball.velocity *= bounciness;
-                    }
-                }
-            }
-            
-        }
-
-        public void ProcessGravity(float bounciness= 0.0f) {
-            if (ball.height > 0f || ball.heightVelocity > 0f)
-            {
-                ball.heightVelocity -= GRAVITY * Time.deltaTime;
-                ball.height += ball.heightVelocity;
-                if (ball.height < 0f)
-                {
-                    ball.height = 0f;
-                    if (bounciness > 0f && ball.heightVelocity < 0f)
-                    {
-                        ball.heightVelocity = -ball.heightVelocity * bounciness;
-                        
                         ball.velocity *= bounciness;
                     }
                 }
@@ -121,8 +102,11 @@
         
         // string layerName = LayerMask.LayerToName(hit.collider.gameObject.layer);
         // Debug.Log($"Hit {hit.collider.name}, Layer: {layerName}, Tag: {hit.collider.tag}");
-        public void MoveAndBounce()
+        public void MoveHorizontal()
         {
+            float dt = Time.fixedDeltaTime;
+            float friction = ball.height > 0 ? ball.frictionAir : ball.frictionGround;
+            ball.velocity = Vector2.MoveTowards(ball.velocity, Vector2.zero, friction* dt);
             Vector2 move = ball.velocity * Time.fixedDeltaTime;
             if (move.sqrMagnitude < 0.001f)
                 return;
@@ -151,5 +135,8 @@
             }
         }
 
-        
+
+        public virtual bool CanCarriedBall() {
+            return false;
+        }
     }

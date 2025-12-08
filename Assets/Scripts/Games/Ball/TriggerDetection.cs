@@ -7,6 +7,7 @@ public class TriggerDetection : MonoBehaviour
 {
     public event Action<Collider2D> OnTriggered;
     public event Action<Collider2D> OnTriggerExit;
+    public event Action<Collider2D> OnStay;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -16,6 +17,11 @@ public class TriggerDetection : MonoBehaviour
     {
         OnTriggerExit?.Invoke(other);
     }
+
+    private void OnTriggerStay2D(Collider2D other) {
+        OnStay?.Invoke(other);
+    }
+
     public void EnableDetection(bool enable)
     {
         gameObject.SetActive(enable);

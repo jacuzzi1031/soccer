@@ -8,10 +8,10 @@ public class AIBehaviorFactory
     private readonly Dictionary<Player.Role, Func<AIBehavior>> _stateFactories =
         new Dictionary<Player.Role, Func<AIBehavior>>
         {
-            { Player.Role.DEFENSE, () => new AIBehavior() },
-            { Player.Role.GOALIE, () => new AIBehavior() },
-            { Player.Role.MIDFIELD, () => new AIBehavior() },
-            { Player.Role.OFFENSE, () => new AIBehavior() },
+            { Player.Role.DEFENSE, () => new AIBehaviorField() },
+            { Player.Role.GOALIE, () => new AIBehaviorGoalie() },
+            { Player.Role.MIDFIELD, () => new AIBehaviorField() },
+            { Player.Role.OFFENSE, () => new AIBehaviorField() },
         };
 
     public AIBehavior GetFreshAIBehavior(Player.Role role)

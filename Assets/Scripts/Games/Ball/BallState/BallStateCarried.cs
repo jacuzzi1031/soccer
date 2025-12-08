@@ -54,7 +54,7 @@ using UnityEngine;
                 new Vector2((facingRight ? OFFSET_FROM_PLAYER.x : -OFFSET_FROM_PLAYER.x) + vx,
                     OFFSET_FROM_PLAYER.y);
             rb.MovePosition(targetPos);
-            ApplyGravity();
+            MoveVertical();
         }
 
         public override void OnEnter() {
@@ -62,11 +62,21 @@ using UnityEngine;
             ball.velocity=Vector2.zero;
             ball.heightVelocity=0.0f;
             ball.height = 0f;
-            // ball.carrier.tackleAcceptArea.EnableDetection(true);
+            if (carrier.controlScheme == Player.ControlScheme.CPU) {
+                foreach (var country in GameManager.Instance.playerSetup) {
+                    if (!string.IsNullOrEmpty(country) && country == carrier.country) {
+                        SwitchControlEvent switchControlEvent = new SwitchControlEvent(
+                            PlayerManager.Instance.currentControlPlayer.playerId,
+                            carrier.playerId,
+                            PlayerManager.Instance.currentControlPlayer.controlScheme
+                        );
+                        GameInterface.Interface.EventSystem.Publish(switchControlEvent);
+                    }
+                }
+            }
         }
         
         public override void OnExit()
         {
-            // ball.carrier.tackleAcceptArea.EnableDetection(false);
         }
     }

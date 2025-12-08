@@ -26,9 +26,9 @@ Transform:
   m_GameObject: {fileID: 216688988932537645}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 35, z: 0}
+  m_LocalPosition: {x: 0, y: 33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 93380649304555503}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -168,6 +168,90 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1579900575350110262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7350167520468060020}
+  - component: {fileID: 2811148618072368356}
+  m_Layer: 0
+  m_Name: PlaySyleSprite
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7350167520468060020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579900575350110262}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 45, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 93380649304555503}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &2811148618072368356
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579900575350110262}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 7
+  m_Sprite: {fileID: 21300000, guid: 9085ddad29a0a424686d6e9518299667, type: 3}
+  m_Color: {r: 1, g: 1, b: 0.75786155, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 15.125, y: 15.125}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &3330586638594298323
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,7 +380,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 14}
@@ -335,6 +419,7 @@ Transform:
   m_Children:
   - {fileID: 5884709216308964457}
   - {fileID: 4248309568218369547}
+  - {fileID: 7350167520468060020}
   - {fileID: 7045989133128010281}
   - {fileID: 3032538110859441391}
   - {fileID: 3991413152869374021}
@@ -358,17 +443,26 @@ MonoBehaviour:
   controlSchemeSO: {fileID: 11400000, guid: 2b77bfc7f8ca05d4ea8cfd6825ea7e86, type: 2}
   teamPaletteTex: {fileID: 2800000, guid: 82e7c9366dc6c994aac78c3095b9df7e, type: 3}
   skinPaletteTex: {fileID: 2800000, guid: 4edb5619f7d4485459fa08c2ce43ae50, type: 3}
+  playerStateFactory:
+    volleyKickSprite: {fileID: 21300000, guid: 17c09c7dde3244943b8608c2ce2e580c, type: 3}
+    bicycleKickSprite: {fileID: 21300000, guid: d956639c99fba844c8557d133193fadd, type: 3}
+    farReachSprite: {fileID: 21300000, guid: 0ad5c983eb54f2649880cf09cfee42bc, type: 3}
+    longballpassSrpite: {fileID: 21300000, guid: d3939771d07d6b742b3ff4e8cbc5fc0c, type: 3}
+    powershotSprite: {fileID: 21300000, guid: 3e1d23f1c1966994699a3428d8657ca1, type: 3}
+    headerSprite: {fileID: 21300000, guid: 9bac8b649763902439c67a5df4b67d32, type: 3}
+    slidetackleSprite: {fileID: 21300000, guid: d7e651197bbc50e47b2747a441232acb, type: 3}
+  fullName: 
+  country: FRANCE
   power: 5.55
   speed: 80
   role: 2
-  country: FRANCE
   controlScheme: 1
   KickoffPosition: {x: 0, y: 0}
   ownGoal: {fileID: 0}
   targetGoal: {fileID: 0}
   ball: {fileID: 0}
   skinColor: 0
-  fullName: 
+  playStyleRenderer: {fileID: 2811148618072368356}
   playerSprite: {fileID: 6264108591919923548}
   controlSprite: {fileID: 544563676402007411}
   animator: {fileID: 4813953148699080707}
@@ -379,8 +473,15 @@ MonoBehaviour:
   runParticles: {fileID: 1204252572053807556}
   FlipComponent: {fileID: 1682230148597570969}
   rb: {fileID: 7394438100784923822}
-  sr: {fileID: 0}
+  ballDetectionArea: {fileID: 2751089920907780289}
+  height: 0
+  heightVelocity: 0
+  GRAVITY: 6
   headingRight: 1
+  spawnPosition: {x: 0, y: 0}
+  playerId: 0
+  weightOnDutySteering: 0
+  opponentListNearby: []
 --- !u!50 &7394438100784923822
 Rigidbody2D:
   serializedVersion: 4
@@ -393,7 +494,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -708,6 +809,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8148310510840086724}
   - component: {fileID: 8716551342432395059}
+  - component: {fileID: 1299837547042407617}
   m_Layer: 15
   m_Name: TackleDamageEmitterArea
   m_TagString: Untagged
@@ -775,6 +877,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 10, y: 10}
   m_EdgeRadius: 0
+--- !u!114 &1299837547042407617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5700191534035474803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c1dee8a20f63547b3e5f4867e72eff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6174530965338418702
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,7 +940,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3991413152869374021
 Transform:
   m_ObjectHideFlags: 0
@@ -875,7 +989,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 13.5}
-  m_Size: {x: 9, y: 18}
+  m_Size: {x: 9, y: 19.6}
   m_Direction: 0
 --- !u!1 &8598162959593025140
 GameObject:
@@ -5717,6 +5831,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2884756632916244044}
   - component: {fileID: 3916421082671687075}
+  - component: {fileID: 2751089920907780289}
   m_Layer: 14
   m_Name: BallDetectionArea
   m_TagString: Untagged
@@ -5771,6 +5886,18 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 6.3}
-  m_Size: {x: 18.13, y: 28}
+  m_Offset: {x: 0, y: 4}
+  m_Size: {x: 17, y: 20.4}
   m_Direction: 0
+--- !u!114 &2751089920907780289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9214874580161329828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c1dee8a20f63547b3e5f4867e72eff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

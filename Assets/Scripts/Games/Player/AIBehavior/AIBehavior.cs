@@ -4,18 +4,28 @@ using UnityEngine;
 
 public class AIBehavior
 {  
-    private Vector2 moveDir;
-    private Ball ball;
-    private TriggerDetection opponentDetectionArea;
-    private Player player;
+    protected Vector2 moveDir=Vector2.zero;
+    protected Ball ball;
+    protected TriggerDetection opponentDetectionArea;
+    protected Player player;
+    private float nextAiTickTime;
+    public const float aiTickFrequency = 0.3f;
+
+    public void Start() {
+        nextAiTickTime = Time.time + Random.Range(0f, aiTickFrequency);
+    }
     public void UpdateAI()
     {
-        PerformAIMovement();
-        PerformAIDecisions();
+        if (Time.time-nextAiTickTime > aiTickFrequency) {
+            nextAiTickTime=Time.time;
+            PerformAIMovement();
+            PerformAIDecisions();
+        }
+
     }
-    private void PerformAIMovement() {
+    public virtual void PerformAIMovement() {
     }
-    private void PerformAIDecisions() {
+    public virtual void PerformAIDecisions() {
     }
     public Vector2 GetAIMoveDir() {
         return moveDir;

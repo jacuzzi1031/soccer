@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class PlayerState
 {
@@ -14,10 +15,10 @@ public class PlayerState
     protected Player player;
     protected PlayerStateData stateData = new PlayerStateData();
     protected Goal targetGoal;
-    // protected TriggerDetection tackleDamageEmitterArea;
+    protected Collider2D tackleDamageEmitterArea;
     protected TriggerDetection teammateDetectionArea;
     protected ParticleSystem runParticles;
-
+    public Sprite playStyleSprite;
     
     public void Setup(
         Player contextPlayer,
@@ -26,12 +27,10 @@ public class PlayerState
         Animator contextAnimationPlayer,
         Ball contextBall,
         ParticleSystem contextParticles,
-        // TriggerDetection contextTeammateDetectionArea,
-        // TriggerDetection contextBallDetectionArea,
-        // Goal contextOwnGoal,
-        // Goal contextTargetGoal,
-        // TriggerDetection contextTackleDamageEmitterArea,
-        AIBehavior contextAiBehavior
+        Goal contextOwnGoal,
+        Goal contextTargetGoal,
+        AIBehavior contextAiBehavior,
+        Collider2D contextTackleDamageEmitterArea
     )
     {
         player = contextPlayer;
@@ -40,12 +39,10 @@ public class PlayerState
         stateData = contextData;
         ball = contextBall;
         runParticles=contextParticles;
-        // teammateDetectionArea = contextTeammateDetectionArea;
-        // ballDetectionArea = contextBallDetectionArea;
-        // ownGoal = contextOwnGoal;
-        // targetGoal = contextTargetGoal;
+        ownGoal = contextOwnGoal;
+        targetGoal = contextTargetGoal;
         aiBehavior = contextAiBehavior;
-        // tackleDamageEmitterArea = contextTackleDamageEmitterArea;
+        tackleDamageEmitterArea = contextTackleDamageEmitterArea;
 
     }
     
@@ -80,4 +77,15 @@ public class PlayerState
     public virtual bool CanCarryBall() => false;
     public virtual bool CanPass() => false;
     public virtual bool IsReadyForKickoff() => false;
+
+    public virtual bool CanVolleyKickOrHeader() {
+        return false;
+    }
+
+    public virtual void VolleyShot(Ball body) {
+        
+    }
+
+    public virtual void OnShootCancel() {
+    }
 }

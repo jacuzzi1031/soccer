@@ -6,7 +6,8 @@ public class Goal : MonoBehaviour
     [SerializeField] private TriggerDetection backNetArea;
     [SerializeField] private TriggerDetection scoringArea;
     [SerializeField] private Transform targetsParent;
-
+    [SerializeField] private Collider2D InvisibleWalls;
+    private Collider2D scoringAreaCollider;
     private string country = "";
     
     private void Start()
@@ -16,6 +17,10 @@ public class Goal : MonoBehaviour
         scoringArea.OnTriggered += OnBallEnterScoringArea;
         
         country=GameManager.Instance.currentMatch.countryHome;
+        if (GameManager.Instance.currentMathType == GameManager.MatchType.Training) {
+            InvisibleWalls.enabled = false;
+        }
+        scoringAreaCollider=scoringArea.GetComponent<Collider2D>();
     }
 
 
@@ -42,6 +47,8 @@ public class Goal : MonoBehaviour
         int index = Random.Range(0, count);
         return targetsParent.GetChild(index).position;
     }
+    
+    
 
     public Vector2 GetCenterTargetPosition()
     {
@@ -59,5 +66,9 @@ public class Goal : MonoBehaviour
     {
         int count = targetsParent.childCount;
         return targetsParent.GetChild(count - 1).position;
+    }
+
+    public Collider2D GetScoringArea() {
+        return scoringAreaCollider;
     }
 }

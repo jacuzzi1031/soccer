@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -6,8 +7,12 @@ using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
 public class PlayerStatePassing: PlayerState {
+    public PlayerStatePassing(Sprite sprite) {
+        playStyleSprite=sprite;
+    }
         public override void OnEnter() {
             animator.Play("kick");
+            GameInterface.Interface.EventSystem.Publish(new PlayStyleShowEvent(player.playerId,playStyleSprite));
         }
         public override void OnAnimationComplete() {
             Player passTarget = null;
@@ -50,8 +55,22 @@ public class PlayerStatePassing: PlayerState {
                         ball.passTo(passDestination,true,passTarget);
                         break;
                 }
+                if (passTarget != null) {
+                    player.StartCoroutine(DelayToSwap(0.2f,passTarget));
+                }
             }
             TransitionState(Player.State.MOVING);
+        }
+        private IEnumerator DelayToSwap(float delay,Player passTarget)
+        {
+            yield return new WaitForSeconds(delay);
+            
+            SwitchControlEvent switchControlEvent = new SwitchControlEvent(
+                PlayerManager.Instance.currentControlPlayer.playerId,
+                passTarget.playerId,
+                PlayerManager.Instance.currentControlPlayer.controlScheme
+            );
+            GameInterface.Interface.EventSystem.Publish(switchControlEvent);
         }
         static bool IsInScreen(Vector3 worldPos)
         {
@@ -60,15 +79,13 @@ public class PlayerStatePassing: PlayerState {
                    vp.y >= 0 && vp.y <= 1 &&
                    vp.z > 0;
         }
-
-        // 判断是否在朝向 90°以内
         static bool IsWithinAngle(Vector2 toTarget, Vector2 moveDir)
         {
-            if (moveDir.sqrMagnitude <= 0.01f)
-                return false;
+            // if (moveDir.sqrMagnitude <= 0.01f)
+            //     return false;
 
             float dot = Vector2.Dot(toTarget.normalized, moveDir.normalized);
-            return dot > 0; 
+            return dot >  0.7071f; 
         }
     
         static bool IsInFront(Player target, Player self)
@@ -78,27 +95,41 @@ public class PlayerStatePassing: PlayerState {
         }
         static List<Player> GetEligibleTargets(Player self, List<Player> team, Vector2 moveDir)
         {
+            if(moveDir.sqrMagnitude <= 0.01f) moveDir=self.headingRight ? Vector2.right : Vector2.left;
+            
             List<Player> list = new();
-
+            Player closestCpuToBall = null;
+            float closestDist = float.MaxValue;
             foreach (var p in team)
             {
                 if (p == self) continue;
-
+                
                 Vector2 toTarget = p.transform.position - self.transform.position;
 
-                if (!IsInFront(p, self)) continue;
+                // if (!IsInFront(p, self)) continue;
                 if (!IsInScreen(p.transform.position)) continue;
+                float dist = (p.transform.position - self.transform.position).sqrMagnitude;
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closestCpuToBall = p;
+                }
                 if (!IsWithinAngle(toTarget, moveDir)) continue;
+
                 list.Add(p);
             }
-            return list.OrderBy(p =>
-                Vector2.Distance(self.transform.position, p.transform.position)
-            ).ToList();
+
+            if (list.Count == 0) {
+                list.Add(closestCpuToBall);
+            }
+            return list
+                .Where(p => p != null && p.transform != null)
+                .OrderBy(p => Vector2.Distance(self.transform.position, p.transform.position))
+                .ToList();
         }
     
         public static Player GetShortPassTarget(Player self, List<Player> team, Vector2 moveDir)
         { 
-            if(moveDir.sqrMagnitude <= 0.01f) moveDir=self.headingRight ? Vector2.right : Vector2.left;
             var list = GetEligibleTargets(self, team, moveDir);
             return list.Count > 0 ? list[0] : null;
         }

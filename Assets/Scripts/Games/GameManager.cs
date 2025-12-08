@@ -10,10 +10,12 @@ public class GameManager : MonoBehaviour
     public enum MatchType {
     Single,
     Coop,
-    Versus
+    Versus,
+    Training,
+    TrainingWithEnemy
     }
 
-    [HideInInspector]public MatchType currentMathType;
+    public MatchType currentMathType;
 
     public Match currentMatch;
     public string[] playerSetup = { "FRANCE", "" };
@@ -25,7 +27,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         currentMatch = new Match("ARGENTINA", "SPAIN");
-        currentMathType=MatchType.Single;
+        playerSetup[0] = currentMatch.countryHome;
     }
 
     private void Start() {

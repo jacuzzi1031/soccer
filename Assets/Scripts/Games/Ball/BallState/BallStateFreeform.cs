@@ -5,35 +5,44 @@
 
     public class BallStateFreeform: BallState {
 
- 
+        private float LockDurationCheckTimer = 0f;
+        private bool CanCarried=false;
+        
 
         public override  void OnEnter() {
-            playerDetectArea.EnableDetection(false);
-            ball.StartCoroutine(EnableDetectionWithDelay(stateData.LockDuration));
+            CanCarried=false;
+            LockDurationCheckTimer = 0f;
             GameInterface.Interface.EventSystem.Publish(new BallFreeformToLerpCameraOffsetEvent(true));
-        }
-        private IEnumerator EnableDetectionWithDelay(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            playerDetectArea.EnableDetection(true);
         }
 
         public override void OnExit() {
-            playerDetectArea.EnableDetection(false);
             GameInterface.Interface.EventSystem.Publish(new BallFreeformToLerpCameraOffsetEvent(false));
+        }
+
+        public override bool CanCarriedBall() {
+            return CanCarried;
         }
 
 
         public override void _Update() {
             SetBallAnimationFromVelocity();
+            SetLockDuration();
+
+            
+        }
+        private void SetLockDuration() {
+            if (!CanCarried&&LockDurationCheckTimer < stateData.LockDuration) {
+                LockDurationCheckTimer+= Time.deltaTime;
+            }
+            else {
+                LockDurationCheckTimer = 0f;
+                CanCarried = true;
+            }
         }
 
         public override void _FixedUpdate() {
-            float delta = Time.fixedDeltaTime;
-            float friction = ball.height > 0 ? ball.frictionAir : ball.frictionGround;
-            ball.velocity = Vector2.MoveTowards(ball.velocity, Vector2.zero, friction* delta);
-            ApplyGravity(BOUNCINESS);
-            MoveAndBounce();
+            MoveVertical(BOUNCINESS);
+            MoveHorizontal();
         }
 
         public override bool CanAirInteract() {

@@ -7,14 +7,18 @@ public class Ball : MonoBehaviour
 {   
     private const float DISTANCE_HIGH_PASS = 5.0f;
     private const float DURATION_TUMBLE_LOCK = 0.2f;
-    private const float DURATION_PASS_LOCK = 0.5f;
+    private const float DURATION_PASS_LOCK = 0.2f;
     private const float KICKOFF_PASS_DISTANCE = 30f;
     private const float TUMBLE_HEIGHT_VELOCITY = 3f;
+    private const float MAX_CAPTURE_HEIGHT = 25f;
     public Vector2 velocity=Vector2.zero;
     private float castDistance = 60f;
     public float height=0.0f;
     public Player carrier;
     public float heightVelocity=0.0f;
+
+    [SerializeField] public Transform trainingSpawnPosition;
+    
     [SerializeField] public LayerMask collideForScoreAreaLayer;
     
     
@@ -29,7 +33,7 @@ public class Ball : MonoBehaviour
     [HideInInspector]public BallState currentState;
     public LayerMask LayerMask;
     public CircleCollider2D  colliderForWall;
-    private const float MAX_CAPTURE_HEIGHT = 25f;
+    [HideInInspector]public List<Player> playerListInProximityArea = new List<Player>();
 
     public float frictionAir = 35f;
     public float frictionGround = 250f;
@@ -39,9 +43,34 @@ public class Ball : MonoBehaviour
     }
 
     private void Start() {
-        playerDetectArea.OnTriggered += PlayerDetectAreaOnOnEnter;
+        //OnTriggerStay2D是因为freedomState有LockDuration
+        playerDetectArea.OnStay += PlayerDetectAreaOnOnEnter;
+        playerProximityArea.OnTriggered+= PlayerProximityAreaOnOnTriggered;
+        playerProximityArea.OnTriggerExit+= PlayerProximityAreaOnOnTriggerExit;
+        GameManager.MatchType currentMathType = GameManager.Instance.currentMathType;
+        if (currentMathType == GameManager.MatchType.Training||currentMathType == GameManager.MatchType.TrainingWithEnemy) {
+            transform.position=trainingSpawnPosition.position;
+        }
     }
+
+    private void PlayerProximityAreaOnOnTriggerExit(Collider2D obj) {
+        Player p = obj.GetComponentInParent<Player>();
+        if (p != null)
+            playerListInProximityArea.Remove(p);
+    }
+
+    private void PlayerProximityAreaOnOnTriggered(Collider2D obj) {
+        Player p = obj.GetComponentInParent<Player>();
+        if (p != null && !playerListInProximityArea.Contains(p))
+            playerListInProximityArea.Add(p);
+    }
+    public int GetProximityTeammatesCount(string playerCountry) {
+        return playerListInProximityArea.FindAll(p => p.country == playerCountry).Count;
+    }
+
     private void PlayerDetectAreaOnOnEnter(Collider2D obj) {
+        if (!currentState.CanCarriedBall())
+            return;
         Player body = obj.GetComponentInParent<Player>();
         if (!body) return;
 
@@ -49,17 +78,17 @@ public class Ball : MonoBehaviour
         {   
             carrier = body;
             body.ControlBall();
-            SwitchState(State.CARRIED);
+            SwitchState(Ball.State.CARRIED);
         }
     }
 
     private void OnDestroy() {
-        playerDetectArea.OnTriggered -= PlayerDetectAreaOnOnEnter;
+        playerDetectArea.OnStay -= PlayerDetectAreaOnOnEnter;
     }
 
     private void Update()
     {
-        ballSprite.localPosition = Vector3.up * height;
+        ballSprite.localPosition = height*3f*Vector3.up;
         currentState?._Update();
     }
     private void FixedUpdate()
@@ -79,13 +108,11 @@ public class Ball : MonoBehaviour
         currentState.StateTransitionRequested += SwitchState;
         currentState.OnEnter();
     }
-    bool IsHeadedForScoringArea(Collider2D scoringArea)
+    public bool IsHeadedForScoringArea(Collider2D scoringArea)
     {
         RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position, velocity.normalized, castDistance, collideForScoreAreaLayer);
-
         if (hit.collider == null)
             return false;
-
         return hit.collider == scoringArea;
     }
     public void Tumble(Vector2 tumbleVelocity)
@@ -116,9 +143,7 @@ public class Ball : MonoBehaviour
         float distance = Vector2.Distance(transform.position, destination);
         float intensity = Mathf.Sqrt(2f * distance * frictionGround);
         velocity = intensity * direction;
-        if (passTarget != null) {
-            StartCoroutine(DelayToSwap(distance/velocity.magnitude/1.2f,passTarget));
-        }
+
         // 如果是高空的，视为水平是匀速，速度为原本速度intensity  x=Vx*t  t=x/Vx
         // 垂直方向终点y=0,Vy=gt/2  代入t Vy=gx/2Vx 高度增加 /2->/1.85 也会有更快速度，飞到球员脸上而不是脚下
         if (!overground)
@@ -132,10 +157,6 @@ public class Ball : MonoBehaviour
         carrier = null;
         SwitchState(State.FREEFORM, BallStateData.Build().SetLockDuration(lockDuration));
     }
-    private IEnumerator DelayToSwap(float delay,Player passTarget)
-    {
-        yield return new WaitForSeconds(delay);
-        GameInterface.Interface.EventSystem.Publish(new PassBallToSwapPlayer(passTarget));
-        PlayerManager.Instance.SwapTo(passTarget);
-    }
+
+
 }
