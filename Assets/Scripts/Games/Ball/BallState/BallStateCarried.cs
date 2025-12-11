@@ -65,12 +65,7 @@ using UnityEngine;
             if (carrier.controlScheme == Player.ControlScheme.CPU) {
                 foreach (var country in GameManager.Instance.playerSetup) {
                     if (!string.IsNullOrEmpty(country) && country == carrier.country) {
-                        SwitchControlEvent switchControlEvent = new SwitchControlEvent(
-                            PlayerManager.Instance.currentControlPlayer.playerId,
-                            carrier.playerId,
-                            PlayerManager.Instance.currentControlPlayer.controlScheme
-                        );
-                        GameInterface.Interface.EventSystem.Publish(switchControlEvent);
+                        GameInterface.Interface.EventSystem.Publish(new PlayerBecomesCarrierEvent(carrier.playerId));
                     }
                 }
             }

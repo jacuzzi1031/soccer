@@ -39,6 +39,6 @@ public class PlayerStateFactory
         if (_stateFactories.TryGetValue(state, out var factory))
             return factory();
 
-        throw new ArgumentException($"State not registered: {state}");
+        throw new ArgumentException($"PlayerState not registered: {state}");
     }
 }

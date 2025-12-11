@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameInterface : MonoBehaviour
 {
     public static GameInterface Interface { get; private set; }
+    public SceneLoader SceneLoader { get; private set; }
     public EventSystem EventSystem { get; private set; }
 
     private void Awake() {
@@ -14,6 +15,7 @@ public class GameInterface : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        SceneLoader = new SceneLoader();
 
         Interface = this;
         DontDestroyOnLoad(gameObject);

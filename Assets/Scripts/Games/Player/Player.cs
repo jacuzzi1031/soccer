@@ -90,6 +90,7 @@ public class Player : MonoBehaviour {
     private Coroutine traitRoutine;
     [HideInInspector] public float weightOnDutySteering;
     [HideInInspector]public List<Player> opponentListNearby = new List<Player>();
+    [HideInInspector] public bool isHome;
     private void Start() {
          SetControlSprite();
          SetupAIBehavior();
@@ -244,8 +245,6 @@ public class Player : MonoBehaviour {
             currentState.StateTransitionRequested -= SwitchState;
             currentState.OnExit();
         }
-
-
         currentState = playerStateFactory.GetFreshState(type);
         currentState.Setup(this, data ?? new PlayerStateData(),rb,animator,ball,runParticles,ownGoal,targetGoal,currentAIBehavior,tackleEmitterArea);
         currentState.StateTransitionRequested += SwitchState;
@@ -308,11 +307,11 @@ public class Player : MonoBehaviour {
         Goal contextOwnGoal,
         Goal contextTargetGoal,
         PlayerResource contextPlayerData,
-        string contextCountry)
+        string contextCountry,bool contextIsHome)
     {   
         playerId=playerid;
         playStyleRenderer.enabled=false;
-        GameManager.MatchType currentMatchType = GameManager.Instance.currentMathType;
+        GameManager.MatchType currentMatchType = GameManager.Instance.currentMatchType;
         if (currentMatchType != GameManager.MatchType.Training&&currentMatchType!= GameManager.MatchType.TrainingWithEnemy) {
             transform.position = contextPosition;
         }
@@ -337,6 +336,7 @@ public class Player : MonoBehaviour {
             headingRight = true;
 
         country = contextCountry;
+        isHome = contextIsHome;
         
     }
     

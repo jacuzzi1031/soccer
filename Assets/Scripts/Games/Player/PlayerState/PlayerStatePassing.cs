@@ -16,15 +16,18 @@ public class PlayerStatePassing: PlayerState {
         }
         public override void OnAnimationComplete() {
             Player passTarget = null;
+            IReadOnlyList<Player> team = player.isHome
+                ? PlayerManager.Instance.GetSquad(true)
+                : PlayerManager.Instance.GetSquad(false);
             switch (stateData.InputType) {
                 case GameInput.PlayerInputType.ShortPass:
-                    passTarget = GetShortPassTarget(player, PlayerManager.Instance.currentTeam, stateData.MoveDir);
+                    passTarget = GetShortPassTarget(player, team, stateData.MoveDir);
                     break;
                 case GameInput.PlayerInputType.LongPass:
-                    passTarget  = GetLongPassTarget(player, PlayerManager.Instance.currentTeam, stateData.MoveDir);
+                    passTarget  = GetLongPassTarget(player, team, stateData.MoveDir);
                     break;
                 case GameInput.PlayerInputType.IncisivePass:
-                    passTarget = GetShortPassTarget(player, PlayerManager.Instance.currentTeam, stateData.MoveDir);
+                    passTarget = GetShortPassTarget(player, team, stateData.MoveDir);
                     break;
             }
             
@@ -44,12 +47,12 @@ public class PlayerStatePassing: PlayerState {
                         passDestination = (Vector2)passTarget.transform.position + passTarget.rb.velocity * 0.8f;
                         ball.passTo(passDestination,true,passTarget);
                         break;
-
+                    
                     case GameInput.PlayerInputType.LongPass:
                         passDestination = (Vector2)passTarget.transform.position + passTarget.rb.velocity * 0.8f;
                         ball.passTo(passDestination,false,passTarget);
                         break;
-
+                    
                     case GameInput.PlayerInputType.IncisivePass:
                         passDestination = (Vector2)passTarget.transform.position + passTarget.rb.velocity * 1.8f;
                         ball.passTo(passDestination,true,passTarget);
@@ -64,13 +67,7 @@ public class PlayerStatePassing: PlayerState {
         private IEnumerator DelayToSwap(float delay,Player passTarget)
         {
             yield return new WaitForSeconds(delay);
-            
-            SwitchControlEvent switchControlEvent = new SwitchControlEvent(
-                PlayerManager.Instance.currentControlPlayer.playerId,
-                passTarget.playerId,
-                PlayerManager.Instance.currentControlPlayer.controlScheme
-            );
-            GameInterface.Interface.EventSystem.Publish(switchControlEvent);
+            GameInterface.Interface.EventSystem.Publish(new PlayerBecomesCarrierEvent(passTarget.playerId));
         }
         static bool IsInScreen(Vector3 worldPos)
         {
@@ -93,7 +90,7 @@ public class PlayerStatePassing: PlayerState {
             float dx = target.transform.position.x - self.transform.position.x;
             return self.headingRight ? dx > 0 : dx < 0;
         }
-        static List<Player> GetEligibleTargets(Player self, List<Player> team, Vector2 moveDir)
+        static List<Player> GetEligibleTargets(Player self, IReadOnlyList<Player> team, Vector2 moveDir)
         {
             if(moveDir.sqrMagnitude <= 0.01f) moveDir=self.headingRight ? Vector2.right : Vector2.left;
             
@@ -128,13 +125,13 @@ public class PlayerStatePassing: PlayerState {
                 .ToList();
         }
     
-        public static Player GetShortPassTarget(Player self, List<Player> team, Vector2 moveDir)
+        public static Player GetShortPassTarget(Player self, IReadOnlyList<Player> team, Vector2 moveDir)
         { 
             var list = GetEligibleTargets(self, team, moveDir);
             return list.Count > 0 ? list[0] : null;
         }
     
-        public static Player GetLongPassTarget(Player self, List<Player> team, Vector2 moveDir)
+        public static Player GetLongPassTarget(Player self, IReadOnlyList<Player> team, Vector2 moveDir)
         {
             var list = GetEligibleTargets(self, team, moveDir);
 

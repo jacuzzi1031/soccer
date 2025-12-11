@@ -17,7 +17,7 @@ public class Goal : MonoBehaviour
         scoringArea.OnTriggered += OnBallEnterScoringArea;
         
         country=GameManager.Instance.currentMatch.countryHome;
-        if (GameManager.Instance.currentMathType == GameManager.MatchType.Training) {
+        if (GameManager.Instance.currentMatchType == GameManager.MatchType.Training) {
             InvisibleWalls.enabled = false;
         }
         scoringAreaCollider=scoringArea.GetComponent<Collider2D>();

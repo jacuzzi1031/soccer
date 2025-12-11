@@ -18,6 +18,7 @@ public class Ball : MonoBehaviour
     public float heightVelocity=0.0f;
 
     [SerializeField] public Transform trainingSpawnPosition;
+    [HideInInspector] public Vector2 spawnPosition;
     
     [SerializeField] public LayerMask collideForScoreAreaLayer;
     
@@ -47,10 +48,20 @@ public class Ball : MonoBehaviour
         playerDetectArea.OnStay += PlayerDetectAreaOnOnEnter;
         playerProximityArea.OnTriggered+= PlayerProximityAreaOnOnTriggered;
         playerProximityArea.OnTriggerExit+= PlayerProximityAreaOnOnTriggerExit;
-        GameManager.MatchType currentMathType = GameManager.Instance.currentMathType;
+        GameManager.MatchType currentMathType = GameManager.Instance.currentMatchType;
         if (currentMathType == GameManager.MatchType.Training||currentMathType == GameManager.MatchType.TrainingWithEnemy) {
             transform.position=trainingSpawnPosition.position;
         }
+        spawnPosition = transform.position;
+        
+        GameInterface.Interface.EventSystem.Subscribe<OnTeamResetEvent>(OnTeamResetEvent);
+    }
+
+    private void OnTeamResetEvent(OnTeamResetEvent obj) {
+        transform.position = spawnPosition;
+        rb.velocity = Vector2.zero;
+        height=0.0f;
+        SwitchState(State.FREEFORM);
     }
 
     private void PlayerProximityAreaOnOnTriggerExit(Collider2D obj) {
