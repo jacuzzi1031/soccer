@@ -48,18 +48,18 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void InitializeSquads() {
-        squadHome = SpawnPlayers(GameManager.Instance.currentMatch.countryHome,goalHome,true);
+        squadHome = SpawnPlayers(GameInterface.Interface.GameManager.currentMatch.countryHome,goalHome,true);
         spawns.rotation = Quaternion.Euler(0, 180, 0);
         kickOffs.rotation = Quaternion.Euler(0, 180, 0);
-        GameManager.MatchType currentMatchType = GameManager.Instance.currentMatchType;
+        GameManager.MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
         if (currentMatchType != GameManager.MatchType.Training&&currentMatchType!=GameManager.MatchType.TrainingWithEnemy) {
-            squadAway = SpawnPlayers(GameManager.Instance.currentMatch.countryAway,goalAway,false);
+            squadAway = SpawnPlayers(GameInterface.Interface.GameManager.currentMatch.countryAway,goalAway,false);
         }
         else if(currentMatchType==GameManager.MatchType.Training){
-            squadAway=SpawnOpponent(GameManager.Instance.currentMatch.countryAway,goalAway,false,false);
+            squadAway=SpawnOpponent(GameInterface.Interface.GameManager.currentMatch.countryAway,goalAway,false,false);
         }
         else {
-            squadAway=SpawnOpponent(GameManager.Instance.currentMatch.countryAway,goalAway,true,false);
+            squadAway=SpawnOpponent(GameInterface.Interface.GameManager.currentMatch.countryAway,goalAway,true,false);
         }
         GameInterface.Interface.EventSystem.Publish(new OnSquadsReadyEvent());
         ResetControlSchemes();
@@ -127,7 +127,7 @@ public class PlayerManager : MonoBehaviour
         Transform kickoffParent = null;
         int startIndex = 0;
 
-        switch (GameManager.Instance.currentMatchType)
+        switch (GameInterface.Interface.GameManager.currentMatchType)
         {
             case GameManager.MatchType.Training:
                 kickoffParent = training.transform;

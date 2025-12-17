@@ -9,7 +9,7 @@ public class AIBehavior
     protected TriggerDetection opponentDetectionArea;
     protected Player player;
     private float nextAiTickTime;
-    public const float aiTickFrequency = 0.3f;
+    public const float aiTickFrequency = 0.2f;
 
     public void Start() {
         nextAiTickTime = Time.time + Random.Range(0f, aiTickFrequency);

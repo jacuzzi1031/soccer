@@ -3,14 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager
 {
-    public static GameManager Instance { get;private set; }
-
     public enum MatchType {
-    Training,
-    TrainingWithEnemy,
-    Championship
+    Training,          //训练模式
+    TrainingWithEnemy,//对抗训练
+    UltimateTeam     //ut
     }
     public MatchType currentMatchType;
 
@@ -35,17 +33,13 @@ public class GameManager : MonoBehaviour
     }
 
     [HideInInspector] public GameState currentState;
-    private GameStateFactory gameStateFactory=new GameStateFactory();
+    private GameStateFactory _gameStateFactory=new GameStateFactory();
     public float TimeLeft { get; private set; }
-    private void Awake() {
-        if (Instance != null && Instance != this) {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+    public void OnInit()
+    {
         currentMatch = new Match("ARGENTINA", "SPAIN");
         playerSetup[0] = currentMatch.countryHome;
+
     }
     public void StartGame()
     {
@@ -58,7 +52,7 @@ public class GameManager : MonoBehaviour
             currentState.OnStateTransitionRequested+= SwitchGameState;
             currentState.OnExit();
         }
-        currentState = gameStateFactory.GetFreshState(newState);
+        currentState = _gameStateFactory.GetFreshState(newState);
         currentState.Setup(this,data);
         currentState.OnStateTransitionRequested+= SwitchGameState;
         currentState.OnEnter();
@@ -78,5 +72,23 @@ public class GameManager : MonoBehaviour
     {
         currentMatch.IncreaseScore(countryScoredOn);
         GameInterface.Interface.EventSystem.Publish(new OnScoreChangedEvent());
+    }
+    public void SetCurrentMatchType(MatchType matchType) {
+        currentMatchType=matchType;
+    }
+
+    public void SetMatchCountry(int RoomIndex, string Country) {
+        playerSetup[RoomIndex] = Country;
+        //锦标赛还会改
+        if (RoomIndex == 0) {
+            currentMatch.countryHome=playerSetup[RoomIndex];
+        }
+        else {
+            currentMatch.countryAway=playerSetup[RoomIndex];
+        }
+    }
+
+    public void SetGameMode(GameMode gameMode) {
+        currentGameMode = gameMode;
     }
 }

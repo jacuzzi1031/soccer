@@ -13,16 +13,13 @@ public enum Scene
 
 public class SceneLoader
 {
-    public event Action OnSceneLoad;
-    public event Action OnSceneLoadComplete;
-    
     public void LoadScene(Scene scene)
     {
-        // OnSceneLoad?.Invoke();
+
         // SceneManager.LoadScene(Scene.LoadingScene.ToString());
         //Unity 还没来得及执行 LoadingScene 的脚本，就直接又切换了 LoadSceneAsync
         AsyncOperation loadSceneAsync = SceneManager.LoadSceneAsync(scene.ToString(), LoadSceneMode.Single);
-        // loadSceneAsync.completed += _ => OnSceneLoadComplete?.Invoke(); 
+
     }
 
     public AsyncOperation LoadGameSceneAsync()

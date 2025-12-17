@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class RoomPlayerInfo : PlayerInfo
 {
-    public bool ready;
+    public bool comfirmed=false;
     public bool isHome;
 }

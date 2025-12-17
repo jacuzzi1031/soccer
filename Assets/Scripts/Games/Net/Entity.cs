@@ -42,20 +42,20 @@ public class Entity : MonoBehaviour
         Player newPlayer = PlayerManager.Instance.GetPlayerById(obj.playerId);
         if (newPlayer == null)
             return;
-        SwitchControlTo(newPlayer);
+        if (currentControlPlayer != null && currentControlPlayer.isHome == newPlayer.isHome) {
+            //如果不是一个队的，由那个队的enttiy去publish
+            SwitchControlTo(newPlayer);
+        }
     }
     private void SwitchControlTo(Player newPlayer)
     {
         if (currentControlPlayer == newPlayer)
             return;
         int oldId = currentControlPlayer != null ? currentControlPlayer.playerId : -1;
-        GameInterface.Interface.EventSystem.Publish(
-            new OnControlSwitchEvent(oldId, newPlayer.playerId, controlScheme)
-        );
-        if (currentControlPlayer != null&&currentControlPlayer.isHome==newPlayer.isHome)
-        {
+            GameInterface.Interface.EventSystem.Publish(
+                new OnControlSwitchEvent(oldId, newPlayer.playerId, controlScheme)
+            );
             currentControlPlayer = newPlayer;
-        }
     }
     
 
@@ -70,7 +70,7 @@ public class Entity : MonoBehaviour
     }
 
     private void initializeControlScheme() {
-        switch (GameManager.Instance.currentGameMode) {
+        switch (GameInterface.Interface.GameManager.currentGameMode) {
             default:
             case GameManager.GameMode.Single:
             case GameManager.GameMode.Versus:

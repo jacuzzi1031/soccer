@@ -9,7 +9,7 @@ private const float PASS_PROBABILITY = 0.05f;
     private const float SHOT_PROBABILITY = 0.3f;
     private const float SPREAD_ASSIST_FACTOR = 0.8f;
     private const float TACKLE_DISTANCE = 15f;
-    private const float TACKLE_PROBABILITY = 0.15f;
+    private const float TACKLE_PROBABILITY = 0.3f;
 
     void Update()
     {
@@ -58,7 +58,7 @@ private const float PASS_PROBABILITY = 0.05f;
             player.SwitchState(Player.State.TACKLING);
         }
         //当cpu控制为玩家所在队伍，不进行shot/pass
-        if (GameManager.Instance.playerSetup[0] == player.country)
+        if (GameInterface.Interface.GameManager.playerSetup[0] == player.country)
             return;
 
         if (ball.carrier == player)

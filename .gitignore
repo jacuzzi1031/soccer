@@ -53,6 +53,7 @@ sysinfo.txt
 .DS_Store
 Thumbs.db
 
+Assets/_Assets/fonts/
 # NuGet for Unity generated files
 Assets/NuGet/Packages/
 Assets/NuGet/Cache/

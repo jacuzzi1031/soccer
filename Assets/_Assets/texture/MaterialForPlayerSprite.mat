@@ -95,14 +95,14 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _SkinColor: -0.52
+    - _SkinColor: 0
     - _SkinIndex: 0
     - _SkinPaletteHeight: 3
     - _SkinRow: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TeamColor: 2.18
+    - _TeamColor: 0
     - _TeamIndex: 0
     - _TeamPaletteHeight: 9
     - _TeamRow: 0

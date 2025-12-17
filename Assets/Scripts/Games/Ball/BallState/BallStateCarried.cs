@@ -63,11 +63,7 @@ using UnityEngine;
             ball.heightVelocity=0.0f;
             ball.height = 0f;
             if (carrier.controlScheme == Player.ControlScheme.CPU) {
-                foreach (var country in GameManager.Instance.playerSetup) {
-                    if (!string.IsNullOrEmpty(country) && country == carrier.country) {
-                        GameInterface.Interface.EventSystem.Publish(new PlayerBecomesCarrierEvent(carrier.playerId));
-                    }
-                }
+                GameInterface.Interface.EventSystem.Publish(new PlayerBecomesCarrierEvent(carrier.playerId));
             }
         }
         

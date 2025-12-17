@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class GameStateFactory
 {
+    private void Awake() => Debug.Log("test！！！！！");
     private Dictionary<GameManager.State, Func<GameState>> states;
 
     public GameStateFactory()
-    {
+    {   
         states = new Dictionary<GameManager.State, Func<GameState>>
         {
             { GameManager.State.GAMEOVER, () => new GameStateGameOver() },

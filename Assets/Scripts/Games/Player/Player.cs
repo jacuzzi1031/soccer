@@ -311,7 +311,7 @@ public class Player : MonoBehaviour {
     {   
         playerId=playerid;
         playStyleRenderer.enabled=false;
-        GameManager.MatchType currentMatchType = GameManager.Instance.currentMatchType;
+        GameManager.MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
         if (currentMatchType != GameManager.MatchType.Training&&currentMatchType!= GameManager.MatchType.TrainingWithEnemy) {
             transform.position = contextPosition;
         }

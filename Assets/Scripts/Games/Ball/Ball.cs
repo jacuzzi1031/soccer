@@ -48,7 +48,7 @@ public class Ball : MonoBehaviour
         playerDetectArea.OnStay += PlayerDetectAreaOnOnEnter;
         playerProximityArea.OnTriggered+= PlayerProximityAreaOnOnTriggered;
         playerProximityArea.OnTriggerExit+= PlayerProximityAreaOnOnTriggerExit;
-        GameManager.MatchType currentMathType = GameManager.Instance.currentMatchType;
+        GameManager.MatchType currentMathType = GameInterface.Interface.GameManager.currentMatchType;
         if (currentMathType == GameManager.MatchType.Training||currentMathType == GameManager.MatchType.TrainingWithEnemy) {
             transform.position=trainingSpawnPosition.position;
         }

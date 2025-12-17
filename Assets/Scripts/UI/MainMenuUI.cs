@@ -1,0 +1,37 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class MainMenuUI : BaseUIPanel {
+
+
+    // [SerializeField] private Button playButton;
+    // [SerializeField] private Button quitButton;
+    [SerializeField] private Button quitButton;
+    [SerializeField] private Button trainButton;
+    [SerializeField] private Button trainWithEnemyButton;
+    [SerializeField] private Button championShipButton;
+
+
+    private void Awake() {
+        trainButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.Training));
+        trainWithEnemyButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.TrainingWithEnemy));
+        championShipButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.UltimateTeam));
+        quitButton.onClick.AddListener(() => {
+            Application.Quit();
+        });
+
+        Time.timeScale = 1f;
+    }
+    private void OnModeButtonClicked(GameManager.MatchType mode)
+    {
+        GameInterface.Interface.GameManager.SetCurrentMatchType(mode);
+        
+        var ui = GameInterface.Interface.UIManager;
+        ui.HideUIPanel(UIPanelType.CreateRoomUI);
+        ui.HideUIPanel(UIPanelType.RoomListUI);
+        ui.HideUIPanel(UIPanelType.MainMenuUI);
+        
+        GameInterface.Interface.SceneLoader.LoadScene(Scene.RoomScene);
+    }
+
+}
