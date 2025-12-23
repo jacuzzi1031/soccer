@@ -66,11 +66,6 @@ public class CameraManager : MonoBehaviour
         
         GameInterface.Interface.EventSystem.Subscribe<BallFreeformToLerpCameraOffsetEvent>(CurrentStateOnOnBallFreeformAction);
     }
-    void OnDestroy()
-    {
-        GameInterface.Interface.EventSystem.Unsubscribe<BallFreeformToLerpCameraOffsetEvent>(CurrentStateOnOnBallFreeformAction);
-        StopAllCoroutines();
-    }
 
 
     private void CurrentStateOnOnBallFreeformAction(BallFreeformToLerpCameraOffsetEvent e) {
@@ -168,6 +163,14 @@ public class CameraManager : MonoBehaviour
         if (_panCameraCoroutine != null)
             StopCoroutine(_panCameraCoroutine);
         _panCameraCoroutine = StartCoroutine(PanCamera(panDistance, panTime, panDirection, panToStartingPos));
+    }
+    private void OnDisable()
+    {   
+        StopAllCoroutines();
+        GameInterface.Interface.EventSystem
+            .Unsubscribe<BallFreeformToLerpCameraOffsetEvent>(
+                CurrentStateOnOnBallFreeformAction
+            );
     }
 
     private IEnumerator PanCamera(float panDistance, float panTime, PanDirection panDirection, bool panToStartingPos)

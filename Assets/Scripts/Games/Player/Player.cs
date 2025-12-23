@@ -80,7 +80,7 @@ public class Player : MonoBehaviour {
     private Vector3 lastInteractDir;
     [HideInInspector]public bool headingRight = true;
 
-    [HideInInspector]public PlayerState currentState;
+    public PlayerState currentState;
     private const float BALL_CONTROL_HEIGHT_MAX = 10f;
     private float originalPlayerSpriteY;
     private float originalControlSpriteY;
@@ -91,18 +91,68 @@ public class Player : MonoBehaviour {
     [HideInInspector] public float weightOnDutySteering;
     [HideInInspector]public List<Player> opponentListNearby = new List<Player>();
     [HideInInspector] public bool isHome;
+
+    public void OnEnable() {
+        GameInterface.Interface.EventSystem.Subscribe<OnGameOverEvent>(OnGameOver);
+        GameInterface.Interface.EventSystem.Subscribe<OnTeamScoredEvent>(OnteamScored);
+    }
+
+    public void OnDestroy() {
+        currentState.OnExit();
+        currentState=null;
+        GameInterface.Interface.EventSystem.Unsubscribe<OnGameOverEvent>(OnGameOver);
+        GameInterface.Interface.EventSystem.Unsubscribe<OnTeamScoredEvent>(OnteamScored);
+        ballDetectionArea.OnStay-= BallDetectionAreaOnOnStay;
+        opponentDetectionArea.OnTriggered-= OpponentDetectionAreaOnOnTriggered;
+        opponentDetectionArea.OnTriggerExit-= OpponentDetectionAreaOnOnTriggerExit;
+        tackleAcceptArea.OnTriggered-= TackleAcceptAreaOnOnTriggered;
+    }
+
+    private void OnteamScored(OnTeamScoredEvent obj) {
+        if(country==obj.CountryScoredOn)
+            SwitchState(State.MOURNING);
+        else {
+            SwitchState(State.CELEBRATING);
+        }
+    }
+    
+    private void OnGameOver(OnGameOverEvent obj) {
+        if(country==obj.CountryWinner)
+            SwitchState(State.CELEBRATING);
+        else {
+            SwitchState(State.MOURNING);
+        }
+    }
+
+    private void Awake() {
+        // 先检查自己是否还活着
+        if (this == null || gameObject == null) return;
+    
+        animator = GetComponentInChildren<Animator>(true); // true = 包含 inactive 的子对象
+    
+        if (animator == null) {
+            Debug.LogError($"[{gameObject.name}] Animator not found!", this);
+        }
+    }
+
     private void Start() {
          SetControlSprite();
          SetupAIBehavior();
          setShaderProperties();
          if (role == Role.GOALIE) {
              goalieHandsArea.enabled = true;
+             rb.constraints =
+                 RigidbodyConstraints2D.FreezePositionX |
+                 RigidbodyConstraints2D.FreezeRotation;
          }
          else {
              goalieHandsArea.enabled = false;
          }
          tackleEmitterArea.enabled = false;
-         SwitchState(State.MOVING, PlayerStateData.Build());
+         spawnPosition=transform.position;
+         Vector2 initialPosition=country==GameInterface.Interface.GameManager.currentMatch.countryHome?KickoffPosition:spawnPosition;
+         SwitchState(State.RESETING, PlayerStateData.Build().SetResetPosition(initialPosition));
+
          
          //充当player reseting state
          FaceTowardsTargetGoal();
@@ -115,8 +165,10 @@ public class Player : MonoBehaviour {
          
          originalPlayerSpriteY = playerSprite.transform.localPosition.y;
          originalControlSpriteY = controlSprite.transform.localPosition.y;
-         spawnPosition=transform.position;
+
     }
+
+
 
     private void TackleAcceptAreaOnOnTriggered(Collider2D obj) {
         Player p = obj.GetComponentInParent<Player>();
@@ -154,9 +206,7 @@ public class Player : MonoBehaviour {
         }
 
     }
-
-    public void OnDestroy() {
-    }
+    
 
     private void setShaderProperties()
     {
@@ -311,13 +361,7 @@ public class Player : MonoBehaviour {
     {   
         playerId=playerid;
         playStyleRenderer.enabled=false;
-        GameManager.MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
-        if (currentMatchType != GameManager.MatchType.Training&&currentMatchType!= GameManager.MatchType.TrainingWithEnemy) {
-            transform.position = contextPosition;
-        }
-        else {
-            transform.position = contextKickoffPosition;
-        }
+        transform.position = contextPosition;
         KickoffPosition = contextKickoffPosition;
         ball = contextBall;
         ownGoal = contextOwnGoal;
@@ -345,6 +389,7 @@ public class Player : MonoBehaviour {
         if (!IsFacingTargetGoal())
         {
             headingRight =!headingRight;
+            Flip(headingRight);
         }
     }
 
@@ -376,4 +421,7 @@ public class Player : MonoBehaviour {
     }
 
 
+    public bool IsReadyForKickoff() {
+        return currentState != null && currentState.IsReadyForKickoff();
+    }
 }

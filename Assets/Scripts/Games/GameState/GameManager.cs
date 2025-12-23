@@ -21,7 +21,8 @@ public class GameManager
 
     public Match currentMatch;
     public string[] playerSetup = { "FRANCE", "" };
-    private const float DURATION_GAME_SEC = 2 * 60f;
+    private const float DURATION_GAME_SEC = 2f;
+    // private const float DURATION_GAME_SEC = 2 * 60f;
     public enum State
     {
         IN_PLAY,
@@ -34,22 +35,22 @@ public class GameManager
 
     [HideInInspector] public GameState currentState;
     private GameStateFactory _gameStateFactory=new GameStateFactory();
-    public float TimeLeft { get; private set; }
+    public float timeLeft;
     public void OnInit()
     {
         currentMatch = new Match("ARGENTINA", "SPAIN");
-        playerSetup[0] = currentMatch.countryHome;
-
     }
+
+
     public void StartGame()
     {
-        TimeLeft = DURATION_GAME_SEC;
+        timeLeft = DURATION_GAME_SEC;
         SwitchGameState(State.RESET);
     }
 
     public void SwitchGameState(State newState, GameStateData data = null) {
         if (currentState != null) {
-            currentState.OnStateTransitionRequested+= SwitchGameState;
+            currentState.OnStateTransitionRequested-= SwitchGameState;
             currentState.OnExit();
         }
         currentState = _gameStateFactory.GetFreshState(newState);
@@ -59,7 +60,7 @@ public class GameManager
     }
     public bool IsTimeUp()
     {
-        return TimeLeft <= 0f;
+        return timeLeft <= 0f;
     }
     public string GetWinnerCountry()
     {
@@ -90,5 +91,9 @@ public class GameManager
 
     public void SetGameMode(GameMode gameMode) {
         currentGameMode = gameMode;
+    }
+
+    public void _Update() {
+        currentState?._Update();
     }
 }

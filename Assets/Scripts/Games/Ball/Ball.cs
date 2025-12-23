@@ -54,7 +54,24 @@ public class Ball : MonoBehaviour
         }
         spawnPosition = transform.position;
         
+
+    }
+    private void OnDestroy() {
+        SwitchState(State.FREEFORM);
+        playerDetectArea.OnStay -= PlayerDetectAreaOnOnEnter;
+        playerProximityArea.OnTriggered-= PlayerProximityAreaOnOnTriggered;
+        playerProximityArea.OnTriggerExit-= PlayerProximityAreaOnOnTriggerExit;
+        GameInterface.Interface.EventSystem.Unsubscribe<OnTeamResetEvent>(OnTeamResetEvent);
+        GameInterface.Interface.EventSystem.Unsubscribe<OnKickoffStartedEvent>(OnKickoffStarted);
+    }
+
+    private void OnEnable() {
         GameInterface.Interface.EventSystem.Subscribe<OnTeamResetEvent>(OnTeamResetEvent);
+        GameInterface.Interface.EventSystem.Subscribe<OnKickoffStartedEvent>(OnKickoffStarted);
+    }
+
+    private void OnKickoffStarted(OnKickoffStartedEvent obj) {
+        passTo(spawnPosition + Vector2.down * KICKOFF_PASS_DISTANCE, true, null);
     }
 
     private void OnTeamResetEvent(OnTeamResetEvent obj) {
@@ -93,9 +110,7 @@ public class Ball : MonoBehaviour
         }
     }
 
-    private void OnDestroy() {
-        playerDetectArea.OnStay -= PlayerDetectAreaOnOnEnter;
-    }
+
 
     private void Update()
     {

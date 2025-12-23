@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class GameStateGameOver : GameState
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public override void OnEnter() {
+        string winnerCountry = manager.GetWinnerCountry();
+        GameInterface.Interface.EventSystem.Publish(new OnGameOverEvent(winnerCountry));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

@@ -19,6 +19,9 @@ public class PlayerState
     protected TriggerDetection teammateDetectionArea;
     protected ParticleSystem runParticles;
     public Sprite playStyleSprite;
+    protected static readonly int SpeedHash =
+        Animator.StringToHash("Speed");
+    private float runThreshold = 45f;
     
     public void Setup(
         Player contextPlayer,
@@ -50,6 +53,28 @@ public class PlayerState
     {
         StateTransitionRequested?.Invoke(newState, data ?? PlayerStateData.Build());
     }
+    public void SetMovementAnimation() {
+        animator.SetFloat(SpeedHash, rb.velocity.magnitude);
+        AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (!info.IsName("movement"))
+        {
+            if (runParticles.isPlaying)
+                runParticles.Stop();
+            return;
+        }
+        float speed = animator.GetFloat(SpeedHash);
+        if (speed >= runThreshold)
+        {
+            if (!runParticles.isPlaying)
+                runParticles.Play();
+        }
+        else
+        {
+            if (runParticles.isPlaying)
+                runParticles.Stop();
+        }
+    }
 
     public virtual void _Update() {
         
@@ -62,7 +87,6 @@ public class PlayerState
         
     }
     public virtual void OnExit() {
-        
     }
 
     public virtual void OnShoot() {

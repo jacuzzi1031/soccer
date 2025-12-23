@@ -6,10 +6,11 @@ using UnityEngine;
 public class Room : MonoBehaviour {
     [SerializeField] private GameObject entityPrefab;
     private List<RoomPlayerInfo> roomPlayerInfoList;
-    
-
+    private List<Entity> entityList= new List<Entity>();
+    public static Room Instance{get; private set;}
 
     private void Awake() {
+        Instance=this;
         List<RoomPlayerInfo> roomPlayerInfoList = GameInterface.Interface.RoomManager.RoomPlayerList;
         //SetGameMode
         if (roomPlayerInfoList.Count == 1) {
@@ -29,14 +30,34 @@ public class Room : MonoBehaviour {
             GameObject go = Instantiate(entityPrefab, transform);
             Entity entity = go.GetComponent<Entity>();
             entity.playerType = info.id == localPlayerId ? Entity.PlayerType.Local : Entity.PlayerType.Remote;
-            entity.playerId = info.id;
+            entity.entityId = info.id;
             entity.isHome = info.isHome;
             entity.controlScheme=entity.isHome?Player.ControlScheme.P1:Player.ControlScheme.P2;
+            entityList.Add(entity);
         }
+    }
 
+    public List<int> GetEntityIdListIsHome(bool isHome) {
+        List<int> entityisHomeList=new List<int>();
+        for (int i = 0; i < entityList.Count; i++) {
+            if (entityList[i].isHome == isHome) {
+                entityisHomeList.Add(entityList[i].entityId);
+            }
+        }
+        return entityisHomeList;
+    }
+
+    public int GetEntityByID(int id) {
+        return entityList[0].entityId;
     }
 
     private void Start() {
-        PlayerManager.Instance.InitializeSquads();
+        PlayerManager.Instance.InitializeSquads();  
+        GameInterface.Interface.GameManager.StartGame();
+    }
+
+
+    public void Update() {
+        GameInterface.Interface.GameManager._Update();
     }
 }

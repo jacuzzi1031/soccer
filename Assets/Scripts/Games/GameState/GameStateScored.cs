@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class GameStateScored : GameState
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    private const float DURATION_CELEBRATION = 3f;
+    private float timeSinceCelebration;
+    public override void OnEnter() {
+        manager.IncreaseScore(stateData.CountryScoredOn);
+        timeSinceCelebration = Time.time;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public override void _Update() {
+        if (Time.time - timeSinceCelebration > DURATION_CELEBRATION)
+        {
+            TransitionState(GameManager.State.RESET, stateData);
+        }
     }
 }

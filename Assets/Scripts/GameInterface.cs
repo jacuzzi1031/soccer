@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameInterface : MonoBehaviour
 {
@@ -30,10 +33,23 @@ public class GameInterface : MonoBehaviour
         GameManager=new GameManager();
         RoomManager=new RoomManager();
         RoomManager.OnInit();
+
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "MainMenuScene")
+            return;
+        foreach (var roomPlayer in RoomManager.RoomPlayerList) {
+            roomPlayer.comfirmed=false;
+        }
         GameManager.OnInit();
         UIManager.OnInit();
-        
-        UIManager.PushUIPanel(UIPanelType.MainMenuUI, ShowUIPanelType.FadeIn);
+        UIManager.PushUIPanel(
+            UIPanelType.MainMenuUI,
+            ShowUIPanelType.FadeIn
+        );
     }
 
     private void OnDestroy() {

@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class CameraControlTrigger : MonoBehaviour
 {
@@ -13,9 +15,9 @@ public class CameraControlTrigger : MonoBehaviour
     private void Start()
     {
     }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {   
+        if (!CameraManager.Instance || !CameraManager.Instance.gameObject.activeInHierarchy) return;
         if (collision.GetComponentInParent<Ball>())
         {   
             if (customInspectorObjects.panCameraOnContact)
@@ -28,6 +30,7 @@ public class CameraControlTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (!CameraManager.Instance || !CameraManager.Instance.gameObject.activeInHierarchy) return;
         if (collision.GetComponentInParent<Ball>())
         {   
             if (customInspectorObjects.panCameraOnContact)

@@ -5,14 +5,13 @@
     public class PlayerStateMoving: PlayerState {
         
         private Vector2 moveDir;
-        private float runThreshold = 45f;
+
         private float goalieSpeed = 44f;
-        private int speedHash;
+
         private float movingSpeed;
         
         public override void OnEnter() {
             animator.Play("movement");
-            speedHash = Animator.StringToHash("Speed");
             movingSpeed=player.speed;
         }
 
@@ -68,28 +67,7 @@
 
         }
         
-        public void SetMovementAnimation() {
-            animator.SetFloat(speedHash, rb.velocity.magnitude);
-            AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
 
-            if (!info.IsName("movement"))
-            {
-                if (runParticles.isPlaying)
-                    runParticles.Stop();
-                return;
-            }
-            float speed = animator.GetFloat(speedHash);
-            if (speed >= runThreshold)
-            {
-                if (!runParticles.isPlaying)
-                    runParticles.Play();
-            }
-            else
-            {
-                if (runParticles.isPlaying)
-                    runParticles.Stop();
-            }
-        }
 
         public override bool CanCarryBall() {
             return player.role != Player.Role.GOALIE;
@@ -97,5 +75,6 @@
 
         public override void OnExit() {
             movingSpeed = 0f;
+            base.OnExit();
         }
     }

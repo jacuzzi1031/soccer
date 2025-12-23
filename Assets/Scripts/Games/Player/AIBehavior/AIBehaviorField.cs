@@ -26,7 +26,13 @@ private const float PASS_PROBABILITY = 0.05f;
         }
         else if (IsBallCarriedByTeammate())
         {
-            moveDir += GetAssistFormationSteeringForce();
+            if (TeammateCouldShoot()) {
+                moveDir += GetCarrierReboundShotForce();
+            }
+            else {
+                moveDir += GetAssistFormationSteeringForce();
+            }
+            
         }
         else
         {
@@ -48,7 +54,12 @@ private const float PASS_PROBABILITY = 0.05f;
 
         moveDir = Vector2.ClampMagnitude(moveDir, 1f);
     }
-    
+
+    private bool TeammateCouldShoot() {
+        Vector2 target = player.targetGoal.GetCenterTargetPosition();
+        return Vector2.Distance(ball.carrier.transform.position, target) < SHOT_DISTANCE;
+    }
+
     public override void PerformAIDecisions()
     {
         if (IsBallPossessedByOpponent() &&
@@ -104,6 +115,51 @@ private const float PASS_PROBABILITY = 0.05f;
         float weight = GetBiCircularWeight(player.transform.position, target, 100, 0, 150, 1);
         return direction * weight;
     }
+    Vector2 GetCarrierReboundShotForce()
+    {
+        const float GoalYOffset     = 10f;
+        const float GoalYRangeSlack = 10f;
+        const float ReboundOffsetX  = 100f;
+
+        Vector2 carrierPos = ball.carrier.transform.position;
+        Vector2 playerPos  = player.transform.position;
+
+        Vector2 topPos    = player.targetGoal.GetTopTargetPosition();
+        Vector2 bottomPos = player.targetGoal.GetBottomTargetPosition();
+        Vector2 centerPos = player.targetGoal.GetCenterTargetPosition();
+
+        Vector2 target = centerPos;
+
+        bool outOfGoalYRange =
+            carrierPos.y > topPos.y + GoalYRangeSlack ||
+            carrierPos.y < bottomPos.y - GoalYRangeSlack;
+
+        if (!outOfGoalYRange)
+        {
+            float distToTop    = Mathf.Abs(carrierPos.y - topPos.y);
+            float distToBottom = Mathf.Abs(carrierPos.y - bottomPos.y);
+
+            target.y = distToTop > distToBottom
+                ? topPos.y + GoalYOffset
+                : bottomPos.y - GoalYOffset;
+        }
+
+        target.x = centerPos.x - Mathf.Sign(centerPos.x) * ReboundOffsetX;
+
+        Vector2 direction = (target - playerPos).normalized;
+
+        float weight = GetBiCircularWeight(
+            playerPos,
+            target,
+            1,
+            0,
+            20,
+            1
+        );
+
+        return direction * weight;
+    }
+
 
     Vector2 GetAssistFormationSteeringForce()
     {

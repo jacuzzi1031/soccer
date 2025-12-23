@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class GameStateOvertime : GameState
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public override void OnEnter() {
+        GameInterface.Interface.EventSystem.Subscribe<OnTeamScoredEvent>(onTeamScoredEvent);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public override void OnExit() {
+        GameInterface.Interface.EventSystem.Unsubscribe<OnTeamScoredEvent>(onTeamScoredEvent);
+    }
+
+    private void onTeamScoredEvent(OnTeamScoredEvent obj) {
+        manager.IncreaseScore(obj.CountryScoredOn);
+        TransitionState(GameManager.State.GAMEOVER);
     }
 }

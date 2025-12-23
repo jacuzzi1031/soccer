@@ -19,7 +19,17 @@ public class RoomVisual : MonoBehaviour {
         _mRoomPlayerPositionAvailable = new bool[roomPlayerPositionArray.Length];
         Array.Fill(_mRoomPlayerPositionAvailable, true);
         SpawnRoomPlayers();
+        
+    }
+
+    public void OnEnable() {
         GameInterface.Interface.EventSystem.Subscribe<CountrySelectEvent>(OnCountrySelect);
+        GameInterface.Interface.RoomManager.OnEnter();
+    }
+    void OnDisable()
+    {
+        GameInterface.Interface.EventSystem.Unsubscribe<CountrySelectEvent>(OnCountrySelect);
+        GameInterface.Interface.RoomManager.OnExit();
     }
     private void OnCountrySelect(CountrySelectEvent obj) {
         //实际是转到RoomManager的RoomPlayerReady的获取的localId;

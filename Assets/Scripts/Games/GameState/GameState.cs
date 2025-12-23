@@ -30,4 +30,8 @@ public class GameState
     public virtual void OnExit() {
         
     }
+
+    public virtual void _Update() {
+        
+    }
 }

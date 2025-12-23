@@ -3,19 +3,20 @@
 
     public class PlayerStateCelebrating: PlayerState {
         private const float AIR_FRICTION = 60f;
-        private const float CELEBRATING_HEIGHT = 1.5f;
+        private const float CELEBRATING_HEIGHT = 2f;
         private float initialDelay;         
         private float startCelebratingTime;
         public override void OnEnter() {
-            animator.Play("celebrate");
-            GameInterface.Interface.EventSystem.Subscribe<TeamResetEvent>(OnTeamReset);
-            initialDelay = Random.Range(0,0.4f);
+            GameInterface.Interface.EventSystem.Subscribe<OnTeamResetEvent>(OnTeamReset);
+            initialDelay = Random.Range(0.2f,0.5f);
             startCelebratingTime = Time.time;
-            rb.velocity = Vector2.MoveTowards(
-                rb.velocity,
-                Vector2.zero,
-                Time.deltaTime * AIR_FRICTION
-            );
+        }
+
+        public override void OnExit() {
+            GameInterface.Interface.EventSystem.Unsubscribe<OnTeamResetEvent>(OnTeamReset);
+            player.height = 0.1f;
+            player.heightVelocity=0f;
+            base.OnExit();
         }
 
         public override void _Update() {
@@ -24,19 +25,22 @@
                 Celebrate();
             }
         }
+
+        public override void _FixedUpdate() {
+            rb.velocity = Vector2.MoveTowards(
+                rb.velocity,
+                Vector2.zero,
+                Time.deltaTime * AIR_FRICTION
+            );
+        }
         private void Celebrate()
         {
-            // Godot: animation_player.play("celebrate")
             animator.Play("celebrate");
-
-            // Godot: player.height = 0.1
             player.height = 0.1f;
-
-            // Godot: player.height_velocity = CELEBRATING_HEIGHT
             player.heightVelocity = CELEBRATING_HEIGHT;
         }
 
-        public void OnTeamReset(TeamResetEvent teamReset) {
+        public void OnTeamReset(OnTeamResetEvent teamReset) {
             TransitionState(Player.State.RESETING,PlayerStateData.Build().SetResetPosition(player.spawnPosition));
         }
     }

@@ -17,9 +17,9 @@ public class Goal : MonoBehaviour
         scoringArea.OnTriggered += OnBallEnterScoringArea;
         
         country=GameInterface.Interface.GameManager.currentMatch.countryHome;
-        if (GameInterface.Interface.GameManager.currentMatchType == GameManager.MatchType.Training) {
-            InvisibleWalls.enabled = false;
-        }
+        // if (GameInterface.Interface.GameManager.currentMatchType == GameManager.MatchType.Training) {
+        //     InvisibleWalls.enabled = false;
+        // }
         scoringAreaCollider=scoringArea.GetComponent<Collider2D>();
     }
 
@@ -36,9 +36,8 @@ public class Goal : MonoBehaviour
     {
         Ball ball = other.GetComponentInParent<Ball>();
         if (ball == null) return;
+        GameInterface.Interface.EventSystem.Publish(new OnTeamScoredEvent(country));
         Debug.Log("scoring!!!");
-        // SoundPlayer.Play(SoundPlayer.Sound.Whistle);
-        // GameEvents.TeamScored(country);
     }
     
     public Vector2 GetRandomTargetPosition()
@@ -70,5 +69,9 @@ public class Goal : MonoBehaviour
 
     public Collider2D GetScoringArea() {
         return scoringAreaCollider;
+    }
+
+    public void initialize(string currentMatchCountryHome) {
+        country=currentMatchCountryHome;
     }
 }

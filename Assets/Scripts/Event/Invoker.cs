@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Invoker : MonoBehaviour
 {
@@ -19,6 +20,11 @@ public class Invoker : MonoBehaviour
         Instance = this;
         DelegateList = new List<Action>();
         DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
+    {
+        DelegateList.Clear();
     }
 
     private void Update()

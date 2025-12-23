@@ -70,8 +70,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1681687981
+  m_SortingLayer: 2
   m_SortingOrder: 7
   m_Sprite: {fileID: 21300000, guid: bcbbb0039a7dadc4bae186aa1e255885, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5049,6 +5049,7 @@ MonoBehaviour:
   carrier: {fileID: 0}
   heightVelocity: 0
   trainingSpawnPosition: {fileID: 0}
+  spawnPosition: {x: 0, y: 0}
   collideForScoreAreaLayer:
     serializedVersion: 2
     m_Bits: 2048
@@ -5062,6 +5063,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   colliderForWall: {fileID: 2820076231886670070}
+  playerListInProximityArea: []
   frictionAir: 1.94
   frictionGround: 10
 --- !u!50 &5907587812378846152
@@ -5230,8 +5232,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1681687981
+  m_SortingLayer: 2
   m_SortingOrder: 6
   m_Sprite: {fileID: -2087317640, guid: d154669b961f02741b43a52747460173, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

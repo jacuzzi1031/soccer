@@ -27,6 +27,7 @@
         
         public override void OnExit() {
             CameraManager.Instance.PowerShotZoom(false);
+            base.OnExit();
         }
 
         public override void OnShootCancel() {

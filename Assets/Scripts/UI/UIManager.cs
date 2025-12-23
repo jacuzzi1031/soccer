@@ -60,15 +60,21 @@ public class UIManager : BaseManager
     private static readonly UIPanelType[] RoomUIPanelArray = { UIPanelType.RoomListUI, UIPanelType.CreateRoomUI };
 
     public override void OnInit()
-    {
+    {   
+        
+        _uiPanelDict.Clear();
+        _uiPanelAddressDict.Clear();
+        _uiPanelStack.Clear();
+        _uiPanelList.Clear();
         base.OnInit();
         _canvas = GameObject.Find("UIPanelCanvas").GetComponent<RectTransform>();
-        GameObject.DontDestroyOnLoad(_canvas.gameObject);
+        // GameObject.DontDestroyOnLoad(_canvas.gameObject);
         InitUIPanel();
 
         GameInterface.Interface.EventSystem.Subscribe<PlayerSignInEvent>(OnPlayerSignIn);
         GameInterface.Interface.EventSystem.Subscribe<PlayerEnterRoomEvent>(OnPlayerEnterRoom);
     }
+    
 
     private void OnPlayerSignIn(PlayerSignInEvent _)
     {
@@ -429,10 +435,10 @@ public class UIManager : BaseManager
     {
         uiPanel.OnShow();
         CanvasGroup canvasGroup = uiPanel.transform.GetComponent<CanvasGroup>();
-        canvasGroup.DOFade(1, UISHOW_DURATION).OnComplete(() => { });
+        canvasGroup.DOFade(1, UISHOW_DURATION).SetLink(canvasGroup.gameObject).OnComplete(() => { });
         if (showUIPanelType is ShowUIPanelType.MoveFadeIn)
         {
-            uiPanel.transform.DOLocalMoveX(UISHOW_END_POSITION, UISHOW_DURATION);
+            uiPanel.transform.DOLocalMoveX(UISHOW_END_POSITION, UISHOW_DURATION).SetLink(uiPanel.gameObject);
         }
         else
         {
@@ -455,10 +461,10 @@ public class UIManager : BaseManager
         CanvasGroup canvasGroup = uiPanel.transform.GetComponent<CanvasGroup>();
         if (hideUIPanelType is HideUIPanelType.MoveFadeOut)
         {
-            uiPanel.transform.DOLocalMoveX(UIHIDE_END_POSITION, UISHOW_DURATION);
+            uiPanel.transform.DOLocalMoveX(UIHIDE_END_POSITION, UISHOW_DURATION).SetLink(uiPanel.gameObject);
         }
 
-        canvasGroup.DOFade(0, UISHOW_DURATION).OnComplete(OnComplete);
+        canvasGroup.DOFade(0, UISHOW_DURATION).SetLink(canvasGroup.gameObject).OnComplete(OnComplete);
         canvasGroup.blocksRaycasts = false;
     }
 
@@ -489,8 +495,6 @@ public class UIManager : BaseManager
     {
         if (_uiPanelAddressDict.TryGetValue(uiPanelType, out string address))
         {
-            Debug.Log($"Spawn UI, Type:{uiPanelType}, Address:{address}");
-
             // 使用 Addressables 异步加载资源
             AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
             handle.Completed += (op) =>
@@ -527,7 +531,6 @@ public class UIManager : BaseManager
     {
         foreach (var uiPanelSo in _uiPanelSoListSo.uIPanelSoList)
         {
-            Debug.Log($"UIAdd,Type:{uiPanelSo.uIPanelType},Path:{uiPanelSo.path}");
             _uiPanelAddressDict.Add(uiPanelSo.uIPanelType, uiPanelSo.path);
         }
     }

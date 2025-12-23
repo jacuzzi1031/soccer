@@ -8,7 +8,6 @@ public enum Scene
     RoomScene,
     LoadingScene,
     GameScene,
-    GameOverScene,
 }
 
 public class SceneLoader

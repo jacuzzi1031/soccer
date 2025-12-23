@@ -65,9 +65,11 @@ using UnityEngine;
             if (carrier.controlScheme == Player.ControlScheme.CPU) {
                 GameInterface.Interface.EventSystem.Publish(new PlayerBecomesCarrierEvent(carrier.playerId));
             }
+            GameInterface.Interface.EventSystem.Publish(new OnBallPossessedEvent(carrier.fullName));
         }
         
         public override void OnExit()
         {
+            GameInterface.Interface.EventSystem.Publish(new OnBallReleasedEvent());
         }
     }

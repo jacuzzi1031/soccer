@@ -9,7 +9,15 @@ public class RoomManager : BaseManager
 
     public RoomManager() {
         RoomPlayerList = new List<RoomPlayerInfo>();
+        
+    }
+
+    public void OnEnter() {
         GameInterface.Interface.EventSystem.Subscribe<CountryConfirmEvent>(onCountryConfirm);
+    }
+
+    public void OnExit() {
+        GameInterface.Interface.EventSystem.Unsubscribe<CountryConfirmEvent>(onCountryConfirm);
     }
 
     public override void OnInit() {
@@ -19,11 +27,6 @@ public class RoomManager : BaseManager
         roomPlayerInfo.nickname = "jacuzzi";
         roomPlayerInfo.isHome = true;
         RoomPlayerList.Add(roomPlayerInfo);
-        // roomPlayerInfo = new RoomPlayerInfo();
-        // roomPlayerInfo.id = 1;
-        // roomPlayerInfo.nickname = "qwe";
-        // roomPlayerInfo.isHome = false;
-        // RoomPlayerList.Add(roomPlayerInfo);
         GameInterface.Interface.LocalPlayerInfo=roomPlayerInfo;
         //先手动设置
         

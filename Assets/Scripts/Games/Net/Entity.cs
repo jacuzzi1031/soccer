@@ -23,7 +23,7 @@ public class Entity : MonoBehaviour
     /// <summary>
     /// 玩家id
     /// </summary>
-    public int playerId;
+    public int entityId;
     /// <summary>
     /// 主客队
     /// </summary>
@@ -61,8 +61,8 @@ public class Entity : MonoBehaviour
 
 
     public void OnTeamsReady(OnSquadsReadyEvent e) {
-        currentTeam = PlayerManager.Instance.GetSquad(isHome);
-        opponentTeam = PlayerManager.Instance.GetSquad(!isHome);
+        if(currentTeam==null) currentTeam = PlayerManager.Instance.GetSquad(isHome);
+        if(opponentTeam==null) opponentTeam = PlayerManager.Instance.GetSquad(!isHome);
         if (IsLocal) {
             initializeControlScheme();
             SubscribeGlobalInputs();
@@ -96,6 +96,16 @@ public class Entity : MonoBehaviour
         GameInput.Instance.OnShortPassAction += OnPassInput;
         GameInput.Instance.OnLongPassAction += OnPassInput;
         GameInput.Instance.OnIncesivePassAction += OnPassInput;
+        GameInput.Instance.OnShootCancelAction+= OnShootCancel;
+    }
+    public void OnDestroy() {
+        GameInterface.Interface.EventSystem.Unsubscribe<PlayerBecomesCarrierEvent>(OnPlayerBecomesCarrier);
+        GameInterface.Interface.EventSystem.Unsubscribe<OnSquadsReadyEvent>(OnTeamsReady);
+        GameInput.Instance.OnSwapAction -= PlayerOnOnSwap;
+        GameInput.Instance.OnShootAction -= OnShootInput;
+        GameInput.Instance.OnShortPassAction -= OnPassInput;
+        GameInput.Instance.OnLongPassAction -= OnPassInput;
+        GameInput.Instance.OnIncesivePassAction -= OnPassInput;
         GameInput.Instance.OnShootCancelAction+= OnShootCancel;
     }
     private void PlayerOnOnSwap(object sender, EventArgs e)
@@ -132,18 +142,13 @@ public class Entity : MonoBehaviour
     }
     private void OnPassInput(object sender, EventArgs e) {
         var passType = GameInput.Instance.LocalPlayerInputType;
-        currentControlPlayer?.currentState.OnPass(passType);
+        currentControlPlayer?.currentState?.OnPass(passType);
+        
+        // kickoff signal for GameStateKickoff
+        GameInterface.Interface.EventSystem.Publish(new EntityForGameKickoffEvent(entityId));
     }
     private void OnShootCancel(object sender, EventArgs e) {
-        currentControlPlayer?.currentState.OnShootCancel();
+        currentControlPlayer?.currentState?.OnShootCancel();
     }
-    public void OnDestroy() {
-        GameInterface.Interface.EventSystem.Unsubscribe<OnSquadsReadyEvent>(OnTeamsReady);
-        GameInput.Instance.OnSwapAction -= PlayerOnOnSwap;
-        GameInput.Instance.OnShootAction -= OnShootInput;
-        GameInput.Instance.OnShortPassAction -= OnPassInput;
-        GameInput.Instance.OnLongPassAction -= OnPassInput;
-        GameInput.Instance.OnIncesivePassAction -= OnPassInput;
-        GameInput.Instance.OnShootCancelAction+= OnShootCancel;
-    }
+
 }

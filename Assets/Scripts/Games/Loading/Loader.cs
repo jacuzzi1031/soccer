@@ -38,7 +38,7 @@ public class Loader : MonoBehaviour
         
         if (_mNowProgress < _mTargetProgress)
         {
-            float speed = (_mTargetProgress - _mNowProgress) > 10 ? 20f : 10f;
+            float speed = (_mTargetProgress - _mNowProgress) > 10 ? 20f : 15f;
             _mNowProgress = (int)Mathf.Min(
                 _mNowProgress + speed * Time.deltaTime * 60f,
                 _mTargetProgress
@@ -61,7 +61,7 @@ public class Loader : MonoBehaviour
     }
     IEnumerator DelayToComplete()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.01f);
         _mRequestSend = true;
         _mLoadSceneAsyncOperation.allowSceneActivation = true;
     }

@@ -20,6 +20,7 @@
 
         public override void OnExit() {
             tackleDamageEmitterArea.enabled = false;
+            base.OnExit();
         }
 
         public override void _FixedUpdate() {

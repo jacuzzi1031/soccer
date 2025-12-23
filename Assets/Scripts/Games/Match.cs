@@ -32,7 +32,7 @@ public class Match
     }
     
     public void IncreaseScore(string countryScoredOn)
-    {
+    {   
         if (countryScoredOn == countryHome)
             goalsAway += 1;
         else
@@ -53,7 +53,7 @@ public class Match
     {
         while (IsTied())
         {
-            goalsHome = Random.Range(0, 6); // Unity 的 Range 上限是排除 6，所以 0~5
+            goalsHome = Random.Range(0, 6); 
             goalsAway = Random.Range(0, 6);
         }
 
