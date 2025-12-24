@@ -9,7 +9,7 @@ public class Entity : MonoBehaviour
     [HideInInspector]public IReadOnlyList<Player> opponentTeam;
     [HideInInspector]public Player currentControlPlayer;
     [HideInInspector]public Ball ball = null;
-    
+
     public enum PlayerType
     {
         Local,
@@ -150,5 +150,6 @@ public class Entity : MonoBehaviour
     private void OnShootCancel(object sender, EventArgs e) {
         currentControlPlayer?.currentState?.OnShootCancel();
     }
+
 
 }

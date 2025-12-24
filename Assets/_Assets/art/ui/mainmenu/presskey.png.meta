@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 361cb6d37d4fc0d4dbdbb8691a66b15d
+guid: 1cdd89c73977639409ddbcf7352a6e26
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,76 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: layout-p1_0
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 16.5
-        width: 16.4
-        height: 16.5
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5d3b942511c742345939093b24e453d1
-      internalID: -92503277
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: layout-p1_1
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 16.5
-        width: 16.4
-        height: 16.5
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 02915aa83f04be94c94b9fdb8b2f3d94
-      internalID: 1348548119
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: layout-p1_2
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 16.5
-        width: 16.4
-        height: 16.5
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7508624724974b446a8d688e18dbb326
-      internalID: -1614545130
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: layout-p1_3
+      name: presskey_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0.5
-        width: 16.4
-        height: 16.5
+        y: 320
+        width: 323.2
+        height: 320
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -174,20 +111,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ae47a834a839b024194aa6bbec022e3e
-      internalID: -236841397
+      spriteID: 6411efee5219b974992f0dd2d80f5b82
+      internalID: -1925283405
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: layout-p1_4
+      name: presskey_1
       rect:
         serializedVersion: 2
-        x: 16
-        y: 0.5
-        width: 16.4
-        height: 16.5
+        x: 323
+        y: 320
+        width: 323.2
+        height: 320
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -195,20 +132,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d583fa98df4e0f34b9242cac5f898231
-      internalID: -1761855018
+      spriteID: bf56bed0ed101b547b4bdd92a71fd5fe
+      internalID: -1715215384
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: layout-p1_5
+      name: presskey_2
       rect:
         serializedVersion: 2
-        x: 32
-        y: 0.5
-        width: 16.4
-        height: 16.5
+        x: 646
+        y: 320
+        width: 323.2
+        height: 320
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -216,20 +153,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e1303e73ab7371f438399e8a79280bf3
-      internalID: 1090638676
+      spriteID: fa10458d57e9a1d488be29eefd564448
+      internalID: 782448193
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: layout-p1_6
+      name: presskey_3
       rect:
         serializedVersion: 2
-        x: 48
-        y: 0.5
-        width: 16.4
-        height: 16.5
+        x: 969
+        y: 320
+        width: 323.2
+        height: 320
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -237,20 +174,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e7d38caae78acf546a31e6b32ef885c5
-      internalID: -41793308
+      spriteID: f4a3fa9f95466854e83e0536cd49847d
+      internalID: 1140744752
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: layout-p1_7
+      name: presskey_4
       rect:
         serializedVersion: 2
-        x: 64
-        y: 0.5
-        width: 16.4
-        height: 16.5
+        x: 1292
+        y: 320
+        width: 323.2
+        height: 320
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -258,8 +195,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 467ac93a581f7b84dbb304d3143d1205
-      internalID: 407988129
+      spriteID: 45e0caa0db0eb154f9b552e825286df1
+      internalID: 235065120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: presskey_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 323.2
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71dea3f453548b94c94360518a4d84d9
+      internalID: -1571716998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: presskey_6
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 0
+        width: 323.2
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69321d1598c691b46bb598e4d131d855
+      internalID: 645454564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: presskey_7
+      rect:
+        serializedVersion: 2
+        x: 646
+        y: 0
+        width: 323.2
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38c8d9cd01f60ea43a9b4a541f684a4a
+      internalID: 2010619193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: presskey_8
+      rect:
+        serializedVersion: 2
+        x: 969
+        y: 0
+        width: 323.2
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f3cf8ea83a967e4c8f3becb728d0dbd
+      internalID: 952865705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: presskey_9
+      rect:
+        serializedVersion: 2
+        x: 1292
+        y: 0
+        width: 323.2
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28ca047e5e4439740a45263882d94b1f
+      internalID: -900916065
       vertices: []
       indices: 
       edges: []
@@ -275,14 +317,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      layout-p1_0: -92503277
-      layout-p1_1: 1348548119
-      layout-p1_2: -1614545130
-      layout-p1_3: -236841397
-      layout-p1_4: -1761855018
-      layout-p1_5: 1090638676
-      layout-p1_6: -41793308
-      layout-p1_7: 407988129
+      presskey_0: -1925283405
+      presskey_1: -1715215384
+      presskey_2: 782448193
+      presskey_3: 1140744752
+      presskey_4: 235065120
+      presskey_5: -1571716998
+      presskey_6: 645454564
+      presskey_7: 2010619193
+      presskey_8: 952865705
+      presskey_9: -900916065
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

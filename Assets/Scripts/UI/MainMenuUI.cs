@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class MainMenuUI : BaseUIPanel {
     [SerializeField] private Button trainButton;
     [SerializeField] private Button trainWithEnemyButton;
     [SerializeField] private Button championShipButton;
+    [SerializeField] private Animator startAnimation;
 
 
     private void Awake() {
@@ -22,6 +24,11 @@ public class MainMenuUI : BaseUIPanel {
 
         Time.timeScale = 1f;
     }
+
+    private void Start() {
+        startAnimation.Play("StartMainMenuAnimation");
+    }
+
     private void OnModeButtonClicked(GameManager.MatchType mode)
     {
         GameInterface.Interface.GameManager.SetCurrentMatchType(mode);
