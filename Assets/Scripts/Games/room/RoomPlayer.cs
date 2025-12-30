@@ -15,6 +15,8 @@ public class RoomPlayer : MonoBehaviour
 
     public int RoomIndex { get; private set; }
     
+    public bool HasComfirmed { get; private set; }
+    
     public void SetRoomPlayer(int index, string nickname)
     {
         RoomIndex = index;
@@ -22,6 +24,9 @@ public class RoomPlayer : MonoBehaviour
         nickNameText.transform.rotation = Quaternion.identity;
     }
     
+    public void SetConfirmed(bool isComfirmed) {
+        HasComfirmed = isComfirmed;
+    }
 
     public void ApplyAppearance(string country, int skinColor=0)
     {
@@ -53,4 +58,6 @@ public class RoomPlayer : MonoBehaviour
         teamIndex = Mathf.Clamp(teamIndex, 0, teamPaletteTex.height - 1);
         mat.SetInt("_TeamColor", teamIndex);
     }
+
+
 }

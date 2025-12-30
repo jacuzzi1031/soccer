@@ -14,6 +14,7 @@
         public override void OnEnter() {
             tackleDamageEmitterArea.enabled = true;
             animator.Play("tackle");
+            SoundManager.Instance.Play(SoundManager.Instance.audioRefs.TACKLING);
             if (stateData.MoveDir.sqrMagnitude <= 0.01f) moveDir = player.headingRight ? Vector2.right : Vector2.left;
             else moveDir = stateData.MoveDir.normalized;
         }

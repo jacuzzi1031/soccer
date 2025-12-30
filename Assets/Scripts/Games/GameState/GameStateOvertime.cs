@@ -6,6 +6,9 @@ public class GameStateOvertime : GameState
 {
     public override void OnEnter() {
         GameInterface.Interface.EventSystem.Subscribe<OnTeamScoredEvent>(onTeamScoredEvent);
+        MusicManager.Instance.Play(
+            MusicManager.Instance.Refs.WIN
+        );
     }
 
     public override void OnExit() {

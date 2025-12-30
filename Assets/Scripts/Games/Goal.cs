@@ -37,6 +37,7 @@ public class Goal : MonoBehaviour
         Ball ball = other.GetComponentInParent<Ball>();
         if (ball == null) return;
         GameInterface.Interface.EventSystem.Publish(new OnTeamScoredEvent(country));
+        SoundManager.Instance.Play(SoundManager.Instance.audioRefs.WHISTLE);
         Debug.Log("scoring!!!");
     }
     

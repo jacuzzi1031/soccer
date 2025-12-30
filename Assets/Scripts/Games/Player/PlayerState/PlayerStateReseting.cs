@@ -6,6 +6,7 @@
         public float arriveDistance = 2f;
         public override void OnEnter() {
             GameInterface.Interface.EventSystem.Subscribe<OnKickoffStartedEvent>(OnKickoffStarted);
+            animator.Play("movement");
         }
 
         public override void OnExit() {

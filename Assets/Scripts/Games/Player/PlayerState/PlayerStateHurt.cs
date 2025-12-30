@@ -16,6 +16,7 @@
             player.height = 0.1f;
             Vector2 tumbleDir = stateData.MoveDir;
             ball.Tumble(tumbleDir * BALL_TUMBLE_SPEED);
+            SoundManager.Instance.Play(SoundManager.Instance.audioRefs.HURT);
         }
 
         public override void _Update() {

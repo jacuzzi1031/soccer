@@ -45,12 +45,18 @@ public class RoomManager : BaseManager
             roomPlayerInfo.isHome = false;
         }
         
+        SoundManager.Instance.Play(SoundManager.Instance.audioRefs.UI_SELECT);
+        
         GameInterface.Interface.GameManager.SetMatchCountry(roomPlayer.RoomIndex,obj.Country);
         
         roomPlayerInfo.comfirmed=true;
+        RoomVisual.Instance._mRoomPlayerInfoToRoomPlayerDict[roomPlayerInfo].SetConfirmed(true);
         if (RoomPlayerList.Count == 1) {
             RoomVisual.Instance.SpawnCPU(obj.Country,
-                (index, country) =>{GameInterface.Interface.GameManager.SetMatchCountry(index,country);} );
+                (index, country) => {
+                    GameInterface.Interface.GameManager.SetMatchCountry(index,country);
+                    SoundManager.Instance.Play(SoundManager.Instance.audioRefs.UI_SELECT);
+                } );
             //没给GameManager 信息
         }
         

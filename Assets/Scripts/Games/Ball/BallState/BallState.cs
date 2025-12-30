@@ -128,6 +128,7 @@
                 rb.MovePosition(contactPos);
                 ball.velocity = Vector2.Reflect(ball.velocity, hit.normal) * BOUNCINESS;
                 ball.SwitchState(Ball.State.FREEFORM);
+                SoundManager.Instance.Play(SoundManager.Instance.audioRefs.BOUNCE);
             }
             else
             {

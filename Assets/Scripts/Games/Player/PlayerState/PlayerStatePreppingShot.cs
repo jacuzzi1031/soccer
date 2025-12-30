@@ -40,7 +40,7 @@
             float bonus = Mathf.Pow(easeTime, EASE_REWARD_FACTOR);
             float shotPower = player.power * (1 + 1.5f*bonus);
             shotDirection = shotDirection.normalized;
-            PlayerStateData data = PlayerStateData.Build().SetShotPower(shotPower).SetShotDirection(shotDirection);
+            PlayerStateData data = PlayerStateData.Build().SetShotPower(shotPower).SetShotDirection(shotDirection).SetPowerShotSound(hasTriggeredBonusEvent);
             TransitionState(Player.State.SHOOTING, data);
         }
 

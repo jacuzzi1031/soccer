@@ -36,6 +36,9 @@ public class RoomVisual : MonoBehaviour {
         int localId = GameInterface.Interface.LocalPlayerInfo.id;
         RoomPlayerInfo roomPlayerInfo = GameInterface.Interface.RoomManager.RoomPlayerList.Find(roomPlayer=>roomPlayer.id == localId);
         RoomPlayer roomPlayer = _mRoomPlayerInfoToRoomPlayerDict[roomPlayerInfo];
+
+        if (roomPlayer.HasComfirmed) return;
+        
         roomPlayer.ApplyAppearance(obj.countryName);
         
         //RoomUI的SelectCurSor移动  ，其中RoomPlayer保存了cursor的key i ，也就是_mRoomPlayerPositionAvailable的i

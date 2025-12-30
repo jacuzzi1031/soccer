@@ -26,8 +26,6 @@
                 player.heightVelocity = HEIGHT_VELOCITY_START;
                 animator.Play("header");
                 isHeader = true;
-                
-                
             }
         }
 
@@ -36,6 +34,7 @@
                 Vector2 destination = targetGoal.GetRandomTargetPosition();
                 Vector2 direction = (destination - (Vector2)body.transform.position).normalized;
                 body.shoot(direction * player.power * BONUS_POWER);
+                SoundManager.Instance.Play(SoundManager.Instance.audioRefs.POWERSHOT);
 
                 if (isHeader) {
                     GameInterface.Interface.EventSystem.Publish(new PlayStyleShowEvent(player.playerId,headerSprite));

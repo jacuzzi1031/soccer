@@ -29,11 +29,15 @@ public class RoomUI : MonoBehaviour
         UpdateRoomName();
     }
 
-    public void OnCountrySelect(int selectorid,int currentIndex) {
-        this.currentIndex = currentIndex;
+    public void OnCountrySelect(int selectorid,int selectIndex) {
+        if (selectIndex != currentIndex) {
+            currentIndex = selectIndex;
+            SoundManager.Instance.Play(SoundManager.Instance.audioRefs.UI_NAV);
+        }
+
         //还是之后交给RoomManager处理
         
-        selectorDict[selectorid].MoveTo(items[currentIndex].transform);
+        selectorDict[selectorid].MoveTo(items[selectIndex].transform);
         // SoundPlayer.Play("ui_nav");
     }
 
@@ -74,7 +78,7 @@ public class RoomUI : MonoBehaviour
 
         if (move == Vector2.zero || move == lastMoveInput)
             return;
-
+        
         TryMove(move);
         lastMoveInput = move;
     }

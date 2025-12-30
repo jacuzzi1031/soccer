@@ -12,6 +12,7 @@
         }
         public override void OnEnter() {
             animator.Play("bicycle_kick");
+            SoundManager.Instance.Play(SoundManager.Instance.audioRefs.POWERSHOT);
         }
 
         public override void VolleyShot(Ball body) {

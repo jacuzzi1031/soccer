@@ -7,6 +7,7 @@ public class PlayerStateData
     public Vector2 MoveDir { get; private set; }
     public Vector2 ShotDirection { get; private set; }
     public float ShotPower { get; private set; }
+    public bool isPowerShot { get; private set; }
 
     public static PlayerStateData Build()
     {
@@ -22,6 +23,11 @@ public class PlayerStateData
     public PlayerStateData SetShotPower(float power)
     {
         ShotPower = power;
+        return this;
+    }
+
+    public PlayerStateData SetPowerShotSound(bool IsPowerShotSound) {
+        isPowerShot = IsPowerShotSound;
         return this;
     }
 

@@ -21,8 +21,8 @@ public class GameManager
 
     public Match currentMatch;
     public string[] playerSetup = { "FRANCE", "" };
-    private const float DURATION_GAME_SEC = 2f;
-    // private const float DURATION_GAME_SEC = 2 * 60f;
+    // private const float DURATION_GAME_SEC = 2f;
+    private const float DURATION_GAME_SEC = 2 * 60f;
     public enum State
     {
         IN_PLAY,

@@ -22,6 +22,7 @@ public class GameStateKickoff : GameState {
         }
         
         GameInterface.Interface.EventSystem.Subscribe<EntityForGameKickoffEvent>(onKickoffEvent);
+        SoundManager.Instance.Play(SoundManager.Instance.audioRefs.WHISTLE);
     }
 
     public override void OnExit() {

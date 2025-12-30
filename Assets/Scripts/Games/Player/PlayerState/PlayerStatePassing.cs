@@ -13,6 +13,7 @@ public class PlayerStatePassing: PlayerState {
         public override void OnEnter() {
             animator.Play("kick");
             GameInterface.Interface.EventSystem.Publish(new PlayStyleShowEvent(player.playerId,playStyleSprite));
+            SoundManager.Instance.Play(SoundManager.Instance.audioRefs.PASS);
         }
         public override void OnAnimationComplete() {
             Player passTarget = null;

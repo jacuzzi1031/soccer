@@ -5,6 +5,12 @@
 
         public override void OnEnter() {
             animator.Play("kick");
+            if (stateData.isPowerShot) {
+                SoundManager.Instance.Play(SoundManager.Instance.audioRefs.POWERSHOT);
+            }
+            else {
+                SoundManager.Instance.Play(SoundManager.Instance.audioRefs.SHOT);
+            }
         }
 
 

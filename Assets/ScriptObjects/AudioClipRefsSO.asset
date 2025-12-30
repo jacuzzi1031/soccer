@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afd18d138abf06c4dbd64e01ff892ba8, type: 3}
+  m_Name: AudioClipRefsSO
+  m_EditorClassIdentifier: 
+  BOUNCE: {fileID: 8300000, guid: d38ad3ec7ad98a9499bd7ac84c1e77c3, type: 3}
+  HURT: {fileID: 8300000, guid: 481b8c4b20e66cb43ab27ed083c4c89e, type: 3}
+  PASS: {fileID: 8300000, guid: c4be9f5ec95da6f4b8878b080a441b74, type: 3}
+  POWERSHOT: {fileID: 8300000, guid: bfd066fef372c83489670127602d4806, type: 3}
+  SHOT: {fileID: 8300000, guid: 9bba2976379df114f878afe68a1dffa5, type: 3}
+  TACKLING: {fileID: 8300000, guid: a0b73063605023b489f7fdc3b0845f57, type: 3}
+  UI_NAV: {fileID: 8300000, guid: a05211fd649fffb458fe8f5f411ed1e9, type: 3}
+  UI_SELECT: {fileID: 8300000, guid: 128f6172baa9d6742a882588657cb847, type: 3}
+  WHISTLE: {fileID: 8300000, guid: 5c4fbe75850867c439d05d4e86a05f1a, type: 3}
