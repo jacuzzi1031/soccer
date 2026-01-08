@@ -271,6 +271,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiPanelSoListSo: {fileID: 11400000, guid: 2d878d8eb81f7a54a991895664efdfd6, type: 2}
+  serverIP: 127.0.0.1
+  serverPort: 8080
 --- !u!4 &750498124
 Transform:
   m_ObjectHideFlags: 0

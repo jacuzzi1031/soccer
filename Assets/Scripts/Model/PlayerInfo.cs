@@ -1,4 +1,6 @@
 using System;
+using SocketProtocol;
+
 // using SocketProtocol;
 
 
@@ -9,12 +11,12 @@ public class PlayerInfo : IEquatable<PlayerInfo>
 
     }
 
-    // public PlayerInfo(PlayerInfoPack pack)
-    // {
-    //     id = pack.Id;
-    //     username = pack.Username;
-    //     nickname = pack.Nickname;
-    // }
+    public PlayerInfo(PlayerInfoPack pack)
+    {
+        id = pack.Id;
+        username = pack.Username;
+        nickname = pack.Nickname;
+    }
 
     public int id;
     public string username;

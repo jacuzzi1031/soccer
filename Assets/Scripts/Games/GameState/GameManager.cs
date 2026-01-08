@@ -6,9 +6,9 @@ using UnityEngine;
 public class GameManager
 {
     public enum MatchType {
-    Training,          //训练模式
+    Training,          //自由训练
     TrainingWithEnemy,//对抗训练
-    UltimateTeam     //ut
+    UltimateTeam     //正式比赛
     }
     public MatchType currentMatchType;
 

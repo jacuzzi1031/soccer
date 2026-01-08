@@ -17,8 +17,33 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: fd6686122ec1cc1438f873429b45b445
   m_SerializeEntries:
+  - m_GUID: 3076ff6d36a2c614cb2fe9d3239c30b5
+    m_Address: UIPanel/CreateRoomUI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3d313abef3f0f3d438d0a8d7177907ac
     m_Address: UIPanel/MainMenuUI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 728ba436400cc2a4ab00c32676ab4461
+    m_Address: UIPanel/MessageUI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 85b95f4e854099940b2c7d33a95df92e
+    m_Address: UIPanel/SignUpUI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9e1960773db93d4ab0ddc9667cee26b
+    m_Address: UIPanel/RoomListUI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df5ffb3077a1b124bb250c2c088e164e
+    m_Address: UIPanel/SignInUI
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

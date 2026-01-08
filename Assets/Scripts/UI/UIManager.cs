@@ -495,7 +495,6 @@ public class UIManager : BaseManager
     {
         if (_uiPanelAddressDict.TryGetValue(uiPanelType, out string address))
         {
-            // 使用 Addressables 异步加载资源
             AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
             handle.Completed += (op) =>
             {

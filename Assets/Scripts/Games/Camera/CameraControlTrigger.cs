@@ -43,7 +43,6 @@ public class CameraControlTrigger : MonoBehaviour
 }
 
 //非 MonoBehaviour 类，它不能直接在 Inspector 中显示，除非它被标记为 可序列化。
-//还需要在主类（继承monobehavior）public声明实例
 [System.Serializable]
 public class CustomInspectorObjects
 {
@@ -64,36 +63,4 @@ public enum PanDirection
     Left,
     Right
 }
-[CustomEditor(typeof(CameraControlTrigger))]
-public class MyScriptEditor : Editor
-{
-    CameraControlTrigger cameraControlTrigger;
 
-    private void OnEnable()
-    {
-        cameraControlTrigger = (CameraControlTrigger)target;
-    }
-
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        if (cameraControlTrigger.customInspectorObjects.swapCameras)
-        {
-            cameraControlTrigger.customInspectorObjects.cameraOnLeft = EditorGUILayout.ObjectField("Camera on Left", cameraControlTrigger.customInspectorObjects.cameraOnLeft, typeof(CinemachineVirtualCamera), true) as CinemachineVirtualCamera;
-
-            cameraControlTrigger.customInspectorObjects.cameraOnRight = EditorGUILayout.ObjectField("Camera on Right", cameraControlTrigger.customInspectorObjects.cameraOnRight, typeof(CinemachineVirtualCamera), true) as CinemachineVirtualCamera;
-        }
-        if (cameraControlTrigger.customInspectorObjects.panCameraOnContact)
-        {
-            cameraControlTrigger.customInspectorObjects.panDirection = (PanDirection)EditorGUILayout.EnumPopup("Camera Pan Direction", cameraControlTrigger.customInspectorObjects.panDirection);
-            cameraControlTrigger.customInspectorObjects.panDistance = EditorGUILayout.FloatField("Pan Distance", cameraControlTrigger.customInspectorObjects.panDistance);
-            cameraControlTrigger.customInspectorObjects.panTime = EditorGUILayout.FloatField("Pan Time", cameraControlTrigger.customInspectorObjects.panTime);
-        }
-
-        if (GUI.changed)
-        {
-            EditorUtility.SetDirty(cameraControlTrigger);
-        }
-    }
-}

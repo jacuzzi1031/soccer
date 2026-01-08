@@ -14,3 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uIPanelSoList:
   - {fileID: 11400000, guid: e76dbae41d2af8445b9b8cd916320e3b, type: 2}
+  - {fileID: 11400000, guid: 6456e912d97e7fc41824e17c731efa33, type: 2}
+  - {fileID: 11400000, guid: 924cd84e257c9254dbfb29d7c60399e6, type: 2}
+  - {fileID: 11400000, guid: a37eb72e41a0aa04eb122f819543e6b5, type: 2}
+  - {fileID: 11400000, guid: 0749d444c35e8f348acebabd78aaec30, type: 2}
+  - {fileID: 11400000, guid: d107dc2c3e218e644956964f67792e38, type: 2}
+  - {fileID: 11400000, guid: 6c152e8551f78e149879cbd35e50a9aa, type: 2}
+  - {fileID: 11400000, guid: 82405f4d174d4cb47b6fdbdc7b4726a6, type: 2}
+  - {fileID: 11400000, guid: 14ea90d79323257498c1805bb13e491c, type: 2}

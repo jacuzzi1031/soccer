@@ -17,7 +17,13 @@ public class GameInterface : MonoBehaviour
     
     public PlayerInfo LocalPlayerInfo { get; set; }
     
+    public TcpClient TcpClient { get; private set; }
+    public UdpListener UdpListener { get; private set; }
+    public RequestManager RequestManager { get; private set; }
+    
     [Header("UI")] [SerializeField] private UIPanelSoListSo uiPanelSoListSo;
+    [Header("网络")] [SerializeField] private string serverIP;
+    [SerializeField] private int serverPort;
     private void Awake() {
         if (Interface != null)
         {
@@ -26,14 +32,20 @@ public class GameInterface : MonoBehaviour
         }
         SceneLoader = new SceneLoader();
 
+        #if UNITY_EDITOR
+                serverIP = "127.0.0.1";
+        #endif
+        TcpClient = new TcpClient(serverIP, serverPort);
+        UdpListener = new UdpListener();
         Interface = this;
         DontDestroyOnLoad(gameObject);
         EventSystem = new EventSystem();
         UIManager = new UIManager(uiPanelSoListSo);
         GameManager=new GameManager();
         RoomManager=new RoomManager();
+        RequestManager = new RequestManager();
         RoomManager.OnInit();
-
+        RequestManager.OnInit();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -42,7 +54,7 @@ public class GameInterface : MonoBehaviour
         if (scene.name != "MainMenuScene")
             return;
         foreach (var roomPlayer in RoomManager.RoomPlayerList) {
-            roomPlayer.comfirmed=false;
+            roomPlayer.ready=false;
         }
         GameManager.OnInit();
         UIManager.OnInit();
@@ -53,5 +65,7 @@ public class GameInterface : MonoBehaviour
     }
 
     private void OnDestroy() {
+        TcpClient.Dispose();
+        UdpListener.Dispose();
     }
 }

@@ -5,8 +5,7 @@ using UnityEngine.UI;
 public class MainMenuUI : BaseUIPanel {
 
 
-    // [SerializeField] private Button playButton;
-    // [SerializeField] private Button quitButton;
+    [SerializeField] private Button playButton;
     [SerializeField] private Button quitButton;
     [SerializeField] private Button trainButton;
     [SerializeField] private Button trainWithEnemyButton;
@@ -15,14 +14,20 @@ public class MainMenuUI : BaseUIPanel {
 
 
     private void Awake() {
-        trainButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.Training));
-        trainWithEnemyButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.TrainingWithEnemy));
-        championShipButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.UltimateTeam));
+        playButton.onClick.AddListener(() => {
+            GameInterface.Interface.UIManager.PushUIPanelAppend(
+                GameInterface.Interface.TcpClient.IsOnline ? UIPanelType.RoomListUI : UIPanelType.SignInUI,
+                ShowUIPanelType.FadeIn);
+        });
         quitButton.onClick.AddListener(() => {
             Application.Quit();
         });
-
         Time.timeScale = 1f;
+        
+        //for test single player
+        trainButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.Training));
+        trainWithEnemyButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.TrainingWithEnemy));
+        championShipButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.UltimateTeam));
     }
 
     private void Start() {
