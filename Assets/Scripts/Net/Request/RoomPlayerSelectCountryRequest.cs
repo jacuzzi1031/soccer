@@ -1,26 +1,20 @@
 using System;
 using SocketProtocol;
 
-public class RoomPlayerReadyRequest : BaseRequest
+public class RoomPlayerSelectCountryRequest : BaseRequest
 {
 
-    // public event Action<int> OnPlayerReadyChanged;
-
-    public RoomPlayerReadyRequest()
+    public RoomPlayerSelectCountryRequest()
     {
         Request = RequestCode.Room;
-        Action = ActionCode.PlayerReady;
+        Action = ActionCode.PlayerSelectCountry;
     }
 
     protected override void HandleServerSuccessResponse(MainPack pack)
     {
-        // int clientId = pack.ClientPack.ClientId;
-        bool ready = pack.RoomPlayerReadyPack.Ready;
         int playerId = pack.PlayerInfoPack.Id;
 
-        GameInterface.Interface.RoomManager.RoomPlayerReady(playerId, ready);
-
-
+        GameInterface.Interface.RoomManager.RoomPlayerSelectCountry(playerId, pack.RoomPlayerSelectCountryPack.CountryIndex, pack.RoomPlayerSelectCountryPack.CountryName);
         base.HandleServerSuccessResponse(pack);
     }
 
@@ -29,9 +23,9 @@ public class RoomPlayerReadyRequest : BaseRequest
         base.HandleServerFailResponse(pack);
     }
 
-    public void SendRoomPlayerReadyRequest(bool ready, Action onSuccess = null, Action onFail = null)
+    public void SendSelectCountryRequest(int countryIndex,string countryName, Action onSuccess = null, Action onFail = null)
     {
-        RoomPlayerReadyPack roomPlayerReadyPack = new RoomPlayerReadyPack { Ready = ready };
+        RoomPlayerSelectCountryPack roomPlayerSelectCountryPack = new RoomPlayerSelectCountryPack { CountryIndex=countryIndex,CountryName = countryName};
 
         string roomCode = GameInterface.Interface.RoomManager.CurrentRoomInfo.roomCode;
         roomCode = CharsetUtil.DefaultToUTF8(roomCode);
@@ -41,14 +35,14 @@ public class RoomPlayerReadyRequest : BaseRequest
             RoomCode = roomCode,
         };
 
-        MainPack mainPack = new MainPack
+        MainPack mainPack = new MainPack  
         {
             RequestCode = Request,
             ActionCode = Action,
-            RoomPlayerReadyPack = roomPlayerReadyPack,
+            RoomPlayerSelectCountryPack = roomPlayerSelectCountryPack,
             RoomInfoPack = roomInfoPack
         };
-
+        
         SendRequest(mainPack);
     }
 }

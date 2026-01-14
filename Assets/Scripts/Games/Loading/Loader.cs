@@ -48,25 +48,26 @@ public class Loader : MonoBehaviour
         
         if (_mNowProgress == 100 && !_mRequestSend)
         {
-            // LoadGameSceneCompleteRequest request =
-            //     GameInterface.Interface.RequestManager.GetRequest<LoadGameSceneCompleteRequest>();
-            //
-            // request.SendLoadGameSceneCompleteRequest(onSuccess: OnAllPlayerLoadComplete);
-            // _mRequestSend = true;
+            LoadGameSceneCompleteRequest request =
+                GameInterface.Interface.RequestManager.GetRequest<LoadGameSceneCompleteRequest>();
+            
+            request.SendLoadGameSceneCompleteRequest(onSuccess: OnAllPlayerLoadComplete);
+            _mRequestSend = true;
 
-            StartCoroutine(DelayToComplete());
+            // StartCoroutine(DelayToComplete());
 
             tipText.gameObject.SetActive(true);
         }
     }
-    IEnumerator DelayToComplete()
+    private void OnAllPlayerLoadComplete()
     {
-        yield return new WaitForSeconds(0.01f);
-        _mRequestSend = true;
         _mLoadSceneAsyncOperation.allowSceneActivation = true;
     }
-    // private void OnAllPlayerLoadComplete()
+    // IEnumerator DelayToComplete()
     // {
+    //     yield return new WaitForSeconds(0.01f);
+    //     _mRequestSend = true;
     //     _mLoadSceneAsyncOperation.allowSceneActivation = true;
     // }
+
 }

@@ -19,7 +19,7 @@ public class CountryItem : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        RoomUI.Instance.SetCountryFromClick(CountryName);
+        RoomUI.Instance.ConfirmCountryFromClick(CountryName);
     }
 
     public void OnPointerEnter(PointerEventData eventData) {

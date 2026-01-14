@@ -9,23 +9,38 @@ public class RoomPlayer : MonoBehaviour
     [SerializeField] private TextMeshPro nickNameText;
     
     [SerializeField] private SpriteRenderer playerSprite;
+    [SerializeField] private SpriteRenderer confirmSprite;
     [SerializeField] private Texture2D teamPaletteTex;
     [SerializeField] private Texture2D skinPaletteTex;
 
-
+    [HideInInspector]public bool HasComfirmed=false;
     public int RoomIndex { get; private set; }
-    
-    public bool HasComfirmed { get; private set; }
-    
+    private Animator animator;
+
+    private void Awake() {
+        animator=playerSprite.GetComponent<Animator>();
+    }
+
     public void SetRoomPlayer(int index, string nickname)
     {
         RoomIndex = index;
         nickNameText.text = nickname;
         nickNameText.transform.rotation = Quaternion.identity;
+        confirmSprite.transform.rotation = Quaternion.identity;
+        confirmSprite.enabled = false;
+        animator.Play("movement");
     }
-    
-    public void SetConfirmed(bool isComfirmed) {
-        HasComfirmed = isComfirmed;
+
+    public void SetComfirmed(bool flag) {
+        HasComfirmed = flag;
+        confirmSprite.enabled = flag;
+        if (flag) {
+            animator.Play("walk");
+        }
+        else {
+            animator.Play("movement");
+        }
+        
     }
 
     public void ApplyAppearance(string country, int skinColor=0)

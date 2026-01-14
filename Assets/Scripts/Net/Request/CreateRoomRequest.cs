@@ -24,17 +24,14 @@ public class CreateRoomRequest : BaseRequest
             currentPlayers = roomInfoPack.CurrentPlayers,
             maxPlayer = roomInfoPack.MaxPlayer,
         };
-
-        PlayerInfo playerInfo = GameInterface.Interface.LocalPlayerInfo;
-
-        RoomPlayerInfo roomPlayerInfo = new RoomPlayerInfo
-        {
-            id = playerInfo.id,
-            username = playerInfo.username,
-            nickname = playerInfo.nickname,
-            ready = false,
+        RoomPlayerInfoPack roomPlayerInfoPack = pack.RoomPlayerInfoPack;
+        RoomPlayerInfo roomPlayerInfo = new RoomPlayerInfo {
+            id = roomPlayerInfoPack.Id,
+            seatIndex = roomPlayerInfoPack.SeatIndex,
+            username = roomPlayerInfoPack.Username,
+            nickname = roomPlayerInfoPack.Nickname,
+            ready = roomPlayerInfoPack.Ready
         };
-
         GameInterface.Interface.RoomManager.JoinRoom(currentRoomInfo, new List<RoomPlayerInfo> { roomPlayerInfo });
         
         base.HandleServerSuccessResponse(pack);

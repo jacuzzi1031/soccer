@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Net.Request;
 using SocketProtocol;
 using UnityEngine;
 
@@ -25,14 +24,14 @@ public class RequestManager : BaseManager
         RegisterRequest(new SignInRequest());
         RegisterRequest(new SignUpRequest());
         RegisterRequest(new SearchRoomRequest());
-        RegisterRequest(new RoomPlayerReadyRequest());
+        RegisterRequest(new RoomPlayerConfirmCountryRequest());
         RegisterRequest(new JoinRoomRequest());
         RegisterRequest(new CreateRoomRequest());
         RegisterRequest(new QuitRoomRequest());
         RegisterRequest(new ReadyStartGameResponse());
         RegisterRequest(new LoadGameSceneCompleteRequest());
         RegisterRequest(new GameStateChangeResponse());
-        RegisterRequest(new UpdateRecipeResponse());
+        RegisterRequest(new RoomPlayerSelectCountryRequest());
     }
     private void RegisterRequest(BaseRequest request)
     {
@@ -43,6 +42,7 @@ public class RequestManager : BaseManager
     {
         _mRequestDict[pack.ActionCode].HandleServerResponse(pack);
     }
+    // ReSharper disable Unity.PerformanceAnalysis
     public T GetRequest<T>() where T : BaseRequest
     {
         if (_mRequestTypeDict.TryGetValue(typeof(T), out var req))

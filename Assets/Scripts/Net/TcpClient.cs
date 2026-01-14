@@ -284,6 +284,7 @@ public class TcpClient : IDisposable
         }
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     public void Send(MainPack pack)
     {
         try

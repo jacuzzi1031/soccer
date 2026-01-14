@@ -5,7 +5,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 public class RoomUI : MonoBehaviour
 {
     public static RoomUI Instance{get; private set;}
@@ -13,6 +12,7 @@ public class RoomUI : MonoBehaviour
     [Header("Data")]
     public List<CountryDataSo> countryDatabase;
     [Header("UI")]
+    public Button exitButton;
     public Transform gridParent;
     public CountryItem itemPrefab;
     public SelectorCursor selectorPrefab;
@@ -22,16 +22,18 @@ public class RoomUI : MonoBehaviour
     public int columns = 4;
 
     private List<CountryItem> items = new();
-    private int currentIndex = 0;
+    private int localIndex = 0;
     private Vector2 lastMoveInput;
+    
+    private RoomPlayerSelectCountryRequest _mRoomPlayerSelectCountryRequest;
+    private RoomPlayerConfirmCountryRequest _mRoomPlayerConfirmCountryRequest;
     private void Awake() {
         Instance = this;
         UpdateRoomName();
     }
-
     public void OnCountrySelect(int selectorid,int selectIndex) {
-        if (selectIndex != currentIndex) {
-            currentIndex = selectIndex;
+        if (selectIndex != localIndex) {
+            localIndex = selectIndex;
             SoundManager.Instance.Play(SoundManager.Instance.audioRefs.UI_NAV);
         }
 
@@ -53,14 +55,20 @@ public class RoomUI : MonoBehaviour
     }
     public void Start()
     {
-        //GridLayoutGroup 的执行顺序是 Awake / Start之后Layout Rebuild（UI 系统） Item 的 RectTransform.position 在 Start 时还是旧值 / (0,0)，
-        //不能给selector初始化第一个item位置
+        exitButton.onClick.AddListener(() => {
+                QuitRoomRequest quitRoomRequest = GameInterface.Interface.RequestManager.GetRequest<QuitRoomRequest>();
+                quitRoomRequest.SendQuitRoomRequest();
+            }
+            );
         BuildGrid();
+        // Start之后Layout Rebuild,所以为了selectCursor需要
         LayoutRebuilder.ForceRebuildLayoutImmediate(
             gridParent.GetComponent<RectTransform>()
         );
-        currentIndex = 0;
-        GameInput.Instance.OnShootAction+= SetCountryFromKeyboard;
+        localIndex = 0;
+        GameInput.Instance.OnShootAction+= ConfirmCountryFromKeyboard;
+        _mRoomPlayerSelectCountryRequest = GameInterface.Interface.RequestManager.GetRequest<RoomPlayerSelectCountryRequest>();
+        _mRoomPlayerConfirmCountryRequest = GameInterface.Interface.RequestManager.GetRequest<RoomPlayerConfirmCountryRequest>();
     }
 
     void BuildGrid()
@@ -89,10 +97,10 @@ public class RoomUI : MonoBehaviour
     }
     void TryMove(Vector2 move)
     {
-        int row = currentIndex / columns;
-        int col = currentIndex % columns;
+        int row = localIndex / columns;
+        int col = localIndex % columns;
 
-        int targetIndex = currentIndex;
+        int targetIndex = localIndex;
 
         if (move.x > 0.5f && col < columns - 1)
             targetIndex++;
@@ -100,40 +108,31 @@ public class RoomUI : MonoBehaviour
             targetIndex--;
         else if (move.y > 0.5f && row > 0)
             targetIndex -= columns;
-        else if (move.y < -0.5f && currentIndex + columns < items.Count)
+        else if (move.y < -0.5f && localIndex + columns < items.Count)
             targetIndex += columns;
 
-        if (targetIndex != currentIndex)
+        if (targetIndex != localIndex)
         {
-            GameInterface.Interface.EventSystem.Publish(new CountrySelectEvent(targetIndex,items[targetIndex].CountryName));
+            _mRoomPlayerSelectCountryRequest.SendSelectCountryRequest(targetIndex, items[targetIndex].CountryName);
         }
     }
 
     public void SetIndexFromMouse(int index) {
-        if(currentIndex == index) return;
-        GameInterface.Interface.EventSystem.Publish(new CountrySelectEvent(index,items[index].CountryName));
+        if(localIndex == index) return;
+        _mRoomPlayerSelectCountryRequest.SendSelectCountryRequest(index, items[index].CountryName);
     }
-    private void SetCountryFromKeyboard(object sender, EventArgs e) {
-        GameInterface.Interface.EventSystem.Publish(new CountryConfirmEvent(items[currentIndex].CountryName));
+    private void ConfirmCountryFromKeyboard(object sender, EventArgs e) {
+        _mRoomPlayerConfirmCountryRequest.SendRoomPlayerConfirmCountryRequest(items[localIndex].CountryName);
     }
-    public void SetCountryFromClick(string countryName) {
-        GameInterface.Interface.EventSystem.Publish(new CountryConfirmEvent(countryName));
+    public void ConfirmCountryFromClick(string countryName) {
+        _mRoomPlayerConfirmCountryRequest.SendRoomPlayerConfirmCountryRequest(countryName);
     }
-
-    public void OnPlayerPositionAvailable(int i,bool isempty) {
-        if (!isempty) {
-            CreateSelector(i);
-        }
-        else {
-            selectorDict.Remove(i);
-        }
-    }
-    private void CreateSelector(int positionId)
+    public void CreateSelector(int positionId)
     {
         SelectorCursor selector = Instantiate(selectorPrefab, transform);
         selector.Init(positionId);
         selectorDict.Add(positionId, selector);
-        selector.MoveTo(items[currentIndex].transform);
+        selector.MoveTo(items[0].transform);
     }
 
     public void selectCpuCountry(string excludeCountry, Action<string> onSelected)
@@ -152,6 +151,14 @@ public class RoomUI : MonoBehaviour
 
             // 回调返回 CountryName
             onSelected?.Invoke(selectedItem.CountryName);
+        }
+    }
+
+    public void DeleteSelectCursor(int playerIndex) {
+        if (selectorDict.TryGetValue(playerIndex, out SelectorCursor selector))
+        {
+            Destroy(selector.gameObject);
+            selectorDict.Remove(playerIndex);
         }
     }
 }

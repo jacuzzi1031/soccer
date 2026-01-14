@@ -62,6 +62,7 @@ public class UdpListener : IDisposable
                 StartReceive(e);
                 return;
             }
+            RemoteEp = (IPEndPoint)e.RemoteEndPoint;
             ResFrameSyncData resFrameSyncData = ResFrameSyncData.Parser.ParseFrom(e.Buffer, 0, length);
 
             if (resFrameSyncData.MessageType is MessageType.FrameSync)

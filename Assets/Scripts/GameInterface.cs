@@ -65,7 +65,10 @@ public class GameInterface : MonoBehaviour
     }
 
     private void OnDestroy() {
-        TcpClient.Dispose();
-        UdpListener.Dispose();
+        TcpClient?.Dispose();
+        TcpClient = null;
+
+        UdpListener?.Dispose();
+        UdpListener = null;
     }
 }

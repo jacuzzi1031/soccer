@@ -32,6 +32,7 @@ public class Invoker : MonoBehaviour
         Execute();
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void Execute()
     {
         if (DelegateList.Count == 0) return;

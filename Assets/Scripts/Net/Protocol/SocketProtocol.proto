@@ -27,27 +27,26 @@ enum ActionCode
   SearchRoom = 4;
   AssignClient = 5;
   JoinRoom = 6;
-  PlayerReady = 7;
-  QuitRoom = 8;
-  StartGame = 9;
-  FinishOperation = 10;
-  ReadyStartGame = 11;
-  UpdatePlayerCoin = 12;
-  LoadGameSceneComplete = 13;
-  ChangeGameState = 14;
-  ChangeRound = 15;
-  ChangeOperation = 16;
-  SetGameOver = 17;
-  UpdateRecipe = 18;
-  DeliverRecipe = 19;
+  PlayerConfirmCountry = 7;
+  PlayerSelectCountry=8;
+  QuitRoom = 9;
+  StartGame = 10;
+  FinishOperation = 11;
+  ReadyStartGame = 12;
+  UpdatePlayerCoin = 13;
+  LoadGameSceneComplete = 14;
+  ChangeGameState = 15;
+  ChangeRound =16;
+  ChangeOperation = 17;
+  SetGameOver = 18;
 }
 
 enum RoomMatchType
-{   
-    None=0;
-    Training=1;         
-    TrainingWithEnemy=2;
-    UltimateTeam=3;    
+{
+  None=0;
+  Training=1;
+  TrainingWithEnemy=2;
+  UltimateTeam=3;
 }
 
 enum ReturnCode
@@ -97,20 +96,21 @@ message MainPack
   CreateRoomPack createRoomPack = 11;
   RoomInfoPack roomInfoPack = 13;
   SearchRoomResultPack searchRoomResultPack = 14;
-  RoomPlayerReadyPack roomPlayerReadyPack = 15;
-  JoinRoomResultPack joinRoomResultPack = 16;
-  RoomPlayerInfoPack roomPlayerInfoPack = 17;
+  RoomPlayerConfirmCountryPack roomPlayerConfirmCountryPack = 15;
+  RoomPlayerSelectCountryPack RoomPlayerSelectCountryPack=16;
+  JoinRoomResultPack joinRoomResultPack = 17;
+  RoomPlayerInfoPack roomPlayerInfoPack = 18;
 
-  StartGameResultPack startGameResultPack = 18;
-  FinishOperationPack finishOperationPack = 19;//
-  PlayerScoreBoardPack playerScoreBoardPack = 20;
-  RoundPack roundPack = 21;
-  ChangeOperationPack changeOperationPack = 22;
-  GameOverPack gameOverPack = 23;
+  StartGameResultPack startGameResultPack = 19;
+  FinishOperationPack finishOperationPack = 20;//
+  PlayerScoreBoardPack playerScoreBoardPack = 21;
+  RoundPack roundPack = 22;
+  ChangeOperationPack changeOperationPack = 23;
+  GameOverPack gameOverPack = 24;
 
-  GameState currentGameState = 24;
-  repeated int32 recipeIdArray = 25;
-  int32 deliverRecipeId = 26;
+  GameState currentGameState = 25;
+  repeated int32 recipeIdArray = 26;
+  int32 deliverRecipeId = 27;
 }
 
 message PlayerCoinPack
@@ -157,10 +157,14 @@ message JoinRoomResultPack
   repeated RoomPlayerInfoPack roomPlayerInfoList = 1;
 }
 
-message RoomPlayerReadyPack
+message RoomPlayerConfirmCountryPack
 {
-  bool ready = 1;
   string selectCountry=2;
+}
+message RoomPlayerSelectCountryPack
+{
+  int32 countryIndex = 1;
+  string countryName=2;
 }
 
 message PlayerInfoPack
@@ -172,9 +176,10 @@ message PlayerInfoPack
 message RoomPlayerInfoPack
 {
   int32 id = 1;
-  string username = 2;
-  string nickname = 3;
-  bool ready = 4;
+  int32 seatIndex=2;
+  string username = 3;
+  string nickname = 4;
+  bool ready = 5;
 }
 
 message StartGameResultPack

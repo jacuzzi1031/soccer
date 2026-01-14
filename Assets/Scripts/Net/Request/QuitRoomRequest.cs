@@ -1,5 +1,6 @@
 using System;
 using SocketProtocol;
+using UnityEngine;
 
 public class QuitRoomRequest : BaseRequest
 {
@@ -14,7 +15,8 @@ public class QuitRoomRequest : BaseRequest
         int localPlayerId = GameInterface.Interface.LocalPlayerInfo.id;
 
         int playerId = pack.PlayerInfoPack.Id;
-        GameInterface.Interface.RoomManager.QuitRoom(playerId);
+        
+        GameInterface.Interface.RoomManager.QuitRoom(playerId,localPlayerId);
 
         if (localPlayerId == playerId)
         {
@@ -28,7 +30,6 @@ public class QuitRoomRequest : BaseRequest
                     });
             });
         }
-
         base.HandleServerSuccessResponse(pack);
     }
 

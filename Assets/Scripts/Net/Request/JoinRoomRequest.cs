@@ -34,6 +34,7 @@ public class JoinRoomRequest : BaseRequest
                 RoomPlayerInfo roomPlayerInfo = new RoomPlayerInfo
                 {
                     id = item.Id,
+                    seatIndex = item.SeatIndex,
                     nickname = item.Nickname,
                     username = item.Username,
                     ready = item.Ready,
@@ -41,6 +42,8 @@ public class JoinRoomRequest : BaseRequest
                 return roomPlayerInfo;
             }).ToList();
             GameInterface.Interface.RoomManager.JoinRoom(currentRoomInfo, roomPlayerInfoList);
+            //for delete uiPanel
+            base.HandleServerSuccessResponse(pack);
         }
         else
         {
@@ -49,6 +52,7 @@ public class JoinRoomRequest : BaseRequest
             RoomPlayerInfo roomPlayerInfo = new RoomPlayerInfo
             {
                 id = roomPlayerInfoPack.Id,
+                seatIndex = roomPlayerInfoPack.SeatIndex,
                 nickname = roomPlayerInfoPack.Nickname,
                 username = roomPlayerInfoPack.Username,
                 ready = roomPlayerInfoPack.Ready,
@@ -56,7 +60,7 @@ public class JoinRoomRequest : BaseRequest
             GameInterface.Interface.RoomManager.JoinNewRoomPlayer(roomPlayerInfo);
         }
 
-        base.HandleServerSuccessResponse(pack);
+
     }
 
     protected override void HandleServerFailResponse(MainPack pack)
