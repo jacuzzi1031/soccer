@@ -1,4 +1,5 @@
 using System;
+using GameFrameSync;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -92,7 +93,7 @@ public class PlayerState
     public virtual void OnShoot() {
     }
 
-    public virtual void OnPass(GameInput.PlayerInputType passType) {
+    public virtual void OnPass(InputType passType) {
         
     }
     

@@ -26,7 +26,7 @@ namespace SocketProtocol {
           string.Concat(
             "ChRTb2NrZXRQcm90b2NvbC5wcm90bxIOU29ja2V0UHJvdG9jb2wiQwoNSGVh",
             "cnRiZWF0UGFjaxIRCgl0cmlnZ2VyZWQYASABKAgSDAoEdHlwZRgCIAEoCRIR",
-            "Cgl0aW1lc3RhbXAYAyABKAMipwsKCE1haW5QYWNrEjAKCWhlYXJ0YmVhdBgB",
+            "Cgl0aW1lc3RhbXAYAyABKAMi5QoKCE1haW5QYWNrEjAKCWhlYXJ0YmVhdBgB",
             "IAEoCzIdLlNvY2tldFByb3RvY29sLkhlYXJ0YmVhdFBhY2sSMAoLcmVxdWVz",
             "dENvZGUYAiABKA4yGy5Tb2NrZXRQcm90b2NvbC5SZXF1ZXN0Q29kZRIyCgxy",
             "ZXNwb25zZUNvZGUYAyABKA4yHC5Tb2NrZXRQcm90b2NvbC5SZXNwb25zZUNv",
@@ -48,72 +48,70 @@ namespace SocketProtocol {
             "ZXJTZWxlY3RDb3VudHJ5UGFjaxI+ChJqb2luUm9vbVJlc3VsdFBhY2sYESAB",
             "KAsyIi5Tb2NrZXRQcm90b2NvbC5Kb2luUm9vbVJlc3VsdFBhY2sSPgoScm9v",
             "bVBsYXllckluZm9QYWNrGBIgASgLMiIuU29ja2V0UHJvdG9jb2wuUm9vbVBs",
-            "YXllckluZm9QYWNrEkAKE3N0YXJ0R2FtZVJlc3VsdFBhY2sYEyABKAsyIy5T",
-            "b2NrZXRQcm90b2NvbC5TdGFydEdhbWVSZXN1bHRQYWNrEkAKE2ZpbmlzaE9w",
-            "ZXJhdGlvblBhY2sYFCABKAsyIy5Tb2NrZXRQcm90b2NvbC5GaW5pc2hPcGVy",
-            "YXRpb25QYWNrEkIKFHBsYXllclNjb3JlQm9hcmRQYWNrGBUgASgLMiQuU29j",
-            "a2V0UHJvdG9jb2wuUGxheWVyU2NvcmVCb2FyZFBhY2sSLAoJcm91bmRQYWNr",
-            "GBYgASgLMhkuU29ja2V0UHJvdG9jb2wuUm91bmRQYWNrEkAKE2NoYW5nZU9w",
-            "ZXJhdGlvblBhY2sYFyABKAsyIy5Tb2NrZXRQcm90b2NvbC5DaGFuZ2VPcGVy",
-            "YXRpb25QYWNrEjIKDGdhbWVPdmVyUGFjaxgYIAEoCzIcLlNvY2tldFByb3Rv",
-            "Y29sLkdhbWVPdmVyUGFjaxIzChBjdXJyZW50R2FtZVN0YXRlGBkgASgOMhku",
-            "U29ja2V0UHJvdG9jb2wuR2FtZVN0YXRlEhUKDXJlY2lwZUlkQXJyYXkYGiAD",
-            "KAUSFwoPZGVsaXZlclJlY2lwZUlkGBsgASgFIh4KDlBsYXllckNvaW5QYWNr",
-            "EgwKBGNvaW4YASABKAUiMAoKU2lnbkluUGFjaxIQCgh1c2VybmFtZRgBIAEo",
-            "CRIQCghwYXNzd29yZBgCIAEoCSJCCgpTaWduVXBQYWNrEhAKCHVzZXJuYW1l",
-            "GAEgASgJEhAKCHBhc3N3b3JkGAIgASgJEhAKCG5pY2tuYW1lGAMgASgJImsK",
-            "DkNyZWF0ZVJvb21QYWNrEhAKCHJvb21OYW1lGAIgASgJEjQKDXJvb21NYXRj",
-            "aFR5cGUYAyABKA4yHS5Tb2NrZXRQcm90b2NvbC5Sb29tTWF0Y2hUeXBlEhEK",
-            "CW1heFBsYXllchgEIAEoBSKTAQoMUm9vbUluZm9QYWNrEhAKCHJvb21Db2Rl",
-            "GAEgASgJEhAKCHJvb21OYW1lGAIgASgJEjQKDXJvb21NYXRjaFR5cGUYAyAB",
-            "KA4yHS5Tb2NrZXRQcm90b2NvbC5Sb29tTWF0Y2hUeXBlEhYKDmN1cnJlbnRQ",
-            "bGF5ZXJzGAQgASgFEhEKCW1heFBsYXllchgFIAEoBSJKChRTZWFyY2hSb29t",
-            "UmVzdWx0UGFjaxIyCgxyb29tSW5mb0xpc3QYASADKAsyHC5Tb2NrZXRQcm90",
-            "b2NvbC5Sb29tSW5mb1BhY2siVAoSSm9pblJvb21SZXN1bHRQYWNrEj4KEnJv",
-            "b21QbGF5ZXJJbmZvTGlzdBgBIAMoCzIiLlNvY2tldFByb3RvY29sLlJvb21Q",
-            "bGF5ZXJJbmZvUGFjayI1ChxSb29tUGxheWVyQ29uZmlybUNvdW50cnlQYWNr",
-            "EhUKDXNlbGVjdENvdW50cnkYAiABKAkiSAobUm9vbVBsYXllclNlbGVjdENv",
-            "dW50cnlQYWNrEhQKDGNvdW50cnlJbmRleBgBIAEoBRITCgtjb3VudHJ5TmFt",
-            "ZRgCIAEoCSJACg5QbGF5ZXJJbmZvUGFjaxIKCgJpZBgBIAEoBRIQCgh1c2Vy",
-            "bmFtZRgCIAEoCRIQCghuaWNrbmFtZRgDIAEoCSJmChJSb29tUGxheWVySW5m",
-            "b1BhY2sSCgoCaWQYASABKAUSEQoJc2VhdEluZGV4GAIgASgFEhAKCHVzZXJu",
-            "YW1lGAMgASgJEhAKCG5pY2tuYW1lGAQgASgJEg0KBXJlYWR5GAUgASgIIiwK",
-            "E1N0YXJ0R2FtZVJlc3VsdFBhY2sSFQoNZmlyc3RQbGF5ZXJJZBgBIAEoBSJA",
-            "ChNGaW5pc2hPcGVyYXRpb25QYWNrEhIKCnRvdGFsU2NvcmUYASADKAUSFQoN",
-            "b3BlcmF0aW9uTGVmdBgCIAEoBSJOChNDaGFuZ2VPcGVyYXRpb25QYWNrEiAK",
-            "GGN1cnJlbnRPcGVyYXRpb25QbGF5ZXJJZBgBIAEoBRIVCg1vcGVyYXRpb25M",
-            "ZWZ0GAIgASgFIlMKFFBsYXllclNjb3JlQm9hcmRQYWNrEhAKCHBsYXllcklk",
-            "GAEgASgFEhUKDW9wZXJhdGlvbkxlZnQYAiABKAUSEgoKc2NvcmVBcnJheRgD",
-            "IAMoBSJNCglSb3VuZFBhY2sSFAoMY3VycmVudFJvdW5kGAEgASgFEhkKEW9w",
-            "ZXJhdGlvblBsYXllcklkGAIgASgFEg8KB21lc3NhZ2UYAyABKAkiSAoMR2Ft",
-            "ZU92ZXJQYWNrEjgKD3BsYXllclNjb3JlUGFjaxgBIAMoCzIfLlNvY2tldFBy",
-            "b3RvY29sLlBsYXllclNjb3JlUGFjayI3Cg9QbGF5ZXJTY29yZVBhY2sSEAoI",
-            "cGxheWVySWQYASABKAUSEgoKc2NvcmVBcnJheRgCIAMoBSI1CgpDbGllbnRQ",
-            "YWNrEhAKCGNsaWVudElkGAEgASgFEhUKDXVkcExpc3RlblBvcnQYAyABKAUi",
-            "PQoNUmV0dXJuTWVzc2FnZRIUCgxlcnJvck1lc3NhZ2UYASABKAkSFgoOc3Vj",
-            "Y2Vzc01lc3NhZ2UYAiABKAkqSwoLUmVxdWVzdENvZGUSDwoLUmVxdWVzdE5v",
-            "bmUQABIICgRVc2VyEAESDQoJSGVhcnRCZWF0EAISCAoEUm9vbRADEggKBEdh",
-            "bWUQBCpbCgxSZXNwb25zZUNvZGUSEAoMUmVzcG9uc2VOb25lEAASEAoMVXNl",
-            "clJlc3BvbnNlEAESFQoRSGVhcnRCZWF0UmVzcG9uc2UQAhIQCgxSb29tUmVz",
-            "cG9uc2UQAyrqAgoKQWN0aW9uQ29kZRIOCgpBY3Rpb25Ob25lEAASCgoGU2ln",
-            "bkluEAESCgoGU2lnblVwEAISDgoKQ3JlYXRlUm9vbRADEg4KClNlYXJjaFJv",
-            "b20QBBIQCgxBc3NpZ25DbGllbnQQBRIMCghKb2luUm9vbRAGEhgKFFBsYXll",
-            "ckNvbmZpcm1Db3VudHJ5EAcSFwoTUGxheWVyU2VsZWN0Q291bnRyeRAIEgwK",
-            "CFF1aXRSb29tEAkSDQoJU3RhcnRHYW1lEAoSEwoPRmluaXNoT3BlcmF0aW9u",
-            "EAsSEgoOUmVhZHlTdGFydEdhbWUQDBIUChBVcGRhdGVQbGF5ZXJDb2luEA0S",
-            "GQoVTG9hZEdhbWVTY2VuZUNvbXBsZXRlEA4SEwoPQ2hhbmdlR2FtZVN0YXRl",
-            "EA8SDwoLQ2hhbmdlUm91bmQQEBITCg9DaGFuZ2VPcGVyYXRpb24QERIPCgtT",
-            "ZXRHYW1lT3ZlchASKlAKDVJvb21NYXRjaFR5cGUSCAoETm9uZRAAEgwKCFRy",
-            "YWluaW5nEAESFQoRVHJhaW5pbmdXaXRoRW5lbXkQAhIQCgxVbHRpbWF0ZVRl",
-            "YW0QAyozCgpSZXR1cm5Db2RlEg4KClJldHVybk5vbmUQABILCgdTdWNjZXNz",
-            "EAESCAoERmFpbBACKmgKCUdhbWVTdGF0ZRIOCgpOb3RTdGFydGVkEAASCwoH",
-            "SU5fUExBWRABEgoKBlNDT1JFRBACEgkKBVJFU0VUEAMSCwoHS0lDS09GRhAE",
-            "EgwKCE9WRVJUSU1FEAUSDAoIR0FNRU9WRVIQBmIGcHJvdG8z"));
+            "YXllckluZm9QYWNrEkAKE2ZpbmlzaE9wZXJhdGlvblBhY2sYEyABKAsyIy5T",
+            "b2NrZXRQcm90b2NvbC5GaW5pc2hPcGVyYXRpb25QYWNrEkIKFHBsYXllclNj",
+            "b3JlQm9hcmRQYWNrGBQgASgLMiQuU29ja2V0UHJvdG9jb2wuUGxheWVyU2Nv",
+            "cmVCb2FyZFBhY2sSLAoJcm91bmRQYWNrGBUgASgLMhkuU29ja2V0UHJvdG9j",
+            "b2wuUm91bmRQYWNrEkAKE2NoYW5nZU9wZXJhdGlvblBhY2sYFiABKAsyIy5T",
+            "b2NrZXRQcm90b2NvbC5DaGFuZ2VPcGVyYXRpb25QYWNrEjIKDGdhbWVPdmVy",
+            "UGFjaxgXIAEoCzIcLlNvY2tldFByb3RvY29sLkdhbWVPdmVyUGFjaxIzChBj",
+            "dXJyZW50R2FtZVN0YXRlGBggASgOMhkuU29ja2V0UHJvdG9jb2wuR2FtZVN0",
+            "YXRlEhUKDXJlY2lwZUlkQXJyYXkYGSADKAUSFwoPZGVsaXZlclJlY2lwZUlk",
+            "GBogASgFIh4KDlBsYXllckNvaW5QYWNrEgwKBGNvaW4YASABKAUiMAoKU2ln",
+            "bkluUGFjaxIQCgh1c2VybmFtZRgBIAEoCRIQCghwYXNzd29yZBgCIAEoCSJC",
+            "CgpTaWduVXBQYWNrEhAKCHVzZXJuYW1lGAEgASgJEhAKCHBhc3N3b3JkGAIg",
+            "ASgJEhAKCG5pY2tuYW1lGAMgASgJImsKDkNyZWF0ZVJvb21QYWNrEhAKCHJv",
+            "b21OYW1lGAIgASgJEjQKDXJvb21NYXRjaFR5cGUYAyABKA4yHS5Tb2NrZXRQ",
+            "cm90b2NvbC5Sb29tTWF0Y2hUeXBlEhEKCW1heFBsYXllchgEIAEoBSKTAQoM",
+            "Um9vbUluZm9QYWNrEhAKCHJvb21Db2RlGAEgASgJEhAKCHJvb21OYW1lGAIg",
+            "ASgJEjQKDXJvb21NYXRjaFR5cGUYAyABKA4yHS5Tb2NrZXRQcm90b2NvbC5S",
+            "b29tTWF0Y2hUeXBlEhYKDmN1cnJlbnRQbGF5ZXJzGAQgASgFEhEKCW1heFBs",
+            "YXllchgFIAEoBSJKChRTZWFyY2hSb29tUmVzdWx0UGFjaxIyCgxyb29tSW5m",
+            "b0xpc3QYASADKAsyHC5Tb2NrZXRQcm90b2NvbC5Sb29tSW5mb1BhY2siVAoS",
+            "Sm9pblJvb21SZXN1bHRQYWNrEj4KEnJvb21QbGF5ZXJJbmZvTGlzdBgBIAMo",
+            "CzIiLlNvY2tldFByb3RvY29sLlJvb21QbGF5ZXJJbmZvUGFjayI1ChxSb29t",
+            "UGxheWVyQ29uZmlybUNvdW50cnlQYWNrEhUKDXNlbGVjdENvdW50cnkYAiAB",
+            "KAkiSAobUm9vbVBsYXllclNlbGVjdENvdW50cnlQYWNrEhQKDGNvdW50cnlJ",
+            "bmRleBgBIAEoBRITCgtjb3VudHJ5TmFtZRgCIAEoCSJACg5QbGF5ZXJJbmZv",
+            "UGFjaxIKCgJpZBgBIAEoBRIQCgh1c2VybmFtZRgCIAEoCRIQCghuaWNrbmFt",
+            "ZRgDIAEoCSJmChJSb29tUGxheWVySW5mb1BhY2sSCgoCaWQYASABKAUSEQoJ",
+            "c2VhdEluZGV4GAIgASgFEhAKCHVzZXJuYW1lGAMgASgJEhAKCG5pY2tuYW1l",
+            "GAQgASgJEg0KBXJlYWR5GAUgASgIIkAKE0ZpbmlzaE9wZXJhdGlvblBhY2sS",
+            "EgoKdG90YWxTY29yZRgBIAMoBRIVCg1vcGVyYXRpb25MZWZ0GAIgASgFIk4K",
+            "E0NoYW5nZU9wZXJhdGlvblBhY2sSIAoYY3VycmVudE9wZXJhdGlvblBsYXll",
+            "cklkGAEgASgFEhUKDW9wZXJhdGlvbkxlZnQYAiABKAUiUwoUUGxheWVyU2Nv",
+            "cmVCb2FyZFBhY2sSEAoIcGxheWVySWQYASABKAUSFQoNb3BlcmF0aW9uTGVm",
+            "dBgCIAEoBRISCgpzY29yZUFycmF5GAMgAygFIk0KCVJvdW5kUGFjaxIUCgxj",
+            "dXJyZW50Um91bmQYASABKAUSGQoRb3BlcmF0aW9uUGxheWVySWQYAiABKAUS",
+            "DwoHbWVzc2FnZRgDIAEoCSJICgxHYW1lT3ZlclBhY2sSOAoPcGxheWVyU2Nv",
+            "cmVQYWNrGAEgAygLMh8uU29ja2V0UHJvdG9jb2wuUGxheWVyU2NvcmVQYWNr",
+            "IjcKD1BsYXllclNjb3JlUGFjaxIQCghwbGF5ZXJJZBgBIAEoBRISCgpzY29y",
+            "ZUFycmF5GAIgAygFIjUKCkNsaWVudFBhY2sSEAoIY2xpZW50SWQYASABKAUS",
+            "FQoNdWRwTGlzdGVuUG9ydBgDIAEoBSI9Cg1SZXR1cm5NZXNzYWdlEhQKDGVy",
+            "cm9yTWVzc2FnZRgBIAEoCRIWCg5zdWNjZXNzTWVzc2FnZRgCIAEoCSpLCgtS",
+            "ZXF1ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggKBFVzZXIQARINCglIZWFy",
+            "dEJlYXQQAhIICgRSb29tEAMSCAoER2FtZRAEKlsKDFJlc3BvbnNlQ29kZRIQ",
+            "CgxSZXNwb25zZU5vbmUQABIQCgxVc2VyUmVzcG9uc2UQARIVChFIZWFydEJl",
+            "YXRSZXNwb25zZRACEhAKDFJvb21SZXNwb25zZRADKuoCCgpBY3Rpb25Db2Rl",
+            "Eg4KCkFjdGlvbk5vbmUQABIKCgZTaWduSW4QARIKCgZTaWduVXAQAhIOCgpD",
+            "cmVhdGVSb29tEAMSDgoKU2VhcmNoUm9vbRAEEhAKDEFzc2lnbkNsaWVudBAF",
+            "EgwKCEpvaW5Sb29tEAYSGAoUUGxheWVyQ29uZmlybUNvdW50cnkQBxIXChNQ",
+            "bGF5ZXJTZWxlY3RDb3VudHJ5EAgSDAoIUXVpdFJvb20QCRINCglTdGFydEdh",
+            "bWUQChITCg9GaW5pc2hPcGVyYXRpb24QCxISCg5SZWFkeVN0YXJ0R2FtZRAM",
+            "EhQKEFVwZGF0ZVBsYXllckNvaW4QDRIZChVMb2FkR2FtZVNjZW5lQ29tcGxl",
+            "dGUQDhITCg9DaGFuZ2VHYW1lU3RhdGUQDxIPCgtDaGFuZ2VSb3VuZBAQEhMK",
+            "D0NoYW5nZU9wZXJhdGlvbhAREg8KC1NldEdhbWVPdmVyEBIqUAoNUm9vbU1h",
+            "dGNoVHlwZRIICgROb25lEAASDAoIVHJhaW5pbmcQARIVChFUcmFpbmluZ1dp",
+            "dGhFbmVteRACEhAKDFVsdGltYXRlVGVhbRADKjMKClJldHVybkNvZGUSDgoK",
+            "UmV0dXJuTm9uZRAAEgsKB1N1Y2Nlc3MQARIICgRGYWlsEAIqaAoJR2FtZVN0",
+            "YXRlEg4KCk5vdFN0YXJ0ZWQQABILCgdJTl9QTEFZEAESCgoGU0NPUkVEEAIS",
+            "CQoFUkVTRVQQAxILCgdLSUNLT0ZGEAQSDAoIT1ZFUlRJTUUQBRIMCghHQU1F",
+            "T1ZFUhAGYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::SocketProtocol.RequestCode), typeof(global::SocketProtocol.ResponseCode), typeof(global::SocketProtocol.ActionCode), typeof(global::SocketProtocol.RoomMatchType), typeof(global::SocketProtocol.ReturnCode), typeof(global::SocketProtocol.GameState), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.HeartbeatPack), global::SocketProtocol.HeartbeatPack.Parser, new[]{ "Triggered", "Type", "Timestamp" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.MainPack), global::SocketProtocol.MainPack.Parser, new[]{ "Heartbeat", "RequestCode", "ResponseCode", "ActionCode", "ReturnCode", "SignInPack", "SignUpPack", "PlayerInfoPack", "ReturnMessage", "ClientPack", "CreateRoomPack", "RoomInfoPack", "SearchRoomResultPack", "RoomPlayerConfirmCountryPack", "RoomPlayerSelectCountryPack", "JoinRoomResultPack", "RoomPlayerInfoPack", "StartGameResultPack", "FinishOperationPack", "PlayerScoreBoardPack", "RoundPack", "ChangeOperationPack", "GameOverPack", "CurrentGameState", "RecipeIdArray", "DeliverRecipeId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.MainPack), global::SocketProtocol.MainPack.Parser, new[]{ "Heartbeat", "RequestCode", "ResponseCode", "ActionCode", "ReturnCode", "SignInPack", "SignUpPack", "PlayerInfoPack", "ReturnMessage", "ClientPack", "CreateRoomPack", "RoomInfoPack", "SearchRoomResultPack", "RoomPlayerConfirmCountryPack", "RoomPlayerSelectCountryPack", "JoinRoomResultPack", "RoomPlayerInfoPack", "FinishOperationPack", "PlayerScoreBoardPack", "RoundPack", "ChangeOperationPack", "GameOverPack", "CurrentGameState", "RecipeIdArray", "DeliverRecipeId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.PlayerCoinPack), global::SocketProtocol.PlayerCoinPack.Parser, new[]{ "Coin" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.SignInPack), global::SocketProtocol.SignInPack.Parser, new[]{ "Username", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.SignUpPack), global::SocketProtocol.SignUpPack.Parser, new[]{ "Username", "Password", "Nickname" }, null, null, null, null),
@@ -125,7 +123,6 @@ namespace SocketProtocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.RoomPlayerSelectCountryPack), global::SocketProtocol.RoomPlayerSelectCountryPack.Parser, new[]{ "CountryIndex", "CountryName" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.PlayerInfoPack), global::SocketProtocol.PlayerInfoPack.Parser, new[]{ "Id", "Username", "Nickname" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.RoomPlayerInfoPack), global::SocketProtocol.RoomPlayerInfoPack.Parser, new[]{ "Id", "SeatIndex", "Username", "Nickname", "Ready" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.StartGameResultPack), global::SocketProtocol.StartGameResultPack.Parser, new[]{ "FirstPlayerId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.FinishOperationPack), global::SocketProtocol.FinishOperationPack.Parser, new[]{ "TotalScore", "OperationLeft" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.ChangeOperationPack), global::SocketProtocol.ChangeOperationPack.Parser, new[]{ "CurrentOperationPlayerId", "OperationLeft" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::SocketProtocol.PlayerScoreBoardPack), global::SocketProtocol.PlayerScoreBoardPack.Parser, new[]{ "PlayerId", "OperationLeft", "ScoreArray" }, null, null, null, null),
@@ -533,7 +530,6 @@ namespace SocketProtocol {
       roomPlayerSelectCountryPack_ = other.roomPlayerSelectCountryPack_ != null ? other.roomPlayerSelectCountryPack_.Clone() : null;
       joinRoomResultPack_ = other.joinRoomResultPack_ != null ? other.joinRoomResultPack_.Clone() : null;
       roomPlayerInfoPack_ = other.roomPlayerInfoPack_ != null ? other.roomPlayerInfoPack_.Clone() : null;
-      startGameResultPack_ = other.startGameResultPack_ != null ? other.startGameResultPack_.Clone() : null;
       finishOperationPack_ = other.finishOperationPack_ != null ? other.finishOperationPack_.Clone() : null;
       playerScoreBoardPack_ = other.playerScoreBoardPack_ != null ? other.playerScoreBoardPack_.Clone() : null;
       roundPack_ = other.roundPack_ != null ? other.roundPack_.Clone() : null;
@@ -755,23 +751,9 @@ namespace SocketProtocol {
       }
     }
 
-    /// <summary>Field number for the "startGameResultPack" field.</summary>
-    public const int StartGameResultPackFieldNumber = 19;
-    private global::SocketProtocol.StartGameResultPack startGameResultPack_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::SocketProtocol.StartGameResultPack StartGameResultPack {
-      get { return startGameResultPack_; }
-      set {
-        startGameResultPack_ = value;
-      }
-    }
-
     /// <summary>Field number for the "finishOperationPack" field.</summary>
-    public const int FinishOperationPackFieldNumber = 20;
+    public const int FinishOperationPackFieldNumber = 19;
     private global::SocketProtocol.FinishOperationPack finishOperationPack_;
-    /// <summary>
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::SocketProtocol.FinishOperationPack FinishOperationPack {
@@ -782,7 +764,7 @@ namespace SocketProtocol {
     }
 
     /// <summary>Field number for the "playerScoreBoardPack" field.</summary>
-    public const int PlayerScoreBoardPackFieldNumber = 21;
+    public const int PlayerScoreBoardPackFieldNumber = 20;
     private global::SocketProtocol.PlayerScoreBoardPack playerScoreBoardPack_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -794,7 +776,7 @@ namespace SocketProtocol {
     }
 
     /// <summary>Field number for the "roundPack" field.</summary>
-    public const int RoundPackFieldNumber = 22;
+    public const int RoundPackFieldNumber = 21;
     private global::SocketProtocol.RoundPack roundPack_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -806,7 +788,7 @@ namespace SocketProtocol {
     }
 
     /// <summary>Field number for the "changeOperationPack" field.</summary>
-    public const int ChangeOperationPackFieldNumber = 23;
+    public const int ChangeOperationPackFieldNumber = 22;
     private global::SocketProtocol.ChangeOperationPack changeOperationPack_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -818,7 +800,7 @@ namespace SocketProtocol {
     }
 
     /// <summary>Field number for the "gameOverPack" field.</summary>
-    public const int GameOverPackFieldNumber = 24;
+    public const int GameOverPackFieldNumber = 23;
     private global::SocketProtocol.GameOverPack gameOverPack_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -830,7 +812,7 @@ namespace SocketProtocol {
     }
 
     /// <summary>Field number for the "currentGameState" field.</summary>
-    public const int CurrentGameStateFieldNumber = 25;
+    public const int CurrentGameStateFieldNumber = 24;
     private global::SocketProtocol.GameState currentGameState_ = global::SocketProtocol.GameState.NotStarted;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -842,9 +824,9 @@ namespace SocketProtocol {
     }
 
     /// <summary>Field number for the "recipeIdArray" field.</summary>
-    public const int RecipeIdArrayFieldNumber = 26;
+    public const int RecipeIdArrayFieldNumber = 25;
     private static readonly pb::FieldCodec<int> _repeated_recipeIdArray_codec
-        = pb::FieldCodec.ForInt32(210);
+        = pb::FieldCodec.ForInt32(202);
     private readonly pbc::RepeatedField<int> recipeIdArray_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -853,7 +835,7 @@ namespace SocketProtocol {
     }
 
     /// <summary>Field number for the "deliverRecipeId" field.</summary>
-    public const int DeliverRecipeIdFieldNumber = 27;
+    public const int DeliverRecipeIdFieldNumber = 26;
     private int deliverRecipeId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -896,7 +878,6 @@ namespace SocketProtocol {
       if (!object.Equals(RoomPlayerSelectCountryPack, other.RoomPlayerSelectCountryPack)) return false;
       if (!object.Equals(JoinRoomResultPack, other.JoinRoomResultPack)) return false;
       if (!object.Equals(RoomPlayerInfoPack, other.RoomPlayerInfoPack)) return false;
-      if (!object.Equals(StartGameResultPack, other.StartGameResultPack)) return false;
       if (!object.Equals(FinishOperationPack, other.FinishOperationPack)) return false;
       if (!object.Equals(PlayerScoreBoardPack, other.PlayerScoreBoardPack)) return false;
       if (!object.Equals(RoundPack, other.RoundPack)) return false;
@@ -929,7 +910,6 @@ namespace SocketProtocol {
       if (roomPlayerSelectCountryPack_ != null) hash ^= RoomPlayerSelectCountryPack.GetHashCode();
       if (joinRoomResultPack_ != null) hash ^= JoinRoomResultPack.GetHashCode();
       if (roomPlayerInfoPack_ != null) hash ^= RoomPlayerInfoPack.GetHashCode();
-      if (startGameResultPack_ != null) hash ^= StartGameResultPack.GetHashCode();
       if (finishOperationPack_ != null) hash ^= FinishOperationPack.GetHashCode();
       if (playerScoreBoardPack_ != null) hash ^= PlayerScoreBoardPack.GetHashCode();
       if (roundPack_ != null) hash ^= RoundPack.GetHashCode();
@@ -1024,37 +1004,33 @@ namespace SocketProtocol {
         output.WriteRawTag(146, 1);
         output.WriteMessage(RoomPlayerInfoPack);
       }
-      if (startGameResultPack_ != null) {
-        output.WriteRawTag(154, 1);
-        output.WriteMessage(StartGameResultPack);
-      }
       if (finishOperationPack_ != null) {
-        output.WriteRawTag(162, 1);
+        output.WriteRawTag(154, 1);
         output.WriteMessage(FinishOperationPack);
       }
       if (playerScoreBoardPack_ != null) {
-        output.WriteRawTag(170, 1);
+        output.WriteRawTag(162, 1);
         output.WriteMessage(PlayerScoreBoardPack);
       }
       if (roundPack_ != null) {
-        output.WriteRawTag(178, 1);
+        output.WriteRawTag(170, 1);
         output.WriteMessage(RoundPack);
       }
       if (changeOperationPack_ != null) {
-        output.WriteRawTag(186, 1);
+        output.WriteRawTag(178, 1);
         output.WriteMessage(ChangeOperationPack);
       }
       if (gameOverPack_ != null) {
-        output.WriteRawTag(194, 1);
+        output.WriteRawTag(186, 1);
         output.WriteMessage(GameOverPack);
       }
       if (CurrentGameState != global::SocketProtocol.GameState.NotStarted) {
-        output.WriteRawTag(200, 1);
+        output.WriteRawTag(192, 1);
         output.WriteEnum((int) CurrentGameState);
       }
       recipeIdArray_.WriteTo(output, _repeated_recipeIdArray_codec);
       if (DeliverRecipeId != 0) {
-        output.WriteRawTag(216, 1);
+        output.WriteRawTag(208, 1);
         output.WriteInt32(DeliverRecipeId);
       }
       if (_unknownFields != null) {
@@ -1135,37 +1111,33 @@ namespace SocketProtocol {
         output.WriteRawTag(146, 1);
         output.WriteMessage(RoomPlayerInfoPack);
       }
-      if (startGameResultPack_ != null) {
-        output.WriteRawTag(154, 1);
-        output.WriteMessage(StartGameResultPack);
-      }
       if (finishOperationPack_ != null) {
-        output.WriteRawTag(162, 1);
+        output.WriteRawTag(154, 1);
         output.WriteMessage(FinishOperationPack);
       }
       if (playerScoreBoardPack_ != null) {
-        output.WriteRawTag(170, 1);
+        output.WriteRawTag(162, 1);
         output.WriteMessage(PlayerScoreBoardPack);
       }
       if (roundPack_ != null) {
-        output.WriteRawTag(178, 1);
+        output.WriteRawTag(170, 1);
         output.WriteMessage(RoundPack);
       }
       if (changeOperationPack_ != null) {
-        output.WriteRawTag(186, 1);
+        output.WriteRawTag(178, 1);
         output.WriteMessage(ChangeOperationPack);
       }
       if (gameOverPack_ != null) {
-        output.WriteRawTag(194, 1);
+        output.WriteRawTag(186, 1);
         output.WriteMessage(GameOverPack);
       }
       if (CurrentGameState != global::SocketProtocol.GameState.NotStarted) {
-        output.WriteRawTag(200, 1);
+        output.WriteRawTag(192, 1);
         output.WriteEnum((int) CurrentGameState);
       }
       recipeIdArray_.WriteTo(ref output, _repeated_recipeIdArray_codec);
       if (DeliverRecipeId != 0) {
-        output.WriteRawTag(216, 1);
+        output.WriteRawTag(208, 1);
         output.WriteInt32(DeliverRecipeId);
       }
       if (_unknownFields != null) {
@@ -1228,9 +1200,6 @@ namespace SocketProtocol {
       }
       if (roomPlayerInfoPack_ != null) {
         size += 2 + pb::CodedOutputStream.ComputeMessageSize(RoomPlayerInfoPack);
-      }
-      if (startGameResultPack_ != null) {
-        size += 2 + pb::CodedOutputStream.ComputeMessageSize(StartGameResultPack);
       }
       if (finishOperationPack_ != null) {
         size += 2 + pb::CodedOutputStream.ComputeMessageSize(FinishOperationPack);
@@ -1355,12 +1324,6 @@ namespace SocketProtocol {
           RoomPlayerInfoPack = new global::SocketProtocol.RoomPlayerInfoPack();
         }
         RoomPlayerInfoPack.MergeFrom(other.RoomPlayerInfoPack);
-      }
-      if (other.startGameResultPack_ != null) {
-        if (startGameResultPack_ == null) {
-          StartGameResultPack = new global::SocketProtocol.StartGameResultPack();
-        }
-        StartGameResultPack.MergeFrom(other.StartGameResultPack);
       }
       if (other.finishOperationPack_ != null) {
         if (finishOperationPack_ == null) {
@@ -1526,57 +1489,50 @@ namespace SocketProtocol {
             break;
           }
           case 154: {
-            if (startGameResultPack_ == null) {
-              StartGameResultPack = new global::SocketProtocol.StartGameResultPack();
-            }
-            input.ReadMessage(StartGameResultPack);
-            break;
-          }
-          case 162: {
             if (finishOperationPack_ == null) {
               FinishOperationPack = new global::SocketProtocol.FinishOperationPack();
             }
             input.ReadMessage(FinishOperationPack);
             break;
           }
-          case 170: {
+          case 162: {
             if (playerScoreBoardPack_ == null) {
               PlayerScoreBoardPack = new global::SocketProtocol.PlayerScoreBoardPack();
             }
             input.ReadMessage(PlayerScoreBoardPack);
             break;
           }
-          case 178: {
+          case 170: {
             if (roundPack_ == null) {
               RoundPack = new global::SocketProtocol.RoundPack();
             }
             input.ReadMessage(RoundPack);
             break;
           }
-          case 186: {
+          case 178: {
             if (changeOperationPack_ == null) {
               ChangeOperationPack = new global::SocketProtocol.ChangeOperationPack();
             }
             input.ReadMessage(ChangeOperationPack);
             break;
           }
-          case 194: {
+          case 186: {
             if (gameOverPack_ == null) {
               GameOverPack = new global::SocketProtocol.GameOverPack();
             }
             input.ReadMessage(GameOverPack);
             break;
           }
-          case 200: {
+          case 192: {
             CurrentGameState = (global::SocketProtocol.GameState) input.ReadEnum();
             break;
           }
-          case 210:
-          case 208: {
+          case 202:
+          case 200: {
             recipeIdArray_.AddEntriesFrom(input, _repeated_recipeIdArray_codec);
             break;
           }
-          case 216: {
+          case 208: {
             DeliverRecipeId = input.ReadInt32();
             break;
           }
@@ -1707,57 +1663,50 @@ namespace SocketProtocol {
             break;
           }
           case 154: {
-            if (startGameResultPack_ == null) {
-              StartGameResultPack = new global::SocketProtocol.StartGameResultPack();
-            }
-            input.ReadMessage(StartGameResultPack);
-            break;
-          }
-          case 162: {
             if (finishOperationPack_ == null) {
               FinishOperationPack = new global::SocketProtocol.FinishOperationPack();
             }
             input.ReadMessage(FinishOperationPack);
             break;
           }
-          case 170: {
+          case 162: {
             if (playerScoreBoardPack_ == null) {
               PlayerScoreBoardPack = new global::SocketProtocol.PlayerScoreBoardPack();
             }
             input.ReadMessage(PlayerScoreBoardPack);
             break;
           }
-          case 178: {
+          case 170: {
             if (roundPack_ == null) {
               RoundPack = new global::SocketProtocol.RoundPack();
             }
             input.ReadMessage(RoundPack);
             break;
           }
-          case 186: {
+          case 178: {
             if (changeOperationPack_ == null) {
               ChangeOperationPack = new global::SocketProtocol.ChangeOperationPack();
             }
             input.ReadMessage(ChangeOperationPack);
             break;
           }
-          case 194: {
+          case 186: {
             if (gameOverPack_ == null) {
               GameOverPack = new global::SocketProtocol.GameOverPack();
             }
             input.ReadMessage(GameOverPack);
             break;
           }
-          case 200: {
+          case 192: {
             CurrentGameState = (global::SocketProtocol.GameState) input.ReadEnum();
             break;
           }
-          case 210:
-          case 208: {
+          case 202:
+          case 200: {
             recipeIdArray_.AddEntriesFrom(ref input, _repeated_recipeIdArray_codec);
             break;
           }
-          case 216: {
+          case 208: {
             DeliverRecipeId = input.ReadInt32();
             break;
           }
@@ -4517,204 +4466,6 @@ namespace SocketProtocol {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class StartGameResultPack : pb::IMessage<StartGameResultPack>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<StartGameResultPack> _parser = new pb::MessageParser<StartGameResultPack>(() => new StartGameResultPack());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<StartGameResultPack> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[13]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public StartGameResultPack() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public StartGameResultPack(StartGameResultPack other) : this() {
-      firstPlayerId_ = other.firstPlayerId_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public StartGameResultPack Clone() {
-      return new StartGameResultPack(this);
-    }
-
-    /// <summary>Field number for the "firstPlayerId" field.</summary>
-    public const int FirstPlayerIdFieldNumber = 1;
-    private int firstPlayerId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int FirstPlayerId {
-      get { return firstPlayerId_; }
-      set {
-        firstPlayerId_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as StartGameResultPack);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(StartGameResultPack other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (FirstPlayerId != other.FirstPlayerId) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (FirstPlayerId != 0) hash ^= FirstPlayerId.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (FirstPlayerId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(FirstPlayerId);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (FirstPlayerId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(FirstPlayerId);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (FirstPlayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FirstPlayerId);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(StartGameResultPack other) {
-      if (other == null) {
-        return;
-      }
-      if (other.FirstPlayerId != 0) {
-        FirstPlayerId = other.FirstPlayerId;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            FirstPlayerId = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 8: {
-            FirstPlayerId = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class FinishOperationPack : pb::IMessage<FinishOperationPack>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -4729,7 +4480,7 @@ namespace SocketProtocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[14]; }
+      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4955,7 +4706,7 @@ namespace SocketProtocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[15]; }
+      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5190,7 +4941,7 @@ namespace SocketProtocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[16]; }
+      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[15]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5453,7 +5204,7 @@ namespace SocketProtocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[17]; }
+      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[16]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5725,7 +5476,7 @@ namespace SocketProtocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[18]; }
+      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[17]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5912,7 +5663,7 @@ namespace SocketProtocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[19]; }
+      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[18]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6138,7 +5889,7 @@ namespace SocketProtocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[20]; }
+      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[19]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6376,7 +6127,7 @@ namespace SocketProtocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[21]; }
+      get { return global::SocketProtocol.SocketProtocolReflection.Descriptor.MessageTypes[20]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

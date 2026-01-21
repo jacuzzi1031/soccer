@@ -1,5 +1,6 @@
 
     using System;
+    using GameFrameSync;
     using UnityEngine;
 
     public class PlayerStateMoving: PlayerState {
@@ -35,7 +36,7 @@
             }
         }
 
-        public override void OnPass(GameInput.PlayerInputType passType) {
+        public override void OnPass(InputType passType) {
             if (player.HasBall()) {
                 TransitionState(Player.State.PASSING,PlayerStateData.Build().SetInputType(passType).SetMoveDir(moveDir));
             }

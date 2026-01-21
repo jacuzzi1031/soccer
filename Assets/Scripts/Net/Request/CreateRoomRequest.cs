@@ -28,6 +28,7 @@ public class CreateRoomRequest : BaseRequest
         RoomPlayerInfo roomPlayerInfo = new RoomPlayerInfo {
             id = roomPlayerInfoPack.Id,
             seatIndex = roomPlayerInfoPack.SeatIndex,
+            isHome = roomPlayerInfoPack.SeatIndex==0,
             username = roomPlayerInfoPack.Username,
             nickname = roomPlayerInfoPack.Nickname,
             ready = roomPlayerInfoPack.Ready

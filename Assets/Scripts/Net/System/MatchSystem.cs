@@ -3,26 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager
+public class MatchSystem:ISimulationSystem
 {
-    public enum MatchType {
-    Training,          //自由训练
-    TrainingWithEnemy,//对抗训练
-    UltimateTeam     //正式比赛
-    }
-    public MatchType currentMatchType;
-
-    public enum GameMode {
-        Single,
-        Versus,
-        Coop
-    }
-    public GameMode currentGameMode;
-
     public Match currentMatch;
-    public string[] playerSetup = { "FRANCE", "" };
     // private const float DURATION_GAME_SEC = 2f;
     private const float DURATION_GAME_SEC = 2 * 60f;
+    
     public enum State
     {
         IN_PLAY,
@@ -36,11 +22,11 @@ public class GameManager
     [HideInInspector] public GameState currentState;
     private GameStateFactory _gameStateFactory=new GameStateFactory();
     public float timeLeft;
-    public void OnInit()
-    {
-        currentMatch = new Match("ARGENTINA", "SPAIN");
-    }
 
+    public MatchSystem(string countryHome, string CountryAway) {
+        currentMatch=new Match(countryHome,CountryAway);
+        StartGame();
+    }
 
     public void StartGame()
     {
@@ -74,26 +60,12 @@ public class GameManager
         currentMatch.IncreaseScore(countryScoredOn);
         GameInterface.Interface.EventSystem.Publish(new OnScoreChangedEvent());
     }
-    public void SetCurrentMatchType(MatchType matchType) {
-        currentMatchType=matchType;
+    public void Tick(int frame) {
+        currentState?._Update(frame);
     }
 
-    public void SetMatchCountry(int RoomIndex, string Country) {
-        playerSetup[RoomIndex] = Country;
-        //锦标赛还会改
-        if (RoomIndex == 0) {
-            currentMatch.countryHome=playerSetup[RoomIndex];
-        }
-        else {
-            currentMatch.countryAway=playerSetup[RoomIndex];
-        }
-    }
-
-    public void SetGameMode(GameMode gameMode) {
-        currentGameMode = gameMode;
-    }
-
-    public void _Update() {
-        currentState?._Update();
+    public void Stop() {
+        currentState.OnStateTransitionRequested-= SwitchGameState;
+        currentMatch = null;
     }
 }

@@ -53,6 +53,7 @@ public class JoinRoomRequest : BaseRequest
             {
                 id = roomPlayerInfoPack.Id,
                 seatIndex = roomPlayerInfoPack.SeatIndex,
+                isHome = roomPlayerInfoPack.SeatIndex==0,
                 nickname = roomPlayerInfoPack.Nickname,
                 username = roomPlayerInfoPack.Username,
                 ready = roomPlayerInfoPack.Ready,

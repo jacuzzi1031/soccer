@@ -5,21 +5,21 @@ using UnityEngine;
 public class GameStateFactory
 {
     private void Awake() => Debug.Log("test！！！！！");
-    private Dictionary<GameManager.State, Func<GameState>> states;
+    private Dictionary<MatchSystem.State, Func<GameState>> states;
 
     public GameStateFactory()
     {   
-        states = new Dictionary<GameManager.State, Func<GameState>>
+        states = new Dictionary<MatchSystem.State, Func<GameState>>
         {
-            { GameManager.State.GAMEOVER, () => new GameStateGameOver() },
-            { GameManager.State.IN_PLAY, () => new GameStateInPlay() },
-            { GameManager.State.KICKOFF, () => new GameStateKickoff() },
-            { GameManager.State.OVERTIME, () => new GameStateOvertime() },
-            { GameManager.State.RESET, () => new GameStateReset() },
-            { GameManager.State.SCORED, () => new GameStateScored() },
+            { MatchSystem.State.GAMEOVER, () => new GameStateGameOver() },
+            { MatchSystem.State.IN_PLAY, () => new GameStateInPlay() },
+            { MatchSystem.State.KICKOFF, () => new GameStateKickoff() },
+            { MatchSystem.State.OVERTIME, () => new GameStateOvertime() },
+            { MatchSystem.State.RESET, () => new GameStateReset() },
+            { MatchSystem.State.SCORED, () => new GameStateScored() },
         };
     }
-    public GameState GetFreshState(GameManager.State state)
+    public GameState GetFreshState(MatchSystem.State state)
     {
         if (states.TryGetValue(state, out var factory)) {
             return factory();

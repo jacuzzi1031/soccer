@@ -16,7 +16,7 @@ public class Goal : MonoBehaviour
         
         scoringArea.OnTriggered += OnBallEnterScoringArea;
         
-        country=GameInterface.Interface.GameManager.currentMatch.countryHome;
+        country=GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryHome;
         // if (GameInterface.Interface.GameManager.currentMatchType == GameManager.MatchType.Training) {
         //     InvisibleWalls.enabled = false;
         // }

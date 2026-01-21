@@ -1,5 +1,6 @@
 using System;
 using System.Security.Cryptography;
+using GameFrameSync;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -37,19 +38,8 @@ public class GameInput : MonoBehaviour {
         Pause,
 
     }
-    public enum PlayerInputType
-    {
-        None = 0,
-        Move = 1,
-        Shoot = 2,
-        ShortPass=3,
-        IncisivePass=4,
-        LongPass=5,
-        Tackle=6,
-        Swap=7,
-    }
     // public GameFrameSyncManager.PlayerInputType LocalPlayerInputType { get; private set; }
-    public PlayerInputType LocalPlayerInputType { get; private set; }
+    public InputType LocalPlayerInputType { get; private set; }
 
 
     private PlayerInputActions playerInputActions;
@@ -90,13 +80,13 @@ public class GameInput : MonoBehaviour {
     
     private void Move_canceled(InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.None;
+        LocalPlayerInputType = InputType.None;
         MoveVector = Vector2.zero;
     }
 
     private void Move_performed(InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.Move;
+        LocalPlayerInputType = InputType.Move;
         MoveVector = obj.ReadValue<Vector2>();
     }
 
@@ -123,49 +113,49 @@ public class GameInput : MonoBehaviour {
 
     private void Swap_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.Swap;
+        LocalPlayerInputType = InputType.Swap;
         OnSwapAction?.Invoke(this, EventArgs.Empty);
     }
     private void Swap_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.None;
+        LocalPlayerInputType = InputType.None;
     }
     private void IncisivePass_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.IncisivePass;
+        LocalPlayerInputType = InputType.IncisivePass;
         OnIncesivePassAction?.Invoke(this, EventArgs.Empty);
     }
     private void IncisivePass_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.None;
+        LocalPlayerInputType = InputType.None;
     }
     private void ShortPass_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.ShortPass;
+        LocalPlayerInputType = InputType.ShortPass;
         OnShortPassAction?.Invoke(this, EventArgs.Empty);
     }
     private void ShortPass_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.None;
+        LocalPlayerInputType = InputType.None;
         
     }
     private void LongPass_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.LongPass;
+        LocalPlayerInputType = InputType.LongPass;
         OnLongPassAction?.Invoke(this, EventArgs.Empty);
     }
     private void LongPass_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.None;
+        LocalPlayerInputType = InputType.None;
     }
     private void Shoot_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.Shoot;
+        LocalPlayerInputType = InputType.ShootPress;
         OnShootAction?.Invoke(this, EventArgs.Empty);
     }
     private void Shoot_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        LocalPlayerInputType = PlayerInputType.None;
+        LocalPlayerInputType = InputType.ShootRelease;
         OnShootCancelAction?.Invoke(this, EventArgs.Empty);
     }
 

@@ -8,8 +8,8 @@ public class GameStateKickoff : GameState {
     public override void OnEnter() {
         validEntityIdSet.Clear();
         string countryStarting = stateData.CountryScoredOn;
-        if (countryStarting == null) countryStarting = manager.playerSetup[0];
-        bool ScoreIsHome=manager.playerSetup[0]==countryStarting?true:false;
+        if (countryStarting == null) countryStarting = System.currentMatch.countryHome;
+        bool ScoreIsHome=System.currentMatch.countryHome==countryStarting?true:false;
         List<int> entityIdListIsHome = EntityManager.Instance.GetEntityIdListIsHome(ScoreIsHome);
         
         validEntityIdSet = new HashSet<int>(entityIdListIsHome);
@@ -17,8 +17,8 @@ public class GameStateKickoff : GameState {
         GameManager.MatchType matchType = GameInterface.Interface.GameManager.currentMatchType;
         GameManager.GameMode gameMode = GameInterface.Interface.GameManager.currentGameMode;
         if (matchType == GameManager.MatchType.Training || matchType == GameManager.MatchType.TrainingWithEnemy
-            ||gameMode==GameManager.GameMode.Single) {
-            validEntityIdSet.Add(EntityManager.Instance.GetEntityByID(0));
+                                                        ||gameMode==GameManager.GameMode.Single) {
+            validEntityIdSet.Add(EntityManager.Instance.GetEntityByID());
         }
         
         GameInterface.Interface.EventSystem.Subscribe<EntityForGameKickoffEvent>(onKickoffEvent);
@@ -33,7 +33,13 @@ public class GameStateKickoff : GameState {
         
         if (!validEntityIdSet.Contains(obj.entityId))
             return;
-        GameInterface.Interface.EventSystem.Publish(new OnKickoffStartedEvent());
-        TransitionState(GameManager.State.IN_PLAY);
+        if (_transitionQueued)
+            return;
+        _transitionQueued = true;
+
+        Invoker.Instance.DelegateList.Add(() => {
+            TransitionState(MatchSystem.State.IN_PLAY);
+            GameInterface.Interface.EventSystem.Publish(new OnKickoffStartedEvent());
+        });
     }
 }

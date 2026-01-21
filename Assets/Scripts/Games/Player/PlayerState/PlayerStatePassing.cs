@@ -21,13 +21,13 @@ public class PlayerStatePassing: PlayerState {
                 ? PlayerManager.Instance.GetSquad(true)
                 : PlayerManager.Instance.GetSquad(false);
             switch (stateData.InputType) {
-                case GameInput.PlayerInputType.ShortPass:
+                case GameFrameSync.InputType.ShortPass:
                     passTarget = GetShortPassTarget(player, team, stateData.MoveDir);
                     break;
-                case GameInput.PlayerInputType.LongPass:
+                case GameFrameSync.InputType.LongPass:
                     passTarget  = GetLongPassTarget(player, team, stateData.MoveDir);
                     break;
-                case GameInput.PlayerInputType.IncisivePass:
+                case GameFrameSync.InputType.IncisivePass:
                     passTarget = GetShortPassTarget(player, team, stateData.MoveDir);
                     break;
             }
@@ -44,17 +44,17 @@ public class PlayerStatePassing: PlayerState {
             {
                 switch (stateData.InputType)
                 {
-                    case GameInput.PlayerInputType.ShortPass:
+                    case GameFrameSync.InputType.ShortPass:
                         passDestination = (Vector2)passTarget.transform.position + passTarget.rb.velocity * 0.8f;
                         ball.passTo(passDestination,true,passTarget);
                         break;
                     
-                    case GameInput.PlayerInputType.LongPass:
+                    case GameFrameSync.InputType.LongPass:
                         passDestination = (Vector2)passTarget.transform.position + passTarget.rb.velocity * 0.8f;
                         ball.passTo(passDestination,false,passTarget);
                         break;
                     
-                    case GameInput.PlayerInputType.IncisivePass:
+                    case GameFrameSync.InputType.IncisivePass:
                         passDestination = (Vector2)passTarget.transform.position + passTarget.rb.velocity * 1.8f;
                         ball.passTo(passDestination,true,passTarget);
                         break;

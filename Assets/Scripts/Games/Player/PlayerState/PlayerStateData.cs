@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerStateData
 {
-    public GameInput.PlayerInputType InputType { get; private set; }
+    public GameFrameSync.InputType InputType { get; private set; }
     public Vector2 ResetPosition { get; private set; }
     public Vector2 MoveDir { get; private set; }
     public Vector2 ShotDirection { get; private set; }
@@ -32,7 +32,7 @@ public class PlayerStateData
     }
 
 
-    public PlayerStateData SetInputType(GameInput.PlayerInputType inputType)
+    public PlayerStateData SetInputType(GameFrameSync.InputType inputType)
     {
         InputType = inputType;
         return this;

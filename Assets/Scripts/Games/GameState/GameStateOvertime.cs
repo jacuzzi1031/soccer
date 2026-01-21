@@ -16,7 +16,12 @@ public class GameStateOvertime : GameState
     }
 
     private void onTeamScoredEvent(OnTeamScoredEvent obj) {
-        manager.IncreaseScore(obj.CountryScoredOn);
-        TransitionState(GameManager.State.GAMEOVER);
+        if (_transitionQueued)
+            return;
+        _transitionQueued = true;
+        Invoker.Instance.DelegateList.Add(() => {
+            System.IncreaseScore(obj.CountryScoredOn);
+            TransitionState(MatchSystem.State.GAMEOVER);
+        });
     }
 }

@@ -24,43 +24,42 @@ namespace GameFrameSync {
     static GameFrameSyncReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChNHYW1lRnJhbWVTeW5jLnByb3RvEg1HYW1lRnJhbWVTeW5jIrsCChFSZXFG",
-            "cmFtZUlucHV0RGF0YRIPCgdmcmFtZUlkGAEgASgFEhAKCHBsYXllcklkGAIg",
-            "ASgFEisKCWlucHV0VHlwZRgDIAEoDjIYLkdhbWVGcmFtZVN5bmMuSW5wdXRU",
-            "eXBlEikKCHBvc2l0aW9uGAQgASgLMhcuR2FtZUZyYW1lU3luYy5WZWN0b3Iy",
-            "RBINCgVmb3JjZRgFIAEoAhIWCg5hcnJvd1JvdGF0aW9uWhgGIAEoAhIvCg5z",
-            "aG9vdERpcmVjdGlvbhgHIAEoCzIXLkdhbWVGcmFtZVN5bmMuVmVjdG9yMkQS",
-            "KwoKbW92ZVZlY3RvchgIIAEoCzIXLkdhbWVGcmFtZVN5bmMuVmVjdG9yMkQS",
-            "DQoFaW5kZXgYCSABKAUSFwoPaW50ZXJhY3RDb3VudGVyGAogASgFIrgCCg5G",
-            "cmFtZUlucHV0RGF0YRIPCgdmcmFtZUlkGAEgASgFEhAKCHBsYXllcklkGAIg",
-            "ASgFEisKCWlucHV0VHlwZRgDIAEoDjIYLkdhbWVGcmFtZVN5bmMuSW5wdXRU",
-            "eXBlEikKCHBvc2l0aW9uGAQgASgLMhcuR2FtZUZyYW1lU3luYy5WZWN0b3Iy",
-            "RBINCgVmb3JjZRgFIAEoAhIWCg5hcnJvd1JvdGF0aW9uWhgGIAEoAhIvCg5z",
-            "aG9vdERpcmVjdGlvbhgHIAEoCzIXLkdhbWVGcmFtZVN5bmMuVmVjdG9yMkQS",
-            "KwoKbW92ZVZlY3RvchgIIAEoCzIXLkdhbWVGcmFtZVN5bmMuVmVjdG9yMkQS",
-            "DQoFaW5kZXgYCSABKAUSFwoPaW50ZXJhY3RDb3VudGVyGAogASgFIikKC01l",
-            "c3NhZ2VIZWFkEg0KBWluZGV4GAEgASgFEgsKA2FjaxgCIAEoCCIrCghWZWN0",
-            "b3IzRBIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoBehgDIAEoAiIgCghWZWN0",
-            "b3IyRBIJCgF4GAEgASgCEgkKAXkYAiABKAIikgIKEFJlc0ZyYW1lU3luY0Rh",
-            "dGESDwoHZnJhbWVJZBgBIAEoBRI8ChVwbGF5ZXJzRnJhbWVJbnB1dERhdGEY",
-            "AiADKAsyHS5HYW1lRnJhbWVTeW5jLkZyYW1lSW5wdXREYXRhEjsKEXJlcUZy",
-            "YW1lSW5wdXREYXRhGAMgASgLMiAuR2FtZUZyYW1lU3luYy5SZXFGcmFtZUlu",
-            "cHV0RGF0YRIvCgttZXNzYWdlSGVhZBgFIAEoCzIaLkdhbWVGcmFtZVN5bmMu",
-            "TWVzc2FnZUhlYWQSLwoLbWVzc2FnZVR5cGUYBiABKA4yGi5HYW1lRnJhbWVT",
-            "eW5jLk1lc3NhZ2VUeXBlEhAKCHJvb21Db2RlGAcgASgJKoABCglJbnB1dFR5",
-            "cGUSCAoETm9uZRAAEgwKCE1vdmVMZWZ0EAESDQoJTW92ZVJpZ2h0EAISCQoF",
-            "UmVhZHkQAxINCglRdWl0UmVhZHkQBBIJCgVTaG9vdBAFEggKBE1vdmUQBhIM",
-            "CghJbnRlcmFjdBAHEg8KC0ludGVyYWN0QWx0EAgqJQoLTWVzc2FnZVR5cGUS",
-            "DQoJRnJhbWVTeW5jEAASBwoDQUNLEAJiBnByb3RvMw=="));
+            "ChNHYW1lRnJhbWVTeW5jLnByb3RvEg1HYW1lRnJhbWVTeW5jIuQBChBSZXNG",
+            "cmFtZVN5bmNEYXRhEg8KB2ZyYW1lSWQYASABKAUSPwoVcGxheWVyc0ZyYW1l",
+            "SW5wdXREYXRhGAIgAygLMiAuR2FtZUZyYW1lU3luYy5SZXNGcmFtZUlucHV0",
+            "RGF0YRI7ChFyZXFGcmFtZUlucHV0RGF0YRgDIAEoCzIgLkdhbWVGcmFtZVN5",
+            "bmMuUmVxRnJhbWVJbnB1dERhdGESLwoLbWVzc2FnZVR5cGUYBiABKA4yGi5H",
+            "YW1lRnJhbWVTeW5jLk1lc3NhZ2VUeXBlEhAKCHJvb21Db2RlGAcgASgJIqMB",
+            "ChBSZXFGcmFtZVN5bmNEYXRhEg8KB2ZyYW1lSWQYASABKAUSOwoRcmVxRnJh",
+            "bWVJbnB1dERhdGEYAyABKAsyIC5HYW1lRnJhbWVTeW5jLlJlcUZyYW1lSW5w",
+            "dXREYXRhEi8KC21lc3NhZ2VUeXBlGAYgASgOMhouR2FtZUZyYW1lU3luYy5N",
+            "ZXNzYWdlVHlwZRIQCghyb29tQ29kZRgHIAEoCSLqAQoRUmVxRnJhbWVJbnB1",
+            "dERhdGESDwoHZnJhbWVJZBgBIAEoBRIQCghwbGF5ZXJJZBgCIAEoBRIrCglp",
+            "bnB1dFR5cGUYAyABKA4yGC5HYW1lRnJhbWVTeW5jLklucHV0VHlwZRIpCghw",
+            "b3NpdGlvbhgEIAEoCzIXLkdhbWVGcmFtZVN5bmMuVmVjdG9yMkQSKwoKbW92",
+            "ZVZlY3RvchgIIAEoCzIXLkdhbWVGcmFtZVN5bmMuVmVjdG9yMkQSFwoPYWN0",
+            "aXZlVW5pdEluZGV4GAkgASgFEhQKDGNvbW1hbmRJbmRleBgKIAEoBSLqAQoR",
+            "UmVzRnJhbWVJbnB1dERhdGESDwoHZnJhbWVJZBgBIAEoBRIQCghwbGF5ZXJJ",
+            "ZBgCIAEoBRIrCglpbnB1dFR5cGUYAyABKA4yGC5HYW1lRnJhbWVTeW5jLklu",
+            "cHV0VHlwZRIpCghwb3NpdGlvbhgEIAEoCzIXLkdhbWVGcmFtZVN5bmMuVmVj",
+            "dG9yMkQSKwoKbW92ZVZlY3RvchgIIAEoCzIXLkdhbWVGcmFtZVN5bmMuVmVj",
+            "dG9yMkQSFwoPYWN0aXZlVW5pdEluZGV4GAkgASgFEhQKDGNvbW1hbmRJbmRl",
+            "eBgKIAEoBSIrCghWZWN0b3IzRBIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoB",
+            "ehgDIAEoAiIgCghWZWN0b3IyRBIJCgF4GAEgASgCEgkKAXkYAiABKAIqhwEK",
+            "CUlucHV0VHlwZRIICgROb25lEAASCAoEbW92ZRACEggKBFN3YXAQAxIQCgxJ",
+            "bmNpc2l2ZVBhc3MQBBINCglTaG9ydFBhc3MQBRIMCghMb25nUGFzcxAGEg8K",
+            "C1NIT09UX1BSRVNTEAcSEQoNU0hPT1RfUkVMRUFTRRAIEgkKBVBhdXNlEAkq",
+            "JQoLTWVzc2FnZVR5cGUSDQoJRnJhbWVTeW5jEAASBwoDQUNLEAJiBnByb3Rv",
+            "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameFrameSync.InputType), typeof(global::GameFrameSync.MessageType), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqFrameInputData), global::GameFrameSync.ReqFrameInputData.Parser, new[]{ "FrameId", "PlayerId", "InputType", "Position", "Force", "ArrowRotationZ", "ShootDirection", "MoveVector", "Index", "InteractCounter" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.FrameInputData), global::GameFrameSync.FrameInputData.Parser, new[]{ "FrameId", "PlayerId", "InputType", "Position", "Force", "ArrowRotationZ", "ShootDirection", "MoveVector", "Index", "InteractCounter" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.MessageHead), global::GameFrameSync.MessageHead.Parser, new[]{ "Index", "Ack" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResFrameSyncData), global::GameFrameSync.ResFrameSyncData.Parser, new[]{ "FrameId", "PlayersFrameInputData", "ReqFrameInputData", "MessageType", "RoomCode" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqFrameSyncData), global::GameFrameSync.ReqFrameSyncData.Parser, new[]{ "FrameId", "ReqFrameInputData", "MessageType", "RoomCode" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqFrameInputData), global::GameFrameSync.ReqFrameInputData.Parser, new[]{ "FrameId", "PlayerId", "InputType", "Position", "MoveVector", "ActiveUnitIndex", "CommandIndex" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResFrameInputData), global::GameFrameSync.ResFrameInputData.Parser, new[]{ "FrameId", "PlayerId", "InputType", "Position", "MoveVector", "ActiveUnitIndex", "CommandIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.Vector3D), global::GameFrameSync.Vector3D.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.Vector2D), global::GameFrameSync.Vector2D.Parser, new[]{ "X", "Y" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResFrameSyncData), global::GameFrameSync.ResFrameSyncData.Parser, new[]{ "FrameId", "PlayersFrameInputData", "ReqFrameInputData", "MessageHead", "MessageType", "RoomCode" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.Vector2D), global::GameFrameSync.Vector2D.Parser, new[]{ "X", "Y" }, null, null, null, null)
           }));
     }
     #endregion
@@ -69,14 +68,14 @@ namespace GameFrameSync {
   #region Enums
   public enum InputType {
     [pbr::OriginalName("None")] None = 0,
-    [pbr::OriginalName("MoveLeft")] MoveLeft = 1,
-    [pbr::OriginalName("MoveRight")] MoveRight = 2,
-    [pbr::OriginalName("Ready")] Ready = 3,
-    [pbr::OriginalName("QuitReady")] QuitReady = 4,
-    [pbr::OriginalName("Shoot")] Shoot = 5,
-    [pbr::OriginalName("Move")] Move = 6,
-    [pbr::OriginalName("Interact")] Interact = 7,
-    [pbr::OriginalName("InteractAlt")] InteractAlt = 8,
+    [pbr::OriginalName("move")] Move = 2,
+    [pbr::OriginalName("Swap")] Swap = 3,
+    [pbr::OriginalName("IncisivePass")] IncisivePass = 4,
+    [pbr::OriginalName("ShortPass")] ShortPass = 5,
+    [pbr::OriginalName("LongPass")] LongPass = 6,
+    [pbr::OriginalName("SHOOT_PRESS")] ShootPress = 7,
+    [pbr::OriginalName("SHOOT_RELEASE")] ShootRelease = 8,
+    [pbr::OriginalName("Pause")] Pause = 9,
   }
 
   public enum MessageType {
@@ -87,6 +86,668 @@ namespace GameFrameSync {
   #endregion
 
   #region Messages
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ResFrameSyncData : pb::IMessage<ResFrameSyncData>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ResFrameSyncData> _parser = new pb::MessageParser<ResFrameSyncData>(() => new ResFrameSyncData());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ResFrameSyncData> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[0]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ResFrameSyncData() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ResFrameSyncData(ResFrameSyncData other) : this() {
+      frameId_ = other.frameId_;
+      playersFrameInputData_ = other.playersFrameInputData_.Clone();
+      reqFrameInputData_ = other.reqFrameInputData_ != null ? other.reqFrameInputData_.Clone() : null;
+      messageType_ = other.messageType_;
+      roomCode_ = other.roomCode_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ResFrameSyncData Clone() {
+      return new ResFrameSyncData(this);
+    }
+
+    /// <summary>Field number for the "frameId" field.</summary>
+    public const int FrameIdFieldNumber = 1;
+    private int frameId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int FrameId {
+      get { return frameId_; }
+      set {
+        frameId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "playersFrameInputData" field.</summary>
+    public const int PlayersFrameInputDataFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::GameFrameSync.ResFrameInputData> _repeated_playersFrameInputData_codec
+        = pb::FieldCodec.ForMessage(18, global::GameFrameSync.ResFrameInputData.Parser);
+    private readonly pbc::RepeatedField<global::GameFrameSync.ResFrameInputData> playersFrameInputData_ = new pbc::RepeatedField<global::GameFrameSync.ResFrameInputData>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::GameFrameSync.ResFrameInputData> PlayersFrameInputData {
+      get { return playersFrameInputData_; }
+    }
+
+    /// <summary>Field number for the "reqFrameInputData" field.</summary>
+    public const int ReqFrameInputDataFieldNumber = 3;
+    private global::GameFrameSync.ReqFrameInputData reqFrameInputData_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::GameFrameSync.ReqFrameInputData ReqFrameInputData {
+      get { return reqFrameInputData_; }
+      set {
+        reqFrameInputData_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "messageType" field.</summary>
+    public const int MessageTypeFieldNumber = 6;
+    private global::GameFrameSync.MessageType messageType_ = global::GameFrameSync.MessageType.FrameSync;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::GameFrameSync.MessageType MessageType {
+      get { return messageType_; }
+      set {
+        messageType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "roomCode" field.</summary>
+    public const int RoomCodeFieldNumber = 7;
+    private string roomCode_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string RoomCode {
+      get { return roomCode_; }
+      set {
+        roomCode_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ResFrameSyncData);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ResFrameSyncData other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (FrameId != other.FrameId) return false;
+      if(!playersFrameInputData_.Equals(other.playersFrameInputData_)) return false;
+      if (!object.Equals(ReqFrameInputData, other.ReqFrameInputData)) return false;
+      if (MessageType != other.MessageType) return false;
+      if (RoomCode != other.RoomCode) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (FrameId != 0) hash ^= FrameId.GetHashCode();
+      hash ^= playersFrameInputData_.GetHashCode();
+      if (reqFrameInputData_ != null) hash ^= ReqFrameInputData.GetHashCode();
+      if (MessageType != global::GameFrameSync.MessageType.FrameSync) hash ^= MessageType.GetHashCode();
+      if (RoomCode.Length != 0) hash ^= RoomCode.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (FrameId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(FrameId);
+      }
+      playersFrameInputData_.WriteTo(output, _repeated_playersFrameInputData_codec);
+      if (reqFrameInputData_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(ReqFrameInputData);
+      }
+      if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
+        output.WriteRawTag(48);
+        output.WriteEnum((int) MessageType);
+      }
+      if (RoomCode.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(RoomCode);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (FrameId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(FrameId);
+      }
+      playersFrameInputData_.WriteTo(ref output, _repeated_playersFrameInputData_codec);
+      if (reqFrameInputData_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(ReqFrameInputData);
+      }
+      if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
+        output.WriteRawTag(48);
+        output.WriteEnum((int) MessageType);
+      }
+      if (RoomCode.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(RoomCode);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (FrameId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrameId);
+      }
+      size += playersFrameInputData_.CalculateSize(_repeated_playersFrameInputData_codec);
+      if (reqFrameInputData_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ReqFrameInputData);
+      }
+      if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MessageType);
+      }
+      if (RoomCode.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RoomCode);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ResFrameSyncData other) {
+      if (other == null) {
+        return;
+      }
+      if (other.FrameId != 0) {
+        FrameId = other.FrameId;
+      }
+      playersFrameInputData_.Add(other.playersFrameInputData_);
+      if (other.reqFrameInputData_ != null) {
+        if (reqFrameInputData_ == null) {
+          ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
+        }
+        ReqFrameInputData.MergeFrom(other.ReqFrameInputData);
+      }
+      if (other.MessageType != global::GameFrameSync.MessageType.FrameSync) {
+        MessageType = other.MessageType;
+      }
+      if (other.RoomCode.Length != 0) {
+        RoomCode = other.RoomCode;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            FrameId = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            playersFrameInputData_.AddEntriesFrom(input, _repeated_playersFrameInputData_codec);
+            break;
+          }
+          case 26: {
+            if (reqFrameInputData_ == null) {
+              ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
+            }
+            input.ReadMessage(ReqFrameInputData);
+            break;
+          }
+          case 48: {
+            MessageType = (global::GameFrameSync.MessageType) input.ReadEnum();
+            break;
+          }
+          case 58: {
+            RoomCode = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            FrameId = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            playersFrameInputData_.AddEntriesFrom(ref input, _repeated_playersFrameInputData_codec);
+            break;
+          }
+          case 26: {
+            if (reqFrameInputData_ == null) {
+              ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
+            }
+            input.ReadMessage(ReqFrameInputData);
+            break;
+          }
+          case 48: {
+            MessageType = (global::GameFrameSync.MessageType) input.ReadEnum();
+            break;
+          }
+          case 58: {
+            RoomCode = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ReqFrameSyncData : pb::IMessage<ReqFrameSyncData>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ReqFrameSyncData> _parser = new pb::MessageParser<ReqFrameSyncData>(() => new ReqFrameSyncData());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ReqFrameSyncData> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ReqFrameSyncData() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ReqFrameSyncData(ReqFrameSyncData other) : this() {
+      frameId_ = other.frameId_;
+      reqFrameInputData_ = other.reqFrameInputData_ != null ? other.reqFrameInputData_.Clone() : null;
+      messageType_ = other.messageType_;
+      roomCode_ = other.roomCode_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ReqFrameSyncData Clone() {
+      return new ReqFrameSyncData(this);
+    }
+
+    /// <summary>Field number for the "frameId" field.</summary>
+    public const int FrameIdFieldNumber = 1;
+    private int frameId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int FrameId {
+      get { return frameId_; }
+      set {
+        frameId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "reqFrameInputData" field.</summary>
+    public const int ReqFrameInputDataFieldNumber = 3;
+    private global::GameFrameSync.ReqFrameInputData reqFrameInputData_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::GameFrameSync.ReqFrameInputData ReqFrameInputData {
+      get { return reqFrameInputData_; }
+      set {
+        reqFrameInputData_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "messageType" field.</summary>
+    public const int MessageTypeFieldNumber = 6;
+    private global::GameFrameSync.MessageType messageType_ = global::GameFrameSync.MessageType.FrameSync;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::GameFrameSync.MessageType MessageType {
+      get { return messageType_; }
+      set {
+        messageType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "roomCode" field.</summary>
+    public const int RoomCodeFieldNumber = 7;
+    private string roomCode_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string RoomCode {
+      get { return roomCode_; }
+      set {
+        roomCode_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ReqFrameSyncData);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ReqFrameSyncData other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (FrameId != other.FrameId) return false;
+      if (!object.Equals(ReqFrameInputData, other.ReqFrameInputData)) return false;
+      if (MessageType != other.MessageType) return false;
+      if (RoomCode != other.RoomCode) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (FrameId != 0) hash ^= FrameId.GetHashCode();
+      if (reqFrameInputData_ != null) hash ^= ReqFrameInputData.GetHashCode();
+      if (MessageType != global::GameFrameSync.MessageType.FrameSync) hash ^= MessageType.GetHashCode();
+      if (RoomCode.Length != 0) hash ^= RoomCode.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (FrameId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(FrameId);
+      }
+      if (reqFrameInputData_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(ReqFrameInputData);
+      }
+      if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
+        output.WriteRawTag(48);
+        output.WriteEnum((int) MessageType);
+      }
+      if (RoomCode.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(RoomCode);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (FrameId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(FrameId);
+      }
+      if (reqFrameInputData_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(ReqFrameInputData);
+      }
+      if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
+        output.WriteRawTag(48);
+        output.WriteEnum((int) MessageType);
+      }
+      if (RoomCode.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(RoomCode);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (FrameId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrameId);
+      }
+      if (reqFrameInputData_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ReqFrameInputData);
+      }
+      if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MessageType);
+      }
+      if (RoomCode.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RoomCode);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ReqFrameSyncData other) {
+      if (other == null) {
+        return;
+      }
+      if (other.FrameId != 0) {
+        FrameId = other.FrameId;
+      }
+      if (other.reqFrameInputData_ != null) {
+        if (reqFrameInputData_ == null) {
+          ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
+        }
+        ReqFrameInputData.MergeFrom(other.ReqFrameInputData);
+      }
+      if (other.MessageType != global::GameFrameSync.MessageType.FrameSync) {
+        MessageType = other.MessageType;
+      }
+      if (other.RoomCode.Length != 0) {
+        RoomCode = other.RoomCode;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            FrameId = input.ReadInt32();
+            break;
+          }
+          case 26: {
+            if (reqFrameInputData_ == null) {
+              ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
+            }
+            input.ReadMessage(ReqFrameInputData);
+            break;
+          }
+          case 48: {
+            MessageType = (global::GameFrameSync.MessageType) input.ReadEnum();
+            break;
+          }
+          case 58: {
+            RoomCode = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            FrameId = input.ReadInt32();
+            break;
+          }
+          case 26: {
+            if (reqFrameInputData_ == null) {
+              ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
+            }
+            input.ReadMessage(ReqFrameInputData);
+            break;
+          }
+          case 48: {
+            MessageType = (global::GameFrameSync.MessageType) input.ReadEnum();
+            break;
+          }
+          case 58: {
+            RoomCode = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class ReqFrameInputData : pb::IMessage<ReqFrameInputData>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -102,7 +763,7 @@ namespace GameFrameSync {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[0]; }
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -126,12 +787,9 @@ namespace GameFrameSync {
       playerId_ = other.playerId_;
       inputType_ = other.inputType_;
       position_ = other.position_ != null ? other.position_.Clone() : null;
-      force_ = other.force_;
-      arrowRotationZ_ = other.arrowRotationZ_;
-      shootDirection_ = other.shootDirection_ != null ? other.shootDirection_.Clone() : null;
       moveVector_ = other.moveVector_ != null ? other.moveVector_.Clone() : null;
-      index_ = other.index_;
-      interactCounter_ = other.interactCounter_;
+      activeUnitIndex_ = other.activeUnitIndex_;
+      commandIndex_ = other.commandIndex_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -189,42 +847,6 @@ namespace GameFrameSync {
       }
     }
 
-    /// <summary>Field number for the "force" field.</summary>
-    public const int ForceFieldNumber = 5;
-    private float force_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public float Force {
-      get { return force_; }
-      set {
-        force_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "arrowRotationZ" field.</summary>
-    public const int ArrowRotationZFieldNumber = 6;
-    private float arrowRotationZ_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public float ArrowRotationZ {
-      get { return arrowRotationZ_; }
-      set {
-        arrowRotationZ_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "shootDirection" field.</summary>
-    public const int ShootDirectionFieldNumber = 7;
-    private global::GameFrameSync.Vector2D shootDirection_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::GameFrameSync.Vector2D ShootDirection {
-      get { return shootDirection_; }
-      set {
-        shootDirection_ = value;
-      }
-    }
-
     /// <summary>Field number for the "moveVector" field.</summary>
     public const int MoveVectorFieldNumber = 8;
     private global::GameFrameSync.Vector2D moveVector_;
@@ -237,27 +859,27 @@ namespace GameFrameSync {
       }
     }
 
-    /// <summary>Field number for the "index" field.</summary>
-    public const int IndexFieldNumber = 9;
-    private int index_;
+    /// <summary>Field number for the "activeUnitIndex" field.</summary>
+    public const int ActiveUnitIndexFieldNumber = 9;
+    private int activeUnitIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Index {
-      get { return index_; }
+    public int ActiveUnitIndex {
+      get { return activeUnitIndex_; }
       set {
-        index_ = value;
+        activeUnitIndex_ = value;
       }
     }
 
-    /// <summary>Field number for the "interactCounter" field.</summary>
-    public const int InteractCounterFieldNumber = 10;
-    private int interactCounter_;
+    /// <summary>Field number for the "commandIndex" field.</summary>
+    public const int CommandIndexFieldNumber = 10;
+    private int commandIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int InteractCounter {
-      get { return interactCounter_; }
+    public int CommandIndex {
+      get { return commandIndex_; }
       set {
-        interactCounter_ = value;
+        commandIndex_ = value;
       }
     }
 
@@ -280,12 +902,9 @@ namespace GameFrameSync {
       if (PlayerId != other.PlayerId) return false;
       if (InputType != other.InputType) return false;
       if (!object.Equals(Position, other.Position)) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Force, other.Force)) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ArrowRotationZ, other.ArrowRotationZ)) return false;
-      if (!object.Equals(ShootDirection, other.ShootDirection)) return false;
       if (!object.Equals(MoveVector, other.MoveVector)) return false;
-      if (Index != other.Index) return false;
-      if (InteractCounter != other.InteractCounter) return false;
+      if (ActiveUnitIndex != other.ActiveUnitIndex) return false;
+      if (CommandIndex != other.CommandIndex) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -297,12 +916,9 @@ namespace GameFrameSync {
       if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
       if (InputType != global::GameFrameSync.InputType.None) hash ^= InputType.GetHashCode();
       if (position_ != null) hash ^= Position.GetHashCode();
-      if (Force != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Force);
-      if (ArrowRotationZ != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ArrowRotationZ);
-      if (shootDirection_ != null) hash ^= ShootDirection.GetHashCode();
       if (moveVector_ != null) hash ^= MoveVector.GetHashCode();
-      if (Index != 0) hash ^= Index.GetHashCode();
-      if (InteractCounter != 0) hash ^= InteractCounter.GetHashCode();
+      if (ActiveUnitIndex != 0) hash ^= ActiveUnitIndex.GetHashCode();
+      if (CommandIndex != 0) hash ^= CommandIndex.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -337,29 +953,17 @@ namespace GameFrameSync {
         output.WriteRawTag(34);
         output.WriteMessage(Position);
       }
-      if (Force != 0F) {
-        output.WriteRawTag(45);
-        output.WriteFloat(Force);
-      }
-      if (ArrowRotationZ != 0F) {
-        output.WriteRawTag(53);
-        output.WriteFloat(ArrowRotationZ);
-      }
-      if (shootDirection_ != null) {
-        output.WriteRawTag(58);
-        output.WriteMessage(ShootDirection);
-      }
       if (moveVector_ != null) {
         output.WriteRawTag(66);
         output.WriteMessage(MoveVector);
       }
-      if (Index != 0) {
+      if (ActiveUnitIndex != 0) {
         output.WriteRawTag(72);
-        output.WriteInt32(Index);
+        output.WriteInt32(ActiveUnitIndex);
       }
-      if (InteractCounter != 0) {
+      if (CommandIndex != 0) {
         output.WriteRawTag(80);
-        output.WriteInt32(InteractCounter);
+        output.WriteInt32(CommandIndex);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -387,29 +991,17 @@ namespace GameFrameSync {
         output.WriteRawTag(34);
         output.WriteMessage(Position);
       }
-      if (Force != 0F) {
-        output.WriteRawTag(45);
-        output.WriteFloat(Force);
-      }
-      if (ArrowRotationZ != 0F) {
-        output.WriteRawTag(53);
-        output.WriteFloat(ArrowRotationZ);
-      }
-      if (shootDirection_ != null) {
-        output.WriteRawTag(58);
-        output.WriteMessage(ShootDirection);
-      }
       if (moveVector_ != null) {
         output.WriteRawTag(66);
         output.WriteMessage(MoveVector);
       }
-      if (Index != 0) {
+      if (ActiveUnitIndex != 0) {
         output.WriteRawTag(72);
-        output.WriteInt32(Index);
+        output.WriteInt32(ActiveUnitIndex);
       }
-      if (InteractCounter != 0) {
+      if (CommandIndex != 0) {
         output.WriteRawTag(80);
-        output.WriteInt32(InteractCounter);
+        output.WriteInt32(CommandIndex);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -433,23 +1025,14 @@ namespace GameFrameSync {
       if (position_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Position);
       }
-      if (Force != 0F) {
-        size += 1 + 4;
-      }
-      if (ArrowRotationZ != 0F) {
-        size += 1 + 4;
-      }
-      if (shootDirection_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ShootDirection);
-      }
       if (moveVector_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(MoveVector);
       }
-      if (Index != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Index);
+      if (ActiveUnitIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActiveUnitIndex);
       }
-      if (InteractCounter != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InteractCounter);
+      if (CommandIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CommandIndex);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -478,29 +1061,17 @@ namespace GameFrameSync {
         }
         Position.MergeFrom(other.Position);
       }
-      if (other.Force != 0F) {
-        Force = other.Force;
-      }
-      if (other.ArrowRotationZ != 0F) {
-        ArrowRotationZ = other.ArrowRotationZ;
-      }
-      if (other.shootDirection_ != null) {
-        if (shootDirection_ == null) {
-          ShootDirection = new global::GameFrameSync.Vector2D();
-        }
-        ShootDirection.MergeFrom(other.ShootDirection);
-      }
       if (other.moveVector_ != null) {
         if (moveVector_ == null) {
           MoveVector = new global::GameFrameSync.Vector2D();
         }
         MoveVector.MergeFrom(other.MoveVector);
       }
-      if (other.Index != 0) {
-        Index = other.Index;
+      if (other.ActiveUnitIndex != 0) {
+        ActiveUnitIndex = other.ActiveUnitIndex;
       }
-      if (other.InteractCounter != 0) {
-        InteractCounter = other.InteractCounter;
+      if (other.CommandIndex != 0) {
+        CommandIndex = other.CommandIndex;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -540,21 +1111,6 @@ namespace GameFrameSync {
             input.ReadMessage(Position);
             break;
           }
-          case 45: {
-            Force = input.ReadFloat();
-            break;
-          }
-          case 53: {
-            ArrowRotationZ = input.ReadFloat();
-            break;
-          }
-          case 58: {
-            if (shootDirection_ == null) {
-              ShootDirection = new global::GameFrameSync.Vector2D();
-            }
-            input.ReadMessage(ShootDirection);
-            break;
-          }
           case 66: {
             if (moveVector_ == null) {
               MoveVector = new global::GameFrameSync.Vector2D();
@@ -563,11 +1119,11 @@ namespace GameFrameSync {
             break;
           }
           case 72: {
-            Index = input.ReadInt32();
+            ActiveUnitIndex = input.ReadInt32();
             break;
           }
           case 80: {
-            InteractCounter = input.ReadInt32();
+            CommandIndex = input.ReadInt32();
             break;
           }
         }
@@ -608,21 +1164,6 @@ namespace GameFrameSync {
             input.ReadMessage(Position);
             break;
           }
-          case 45: {
-            Force = input.ReadFloat();
-            break;
-          }
-          case 53: {
-            ArrowRotationZ = input.ReadFloat();
-            break;
-          }
-          case 58: {
-            if (shootDirection_ == null) {
-              ShootDirection = new global::GameFrameSync.Vector2D();
-            }
-            input.ReadMessage(ShootDirection);
-            break;
-          }
           case 66: {
             if (moveVector_ == null) {
               MoveVector = new global::GameFrameSync.Vector2D();
@@ -631,11 +1172,11 @@ namespace GameFrameSync {
             break;
           }
           case 72: {
-            Index = input.ReadInt32();
+            ActiveUnitIndex = input.ReadInt32();
             break;
           }
           case 80: {
-            InteractCounter = input.ReadInt32();
+            CommandIndex = input.ReadInt32();
             break;
           }
         }
@@ -646,21 +1187,21 @@ namespace GameFrameSync {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class FrameInputData : pb::IMessage<FrameInputData>
+  public sealed partial class ResFrameInputData : pb::IMessage<ResFrameInputData>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<FrameInputData> _parser = new pb::MessageParser<FrameInputData>(() => new FrameInputData());
+    private static readonly pb::MessageParser<ResFrameInputData> _parser = new pb::MessageParser<ResFrameInputData>(() => new ResFrameInputData());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<FrameInputData> Parser { get { return _parser; } }
+    public static pb::MessageParser<ResFrameInputData> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[1]; }
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -671,7 +1212,7 @@ namespace GameFrameSync {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public FrameInputData() {
+    public ResFrameInputData() {
       OnConstruction();
     }
 
@@ -679,24 +1220,21 @@ namespace GameFrameSync {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public FrameInputData(FrameInputData other) : this() {
+    public ResFrameInputData(ResFrameInputData other) : this() {
       frameId_ = other.frameId_;
       playerId_ = other.playerId_;
       inputType_ = other.inputType_;
       position_ = other.position_ != null ? other.position_.Clone() : null;
-      force_ = other.force_;
-      arrowRotationZ_ = other.arrowRotationZ_;
-      shootDirection_ = other.shootDirection_ != null ? other.shootDirection_.Clone() : null;
       moveVector_ = other.moveVector_ != null ? other.moveVector_.Clone() : null;
-      index_ = other.index_;
-      interactCounter_ = other.interactCounter_;
+      activeUnitIndex_ = other.activeUnitIndex_;
+      commandIndex_ = other.commandIndex_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public FrameInputData Clone() {
-      return new FrameInputData(this);
+    public ResFrameInputData Clone() {
+      return new ResFrameInputData(this);
     }
 
     /// <summary>Field number for the "frameId" field.</summary>
@@ -747,42 +1285,6 @@ namespace GameFrameSync {
       }
     }
 
-    /// <summary>Field number for the "force" field.</summary>
-    public const int ForceFieldNumber = 5;
-    private float force_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public float Force {
-      get { return force_; }
-      set {
-        force_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "arrowRotationZ" field.</summary>
-    public const int ArrowRotationZFieldNumber = 6;
-    private float arrowRotationZ_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public float ArrowRotationZ {
-      get { return arrowRotationZ_; }
-      set {
-        arrowRotationZ_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "shootDirection" field.</summary>
-    public const int ShootDirectionFieldNumber = 7;
-    private global::GameFrameSync.Vector2D shootDirection_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::GameFrameSync.Vector2D ShootDirection {
-      get { return shootDirection_; }
-      set {
-        shootDirection_ = value;
-      }
-    }
-
     /// <summary>Field number for the "moveVector" field.</summary>
     public const int MoveVectorFieldNumber = 8;
     private global::GameFrameSync.Vector2D moveVector_;
@@ -795,39 +1297,39 @@ namespace GameFrameSync {
       }
     }
 
-    /// <summary>Field number for the "index" field.</summary>
-    public const int IndexFieldNumber = 9;
-    private int index_;
+    /// <summary>Field number for the "activeUnitIndex" field.</summary>
+    public const int ActiveUnitIndexFieldNumber = 9;
+    private int activeUnitIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Index {
-      get { return index_; }
+    public int ActiveUnitIndex {
+      get { return activeUnitIndex_; }
       set {
-        index_ = value;
+        activeUnitIndex_ = value;
       }
     }
 
-    /// <summary>Field number for the "interactCounter" field.</summary>
-    public const int InteractCounterFieldNumber = 10;
-    private int interactCounter_;
+    /// <summary>Field number for the "commandIndex" field.</summary>
+    public const int CommandIndexFieldNumber = 10;
+    private int commandIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int InteractCounter {
-      get { return interactCounter_; }
+    public int CommandIndex {
+      get { return commandIndex_; }
       set {
-        interactCounter_ = value;
+        commandIndex_ = value;
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as FrameInputData);
+      return Equals(other as ResFrameInputData);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(FrameInputData other) {
+    public bool Equals(ResFrameInputData other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -838,12 +1340,9 @@ namespace GameFrameSync {
       if (PlayerId != other.PlayerId) return false;
       if (InputType != other.InputType) return false;
       if (!object.Equals(Position, other.Position)) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Force, other.Force)) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ArrowRotationZ, other.ArrowRotationZ)) return false;
-      if (!object.Equals(ShootDirection, other.ShootDirection)) return false;
       if (!object.Equals(MoveVector, other.MoveVector)) return false;
-      if (Index != other.Index) return false;
-      if (InteractCounter != other.InteractCounter) return false;
+      if (ActiveUnitIndex != other.ActiveUnitIndex) return false;
+      if (CommandIndex != other.CommandIndex) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -855,12 +1354,9 @@ namespace GameFrameSync {
       if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
       if (InputType != global::GameFrameSync.InputType.None) hash ^= InputType.GetHashCode();
       if (position_ != null) hash ^= Position.GetHashCode();
-      if (Force != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Force);
-      if (ArrowRotationZ != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ArrowRotationZ);
-      if (shootDirection_ != null) hash ^= ShootDirection.GetHashCode();
       if (moveVector_ != null) hash ^= MoveVector.GetHashCode();
-      if (Index != 0) hash ^= Index.GetHashCode();
-      if (InteractCounter != 0) hash ^= InteractCounter.GetHashCode();
+      if (ActiveUnitIndex != 0) hash ^= ActiveUnitIndex.GetHashCode();
+      if (CommandIndex != 0) hash ^= CommandIndex.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -895,29 +1391,17 @@ namespace GameFrameSync {
         output.WriteRawTag(34);
         output.WriteMessage(Position);
       }
-      if (Force != 0F) {
-        output.WriteRawTag(45);
-        output.WriteFloat(Force);
-      }
-      if (ArrowRotationZ != 0F) {
-        output.WriteRawTag(53);
-        output.WriteFloat(ArrowRotationZ);
-      }
-      if (shootDirection_ != null) {
-        output.WriteRawTag(58);
-        output.WriteMessage(ShootDirection);
-      }
       if (moveVector_ != null) {
         output.WriteRawTag(66);
         output.WriteMessage(MoveVector);
       }
-      if (Index != 0) {
+      if (ActiveUnitIndex != 0) {
         output.WriteRawTag(72);
-        output.WriteInt32(Index);
+        output.WriteInt32(ActiveUnitIndex);
       }
-      if (InteractCounter != 0) {
+      if (CommandIndex != 0) {
         output.WriteRawTag(80);
-        output.WriteInt32(InteractCounter);
+        output.WriteInt32(CommandIndex);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -945,29 +1429,17 @@ namespace GameFrameSync {
         output.WriteRawTag(34);
         output.WriteMessage(Position);
       }
-      if (Force != 0F) {
-        output.WriteRawTag(45);
-        output.WriteFloat(Force);
-      }
-      if (ArrowRotationZ != 0F) {
-        output.WriteRawTag(53);
-        output.WriteFloat(ArrowRotationZ);
-      }
-      if (shootDirection_ != null) {
-        output.WriteRawTag(58);
-        output.WriteMessage(ShootDirection);
-      }
       if (moveVector_ != null) {
         output.WriteRawTag(66);
         output.WriteMessage(MoveVector);
       }
-      if (Index != 0) {
+      if (ActiveUnitIndex != 0) {
         output.WriteRawTag(72);
-        output.WriteInt32(Index);
+        output.WriteInt32(ActiveUnitIndex);
       }
-      if (InteractCounter != 0) {
+      if (CommandIndex != 0) {
         output.WriteRawTag(80);
-        output.WriteInt32(InteractCounter);
+        output.WriteInt32(CommandIndex);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -991,23 +1463,14 @@ namespace GameFrameSync {
       if (position_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Position);
       }
-      if (Force != 0F) {
-        size += 1 + 4;
-      }
-      if (ArrowRotationZ != 0F) {
-        size += 1 + 4;
-      }
-      if (shootDirection_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ShootDirection);
-      }
       if (moveVector_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(MoveVector);
       }
-      if (Index != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Index);
+      if (ActiveUnitIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActiveUnitIndex);
       }
-      if (InteractCounter != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InteractCounter);
+      if (CommandIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CommandIndex);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1017,7 +1480,7 @@ namespace GameFrameSync {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(FrameInputData other) {
+    public void MergeFrom(ResFrameInputData other) {
       if (other == null) {
         return;
       }
@@ -1036,29 +1499,17 @@ namespace GameFrameSync {
         }
         Position.MergeFrom(other.Position);
       }
-      if (other.Force != 0F) {
-        Force = other.Force;
-      }
-      if (other.ArrowRotationZ != 0F) {
-        ArrowRotationZ = other.ArrowRotationZ;
-      }
-      if (other.shootDirection_ != null) {
-        if (shootDirection_ == null) {
-          ShootDirection = new global::GameFrameSync.Vector2D();
-        }
-        ShootDirection.MergeFrom(other.ShootDirection);
-      }
       if (other.moveVector_ != null) {
         if (moveVector_ == null) {
           MoveVector = new global::GameFrameSync.Vector2D();
         }
         MoveVector.MergeFrom(other.MoveVector);
       }
-      if (other.Index != 0) {
-        Index = other.Index;
+      if (other.ActiveUnitIndex != 0) {
+        ActiveUnitIndex = other.ActiveUnitIndex;
       }
-      if (other.InteractCounter != 0) {
-        InteractCounter = other.InteractCounter;
+      if (other.CommandIndex != 0) {
+        CommandIndex = other.CommandIndex;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1098,21 +1549,6 @@ namespace GameFrameSync {
             input.ReadMessage(Position);
             break;
           }
-          case 45: {
-            Force = input.ReadFloat();
-            break;
-          }
-          case 53: {
-            ArrowRotationZ = input.ReadFloat();
-            break;
-          }
-          case 58: {
-            if (shootDirection_ == null) {
-              ShootDirection = new global::GameFrameSync.Vector2D();
-            }
-            input.ReadMessage(ShootDirection);
-            break;
-          }
           case 66: {
             if (moveVector_ == null) {
               MoveVector = new global::GameFrameSync.Vector2D();
@@ -1121,11 +1557,11 @@ namespace GameFrameSync {
             break;
           }
           case 72: {
-            Index = input.ReadInt32();
+            ActiveUnitIndex = input.ReadInt32();
             break;
           }
           case 80: {
-            InteractCounter = input.ReadInt32();
+            CommandIndex = input.ReadInt32();
             break;
           }
         }
@@ -1166,21 +1602,6 @@ namespace GameFrameSync {
             input.ReadMessage(Position);
             break;
           }
-          case 45: {
-            Force = input.ReadFloat();
-            break;
-          }
-          case 53: {
-            ArrowRotationZ = input.ReadFloat();
-            break;
-          }
-          case 58: {
-            if (shootDirection_ == null) {
-              ShootDirection = new global::GameFrameSync.Vector2D();
-            }
-            input.ReadMessage(ShootDirection);
-            break;
-          }
           case 66: {
             if (moveVector_ == null) {
               MoveVector = new global::GameFrameSync.Vector2D();
@@ -1189,246 +1610,11 @@ namespace GameFrameSync {
             break;
           }
           case 72: {
-            Index = input.ReadInt32();
+            ActiveUnitIndex = input.ReadInt32();
             break;
           }
           case 80: {
-            InteractCounter = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class MessageHead : pb::IMessage<MessageHead>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<MessageHead> _parser = new pb::MessageParser<MessageHead>(() => new MessageHead());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<MessageHead> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[2]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public MessageHead() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public MessageHead(MessageHead other) : this() {
-      index_ = other.index_;
-      ack_ = other.ack_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public MessageHead Clone() {
-      return new MessageHead(this);
-    }
-
-    /// <summary>Field number for the "index" field.</summary>
-    public const int IndexFieldNumber = 1;
-    private int index_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Index {
-      get { return index_; }
-      set {
-        index_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "ack" field.</summary>
-    public const int AckFieldNumber = 2;
-    private bool ack_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Ack {
-      get { return ack_; }
-      set {
-        ack_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as MessageHead);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(MessageHead other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (Index != other.Index) return false;
-      if (Ack != other.Ack) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (Index != 0) hash ^= Index.GetHashCode();
-      if (Ack != false) hash ^= Ack.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (Index != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(Index);
-      }
-      if (Ack != false) {
-        output.WriteRawTag(16);
-        output.WriteBool(Ack);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Index != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(Index);
-      }
-      if (Ack != false) {
-        output.WriteRawTag(16);
-        output.WriteBool(Ack);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (Index != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Index);
-      }
-      if (Ack != false) {
-        size += 1 + 1;
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(MessageHead other) {
-      if (other == null) {
-        return;
-      }
-      if (other.Index != 0) {
-        Index = other.Index;
-      }
-      if (other.Ack != false) {
-        Ack = other.Ack;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            Index = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            Ack = input.ReadBool();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 8: {
-            Index = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            Ack = input.ReadBool();
+            CommandIndex = input.ReadInt32();
             break;
           }
         }
@@ -1453,7 +1639,7 @@ namespace GameFrameSync {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[3]; }
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1725,7 +1911,7 @@ namespace GameFrameSync {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[4]; }
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1936,396 +2122,6 @@ namespace GameFrameSync {
           }
           case 21: {
             Y = input.ReadFloat();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class ResFrameSyncData : pb::IMessage<ResFrameSyncData>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<ResFrameSyncData> _parser = new pb::MessageParser<ResFrameSyncData>(() => new ResFrameSyncData());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<ResFrameSyncData> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[5]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ResFrameSyncData() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ResFrameSyncData(ResFrameSyncData other) : this() {
-      frameId_ = other.frameId_;
-      playersFrameInputData_ = other.playersFrameInputData_.Clone();
-      reqFrameInputData_ = other.reqFrameInputData_ != null ? other.reqFrameInputData_.Clone() : null;
-      messageHead_ = other.messageHead_ != null ? other.messageHead_.Clone() : null;
-      messageType_ = other.messageType_;
-      roomCode_ = other.roomCode_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ResFrameSyncData Clone() {
-      return new ResFrameSyncData(this);
-    }
-
-    /// <summary>Field number for the "frameId" field.</summary>
-    public const int FrameIdFieldNumber = 1;
-    private int frameId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int FrameId {
-      get { return frameId_; }
-      set {
-        frameId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "playersFrameInputData" field.</summary>
-    public const int PlayersFrameInputDataFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::GameFrameSync.FrameInputData> _repeated_playersFrameInputData_codec
-        = pb::FieldCodec.ForMessage(18, global::GameFrameSync.FrameInputData.Parser);
-    private readonly pbc::RepeatedField<global::GameFrameSync.FrameInputData> playersFrameInputData_ = new pbc::RepeatedField<global::GameFrameSync.FrameInputData>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::GameFrameSync.FrameInputData> PlayersFrameInputData {
-      get { return playersFrameInputData_; }
-    }
-
-    /// <summary>Field number for the "reqFrameInputData" field.</summary>
-    public const int ReqFrameInputDataFieldNumber = 3;
-    private global::GameFrameSync.ReqFrameInputData reqFrameInputData_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::GameFrameSync.ReqFrameInputData ReqFrameInputData {
-      get { return reqFrameInputData_; }
-      set {
-        reqFrameInputData_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "messageHead" field.</summary>
-    public const int MessageHeadFieldNumber = 5;
-    private global::GameFrameSync.MessageHead messageHead_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::GameFrameSync.MessageHead MessageHead {
-      get { return messageHead_; }
-      set {
-        messageHead_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "messageType" field.</summary>
-    public const int MessageTypeFieldNumber = 6;
-    private global::GameFrameSync.MessageType messageType_ = global::GameFrameSync.MessageType.FrameSync;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::GameFrameSync.MessageType MessageType {
-      get { return messageType_; }
-      set {
-        messageType_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "roomCode" field.</summary>
-    public const int RoomCodeFieldNumber = 7;
-    private string roomCode_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string RoomCode {
-      get { return roomCode_; }
-      set {
-        roomCode_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as ResFrameSyncData);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(ResFrameSyncData other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (FrameId != other.FrameId) return false;
-      if(!playersFrameInputData_.Equals(other.playersFrameInputData_)) return false;
-      if (!object.Equals(ReqFrameInputData, other.ReqFrameInputData)) return false;
-      if (!object.Equals(MessageHead, other.MessageHead)) return false;
-      if (MessageType != other.MessageType) return false;
-      if (RoomCode != other.RoomCode) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (FrameId != 0) hash ^= FrameId.GetHashCode();
-      hash ^= playersFrameInputData_.GetHashCode();
-      if (reqFrameInputData_ != null) hash ^= ReqFrameInputData.GetHashCode();
-      if (messageHead_ != null) hash ^= MessageHead.GetHashCode();
-      if (MessageType != global::GameFrameSync.MessageType.FrameSync) hash ^= MessageType.GetHashCode();
-      if (RoomCode.Length != 0) hash ^= RoomCode.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (FrameId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(FrameId);
-      }
-      playersFrameInputData_.WriteTo(output, _repeated_playersFrameInputData_codec);
-      if (reqFrameInputData_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(ReqFrameInputData);
-      }
-      if (messageHead_ != null) {
-        output.WriteRawTag(42);
-        output.WriteMessage(MessageHead);
-      }
-      if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
-        output.WriteRawTag(48);
-        output.WriteEnum((int) MessageType);
-      }
-      if (RoomCode.Length != 0) {
-        output.WriteRawTag(58);
-        output.WriteString(RoomCode);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (FrameId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(FrameId);
-      }
-      playersFrameInputData_.WriteTo(ref output, _repeated_playersFrameInputData_codec);
-      if (reqFrameInputData_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(ReqFrameInputData);
-      }
-      if (messageHead_ != null) {
-        output.WriteRawTag(42);
-        output.WriteMessage(MessageHead);
-      }
-      if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
-        output.WriteRawTag(48);
-        output.WriteEnum((int) MessageType);
-      }
-      if (RoomCode.Length != 0) {
-        output.WriteRawTag(58);
-        output.WriteString(RoomCode);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (FrameId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrameId);
-      }
-      size += playersFrameInputData_.CalculateSize(_repeated_playersFrameInputData_codec);
-      if (reqFrameInputData_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ReqFrameInputData);
-      }
-      if (messageHead_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(MessageHead);
-      }
-      if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MessageType);
-      }
-      if (RoomCode.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(RoomCode);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(ResFrameSyncData other) {
-      if (other == null) {
-        return;
-      }
-      if (other.FrameId != 0) {
-        FrameId = other.FrameId;
-      }
-      playersFrameInputData_.Add(other.playersFrameInputData_);
-      if (other.reqFrameInputData_ != null) {
-        if (reqFrameInputData_ == null) {
-          ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
-        }
-        ReqFrameInputData.MergeFrom(other.ReqFrameInputData);
-      }
-      if (other.messageHead_ != null) {
-        if (messageHead_ == null) {
-          MessageHead = new global::GameFrameSync.MessageHead();
-        }
-        MessageHead.MergeFrom(other.MessageHead);
-      }
-      if (other.MessageType != global::GameFrameSync.MessageType.FrameSync) {
-        MessageType = other.MessageType;
-      }
-      if (other.RoomCode.Length != 0) {
-        RoomCode = other.RoomCode;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            FrameId = input.ReadInt32();
-            break;
-          }
-          case 18: {
-            playersFrameInputData_.AddEntriesFrom(input, _repeated_playersFrameInputData_codec);
-            break;
-          }
-          case 26: {
-            if (reqFrameInputData_ == null) {
-              ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
-            }
-            input.ReadMessage(ReqFrameInputData);
-            break;
-          }
-          case 42: {
-            if (messageHead_ == null) {
-              MessageHead = new global::GameFrameSync.MessageHead();
-            }
-            input.ReadMessage(MessageHead);
-            break;
-          }
-          case 48: {
-            MessageType = (global::GameFrameSync.MessageType) input.ReadEnum();
-            break;
-          }
-          case 58: {
-            RoomCode = input.ReadString();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 8: {
-            FrameId = input.ReadInt32();
-            break;
-          }
-          case 18: {
-            playersFrameInputData_.AddEntriesFrom(ref input, _repeated_playersFrameInputData_codec);
-            break;
-          }
-          case 26: {
-            if (reqFrameInputData_ == null) {
-              ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
-            }
-            input.ReadMessage(ReqFrameInputData);
-            break;
-          }
-          case 42: {
-            if (messageHead_ == null) {
-              MessageHead = new global::GameFrameSync.MessageHead();
-            }
-            input.ReadMessage(MessageHead);
-            break;
-          }
-          case 48: {
-            MessageType = (global::GameFrameSync.MessageType) input.ReadEnum();
-            break;
-          }
-          case 58: {
-            RoomCode = input.ReadString();
             break;
           }
         }

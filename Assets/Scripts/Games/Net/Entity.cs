@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using GameFrameSync;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
@@ -23,19 +24,77 @@ public class Entity : MonoBehaviour
     /// <summary>
     /// 玩家id
     /// </summary>
-    public int entityId;
+    public int playerId;
     /// <summary>
     /// 主客队
     /// </summary>
     public bool isHome;
+    public GameFrameSync.InputType playerInputType;
+    /// <summary>
+    /// 当前位置（远程）
+    /// </summary>
+    public Vector2 playerPosition;
+    /// <summary>
+    /// 当前位置（本地）
+    /// </summary>
+    public Vector2 localPlayerPosition;
+    /// <summary>
+    /// 移动向量(远程)
+    /// </summary>
+    public Vector2 moveVector;
+    /// <summary>
+    /// 移动向量(本地)
+    /// </summary>
+    public Vector2 localMoveVector;
+    /// <summary>
+    /// 控制权(本地)
+    /// </summary>
+    public int activeUnitIndex;
+    /// <summary>
+    /// 行为目标(远程)
+    /// </summary>
+    public int commandIndex;
+    
+    
     public Player.ControlScheme controlScheme;
     private void Start() {
         ball = PlayerManager.Instance.ball;
     }
     private void OnEnable()
     {
+        GameInterface.Interface.GameFrameSyncManager.OnFrameSync += OnFrameSync;
         GameInterface.Interface.EventSystem.Subscribe<OnSquadsReadyEvent>(OnTeamsReady);
         GameInterface.Interface.EventSystem.Subscribe<PlayerBecomesCarrierEvent>(OnPlayerBecomesCarrier);
+    }
+    private void OnFrameSync(List<ResFrameInputData> frameDataList)
+    {
+        ResFrameInputData frameInputData = frameDataList?.Find(item => item.PlayerId == playerId);
+        if (frameInputData != null)
+        {
+            InputType inputType = frameInputData.InputType;
+            activeUnitIndex = frameInputData.ActiveUnitIndex;
+            commandIndex = frameInputData.CommandIndex;
+            if (inputType != playerInputType) 
+            {
+                Invoker.Instance.DelegateList.Add(() =>
+                {
+                    // OnPlayerInputChanged?.Invoke(this, new OnPlayerInputChangedEventArgs
+                    //     { playerId = playerId, inputType = inputType });
+                });
+            }
+            playerInputType = inputType;
+            
+            if (frameInputData.Position != null&&!IsLocal)
+            {
+                playerPosition = new Vector3(frameInputData.Position.X, 0,
+                    frameInputData.Position.Y);
+            }
+
+            if (frameInputData.MoveVector != null&&!IsLocal)
+            {
+                moveVector = new Vector2(frameInputData.MoveVector.X, frameInputData.MoveVector.Y);
+            }
+        }
     }
 
     private void OnPlayerBecomesCarrier(PlayerBecomesCarrierEvent obj) {
@@ -145,7 +204,7 @@ public class Entity : MonoBehaviour
         currentControlPlayer?.currentState?.OnPass(passType);
         
         // kickoff signal for GameStateKickoff
-        GameInterface.Interface.EventSystem.Publish(new EntityForGameKickoffEvent(entityId));
+        GameInterface.Interface.EventSystem.Publish(new EntityForGameKickoffEvent(playerId));
     }
     private void OnShootCancel(object sender, EventArgs e) {
         currentControlPlayer?.currentState?.OnShootCancel();

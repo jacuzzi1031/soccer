@@ -3,21 +3,21 @@ using UnityEngine;
 
 public class GameState
 {
+    public event Action<MatchSystem.State, GameStateData> OnStateTransitionRequested;
 
-    public event Action<GameManager.State, GameStateData> OnStateTransitionRequested;
 
-
-    protected GameManager manager;
+    protected MatchSystem System;
     protected GameStateData stateData;
+    protected bool _transitionQueued;
 
 
-    public void Setup(GameManager contextManager, GameStateData contextData)
+    public void Setup(MatchSystem contextSystem, GameStateData contextData)
     {
-        manager = contextManager;
+        System = contextSystem;
         stateData = contextData;
     }
     
-    public void TransitionState(GameManager.State newState, GameStateData data = null)
+    public void TransitionState(MatchSystem.State newState, GameStateData data = null)
     {
         if (data == null)
             data = GameStateData.Build();
@@ -31,7 +31,7 @@ public class GameState
         
     }
 
-    public virtual void _Update() {
+    public virtual void _Update(int frame) {
         
     }
 }

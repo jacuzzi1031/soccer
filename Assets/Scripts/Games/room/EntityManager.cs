@@ -30,7 +30,7 @@ public class EntityManager : MonoBehaviour {
             GameObject go = Instantiate(entityPrefab, transform);
             Entity entity = go.GetComponent<Entity>();
             entity.playerType = info.id == localPlayerId ? Entity.PlayerType.Local : Entity.PlayerType.Remote;
-            entity.entityId = info.id;
+            entity.playerId = info.id;
             entity.isHome = info.isHome;
             entity.controlScheme=entity.isHome?Player.ControlScheme.P1:Player.ControlScheme.P2;
             entityList.Add(entity);
@@ -41,26 +41,19 @@ public class EntityManager : MonoBehaviour {
         List<int> entityisHomeList=new List<int>();
         for (int i = 0; i < entityList.Count; i++) {
             if (entityList[i].isHome == isHome) {
-                entityisHomeList.Add(entityList[i].entityId);
+                entityisHomeList.Add(entityList[i].playerId);
             }
         }
         return entityisHomeList;
     }
 
-    public int GetEntityByID(int id) {
-        return entityList[0].entityId;
+    public int GetEntityByID() {
+        return entityList[0].playerId;
     }
 
     private void Start() {
         PlayerManager.Instance.InitializeSquads();  
-        GameInterface.Interface.GameManager.StartGame();
     }
-
-
-    public void Update() {
-        GameInterface.Interface.GameManager._Update();
-    }
-    
     #region for PauseGame
     private bool isGamePaused = false;
     public event EventHandler OnGamePaused;

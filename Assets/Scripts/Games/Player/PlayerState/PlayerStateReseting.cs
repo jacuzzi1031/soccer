@@ -12,9 +12,6 @@
         public override void OnExit() {
             GameInterface.Interface.EventSystem.Unsubscribe<OnKickoffStartedEvent>(OnKickoffStarted);
         }
-        private void OnDestroy() {
-            GameInterface.Interface.EventSystem.Unsubscribe<OnKickoffStartedEvent>(OnKickoffStarted);
-        }
         public override void _Update()
         {
             if (hasArrived) return;

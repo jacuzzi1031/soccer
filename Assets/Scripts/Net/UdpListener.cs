@@ -12,8 +12,7 @@ public class UdpListener : IDisposable
     private byte[] cacheBytes = new byte[1024];
     private int _mCurrentDataSequence = 0;
 
-    private readonly ObjectPool<ResFrameSyncData> _mResFrameSyncDataPool;
-    private readonly ObjectPool<MessageHead> _mMessageHeadPool;
+    private readonly ObjectPool<ReqFrameSyncData> _mReqFrameSyncDataPool;
     public int UdpListenPort { get; private set; }
     public bool Disposed { get; private set; }
     public IPEndPoint RemoteEp { get; private set; }
@@ -21,8 +20,7 @@ public class UdpListener : IDisposable
 
     public UdpListener()
     {
-        _mResFrameSyncDataPool = new ObjectPool<ResFrameSyncData>(() => new ResFrameSyncData());
-        _mMessageHeadPool = new ObjectPool<MessageHead>(() => new MessageHead());
+        _mReqFrameSyncDataPool = new ObjectPool<ReqFrameSyncData>(() => new ReqFrameSyncData());
         _mSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         _mSocket.Bind(new IPEndPoint(IPAddress.Any, 0));
         IPEndPoint clientLocalEndPoint = _mSocket.LocalEndPoint as IPEndPoint;
@@ -69,7 +67,7 @@ public class UdpListener : IDisposable
             {
                 OnReceiveFrameSync?.Invoke(resFrameSyncData);
 
-                SendAck(resFrameSyncData.MessageHead.Index);
+                SendAck();
             }
             
             StartReceive(e);
@@ -79,13 +77,9 @@ public class UdpListener : IDisposable
         }
     }
 
-    public void Send(in ResFrameSyncData resFrameSyncData)
+    public void Send(in ReqFrameSyncData resFrameSyncData)
     {
         if (Disposed) return;
-        MessageHead messageHead = _mMessageHeadPool.Allocate();
-        messageHead.Index = _mCurrentDataSequence;
-
-        resFrameSyncData.MessageHead = messageHead;
         resFrameSyncData.MessageType = MessageType.FrameSync;
 
         try
@@ -104,22 +98,14 @@ public class UdpListener : IDisposable
         {
             Debug.LogError("Exception:" + e);
         }
-        finally
-        {
-            _mMessageHeadPool.Release(messageHead);
-        }
     }
 
-    private void SendAck(int index)
+    private void SendAck()
     {
         if (Disposed) return;
-        MessageHead messageHead = _mMessageHeadPool.Allocate();
-        messageHead.Index = index;
-        messageHead.Ack = true;
-        // messageHead.ClientIp = GameInterface.Interface.TcpClient.ClientIp;
 
-        ResFrameSyncData resFrameSyncData = _mResFrameSyncDataPool.Allocate();
-        resFrameSyncData.MessageHead = messageHead;
+
+        ReqFrameSyncData resFrameSyncData = _mReqFrameSyncDataPool.Allocate();
         resFrameSyncData.MessageType = MessageType.Ack;
 
         try
@@ -137,8 +123,7 @@ public class UdpListener : IDisposable
         }
         finally
         {
-            _mMessageHeadPool.Release(messageHead);
-            _mResFrameSyncDataPool.Release(resFrameSyncData);
+            _mReqFrameSyncDataPool.Release(resFrameSyncData);
         }
     }
 
@@ -148,7 +133,7 @@ public class UdpListener : IDisposable
         _mSocket.Dispose();
     }
 
-    private byte[] Serialize(ResFrameSyncData resFrameSyncData)
+    private byte[] Serialize(ReqFrameSyncData resFrameSyncData)
     {
         byte[] data = resFrameSyncData.ToByteArray();
         return data;

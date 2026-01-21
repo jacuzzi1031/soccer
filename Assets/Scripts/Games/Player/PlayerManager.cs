@@ -78,21 +78,21 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void InitializeSquads() {
-        squadHome = SpawnPlayers(GameInterface.Interface.GameManager.currentMatch.countryHome,goalHome,true);
-        goalHome.initialize(GameInterface.Interface.GameManager.currentMatch.countryHome);
+        squadHome = SpawnPlayers(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryHome,goalHome,true);
+        goalHome.initialize(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryHome);
         spawns.rotation = Quaternion.Euler(0, 180, 0);
         kickOffs.rotation = Quaternion.Euler(0, 180, 0);
         GameManager.MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
         if (currentMatchType != GameManager.MatchType.Training&&currentMatchType!=GameManager.MatchType.TrainingWithEnemy) {
-            squadAway = SpawnPlayers(GameInterface.Interface.GameManager.currentMatch.countryAway,goalAway,false);
+            squadAway = SpawnPlayers(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway,goalAway,false);
         }
         else if(currentMatchType==GameManager.MatchType.Training){
-            squadAway=SpawnOpponent(GameInterface.Interface.GameManager.currentMatch.countryAway,goalAway,false,false);
+            squadAway=SpawnOpponent(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway,goalAway,false,false);
         }
         else {
-            squadAway=SpawnOpponent(GameInterface.Interface.GameManager.currentMatch.countryAway,goalAway,true,false);
+            squadAway=SpawnOpponent(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway,goalAway,true,false);
         }
-        goalAway.initialize(GameInterface.Interface.GameManager.currentMatch.countryAway);
+        goalAway.initialize(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway);
 
         ResetControlSchemes();
     }

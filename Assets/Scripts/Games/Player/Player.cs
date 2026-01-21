@@ -150,7 +150,7 @@ public class Player : MonoBehaviour {
          }
          tackleEmitterArea.enabled = false;
          spawnPosition=transform.position;
-         Vector2 initialPosition=country==GameInterface.Interface.GameManager.currentMatch.countryHome?KickoffPosition:spawnPosition;
+         Vector2 initialPosition=country==GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryHome?KickoffPosition:spawnPosition;
          SwitchState(State.RESETING, PlayerStateData.Build().SetResetPosition(initialPosition));
 
          
@@ -282,9 +282,6 @@ public class Player : MonoBehaviour {
             controlSprite.transform.localPosition = controlPos;
         }
     }
-
-
-
     private void FixedUpdate() {
         currentState?._FixedUpdate();
         ApplyHeight();

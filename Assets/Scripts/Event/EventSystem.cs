@@ -2,12 +2,8 @@ using System;
 using System.Collections.Generic;
 /// <summary>
 ///
-/// “这个事件，发布者是否应该知道接收者是谁？”
-/// 如果「应该知道」用 直接事件 / 回调
-//  如果「不该知道」用 EventSystem
-//绑定某个业务对象的 UI/Room UI / Match UI   直接事件
-//UI 触发音效，而不是 Room 触发 ，全局 UI（提示、Toast、音效）    EventSystem
-//跨系统 UI    EventSystem
+// 所有会影响比赛结果 / GameState 的事件 → 必须走 EventSystem + Invoker
+// 所有不影响确定性的本地行为 → 可以直接 += / -=
 
 /// @前缀可以让关键字（keyword）当作普通变量名使用。
 /// 有先发布后订阅 _mEventPool

@@ -100,17 +100,15 @@ message MainPack
   RoomPlayerSelectCountryPack RoomPlayerSelectCountryPack=16;
   JoinRoomResultPack joinRoomResultPack = 17;
   RoomPlayerInfoPack roomPlayerInfoPack = 18;
+  FinishOperationPack finishOperationPack = 19;
+  PlayerScoreBoardPack playerScoreBoardPack = 20;
+  RoundPack roundPack = 21;
+  ChangeOperationPack changeOperationPack = 22;
+  GameOverPack gameOverPack = 23;
 
-  StartGameResultPack startGameResultPack = 19;
-  FinishOperationPack finishOperationPack = 20;//
-  PlayerScoreBoardPack playerScoreBoardPack = 21;
-  RoundPack roundPack = 22;
-  ChangeOperationPack changeOperationPack = 23;
-  GameOverPack gameOverPack = 24;
-
-  GameState currentGameState = 25;
-  repeated int32 recipeIdArray = 26;
-  int32 deliverRecipeId = 27;
+  GameState currentGameState = 24;
+  repeated int32 recipeIdArray = 25;
+  int32 deliverRecipeId = 26;
 }
 
 message PlayerCoinPack
@@ -181,12 +179,6 @@ message RoomPlayerInfoPack
   string nickname = 4;
   bool ready = 5;
 }
-
-message StartGameResultPack
-{
-  int32 firstPlayerId = 1;
-}
-
 message FinishOperationPack
 {
   repeated int32 totalScore = 1;

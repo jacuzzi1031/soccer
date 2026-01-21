@@ -103,26 +103,4 @@ public class RoomListUI : BaseUIPanel
             _activeRoomTabs.Add(roomTabUI);
         }
     }
-    private void UpdateRoomList2(List<RoomInfo> roomInfoList)
-    {
-        Debug.Log($"RoomListUI搜索结果:{roomInfoList.Count}");
-        foreach (Transform roomTabTransform in roomTabsContainer)
-        {
-            Destroy(roomTabTransform.gameObject);
-        }
-
-        float spacing = roomTabsContainer.GetComponent<VerticalLayoutGroup>().spacing;
-        float perHeight = roomTabPrefab.GetComponent<RectTransform>().rect.height;
-        Debug.Log("RoomTab Per Height:" + perHeight);
-        float height = perHeight * roomInfoList.Count + (roomInfoList.Count - 1) * spacing;
-        Debug.Log("RoomTab Container Height:" + height);
-        roomTabsContainer.sizeDelta = new Vector2(roomTabsContainer.sizeDelta.x, height);
-
-        foreach (var roomInfo in roomInfoList)
-        {
-            GameObject roomTabUIGameObject = Instantiate(roomTabPrefab, roomTabsContainer);
-            RoomTabUI roomTabUI = roomTabUIGameObject.GetComponent<RoomTabUI>();
-            roomTabUI.SetRoomTab(roomInfo);
-        }
-    }
 }

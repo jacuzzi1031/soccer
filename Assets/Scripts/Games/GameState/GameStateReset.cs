@@ -17,6 +17,12 @@ public class GameStateReset : GameState
     }
 
     private void OnKickoffReadyEvent(OnKickoffReadyEvent obj) {
-        TransitionState(GameManager.State.KICKOFF,stateData);
+        if (_transitionQueued)
+            return;
+        _transitionQueued = true;
+
+        Invoker.Instance.DelegateList.Add(() => {
+            TransitionState(MatchSystem.State.KICKOFF,stateData);
+        });
     }
 }
