@@ -5,9 +5,9 @@ using UnityEngine;
 public class AIBehavior
 {  
     protected Vector2 moveDir=Vector2.zero;
-    protected Ball ball;
+    protected BallView BallView;
     protected TriggerDetection opponentDetectionArea;
-    protected Player player;
+    protected PlayerView PlayerView;
     private float nextAiTickTime;
     public const float aiTickFrequency = 0.2f;
 
@@ -31,9 +31,9 @@ public class AIBehavior
         return moveDir;
     }
 
-    public void Setup(Player player, Ball ball, TriggerDetection opponentDetectionArea) {
-        this.player=player;
-        this.ball=ball;
+    public void Setup(PlayerView playerView, BallView ballView, TriggerDetection opponentDetectionArea) {
+        this.PlayerView=playerView;
+        this.BallView=ballView;
         this.opponentDetectionArea=opponentDetectionArea;
     }
 }

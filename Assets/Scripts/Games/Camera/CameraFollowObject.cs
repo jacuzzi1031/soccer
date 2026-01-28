@@ -12,21 +12,21 @@ public class CameraFollowObject : MonoBehaviour
     [SerializeField] private float _flipYRotationTime = 0.5f;
     private Coroutine _turnCoroutine; 
     private bool _isFacingRight;
-    private Ball ball;
+    private BallView _ballView;
 
     public static CameraFollowObject Instance{get;private set;}
     
     private void Awake()
     {   
         Instance=this;
-        ball = _ballTransform.gameObject.GetComponent<Ball>();
+        _ballView = _ballTransform.gameObject.GetComponent<BallView>();
     }
     private void Update()
     {   
         
-        if (ball.carrier) {
-            _isFacingRight = ball.carrier.headingRight;
-            transform.position = ball.carrier.transform.position;
+        if (_ballView.carrier) {
+            _isFacingRight = _ballView.carrier.headingRight;
+            transform.position = _ballView.carrier.transform.position;
         }
         else {
             transform.position = _ballTransform.position;

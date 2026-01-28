@@ -5,12 +5,12 @@ using UnityEngine;
 public class PlayerResource
 {
     public string fullName;
-    public Player.SkinColor skin;
-    public Player.Role role;
+    public PlayerView.SkinColor skin;
+    public Role role;
     public float speed;
     public float power;
 
-    public PlayerResource(string fullName, Player.SkinColor skin, Player.Role role, float speed, float power)
+    public PlayerResource(string fullName, PlayerView.SkinColor skin, Role role, float speed, float power)
     {
         this.fullName = fullName;
         this.skin = skin;

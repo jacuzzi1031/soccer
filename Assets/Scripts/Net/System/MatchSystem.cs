@@ -68,4 +68,11 @@ public class MatchSystem:ISimulationSystem
         currentState.OnStateTransitionRequested-= SwitchGameState;
         currentMatch = null;
     }
+
+    public void AllReady() {
+        Invoker.Instance.DelegateList.Add(() => {
+            
+            GameInterface.Interface.EventSystem.Publish(new OnKickoffReadyEvent());
+        });
+    }
 }

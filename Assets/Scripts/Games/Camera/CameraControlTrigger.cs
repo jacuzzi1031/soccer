@@ -18,7 +18,7 @@ public class CameraControlTrigger : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {   
         if (!CameraManager.Instance || !CameraManager.Instance.gameObject.activeInHierarchy) return;
-        if (collision.GetComponentInParent<Ball>())
+        if (collision.GetComponentInParent<BallView>())
         {   
             if (customInspectorObjects.panCameraOnContact)
             {
@@ -31,7 +31,7 @@ public class CameraControlTrigger : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (!CameraManager.Instance || !CameraManager.Instance.gameObject.activeInHierarchy) return;
-        if (collision.GetComponentInParent<Ball>())
+        if (collision.GetComponentInParent<BallView>())
         {   
             if (customInspectorObjects.panCameraOnContact)
             {

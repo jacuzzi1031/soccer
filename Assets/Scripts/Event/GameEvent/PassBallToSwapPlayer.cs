@@ -4,9 +4,9 @@ using UnityEngine;
 
 public struct PassBallToSwapPlayer : IEvent
 {
-    public Player ToSwapPlayer;
-    public PassBallToSwapPlayer(Player toSwapPlayer)
+    public PlayerView ToSwapPlayerView;
+    public PassBallToSwapPlayer(PlayerView toSwapPlayerView)
     {
-        ToSwapPlayer = toSwapPlayer;
+        ToSwapPlayerView = toSwapPlayerView;
     }
 }

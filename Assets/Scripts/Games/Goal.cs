@@ -26,16 +26,16 @@ public class Goal : MonoBehaviour
 
     private void OnBallEnterBackNet(Collider2D other)
     {
-        Ball ball = other.GetComponentInParent<Ball>();
-        if (ball == null) return;
+        BallView ballView = other.GetComponentInParent<BallView>();
+        if (ballView == null) return;
 
-        ball.Stop();
+        ballView.Stop();
     }
     
     private void OnBallEnterScoringArea(Collider2D other)
     {
-        Ball ball = other.GetComponentInParent<Ball>();
-        if (ball == null) return;
+        BallView ballView = other.GetComponentInParent<BallView>();
+        if (ballView == null) return;
         GameInterface.Interface.EventSystem.Publish(new OnTeamScoredEvent(country));
         SoundManager.Instance.Play(SoundManager.Instance.audioRefs.WHISTLE);
         Debug.Log("scoring!!!");

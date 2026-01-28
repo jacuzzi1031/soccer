@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class AIBehaviorFactory
 {
-    private readonly Dictionary<Player.Role, Func<AIBehavior>> _stateFactories =
-        new Dictionary<Player.Role, Func<AIBehavior>>
+    private readonly Dictionary<Role, Func<AIBehavior>> _stateFactories =
+        new Dictionary<Role, Func<AIBehavior>>
         {
-            { Player.Role.DEFENSE, () => new AIBehaviorField() },
-            { Player.Role.GOALIE, () => new AIBehaviorGoalie() },
-            { Player.Role.MIDFIELD, () => new AIBehaviorField() },
-            { Player.Role.OFFENSE, () => new AIBehaviorField() },
+            { Role.DEFENSE, () => new AIBehaviorField() },
+            { Role.GOALIE, () => new AIBehaviorGoalie() },
+            { Role.MIDFIELD, () => new AIBehaviorField() },
+            { Role.OFFENSE, () => new AIBehaviorField() },
         };
 
-    public AIBehavior GetFreshAIBehavior(Player.Role role)
+    public AIBehavior GetFreshAIBehavior(Role role)
     {
         if (_stateFactories.TryGetValue(role, out var factory))
             return factory();

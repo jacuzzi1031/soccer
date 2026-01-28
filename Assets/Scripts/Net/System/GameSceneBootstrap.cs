@@ -7,7 +7,7 @@ public class GameSceneBootstrap : MonoBehaviour
     bool _frameReady;
     bool _started;
     int _startFrame;
-
+    [SerializeField] BallView ballView;
     void Awake()
     {
         GameInterface.Interface
@@ -30,7 +30,7 @@ public class GameSceneBootstrap : MonoBehaviour
         _started = true;
         _startFrame = serverFrame;
 
-        GameInterface.Interface.GameManager.StartMatch();
+        GameInterface.Interface.GameManager.StartMatch(ballView);
     }
 }
 

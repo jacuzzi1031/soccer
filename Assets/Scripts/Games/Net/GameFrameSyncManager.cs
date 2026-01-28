@@ -19,9 +19,6 @@ public class GameFrameSyncManager : BaseManager
     
     private ObjectPool<Vector2D> _mVector2DPool;
 
-
-    public event Action<List<ResFrameInputData>> OnFrameSync;
-
     public override void OnInit()
     {
         _mReqFrameInputDataPool = new ObjectPool<ReqFrameInputData>(() => new ReqFrameInputData());
@@ -55,8 +52,9 @@ public class GameFrameSyncManager : BaseManager
             var frameInputs = resFrameSyncData.PlayersFrameInputData
                 .Where(i => i.FrameId == nextExecuteFrameId)
                 .ToList();
-            OnFrameSync?.Invoke(frameInputs);
-
+            foreach (var frameInput in frameInputs) {
+                SimulationDriver.Instance.InputBuffer.Push(frameInput);
+            }
             _lastExecutedFrameId = nextExecuteFrameId;
         }
         UploadLocalInput(_serverAuthoritativeFrameId);
@@ -71,21 +69,15 @@ public class GameFrameSyncManager : BaseManager
 
         Entity localEntity = _mEntities
             .Find(e => e.playerType == Entity.PlayerType.Local);
-        var position = _mVector2DPool.Allocate();
         var moveVector = _mVector2DPool.Allocate();
-        if (localEntity != null)
-        {
-            position.X = MathUtil.GetFloat(localEntity.localPlayerPosition.x);
-            position.Y = MathUtil.GetFloat(localEntity.localPlayerPosition.y);
 
-            moveVector.X = MathUtil.GetFloat(localEntity.localMoveVector.x);
-            moveVector.Y = MathUtil.GetFloat(localEntity.localMoveVector.y);
+        moveVector.X = GameInput.Instance.MoveX;
+        moveVector.Y =  GameInput.Instance.MoveY;
 
-            req.Position = position;
-            req.MoveVector = moveVector;
-            req.ActiveUnitIndex = localEntity.activeUnitIndex;
-            req.CommandIndex = localEntity.commandIndex;
-        }
+        req.MoveVector = moveVector;
+        // req.ActiveUnitIndex = localEntity.activeUnitIndex;
+        // req.CommandIndex = localEntity.commandIndex;
+        
 
         var sendData = _mReqFrameSyncDataPool.Allocate();
         sendData.FrameId = targetFrameId;
@@ -96,7 +88,6 @@ public class GameFrameSyncManager : BaseManager
         
                 
         _mReqFrameInputDataPool.Release(req);
-        _mVector2DPool.Release(position);
         _mVector2DPool.Release(moveVector);
     }
     public void AddEntity(in Entity entity)

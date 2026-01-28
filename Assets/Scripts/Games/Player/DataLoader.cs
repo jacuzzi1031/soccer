@@ -40,8 +40,8 @@ public class DataLoader : MonoBehaviour
             {
                 PlayerResource pr = new PlayerResource(
                     player.name,
-                    (Player.SkinColor)player.skin,
-                    (Player.Role)player.role,
+                    (PlayerView.SkinColor)player.skin,
+                    (Role)player.role,
                     player.speed,
                     player.power
                 );

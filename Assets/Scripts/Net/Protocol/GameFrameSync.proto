@@ -37,7 +37,7 @@ message ReqFrameSyncData
 message ReqFrameInputData
 {
   int32 frameId = 1;
-  int32 playerId = 2;
+  int32 OwnerPlayerId = 2;
   InputType inputType = 3;
   Vector2D position = 4;
   Vector2D moveVector = 8;
@@ -48,22 +48,21 @@ message ReqFrameInputData
 message ResFrameInputData
 {
   int32 frameId = 1;
-  int32 playerId = 2;
+  int32 OwnerPlayerId = 2;
   InputType inputType = 3;
-  Vector2D position = 4;
   Vector2D moveVector = 8;
-  int32 activeUnitIndex=9;
-  int32 commandIndex=10;
+//  int32 activeUnitIndex=9;
+//  int32 commandIndex=10;
 }
 message Vector3D
 {
-  float x = 1;
-  float y = 2;
-  float z = 3;
+  sint32 x = 1;
+  sint32 y = 2;
+  sint32 z = 3;
 }
 message Vector2D
 {
-  float x = 1;
-  float y = 2;
+  sint32 x = 1;
+  sint32 y = 2;
 }
 

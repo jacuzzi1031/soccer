@@ -13,17 +13,18 @@ public class GameInput : MonoBehaviour {
     public static GameInput Instance { get; private set; }
     
 
-    public event EventHandler OnSwapAction;
-    public event EventHandler OnIncesivePassAction;
-    public event EventHandler OnShortPassAction;
-    public event EventHandler OnLongPassAction;
+    // public event EventHandler OnSwapAction;
+    // public event EventHandler OnIncesivePassAction;
+    // public event EventHandler OnShortPassAction;
+    // public event EventHandler OnLongPassAction;
     public event EventHandler OnShootAction;
-    public event EventHandler OnShootCancelAction;
+    // public event EventHandler OnShootCancelAction;
     public event EventHandler OnPauseAction;
     public event EventHandler OnBindingRebind;
 
 
-    public Vector2 MoveVector { get; private set; }
+    public int MoveX { get; private set; }
+    public int MoveY { get; private set; }
 
     public enum Binding {
         Move_Up,
@@ -38,7 +39,6 @@ public class GameInput : MonoBehaviour {
         Pause,
 
     }
-    // public GameFrameSyncManager.PlayerInputType LocalPlayerInputType { get; private set; }
     public InputType LocalPlayerInputType { get; private set; }
 
 
@@ -81,15 +81,27 @@ public class GameInput : MonoBehaviour {
     private void Move_canceled(InputAction.CallbackContext obj)
     {
         LocalPlayerInputType = InputType.None;
-        MoveVector = Vector2.zero;
+        MoveX = 0;
+        MoveY = 0;
     }
 
     private void Move_performed(InputAction.CallbackContext obj)
     {
         LocalPlayerInputType = InputType.Move;
-        MoveVector = obj.ReadValue<Vector2>();
+        Vector2 v = obj.ReadValue<Vector2>();
+        MoveX = QuantizeAxis(v.x);
+        MoveY = QuantizeAxis(v.y);
     }
+    private sbyte QuantizeAxis(float v)
+    {
+        const float deadZone = 0.1f;
 
+        if (Mathf.Abs(v) < deadZone)
+            return 0;
+
+        v = Mathf.Clamp(v, -1f, 1f);
+        return (sbyte)(v * 127);
+    }
     private void OnDestroy() {
         if (playerInputActions == null) return;
         playerInputActions.Player.Move.performed -= Move_performed;
@@ -109,12 +121,13 @@ public class GameInput : MonoBehaviour {
 
     private void Pause_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {
         OnPauseAction?.Invoke(this, EventArgs.Empty);
+        LocalPlayerInputType = InputType.Swap;
     }
 
     private void Swap_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         LocalPlayerInputType = InputType.Swap;
-        OnSwapAction?.Invoke(this, EventArgs.Empty);
+        // OnSwapAction?.Invoke(this, EventArgs.Empty);
     }
     private void Swap_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
@@ -123,7 +136,7 @@ public class GameInput : MonoBehaviour {
     private void IncisivePass_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         LocalPlayerInputType = InputType.IncisivePass;
-        OnIncesivePassAction?.Invoke(this, EventArgs.Empty);
+        // OnIncesivePassAction?.Invoke(this, EventArgs.Empty);
     }
     private void IncisivePass_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
@@ -132,7 +145,7 @@ public class GameInput : MonoBehaviour {
     private void ShortPass_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         LocalPlayerInputType = InputType.ShortPass;
-        OnShortPassAction?.Invoke(this, EventArgs.Empty);
+        // OnShortPassAction?.Invoke(this, EventArgs.Empty);
     }
     private void ShortPass_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
@@ -142,7 +155,7 @@ public class GameInput : MonoBehaviour {
     private void LongPass_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         LocalPlayerInputType = InputType.LongPass;
-        OnLongPassAction?.Invoke(this, EventArgs.Empty);
+        // OnLongPassAction?.Invoke(this, EventArgs.Empty);
     }
     private void LongPass_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
@@ -156,15 +169,19 @@ public class GameInput : MonoBehaviour {
     private void Shoot_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         LocalPlayerInputType = InputType.ShootRelease;
-        OnShootCancelAction?.Invoke(this, EventArgs.Empty);
+        // OnShootCancelAction?.Invoke(this, EventArgs.Empty);
     }
 
 
     public Vector2 GetMovementVectorNormalized() {
-        return MoveVector.normalized;
+        return  new Vector2(MoveX / 127f,MoveY / 127f);
     }
-    public Vector2 GetMovementVector() {
-        return MoveVector;
+    public Vector2D GetMovementVector() {
+        return new Vector2D
+        {
+            X = MoveX,
+            Y = MoveY
+        };
     }
 
     public string GetBindingText(Binding binding) {

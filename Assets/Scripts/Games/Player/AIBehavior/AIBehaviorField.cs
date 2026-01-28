@@ -20,7 +20,7 @@ private const float PASS_PROBABILITY = 0.05f;
     {
         moveDir = Vector2.zero;
 
-        if (player.HasBall())
+        if (PlayerView.HasBall())
         {
             moveDir += GetCarrierSteeringForce();
         }
@@ -44,7 +44,7 @@ private const float PASS_PROBABILITY = 0.05f;
                 {
                     moveDir += GetSpawnSteeringForce();
                 }
-                else if (ball.carrier == null)
+                else if (BallView.carrier == null)
                 {
                     moveDir += GetBallProximitySteeringForce();
                     moveDir += GetDensityAroundBallSteeringForce();
@@ -56,44 +56,44 @@ private const float PASS_PROBABILITY = 0.05f;
     }
 
     private bool TeammateCouldShoot() {
-        Vector2 target = player.targetGoal.GetCenterTargetPosition();
-        return Vector2.Distance(ball.carrier.transform.position, target) < SHOT_DISTANCE;
+        Vector2 target = PlayerView.targetGoal.GetCenterTargetPosition();
+        return Vector2.Distance(BallView.carrier.transform.position, target) < SHOT_DISTANCE;
     }
 
     public override void PerformAIDecisions()
     {
         if (IsBallPossessedByOpponent() &&
-            Vector2.Distance(player.transform.position, ball.transform.position) < TACKLE_DISTANCE &&
+            Vector2.Distance(PlayerView.transform.position, BallView.transform.position) < TACKLE_DISTANCE &&
             Random.value < TACKLE_PROBABILITY)
         {
-            player.SwitchState(Player.State.TACKLING);
+            PlayerView.SwitchViewState(PlayerView.State.TACKLING);
         }
         //当cpu控制为玩家所在队伍，不进行shot/pass
-        if (GameInterface.Interface.GameManager.playerSetup[0] == player.country)
+        if (GameInterface.Interface.GameManager.playerSetup[0] == PlayerView.country)
             return;
 
-        if (ball.carrier == player)
+        if (BallView.carrier == PlayerView)
         {
-            Vector2 target = player.targetGoal.GetCenterTargetPosition();
+            Vector2 target = PlayerView.targetGoal.GetCenterTargetPosition();
             
             
-            if (Vector2.Distance(player.transform.position, target) < SHOT_DISTANCE &&
+            if (Vector2.Distance(PlayerView.transform.position, target) < SHOT_DISTANCE &&
                 Random.value < SHOT_PROBABILITY)
             {
-                player.FaceTowardsTargetGoal();
-                Vector2 direction = (player.targetGoal.GetRandomTargetPosition() - (Vector2)player.transform.position).normalized;
+                PlayerView.FaceTowardsTargetGoal();
+                Vector2 direction = (PlayerView.targetGoal.GetRandomTargetPosition() - (Vector2)PlayerView.transform.position).normalized;
 
                 var data = new PlayerStateData()
-                    .SetShotPower(player.power)
+                    .SetShotPower(PlayerView.power)
                     .SetShotDirection(direction);
 
-                player.SwitchState(Player.State.SHOOTING, data);
+                PlayerView.SwitchViewState(PlayerView.State.SHOOTING, data);
             }
             else if (Random.value < PASS_PROBABILITY &&
                      HasOpponentsNearby()
                      )
             {
-                player.SwitchState(Player.State.PASSING);
+                PlayerView.SwitchViewState(PlayerView.State.PASSING);
             }
         }
     }
@@ -103,16 +103,16 @@ private const float PASS_PROBABILITY = 0.05f;
     // ------------------------------
     Vector2 GetOnDutySteeringForce()
     {
-        return player.weightOnDutySteering *
-               (ball.transform.position - player.transform.position).normalized;
+        return PlayerView.weightOnDutySteering *
+               (BallView.transform.position - PlayerView.transform.position).normalized;
     }
 
     Vector2 GetCarrierSteeringForce()
     {
-        Vector2 target = player.targetGoal.GetCenterTargetPosition();
-        Vector2 direction = (target - (Vector2)player.transform.position).normalized;
+        Vector2 target = PlayerView.targetGoal.GetCenterTargetPosition();
+        Vector2 direction = (target - (Vector2)PlayerView.transform.position).normalized;
 
-        float weight = GetBiCircularWeight(player.transform.position, target, 100, 0, 150, 1);
+        float weight = GetBiCircularWeight(PlayerView.transform.position, target, 100, 0, 150, 1);
         return direction * weight;
     }
     Vector2 GetCarrierReboundShotForce()
@@ -121,12 +121,12 @@ private const float PASS_PROBABILITY = 0.05f;
         const float GoalYRangeSlack = 10f;
         const float ReboundOffsetX  = 100f;
 
-        Vector2 carrierPos = ball.carrier.transform.position;
-        Vector2 playerPos  = player.transform.position;
+        Vector2 carrierPos = BallView.carrier.transform.position;
+        Vector2 playerPos  = PlayerView.transform.position;
 
-        Vector2 topPos    = player.targetGoal.GetTopTargetPosition();
-        Vector2 bottomPos = player.targetGoal.GetBottomTargetPosition();
-        Vector2 centerPos = player.targetGoal.GetCenterTargetPosition();
+        Vector2 topPos    = PlayerView.targetGoal.GetTopTargetPosition();
+        Vector2 bottomPos = PlayerView.targetGoal.GetBottomTargetPosition();
+        Vector2 centerPos = PlayerView.targetGoal.GetCenterTargetPosition();
 
         Vector2 target = centerPos;
 
@@ -163,55 +163,55 @@ private const float PASS_PROBABILITY = 0.05f;
 
     Vector2 GetAssistFormationSteeringForce()
     {
-        Vector2 spawnDiff = ball.carrier.spawnPosition - player.spawnPosition;
-        Vector2 destination = (Vector2)ball.carrier.transform.position - spawnDiff * SPREAD_ASSIST_FACTOR;
+        Vector2 spawnDiff = BallView.carrier.spawnPosition - PlayerView.spawnPosition;
+        Vector2 destination = (Vector2)BallView.carrier.transform.position - spawnDiff * SPREAD_ASSIST_FACTOR;
 
-        Vector2 direction = (destination - (Vector2)player.transform.position).normalized;
-        float weight = GetBiCircularWeight(player.transform.position, destination, 30, 0.2f, 60, 1);
+        Vector2 direction = (destination - (Vector2)PlayerView.transform.position).normalized;
+        float weight = GetBiCircularWeight(PlayerView.transform.position, destination, 30, 0.2f, 60, 1);
 
         return direction * weight;
     }
     //足球没有被carried全力抢球
     Vector2 GetBallProximitySteeringForce()
     {
-        float weight = GetBiCircularWeight(player.transform.position, ball.transform.position, 50, 1, 120, 0);
-        Vector2 direction = (ball.transform.position - player.transform.position).normalized;
+        float weight = GetBiCircularWeight(PlayerView.transform.position, BallView.transform.position, 50, 1, 120, 0);
+        Vector2 direction = (BallView.transform.position - PlayerView.transform.position).normalized;
 
         return direction * weight;
     }
     //防守维持阵型
     Vector2 GetSpawnSteeringForce()
     {
-        float weight = GetBiCircularWeight(player.transform.position, player.spawnPosition, 30, 0, 100, 1);
-        Vector2 direction = (player.spawnPosition - (Vector2)player.transform.position).normalized;
+        float weight = GetBiCircularWeight(PlayerView.transform.position, PlayerView.spawnPosition, 30, 0, 100, 1);
+        Vector2 direction = (PlayerView.spawnPosition - (Vector2)PlayerView.transform.position).normalized;
 
         return direction * weight;
     }
     //一个队不一拥而上
     Vector2 GetDensityAroundBallSteeringForce()
     {
-        int count = ball.GetProximityTeammatesCount(player.country);
+        int count = BallView.GetProximityTeammatesCount(PlayerView.country);
         if (count == 0) return Vector2.zero;
 
         float weight = 1 - (1f / count);
-        Vector2 direction = (player.transform.position - ball.transform.position).normalized;
+        Vector2 direction = (PlayerView.transform.position - BallView.transform.position).normalized;
 
         return direction * weight;
     }
 
     bool IsBallCarriedByTeammate()
     {
-        return ball.carrier != null && ball.carrier.country == player.country;
+        return BallView.carrier != null && BallView.carrier.country == PlayerView.country;
     }
 
     bool IsBallPossessedByOpponent()
     {
-        return ball.carrier != null && ball.carrier.country != player.country;
+        return BallView.carrier != null && BallView.carrier.country != PlayerView.country;
     }
 
     bool HasOpponentsNearby()
     {
-        return player.HasOpponentsNearby();
+        return PlayerView.HasOpponentsNearby();
     }
     
     // UTILS: Bicircular Weight

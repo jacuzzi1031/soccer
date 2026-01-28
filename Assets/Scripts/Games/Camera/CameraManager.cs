@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance;
     [SerializeField] private CinemachineVirtualCamera[] _allVirtualCameras;
-    [SerializeField] private Ball ball;
+    [FormerlySerializedAs("ball")] [SerializeField] private BallView ballView;
 
     [Header("Controls for Screen Y during player up/down")]
     [SerializeField] private float _downScreenYAmount = 0.4f;

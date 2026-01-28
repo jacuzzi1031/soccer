@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 public class BallStateFactory
 {
-    private readonly Dictionary<Ball.State, Func<BallState>> _stateFactories =
-        new Dictionary<Ball.State, Func<BallState>>
+    private readonly Dictionary<BallStateId, Func<BallViewState>> _stateFactories =
+        new Dictionary<BallStateId, Func<BallViewState>>
         {
-            { Ball.State.CARRIED, () => new BallStateCarried() },
-            { Ball.State.FREEFORM, () => new BallStateFreeform() },
-            { Ball.State.SHOT, () => new BallStateShot() },
+            { BallStateId.CARRIED, () => new BallViewStateCarried() },
+            { BallStateId.FREEFORM, () => new BallViewStateFreeform() },
+            { BallStateId.SHOT, () => new BallViewStateShot() },
         };
 
-    public BallState GetFreshState(Ball.State state)
+    public BallViewState GetFreshState(BallStateId ballStateId)
     {
-        if (_stateFactories.TryGetValue(state, out var factory))
+        if (_stateFactories.TryGetValue(ballStateId, out var factory))
             return factory();
 
-        throw new ArgumentException($"Ball state not registered: {state}");
+        throw new ArgumentException($"Ball state not registered: {ballStateId}");
     }
 }

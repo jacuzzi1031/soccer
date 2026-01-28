@@ -32,7 +32,7 @@ public class EntityManager : MonoBehaviour {
             entity.playerType = info.id == localPlayerId ? Entity.PlayerType.Local : Entity.PlayerType.Remote;
             entity.playerId = info.id;
             entity.isHome = info.isHome;
-            entity.controlScheme=entity.isHome?Player.ControlScheme.P1:Player.ControlScheme.P2;
+            entity.controlScheme=entity.isHome?ControlScheme.P1:ControlScheme.P2;
             entityList.Add(entity);
         }
     }
@@ -49,10 +49,6 @@ public class EntityManager : MonoBehaviour {
 
     public int GetEntityByID() {
         return entityList[0].playerId;
-    }
-
-    private void Start() {
-        PlayerManager.Instance.InitializeSquads();  
     }
     #region for PauseGame
     private bool isGamePaused = false;

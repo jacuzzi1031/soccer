@@ -8,24 +8,22 @@ using UnityEngine.UIElements;
 public class PlayerManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] public Ball ball;
+    [SerializeField] public BallView ballView;
     [SerializeField] private Goal goalHome;
     [SerializeField] private Goal goalAway;
-    [SerializeField] private Player  playerPrefab;
+    [SerializeField] private PlayerView  playerViewPrefab;
     
     [Header("Components")]
     [SerializeField] private Transform spawns;
     [SerializeField] private Transform kickOffs;
     [SerializeField] private Transform training;
+    
 
-    private const float DURATION_WEIGHT_CACHE = 0.2f;
-    private float timeSinceLastCacheRefresh = 0f;
-    private List<Player> squadHome;
-    private List<Player> squadAway;
-    private Dictionary<int, Player> playersById = new Dictionary<int, Player>();
+    private List<PlayerView> squadHome;
+    private List<PlayerView> squadAway;
+    private Dictionary<int, PlayerView> playersById = new Dictionary<int, PlayerView>();
     public static PlayerManager Instance{get; private set;}
     private int nextPlayerId = 0;
-    private bool isCheckingForKickoffReadiness=false;
     private void Awake() {
         Instance = this;
     }
@@ -43,110 +41,60 @@ public class PlayerManager : MonoBehaviour
     
 
     private void OnTeamResetEvent(OnTeamResetEvent obj) {
-        isCheckingForKickoffReadiness = true;
+        GameInterface.Interface.GameManager.PlayerSystem.OnTeamResetEvent();
     }
-
-    void CheckForKickoffReadiness()
-    {
-        foreach (var squad in new[] { squadHome, squadAway })
-        {
-            foreach (Player player in squad)
-            {
-                if (!player.IsReadyForKickoff())
-                {
-                    return;
-                }
-            }
-        }
-        ResetControlSchemes();
-        isCheckingForKickoffReadiness = false;
-        GameInterface.Interface.EventSystem.Publish(new OnKickoffReadyEvent());
-    }
-
-
     private void OnPlayStyleShowEvent(OnControlSwitchEvent e) {
         if (e.OldPlayerId != -1)
         {
-            Player oldPlayer = playersById[e.OldPlayerId];
-            if (oldPlayer != null)
-                oldPlayer.SetControlScheme(Player.ControlScheme.CPU);
+            PlayerView oldPlayerView = playersById[e.OldPlayerId];
+            if (oldPlayerView != null)
+                oldPlayerView.SetControlScheme(ControlScheme.CPU);
         }
 
-        Player newPlayer = playersById[e.NewPlayerId];
-        if (newPlayer != null)
-            newPlayer.SetControlScheme(e.Scheme);
+        PlayerView newPlayerView = playersById[e.NewPlayerId];
+        if (newPlayerView != null)
+            newPlayerView.SetControlScheme(e.Scheme);
     }
 
-    public void InitializeSquads() {
-        squadHome = SpawnPlayers(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryHome,goalHome,true);
+    public void InitializeSquads(Action<List<PlayerSim>, List<PlayerSim>> onTeamsReady)
+    {
+        // 创建 Home 和 Away 球员并初始化 PlayerView 和 PlayerSim
+        List<PlayerSim> PlayerSimsHome = SpawnPlayerViewsAndSims(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryHome, goalHome, true);
         goalHome.initialize(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryHome);
-        spawns.rotation = Quaternion.Euler(0, 180, 0);
-        kickOffs.rotation = Quaternion.Euler(0, 180, 0);
-        GameManager.MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
-        if (currentMatchType != GameManager.MatchType.Training&&currentMatchType!=GameManager.MatchType.TrainingWithEnemy) {
-            squadAway = SpawnPlayers(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway,goalAway,false);
-        }
-        else if(currentMatchType==GameManager.MatchType.Training){
-            squadAway=SpawnOpponent(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway,goalAway,false,false);
-        }
-        else {
-            squadAway=SpawnOpponent(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway,goalAway,true,false);
-        }
         goalAway.initialize(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway);
 
-        ResetControlSchemes();
-    }
+        spawns.rotation = Quaternion.Euler(0, 180, 0);
+        kickOffs.rotation = Quaternion.Euler(0, 180, 0);
 
-    public void Update() {
-        float currentTime = Time.time;
-        if (currentTime - timeSinceLastCacheRefresh > DURATION_WEIGHT_CACHE)
+        List<PlayerSim> PlayerSimsAway;
+        GameManager.MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
+        if (currentMatchType != GameManager.MatchType.Training && currentMatchType != GameManager.MatchType.TrainingWithEnemy)
         {
-            timeSinceLastCacheRefresh = currentTime;
-            SetOnDutyWeights();
+            PlayerSimsAway = SpawnPlayerViewsAndSims(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway, goalAway, false);
         }
-
-        if (isCheckingForKickoffReadiness) {
-            CheckForKickoffReadiness();
+        else if (currentMatchType == GameManager.MatchType.Training)
+        {
+            PlayerSimsAway=SpawnOpponentViewsAndSims(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway, goalAway, false, false);
         }
+        else
+        {
+            //TrainingWithEnemy
+            PlayerSimsAway=SpawnOpponentViewsAndSims(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway, goalAway, true, false);
+        }
+        // 回调 PlayerSim 列表
+        onTeamsReady?.Invoke(PlayerSimsHome, PlayerSimsAway);
     }
-
-    public IReadOnlyList<Player> GetSquad(bool isHome) {
+    public IReadOnlyList<PlayerView> GetSquad(bool isHome) {
         return isHome?squadHome:squadAway;
     }
 
-    private void SetOnDutyWeights() {
-        List<List<Player>> squads = new List<List<Player>> { squadAway, squadHome };
 
-        foreach (var squad in squads)
-        {
-            List<Player> cpuPlayers = squad
-                .Where(p => p.controlScheme == Player.ControlScheme.CPU &&
-                            p.role != Player.Role.GOALIE)
-                .ToList();
-
-            // 按 spawn_position 到球的距离排序
-            cpuPlayers.Sort((p1, p2) =>
-                (p1.spawnPosition -(Vector2) ball.transform.position).sqrMagnitude
-                .CompareTo((p2.spawnPosition - (Vector2) ball.transform.position).sqrMagnitude)
-            );
-            
-            for (int i = 0; i < cpuPlayers.Count; i++)
-            {
-                cpuPlayers[i].weightOnDutySteering = 1f - Ease((float)i / 10f, 0.1f);
-            }
-        }
-    }
-    float Ease(float x, float bias)
-    {
-        return Mathf.Pow(x, bias);
-    }
-
-    private void ResetControlSchemes() {
+    public void ResetControlSchemes() {
         foreach (var player in squadHome) {
-            player.SetControlScheme(Player.ControlScheme.CPU);
+            player.SetControlScheme(ControlScheme.CPU);
         }
         foreach (var player in squadAway) {
-            player.SetControlScheme(Player.ControlScheme.CPU);
+            player.SetControlScheme(ControlScheme.CPU);
         }
         GameInterface.Interface.EventSystem.Publish(new OnSquadsReadyEvent());
     }
@@ -156,10 +104,11 @@ public class PlayerManager : MonoBehaviour
             player.ShowPlayStyle(obj.sprite);
         }
     }
-    public List<Player> SpawnPlayers(string country, Goal ownGoal,bool isHome)
+    public List<PlayerSim> SpawnPlayerViewsAndSims(string country, Goal ownGoal, bool isHome)
     {
-        List<Player> players = new List<Player>();
+        List<PlayerView> playerViews = new List<PlayerView>();
         List<PlayerResource> playerResources = DataLoader.Instance.GetSquad(country);
+        List<PlayerSim> playerSims = new List<PlayerSim>();
 
         Transform kickoffParent = null;
         int startIndex = 0;
@@ -168,92 +117,133 @@ public class PlayerManager : MonoBehaviour
         {
             case GameManager.MatchType.Training:
                 kickoffParent = training.transform;
-                startIndex = 4;  
+                startIndex = 4;
                 break;
             case GameManager.MatchType.TrainingWithEnemy:
                 kickoffParent = training.transform;
-                startIndex = 5;  
+                startIndex = 5;
                 break;
 
-            default: 
+            default:
                 kickoffParent = kickOffs.transform;
-                startIndex = 0; 
+                startIndex = 0;
                 break;
         }
-        
+
         for (int i = startIndex; i < playerResources.Count; i++)
         {
             GameManager.MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
             Vector2 playerPosition;
             Vector2 kickoffPosition;
-            if (currentMatchType != GameManager.MatchType.Training&&currentMatchType!=GameManager.MatchType.TrainingWithEnemy) {
-                playerPosition= spawns.GetChild(i).position;
+            
+            if (currentMatchType != GameManager.MatchType.Training && currentMatchType != GameManager.MatchType.TrainingWithEnemy)
+            {
+                playerPosition = spawns.GetChild(i).position;
                 kickoffPosition = (i > 3)
                     ? (Vector2)kickoffParent.GetChild(i - 4).position
                     : playerPosition;
             }
-            else {
-                playerPosition=training.GetChild(i-4).position;
-                kickoffPosition=training.GetChild(i-4).position;
+            else
+            {
+                playerPosition = training.GetChild(i - 4).position;
+                kickoffPosition = training.GetChild(i - 4).position;
             }
+
             Goal targetGoal = (ownGoal == goalAway) ? goalHome : goalAway;
             PlayerResource playerData = playerResources[i];
-            Player player = SpawnPlayer(
+            
+            PlayerSim playerSim = new PlayerSim(
+                nextPlayerId,
+                playerData,
+                playerPosition,
+                kickoffPosition,
+                country,
+                isHome
+            );
+            
+            PlayerView playerView = SpawnPlayer(
                 playerPosition,
                 kickoffPosition,
                 ownGoal,
                 targetGoal,
                 playerData,
                 country,
-                isHome
+                isHome,
+                playerSim
             );
 
-            players.Add(player);
+            playerViews.Add(playerView); 
+            playerSims.Add(playerSim); 
         }
-
-        return players;
+        
+        if (isHome)
+        {
+            squadHome = playerViews;
+        }
+        else
+        {
+            squadAway = playerViews;
+        }
+        
+        return playerSims;
     }
+    private List<PlayerSim> SpawnOpponentViewsAndSims(string country, Goal ownGoal,bool withopponent,bool isHome) {
 
-    private List<Player> SpawnOpponent(string country, Goal ownGoal,bool withopponent,bool isHome) {
-        List<Player> players=new List<Player>();
+        List<PlayerView> playerViews=new List<PlayerView>();
+        List<PlayerSim> playerSims = new List<PlayerSim>();
         List<PlayerResource> playerResources = DataLoader.Instance.GetSquad(country);
         for (int i = 0; i < (withopponent ? 2 : 1); i++) {
             Vector2 spawnPosition = spawns.GetChild(i).position;
             Goal targetGoal = (ownGoal == goalAway) ? goalHome : goalAway;
             PlayerResource playerData = playerResources[i];
             Vector2 kickoffPosition = spawnPosition;
-            Player player = SpawnPlayer(
+            PlayerSim playerSim = new PlayerSim(
+                nextPlayerId,
+                playerData,
+                spawnPosition,
+                kickoffPosition,
+                country,
+                isHome
+            );
+            PlayerView playerView = SpawnPlayer(
                 spawnPosition,
                 kickoffPosition,
                 ownGoal,
                 targetGoal,
                 playerData,
-                country,isHome
+                country,isHome,
+                playerSim
             );
-            players.Add(player);
+            playerViews.Add(playerView);
+            playerSims.Add(playerSim);
         }
-        return players;
+        squadAway=playerViews;
+        return playerSims;
     }
 
 
 
-    public Player SpawnPlayer(
+    public PlayerView SpawnPlayer(
         Vector2 playerPosition,
         Vector2 kickoffPosition,
         Goal ownGoal,
         Goal targetGoal,
         PlayerResource playerData,
         string country,
-        bool isHome)
+        bool isHome,
+        PlayerSim playerSim)
     {
-        Player player = Instantiate(playerPrefab,transform);
-        player.Initialize(nextPlayerId,playerPosition, kickoffPosition, ball, ownGoal, targetGoal, playerData, country, isHome);
-        playersById[nextPlayerId]=player;
+        PlayerView playerView = Instantiate(playerViewPrefab, transform);
+        playerView.Initialize(nextPlayerId, playerPosition, kickoffPosition, ballView, ownGoal, targetGoal, playerData, country, isHome);
+        playerView.InjectSim(playerSim);
+
+        playersById[nextPlayerId] = playerView;
         nextPlayerId++;
-        return player;
+
+        return playerView;
     }
 
-    public Player GetPlayerById(int playerId) {
+    public PlayerView GetPlayerById(int playerId) {
         return playersById[playerId];
     }
 }

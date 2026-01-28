@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Data;
+using GameFrameSync;
 using UnityEngine;
 
 public enum SimulationState
@@ -19,6 +21,7 @@ public class SimulationDriver : MonoBehaviour
 
     SimulationState state = SimulationState.Idle;
     readonly List<ISimulationSystem> systems = new();
+    public InputBuffer InputBuffer { get; } = new InputBuffer();
 
     public int CurrentFrame => currentFrame;
     public SimulationState State => state;
@@ -42,10 +45,13 @@ public class SimulationDriver : MonoBehaviour
         state = SimulationState.WaitingForStart;
     }
 
-    public void SetSystems(List<ISimulationSystem> matchSystems)
+    public void SetSystems(List<ISimulationSystem> systems)
     {
-        systems.Clear();
-        systems.AddRange(matchSystems);
+        this.systems.Clear();
+        this.systems.AddRange(systems);
+        foreach (var system in systems) {
+            system.SetInputBuffer(InputBuffer);
+        }
     }
 
     public void StartSimulation()
@@ -75,13 +81,36 @@ public class SimulationDriver : MonoBehaviour
 
         while (accumulator >= FRAME_DT)
         {
-            for (int i = 0; i < systems.Count; i++)
-            {
-                systems[i].Tick(currentFrame);
-            }
-
-            currentFrame++;
+            StepSimulation();
             accumulator -= FRAME_DT;
+        }
+    }
+    private void StepSimulation()
+    {
+        InputBuffer.ConsumeFrame(currentFrame, DispatchCommand);
+        for (int i = 0; i < systems.Count; i++)
+        {
+            systems[i].Tick(currentFrame);
+        }
+        currentFrame++;
+    }
+    private void DispatchCommand(InputBuffer.Command cmd)
+    {
+        switch (cmd.inputType)
+        {
+            case InputType.Move:
+                break;
+
+            case InputType.ShortPass:
+            case InputType.LongPass:
+
+                break;
+
+            case InputType.ShootPress:
+                break;
+
+            case InputType.ShootRelease:
+                break;
         }
     }
 }

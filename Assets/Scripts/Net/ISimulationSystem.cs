@@ -6,4 +6,7 @@ public interface ISimulationSystem
 {
     void Tick(int frame);
     void Stop();
+
+    void SetInputBuffer(InputBuffer inputBuffer) {
+    }
 }

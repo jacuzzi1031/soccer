@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using GameFrameSync;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Entity : MonoBehaviour
 {
-    [HideInInspector]public IReadOnlyList<Player> currentTeam;
-    [HideInInspector]public IReadOnlyList<Player> opponentTeam;
-    [HideInInspector]public Player currentControlPlayer;
-    [HideInInspector]public Ball ball = null;
+    [HideInInspector]public IReadOnlyList<PlayerView> currentTeam;
+    [HideInInspector]public IReadOnlyList<PlayerView> opponentTeam;
+    [FormerlySerializedAs("currentControlPlayer")] [HideInInspector]public PlayerView currentControlPlayerView;
+    [FormerlySerializedAs("ball")] [HideInInspector]public BallView ballView = null;
 
     public enum PlayerType
     {
@@ -56,13 +57,12 @@ public class Entity : MonoBehaviour
     public int commandIndex;
     
     
-    public Player.ControlScheme controlScheme;
+    public ControlScheme controlScheme;
     private void Start() {
-        ball = PlayerManager.Instance.ball;
+        ballView = PlayerManager.Instance.ballView;
     }
     private void OnEnable()
     {
-        GameInterface.Interface.GameFrameSyncManager.OnFrameSync += OnFrameSync;
         GameInterface.Interface.EventSystem.Subscribe<OnSquadsReadyEvent>(OnTeamsReady);
         GameInterface.Interface.EventSystem.Subscribe<PlayerBecomesCarrierEvent>(OnPlayerBecomesCarrier);
     }
@@ -78,8 +78,11 @@ public class Entity : MonoBehaviour
             {
                 Invoker.Instance.DelegateList.Add(() =>
                 {
-                    // OnPlayerInputChanged?.Invoke(this, new OnPlayerInputChangedEventArgs
-                    //     { playerId = playerId, inputType = inputType });
+                    // OnPlayerInputChanged?.Invoke(new Command{
+					// frame = SimulationDriver.Instance.CurrentFrame,
+					// playerId = playerId, 
+					// inputType = inputType,
+					// });
                 });
             }
             playerInputType = inputType;
@@ -98,23 +101,23 @@ public class Entity : MonoBehaviour
     }
 
     private void OnPlayerBecomesCarrier(PlayerBecomesCarrierEvent obj) {
-        Player newPlayer = PlayerManager.Instance.GetPlayerById(obj.playerId);
-        if (newPlayer == null)
+        PlayerView newPlayerView = PlayerManager.Instance.GetPlayerById(obj.playerId);
+        if (newPlayerView == null)
             return;
-        if (currentControlPlayer != null && currentControlPlayer.isHome == newPlayer.isHome) {
+        if (currentControlPlayerView != null && currentControlPlayerView.isHome == newPlayerView.isHome) {
             //如果不是一个队的，由那个队的enttiy去publish
-            SwitchControlTo(newPlayer);
+            SwitchControlTo(newPlayerView);
         }
     }
-    private void SwitchControlTo(Player newPlayer)
+    private void SwitchControlTo(PlayerView newPlayerView)
     {
-        if (currentControlPlayer == newPlayer)
+        if (currentControlPlayerView == newPlayerView)
             return;
-        int oldId = currentControlPlayer != null ? currentControlPlayer.playerId : -1;
+        int oldId = currentControlPlayerView != null ? currentControlPlayerView.playerId : -1;
             GameInterface.Interface.EventSystem.Publish(
-                new OnControlSwitchEvent(oldId, newPlayer.playerId, controlScheme)
+                new OnControlSwitchEvent(oldId, newPlayerView.playerId, controlScheme)
             );
-            currentControlPlayer = newPlayer;
+            currentControlPlayerView = newPlayerView;
     }
     
 
@@ -124,7 +127,6 @@ public class Entity : MonoBehaviour
         if(opponentTeam==null) opponentTeam = PlayerManager.Instance.GetSquad(!isHome);
         if (IsLocal) {
             initializeControlScheme();
-            SubscribeGlobalInputs();
         }
     }
 
@@ -133,53 +135,37 @@ public class Entity : MonoBehaviour
             default:
             case GameManager.GameMode.Single:
             case GameManager.GameMode.Versus:
-                currentControlPlayer = currentTeam[^1];
+                currentControlPlayerView = currentTeam[^1];
                 break;
 
             case GameManager.GameMode.Coop:
-                currentControlPlayer = controlScheme == Player.ControlScheme.P1 
+                currentControlPlayerView = controlScheme == ControlScheme.P1 
                     ? currentTeam[^1] 
                     : currentTeam[^2];
                 break;
         }
         GameInterface.Interface.EventSystem.Publish(
-            new OnControlSwitchEvent(-1, currentControlPlayer.playerId, controlScheme)
+            new OnControlSwitchEvent(-1, currentControlPlayerView.playerId, controlScheme)
         );
-        
     }
     
-    private void SubscribeGlobalInputs()
-    {
-        GameInput.Instance.OnSwapAction += PlayerOnOnSwap;
-        GameInput.Instance.OnShootAction += OnShootInput;
-        GameInput.Instance.OnShortPassAction += OnPassInput;
-        GameInput.Instance.OnLongPassAction += OnPassInput;
-        GameInput.Instance.OnIncesivePassAction += OnPassInput;
-        GameInput.Instance.OnShootCancelAction+= OnShootCancel;
-    }
     public void OnDestroy() {
         GameInterface.Interface.EventSystem.Unsubscribe<PlayerBecomesCarrierEvent>(OnPlayerBecomesCarrier);
         GameInterface.Interface.EventSystem.Unsubscribe<OnSquadsReadyEvent>(OnTeamsReady);
-        GameInput.Instance.OnSwapAction -= PlayerOnOnSwap;
-        GameInput.Instance.OnShootAction -= OnShootInput;
-        GameInput.Instance.OnShortPassAction -= OnPassInput;
-        GameInput.Instance.OnLongPassAction -= OnPassInput;
-        GameInput.Instance.OnIncesivePassAction -= OnPassInput;
-        GameInput.Instance.OnShootCancelAction+= OnShootCancel;
     }
     private void PlayerOnOnSwap(object sender, EventArgs e)
     {
-        if (currentControlPlayer.HasBall()) return;
-        Player closestCpuToBall = null;
+        if (currentControlPlayerView.HasBall()) return;
+        PlayerView closestCpuToBall = null;
         float closestDist = float.MaxValue;
 
         foreach (var p in currentTeam)
         {
-            if (p.controlScheme != Player.ControlScheme.CPU || 
-                p.role == Player.Role.GOALIE ||
-                p == currentControlPlayer)
+            if (p.controlScheme != ControlScheme.CPU || 
+                p.role == Role.GOALIE ||
+                p == currentControlPlayerView)
                 continue;
-            float dist = (p.transform.position - ball.transform.position).sqrMagnitude;
+            float dist = (p.transform.position - ballView.transform.position).sqrMagnitude;
             if (dist < closestDist)
             {
                 closestDist = dist;
@@ -189,7 +175,7 @@ public class Entity : MonoBehaviour
 
         if (closestCpuToBall == null) return;
 
-        float senderDist = (currentControlPlayer.transform.position - ball.transform.position).sqrMagnitude;
+        float senderDist = (currentControlPlayerView.transform.position - ballView.transform.position).sqrMagnitude;
 
         if (closestDist < senderDist) {
             SwitchControlTo(closestCpuToBall);
@@ -197,17 +183,17 @@ public class Entity : MonoBehaviour
     }
     private void OnShootInput(object sender, EventArgs e)
     {   
-        currentControlPlayer?.currentState?.OnShoot();
+        currentControlPlayerView?.CurrentViewState?.OnShoot();
     }
     private void OnPassInput(object sender, EventArgs e) {
         var passType = GameInput.Instance.LocalPlayerInputType;
-        currentControlPlayer?.currentState?.OnPass(passType);
+        currentControlPlayerView?.CurrentViewState?.OnPass(passType);
         
         // kickoff signal for GameStateKickoff
         GameInterface.Interface.EventSystem.Publish(new EntityForGameKickoffEvent(playerId));
     }
     private void OnShootCancel(object sender, EventArgs e) {
-        currentControlPlayer?.currentState?.OnShootCancel();
+        currentControlPlayerView?.CurrentViewState?.OnShootCancel();
     }
 
 

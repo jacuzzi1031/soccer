@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PlayerAnimationOnComplete : MonoBehaviour
 {   
-    [SerializeField] private Player player;
+    [SerializeField] private PlayerView playerView;
     public void OnAnimationComplete()
     {
-            if(player != null)
-                player.OnAnimationComplete();
+            if(playerView != null)
+                playerView.OnAnimationComplete();
     }
 }
