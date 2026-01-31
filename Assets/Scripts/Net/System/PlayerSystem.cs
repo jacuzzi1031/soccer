@@ -13,12 +13,16 @@ public class PlayerSystem:ISimulationSystem
     private List<PlayerSim> teamAway;
     private int weightCacheIntervalFrames;
     private const float DURATION_WEIGHT_CACHE = 0.2f;
+    private const int FP = 1000;
     private float lastCacheRefreshFrame = 0f;
     private bool isCheckingForKickoffReadiness=false;
     public InputBuffer InputBuffer;
-    private BallSim _ball;
-    private MatchSystem _match;
     public ControlContext _control;
+	public SimEventBus _eventBus;
+	public PlayerSystem(SimEventBus eventBus) {
+        _eventBus = eventBus;
+    }
+
     public void RegisterTeams(
         List<PlayerSim> home,
         List<PlayerSim> away)
@@ -27,17 +31,13 @@ public class PlayerSystem:ISimulationSystem
         teamAway = away;
         weightCacheIntervalFrames=Mathf.RoundToInt(SimulationDriver.FRAME_DT * DURATION_WEIGHT_CACHE);
     }
-
-    public void OnTeamResetEvent() {
-        isCheckingForKickoffReadiness = true;
-    }
-    public void Tick(int frame)
+    public void Tick(ISimulationContext context)
     {
         if (lastCacheRefreshFrame < 0 ||
-            frame - lastCacheRefreshFrame >= weightCacheIntervalFrames)
+            context.Frame - lastCacheRefreshFrame >= weightCacheIntervalFrames)
         {
-            lastCacheRefreshFrame = frame;
-            SetOnDutyWeights();
+            lastCacheRefreshFrame = context.Frame;
+            SetOnDutyWeights(context.BallPosition);
         }
         if (isCheckingForKickoffReadiness)
         {
@@ -57,7 +57,6 @@ public class PlayerSystem:ISimulationSystem
             }
         }
         isCheckingForKickoffReadiness = false;
-        _match.AllReady();
         ResetControlSchemesSim();
     }
 
@@ -75,9 +74,13 @@ public class PlayerSystem:ISimulationSystem
         if (_control.AwayOwnerId != -1) {
             teamAway[^1].controlScheme = ControlScheme.P2;
         }
+        _eventBus.Publish(new ControllerChangedSignal
+        {
+            HomePlayerId = _control.HomeOwnerId != -1?teamHome[^1].playerId:-1,
+            AwayPlayerId = _control.AwayOwnerId != -1?teamAway[^1].playerId:-1
+        });
     }
-
-    private void SetOnDutyWeights() {
+    private void SetOnDutyWeights(Vector2 ballPosition) {
         List<List<PlayerSim>> squads = new List<List<PlayerSim>> { teamHome, teamAway };
 
         foreach (var squad in squads)
@@ -94,8 +97,8 @@ public class PlayerSystem:ISimulationSystem
             }
             cpuPlayers.Sort((p1, p2) =>
             {
-                float d1 = (p1.playerPosition - (Vector2)_ball.Position).sqrMagnitude;
-                float d2 = (p2.playerPosition - (Vector2)_ball.Position).sqrMagnitude;
+                float d1 = (p1.playerPosition - ballPosition).sqrMagnitude;
+                float d2 = (p2.playerPosition - ballPosition).sqrMagnitude;
 
                 int cmp = d1.CompareTo(d2);
                 if (cmp != 0)
@@ -103,31 +106,18 @@ public class PlayerSystem:ISimulationSystem
                 //tie-breaker = 当主要排序条件“相等或几乎相等”时，用一个“永远一致的次级规则”来打破平局。
                 return p1.playerId.CompareTo(p2.playerId);
             });
-            
+
+
             for (int i = 0; i < cpuPlayers.Count; i++)
             {
-                cpuPlayers[i].weightOnDutySteering = 1f - Ease((float)i / 10f);
+                int x = i * FP / 10;              // 0 ~ 1000
+                int eased = (x * x) / FP;         // bias = 2
+                int weight = FP - eased;          // 1 - ease
+
+                cpuPlayers[i].weightOnDutySteering = weight;
             }
         }
     }
-    float Ease(float x)
-    {
-        // return Mathf.Pow(x, bias); 任何“非四则运算”的浮点函数，都是不安全的
-        return x * x;
-    }
-    private void ResetControlSchemes() {
-        for (int i = 0; i < teamHome.Count; i++)
-        {
-            teamHome[i].SetControlScheme(ControlScheme.CPU);
-        }
-
-        for (int i = 0; i < teamAway.Count; i++)
-        {
-            teamAway[i].SetControlScheme(ControlScheme.CPU);
-        }
-        GameInterface.Interface.EventSystem.Publish(new OnSquadsReadyEvent());
-    }
-
     public void SetInputBuffer(InputBuffer inputBuffer) {
         this.InputBuffer = inputBuffer;
     }
@@ -135,10 +125,12 @@ public class PlayerSystem:ISimulationSystem
     {
     }
 
-    public void InjectAttribute(BallSim ballSim,MatchSystem matchSystem,ControlContext controlContext) {
-        _ball=ballSim;
-        _match = matchSystem;
+    public void InjectControlContext(ControlContext controlContext) {
         _control=controlContext;
         ResetControlSchemesSim();
+    }
+
+    public void ResetTeams() {
+        isCheckingForKickoffReadiness = true;
     }
 }

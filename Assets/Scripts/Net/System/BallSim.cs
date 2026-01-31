@@ -10,17 +10,13 @@ public class BallSim:ISimulationSystem
     public BallSimState CurrentViewState;
     public BallSimStateFactory stateFactory;
     private bool _running;
-    
+    public SimEventBus _eventBus;
+    public int ownerId=-1;
 
-    public BallSim(Vector2 ContextSpawnPosition)
+    public BallSim(Vector2 ContextSpawnPosition,SimEventBus eventBus)
     {
         spawnPosition = ContextSpawnPosition;
-    }
-
-    public void Start()
-    {
-        if (_running) return;
-        _running = true;
+        _eventBus = eventBus;
         Position=spawnPosition;
     }
     public void SwitchState(BallStateId type, BallStateData data = null)
@@ -32,16 +28,18 @@ public class BallSim:ISimulationSystem
         CurrentViewState.OnEnter();
     }
 
+    public void Tick(ISimulationContext context) {
+        
+    }
+
     public void Stop()
     {
         if (!_running) return;
         _running = false;
     }
-    
 
-    public void Tick(int frame)
-    {
-        if (!_running) return;
-        
+    public void ResetBall() {
+        SwitchState(BallStateId.FREEFORM);
+        _eventBus.Publish(new BallResetSignal());
     }
 }

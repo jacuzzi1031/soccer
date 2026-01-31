@@ -1,15 +1,9 @@
+
 using System.Collections.Generic;
 using System.Data;
 using GameFrameSync;
 using UnityEngine;
 
-public enum SimulationState
-{
-    Idle,
-    WaitingForStart,
-    Running,
-    Stopped
-}
 
 public class SimulationDriver : MonoBehaviour
 {
@@ -19,12 +13,13 @@ public class SimulationDriver : MonoBehaviour
     float accumulator;
     int currentFrame;
 
-    SimulationState state = SimulationState.Idle;
+    
     readonly List<ISimulationSystem> systems = new();
     public InputBuffer InputBuffer { get; } = new InputBuffer();
 
     public int CurrentFrame => currentFrame;
-    public SimulationState State => state;
+    private SimulationContext simulationContext;
+    private SimulationState simulationState;
 
     void Awake()
     {
@@ -42,7 +37,6 @@ public class SimulationDriver : MonoBehaviour
         systems.Clear();
         accumulator = 0f;
         currentFrame = startFrame;
-        state = SimulationState.WaitingForStart;
     }
 
     public void SetSystems(List<ISimulationSystem> systems)
@@ -56,16 +50,10 @@ public class SimulationDriver : MonoBehaviour
 
     public void StartSimulation()
     {
-        state = SimulationState.Running;
     }
 
     public void StopMatch()
     {
-        if (state == SimulationState.Stopped)
-            return;
-
-        state = SimulationState.Stopped;
-
         foreach (var system in systems)
             system.Stop();
 
@@ -74,9 +62,6 @@ public class SimulationDriver : MonoBehaviour
 
     private void Update()
     {
-        if (state != SimulationState.Running)
-            return;
-
         accumulator += Time.deltaTime;
 
         while (accumulator >= FRAME_DT)
@@ -88,9 +73,11 @@ public class SimulationDriver : MonoBehaviour
     private void StepSimulation()
     {
         InputBuffer.ConsumeFrame(currentFrame, DispatchCommand);
+        simulationContext.BuildFrom(simulationState, currentFrame, FRAME_DT);
+        
         for (int i = 0; i < systems.Count; i++)
         {
-            systems[i].Tick(currentFrame);
+            systems[i].Tick(simulationContext);
         }
         currentFrame++;
     }
@@ -112,6 +99,14 @@ public class SimulationDriver : MonoBehaviour
             case InputType.ShootRelease:
                 break;
         }
+    }
+
+    public void SetState(SimulationState simState) {
+        simulationState = simState;
+    }
+
+    public void SetContext(SimulationContext simContext) {
+        simulationContext = simContext;
     }
 }
 

@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MatchSystem:ISimulationSystem
+public class MatchController : MonoBehaviour
 {
     public Match currentMatch;
     // private const float DURATION_GAME_SEC = 2f;
     private const float DURATION_GAME_SEC = 2 * 60f;
-    
+    private SimEventBus _eventBus;
+    private SimulationFacade _simulation;
     public enum State
     {
         IN_PLAY,
@@ -23,9 +24,38 @@ public class MatchSystem:ISimulationSystem
     private GameStateFactory _gameStateFactory=new GameStateFactory();
     public float timeLeft;
 
-    public MatchSystem(string countryHome, string CountryAway) {
+    public MatchController(SimulationFacade simulation,SimEventBus EventBus,string countryHome, string CountryAway) {
         currentMatch=new Match(countryHome,CountryAway);
+        _eventBus = EventBus;
+        _simulation = simulation;
+        SubscribeSimSignal();
+        
         StartGame();
+    }
+
+    private void SubscribeSimSignal() {
+        _eventBus.Subscribe<ControllerChangedSignal>(OnControllerChanged);
+        _eventBus.Subscribe<BallResetSignal>(OnBallReset);
+    }
+
+    private void OnBallReset(BallResetSignal obj) {
+        Invoker.Instance.DelegateList.Add(() =>
+        {
+            GameInterface.Interface.EventSystem.Publish(
+                new BallResetEvent()
+            );
+        });
+    }
+
+    void OnControllerChanged(ControllerChangedSignal s)
+    {
+        //不只是顺序，而是「确定性边界 + 执行域隔离」
+        Invoker.Instance.DelegateList.Add(() =>
+        {
+            GameInterface.Interface.EventSystem.Publish(
+                new SetControllerEvent(s.HomePlayerId, s.AwayPlayerId)
+            );
+        });
     }
 
     public void StartGame()
@@ -74,5 +104,9 @@ public class MatchSystem:ISimulationSystem
             
             GameInterface.Interface.EventSystem.Publish(new OnKickoffReadyEvent());
         });
+    }
+
+    public void RequestReset() {
+        _simulation.ResetTeams();
     }
 }

@@ -32,17 +32,22 @@ public class GameManager
         currentGameMode = gameMode;
     }
     
-    public MatchSystem MatchSystem { get; private set; }
+    public MatchController MatchController { get; private set; }
     public PlayerSystem PlayerSystem { get; private set; }
     public BallSim BallSim { get; private set; }
+    public SimEventBus EventBus;
+    public SimulationFacade SimulationFacade;
+
     public void StartMatch(BallView ballView)
     {
-        ControlContext controlContext =PrepareControlContext(GameInterface.Interface.RoomManager.RoomPlayerList);
-        MatchSystem  = new MatchSystem(playerSetup[0], playerSetup[1]);
-
-        BallSim = new BallSim(ballView.spawnPosition);
-        ballView.InjectSim(BallSim);
+        EventBus = new SimEventBus();
         
+        var simState = new SimulationState();
+
+
+        BallSim = new BallSim(ballView.spawnPosition,EventBus);
+        ballView.InjectSim(BallSim);
+        simState.Ball = BallSim;
         /* 正确的方式创建是GameManager
          * 先获取PlayerManager中inspector的引用（如Spawn/kickoffposition）
          *  然后PlayerSystem 注入依赖initDataList/List<PlayerResource> playerResources ，创建并返回HomeSims/AwaySims
@@ -50,17 +55,25 @@ public class GameManager
          */
         
         
-        PlayerSystem = new PlayerSystem();
+        PlayerSystem = new PlayerSystem(EventBus);
 
-        PlayerManager.Instance.InitializeSquads(
-            (home, away) => { PlayerSystem.RegisterTeams(home, away); }
+        PlayerManager.Instance.InitializeSquads((home, away) => {
+                PlayerSystem.RegisterTeams(home, away);
+                simState.Players.AddRange(home);
+                simState.Players.AddRange(away);
+            }
         );  
-        PlayerSystem.InjectAttribute(BallSim,MatchSystem,controlContext);
+        ControlContext controlContext =PrepareControlContext(GameInterface.Interface.RoomManager.RoomPlayerList);
+        PlayerSystem.InjectControlContext(controlContext);
 
-
+        SimulationFacade = new SimulationFacade(PlayerSystem, BallSim);
+        MatchController  = new MatchController(SimulationFacade,EventBus,playerSetup[0], playerSetup[1]);
+        
+        var simulationContext = new SimulationContext();
+        SimulationDriver.Instance.SetState(simState);
+        SimulationDriver.Instance.SetContext(simulationContext);
         var systems = new List<ISimulationSystem>
         {
-            MatchSystem,
             PlayerSystem,
             BallSim
         };
@@ -102,7 +115,7 @@ public class GameManager
         GameInterface.Interface.SceneLoader
             .LoadScene(Scene.MainMenuScene);
 
-        MatchSystem  = null;
+        MatchController  = null;
         PlayerSystem = null;
         BallSim   = null;
     }

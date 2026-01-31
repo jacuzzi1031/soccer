@@ -27,23 +27,23 @@ public class GameStateInPlay : GameState
         if (_transitionQueued)
             return;
         
-        System.timeLeft -=SimulationDriver.FRAME_DT;
+        Controller.timeLeft -=SimulationDriver.FRAME_DT;
         
-        if (!System.IsTimeUp())
+        if (!Controller.IsTimeUp())
             return;
 
         _transitionQueued = true;
         
         Invoker.Instance.DelegateList.Add(() => {
-            if (System.IsTimeUp())
+            if (Controller.IsTimeUp())
             {
-                if (System.currentMatch.IsTied())
+                if (Controller.currentMatch.IsTied())
                 {
-                    TransitionState(MatchSystem.State.OVERTIME);
+                    TransitionState(MatchController.State.OVERTIME);
                 }
                 else
                 {
-                    TransitionState(MatchSystem.State.GAMEOVER);
+                    TransitionState(MatchController.State.GAMEOVER);
                 }
             }
         });
@@ -51,7 +51,7 @@ public class GameStateInPlay : GameState
 
     private void OnTeamScored(OnTeamScoredEvent obj) {
         Invoker.Instance.DelegateList.Add(() => {
-            TransitionState(MatchSystem.State.SCORED, GameStateData.Build().SetCountryScoredOn(obj.CountryScoredOn));
+            TransitionState(MatchController.State.SCORED, GameStateData.Build().SetCountryScoredOn(obj.CountryScoredOn));
         });
     }
 }

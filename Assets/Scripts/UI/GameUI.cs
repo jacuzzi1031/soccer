@@ -93,7 +93,7 @@ public class GameUI : MonoBehaviour
 
     private void UpdateScore()
     {
-        scoreText.text = GetScoreText(GameInterface.Interface.GameManager.MatchSystem.currentMatch);
+        scoreText.text = GetScoreText(GameInterface.Interface.GameManager.MatchController.currentMatch);
     }
     public string GetScoreText(Match match)
     {   
@@ -103,21 +103,21 @@ public class GameUI : MonoBehaviour
     private void UpdateFlags()
     {
         homeFlagImage.sprite =
-            GetSprite(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryHome);
+            GetSprite(GameInterface.Interface.GameManager.MatchController.currentMatch.countryHome);
 
         awayFlagImage.sprite =
-            GetSprite(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway);
+            GetSprite(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway);
     }
 
     private void UpdateClock()
     {
-        if (GameInterface.Interface.GameManager.MatchSystem.timeLeft < 0)
+        if (GameInterface.Interface.GameManager.MatchController.timeLeft < 0)
             timeText.color = Color.yellow;
         else {
             timeText.color = Color.white;
         }
 
-        timeText.text = GetTimeText(GameInterface.Interface.GameManager.MatchSystem.timeLeft);
+        timeText.text = GetTimeText(GameInterface.Interface.GameManager.MatchController.timeLeft);
     }
     public static string GetTimeText(float timeLeft)
     {
@@ -148,11 +148,11 @@ public class GameUI : MonoBehaviour
 
     private void OnScoreChanged(OnScoreChangedEvent obj)
     {
-        if (!GameInterface.Interface.GameManager.MatchSystem.IsTimeUp())
+        if (!GameInterface.Interface.GameManager.MatchController.IsTimeUp())
         {
             goalScorerText.text = $"{lastBallCarrier} 进球!";
             scoreInfoText.text =
-                GetCurrentScoreInfo(GameInterface.Interface.GameManager.MatchSystem.currentMatch);
+                GetCurrentScoreInfo(GameInterface.Interface.GameManager.MatchController.currentMatch);
             animator.Play("GoalAppear");
         }
 
@@ -172,7 +172,7 @@ public class GameUI : MonoBehaviour
 
     private void OnTeamReset(OnTeamResetEvent obj)
     {
-        if (GameInterface.Interface.GameManager.MatchSystem.currentMatch.HasSomeoneScored())
+        if (GameInterface.Interface.GameManager.MatchController.currentMatch.HasSomeoneScored())
         {
             animator.Play("GoalHide");
         }
@@ -181,7 +181,7 @@ public class GameUI : MonoBehaviour
     private void OnGameOver(OnGameOverEvent obj)
     {
         scoreInfoText.text =
-            GetFinalScoreInfo(GameInterface.Interface.GameManager.MatchSystem.currentMatch);
+            GetFinalScoreInfo(GameInterface.Interface.GameManager.MatchController.currentMatch);
 
         animator.Play("GameOver");
     }

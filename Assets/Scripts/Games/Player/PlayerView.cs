@@ -144,7 +144,7 @@ public class PlayerView : MonoBehaviour {
          }
          tackleEmitterArea.enabled = false;
          spawnPosition=transform.position;
-         Vector2 initialPosition=country==GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryHome?KickoffPosition:spawnPosition;
+         Vector2 initialPosition=country==GameInterface.Interface.GameManager.MatchController.currentMatch.countryHome?KickoffPosition:spawnPosition;
          SwitchViewState(State.RESETING, PlayerStateData.Build().SetResetPosition(initialPosition));
 
          

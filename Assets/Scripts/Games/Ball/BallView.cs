@@ -56,7 +56,7 @@ public class BallView : MonoBehaviour
         spawnPosition = transform.position;
     }
     private void OnEnable() {
-        GameInterface.Interface.EventSystem.Subscribe<OnTeamResetEvent>(OnTeamResetEvent);
+        GameInterface.Interface.EventSystem.Subscribe<BallResetEvent>(OnBallReset);
         GameInterface.Interface.EventSystem.Subscribe<OnKickoffStartedEvent>(OnKickoffStarted);
     }
     private void OnDestroy() {
@@ -64,14 +64,15 @@ public class BallView : MonoBehaviour
         playerDetectArea.OnStay -= PlayerDetectAreaOnOnEnter;
         playerProximityArea.OnTriggered-= PlayerProximityAreaOnOnTriggered;
         playerProximityArea.OnTriggerExit-= PlayerProximityAreaOnOnTriggerExit;
-        GameInterface.Interface.EventSystem.Unsubscribe<OnTeamResetEvent>(OnTeamResetEvent);
+        
+        GameInterface.Interface.EventSystem.Unsubscribe<BallResetEvent>(OnBallReset);
         GameInterface.Interface.EventSystem.Unsubscribe<OnKickoffStartedEvent>(OnKickoffStarted);
     }
     private void OnKickoffStarted(OnKickoffStartedEvent obj) {
         passTo(spawnPosition + Vector2.down * KICKOFF_PASS_DISTANCE, true, null);
     }
 
-    private void OnTeamResetEvent(OnTeamResetEvent obj) {
+    private void OnBallReset(BallResetEvent obj) {
         transform.position = spawnPosition;
         rb.velocity = Vector2.zero;
         height=0.0f;

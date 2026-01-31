@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ISimulationSystem
 {
-    void Tick(int frame);
+    void Tick(ISimulationContext context);
     void Stop();
 
     void SetInputBuffer(InputBuffer inputBuffer) {

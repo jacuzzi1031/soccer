@@ -11,7 +11,7 @@ public class GameStateScored : GameState
         );
     private int celebrationFrames;
     public override void OnEnter() {
-        System.IncreaseScore(stateData.CountryScoredOn);
+        Controller.IncreaseScore(stateData.CountryScoredOn);
         celebrationFrames = 0;
         MusicManager.Instance.Play(
             MusicManager.Instance.Refs.WIN
@@ -32,7 +32,7 @@ public class GameStateScored : GameState
 
         Invoker.Instance.DelegateList.Add(() =>
         {
-            TransitionState(MatchSystem.State.RESET, stateData);
+            TransitionState(MatchController.State.RESET, stateData);
         });
     }
 }

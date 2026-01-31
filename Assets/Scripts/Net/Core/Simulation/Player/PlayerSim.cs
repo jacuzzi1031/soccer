@@ -6,7 +6,7 @@ public class PlayerSim {
     public int playerId;
     public PlayerSimStateFactory stateFactory;
     public ControlScheme controlScheme;
-
+    public Facing facing;
     public Vector2 playerPosition;
     public Vector2 kickoffPosition;
     public Vector2 Velocity;
@@ -42,12 +42,8 @@ public class PlayerSim {
 
     public void OnTakeTackleHit(Vector2 dir)
     {
-        if (!HasBall()) return;
+        // if (!HasBall()) return; 只有carrierSnapshot
         SwitchState(PlayerStateId.HURT, PlayerStateData.Build().SetMoveDir(dir));
-    }
-    public bool HasBall() {
-        // return ball.carrier == this;
-        return true;
     }
     public void SwitchState(PlayerStateId id, PlayerStateData data = null)
     {

@@ -24,24 +24,43 @@ public class PlayerManager : MonoBehaviour
     private Dictionary<int, PlayerView> playersById = new Dictionary<int, PlayerView>();
     public static PlayerManager Instance{get; private set;}
     private int nextPlayerId = 0;
+    private int currentP1Id = -1;
+    private int currentP2Id = -1;
     private void Awake() {
         Instance = this;
+    }
+    private void OnDisable() {
+        GameInterface.Interface.EventSystem.Unsubscribe<PlayStyleShowEvent>(OnPlayStyleShowEvent);
+        GameInterface.Interface.EventSystem.Unsubscribe<OnControlSwitchEvent>(OnPlayStyleShowEvent);
+
+        
+        GameInterface.Interface.EventSystem.Unsubscribe<SetControllerEvent>(OnSimSetControll);
     }
     private void OnEnable() {
         GameInterface.Interface.EventSystem.Subscribe<PlayStyleShowEvent>(OnPlayStyleShowEvent);
         GameInterface.Interface.EventSystem.Subscribe<OnControlSwitchEvent>(OnPlayStyleShowEvent);
-        GameInterface.Interface.EventSystem.Subscribe<OnTeamResetEvent>(OnTeamResetEvent);
+        
+        
+        GameInterface.Interface.EventSystem.Subscribe<SetControllerEvent>(OnSimSetControll);
     }
 
-    private void OnDisable() {
-        GameInterface.Interface.EventSystem.Unsubscribe<PlayStyleShowEvent>(OnPlayStyleShowEvent);
-        GameInterface.Interface.EventSystem.Unsubscribe<OnControlSwitchEvent>(OnPlayStyleShowEvent);
-        GameInterface.Interface.EventSystem.Unsubscribe<OnTeamResetEvent>(OnTeamResetEvent);
-    }
-    
+    private void OnSimSetControll(SetControllerEvent obj) {
+        if (obj.P1Id!=-1&&currentP1Id != obj.P1Id)
+        {
+            if (squadHome[currentP1Id].controlScheme!=ControlScheme.CPU)
+                squadHome[currentP1Id].SetControlScheme(ControlScheme.CPU);
 
-    private void OnTeamResetEvent(OnTeamResetEvent obj) {
-        GameInterface.Interface.GameManager.PlayerSystem.OnTeamResetEvent();
+            currentP1Id = obj.P1Id;
+            squadHome[currentP1Id].SetControlScheme(ControlScheme.P1);
+        }
+        if (obj.P2Id!=-1&&currentP2Id != obj.P2Id)
+        {
+            if (squadHome[currentP2Id].controlScheme!=ControlScheme.CPU)
+                squadHome[currentP2Id].SetControlScheme(ControlScheme.CPU);
+
+            currentP2Id = obj.P1Id;
+            squadHome[currentP2Id].SetControlScheme(ControlScheme.P2);
+        }
     }
     private void OnPlayStyleShowEvent(OnControlSwitchEvent e) {
         if (e.OldPlayerId != -1)
@@ -59,9 +78,9 @@ public class PlayerManager : MonoBehaviour
     public void InitializeSquads(Action<List<PlayerSim>, List<PlayerSim>> onTeamsReady)
     {
         // 创建 Home 和 Away 球员并初始化 PlayerView 和 PlayerSim
-        List<PlayerSim> PlayerSimsHome = SpawnPlayerViewsAndSims(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryHome, goalHome, true);
-        goalHome.initialize(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryHome);
-        goalAway.initialize(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway);
+        List<PlayerSim> PlayerSimsHome = SpawnPlayerViewsAndSims(GameInterface.Interface.GameManager.MatchController.currentMatch.countryHome, goalHome, true);
+        goalHome.initialize(GameInterface.Interface.GameManager.MatchController.currentMatch.countryHome);
+        goalAway.initialize(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway);
 
         spawns.rotation = Quaternion.Euler(0, 180, 0);
         kickOffs.rotation = Quaternion.Euler(0, 180, 0);
@@ -70,33 +89,22 @@ public class PlayerManager : MonoBehaviour
         GameManager.MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
         if (currentMatchType != GameManager.MatchType.Training && currentMatchType != GameManager.MatchType.TrainingWithEnemy)
         {
-            PlayerSimsAway = SpawnPlayerViewsAndSims(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway, goalAway, false);
+            PlayerSimsAway = SpawnPlayerViewsAndSims(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway, goalAway, false);
         }
         else if (currentMatchType == GameManager.MatchType.Training)
         {
-            PlayerSimsAway=SpawnOpponentViewsAndSims(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway, goalAway, false, false);
+            PlayerSimsAway=SpawnOpponentViewsAndSims(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway, goalAway, false, false);
         }
         else
         {
             //TrainingWithEnemy
-            PlayerSimsAway=SpawnOpponentViewsAndSims(GameInterface.Interface.GameManager.MatchSystem.currentMatch.countryAway, goalAway, true, false);
+            PlayerSimsAway=SpawnOpponentViewsAndSims(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway, goalAway, true, false);
         }
         // 回调 PlayerSim 列表
         onTeamsReady?.Invoke(PlayerSimsHome, PlayerSimsAway);
     }
     public IReadOnlyList<PlayerView> GetSquad(bool isHome) {
         return isHome?squadHome:squadAway;
-    }
-
-
-    public void ResetControlSchemes() {
-        foreach (var player in squadHome) {
-            player.SetControlScheme(ControlScheme.CPU);
-        }
-        foreach (var player in squadAway) {
-            player.SetControlScheme(ControlScheme.CPU);
-        }
-        GameInterface.Interface.EventSystem.Publish(new OnSquadsReadyEvent());
     }
     private void OnPlayStyleShowEvent(PlayStyleShowEvent obj) {
         if (playersById.TryGetValue(obj.playerId, out var player))

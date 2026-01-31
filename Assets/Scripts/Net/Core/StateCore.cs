@@ -43,3 +43,7 @@ public class ControlContext
     public int HomeControlledPlayerId;
     public int AwayControlledPlayerId;
 }
+public     enum Facing{
+    Left,
+    Right
+};

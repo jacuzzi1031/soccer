@@ -8,8 +8,8 @@ public class GameStateKickoff : GameState {
     public override void OnEnter() {
         validEntityIdSet.Clear();
         string countryStarting = stateData.CountryScoredOn;
-        if (countryStarting == null) countryStarting = System.currentMatch.countryHome;
-        bool ScoreIsHome=System.currentMatch.countryHome==countryStarting?true:false;
+        if (countryStarting == null) countryStarting = Controller.currentMatch.countryHome;
+        bool ScoreIsHome=Controller.currentMatch.countryHome==countryStarting?true:false;
         List<int> entityIdListIsHome = EntityManager.Instance.GetEntityIdListIsHome(ScoreIsHome);
         
         validEntityIdSet = new HashSet<int>(entityIdListIsHome);
@@ -38,7 +38,7 @@ public class GameStateKickoff : GameState {
         _transitionQueued = true;
 
         Invoker.Instance.DelegateList.Add(() => {
-            TransitionState(MatchSystem.State.IN_PLAY);
+            TransitionState(MatchController.State.IN_PLAY);
             GameInterface.Interface.EventSystem.Publish(new OnKickoffStartedEvent());
         });
     }

@@ -6,6 +6,7 @@ public class GameStateReset : GameState
 {
     public override void OnEnter() {
         GameInterface.Interface.EventSystem.Publish(new OnTeamResetEvent());
+        Controller.RequestReset();
         GameInterface.Interface.EventSystem.Subscribe<OnKickoffReadyEvent>(OnKickoffReadyEvent);
         MusicManager.Instance.Play(
             MusicManager.Instance.Refs.GAMEPLAY
@@ -22,7 +23,7 @@ public class GameStateReset : GameState
         _transitionQueued = true;
 
         Invoker.Instance.DelegateList.Add(() => {
-            TransitionState(MatchSystem.State.KICKOFF,stateData);
+            TransitionState(MatchController.State.KICKOFF,stateData);
         });
     }
 }

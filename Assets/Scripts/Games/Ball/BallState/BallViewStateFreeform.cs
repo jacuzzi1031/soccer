@@ -27,8 +27,6 @@
         public override void _Update() {
             SetBallAnimationFromVelocity();
             SetLockDuration();
-
-            
         }
         private void SetLockDuration() {
             if (!CanCarried&&LockDurationCheckTimer < stateData.LockDuration) {

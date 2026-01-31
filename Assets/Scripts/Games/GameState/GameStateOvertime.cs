@@ -20,8 +20,8 @@ public class GameStateOvertime : GameState
             return;
         _transitionQueued = true;
         Invoker.Instance.DelegateList.Add(() => {
-            System.IncreaseScore(obj.CountryScoredOn);
-            TransitionState(MatchSystem.State.GAMEOVER);
+            Controller.IncreaseScore(obj.CountryScoredOn);
+            TransitionState(MatchController.State.GAMEOVER);
         });
     }
 }
