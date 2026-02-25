@@ -38,6 +38,8 @@ public class GameUI : MonoBehaviour
             { "USA", "美国队" },
             { "CANADA", "加拿大队" }
         };
+    
+    private bool _matchStarted = false;
     public static string ToChinese(string winner)
     {
         if (string.IsNullOrEmpty(winner))
@@ -49,9 +51,6 @@ public class GameUI : MonoBehaviour
     }
     private void Awake() {
         LoadCountrySprite();
-        UpdateScore();
-        UpdateFlags();
-        UpdateClock();
         playerText.text = "";
     }
 
@@ -61,6 +60,15 @@ public class GameUI : MonoBehaviour
         GameInterface.Interface.EventSystem.Subscribe<OnScoreChangedEvent>(OnScoreChanged);
         GameInterface.Interface.EventSystem.Subscribe<OnTeamResetEvent>(OnTeamReset);
         GameInterface.Interface.EventSystem.Subscribe<OnGameOverEvent>(OnGameOver);
+        
+        GameInterface.Interface.GameManager.OnStartMatch+= GameManagerOnOnStartMatch;
+    }
+
+    private void GameManagerOnOnStartMatch() {
+        _matchStarted = true;
+        UpdateScore();
+        UpdateFlags();
+        UpdateClock();
     }
 
     private void OnDestroy()
@@ -74,6 +82,8 @@ public class GameUI : MonoBehaviour
 
     private void Update()
     {
+        if (!_matchStarted)
+            return;
         UpdateClock();
     }
     void LoadCountrySprite()

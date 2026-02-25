@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class BallSimStateFactory
 {
-    private readonly Dictionary<BallStateId, Func<BallSimState>> _stateFactories =
-        new Dictionary<BallStateId, Func<BallSimState>>
+    private readonly Dictionary<BallState, Func<BallSimState>> _stateFactories =
+        new Dictionary<BallState, Func<BallSimState>>
         {
-            { BallStateId.CARRIED, () => new BallSimStateCarried() },
-            { BallStateId.FREEFORM, () => new BallSimStateFreeform() },
-            { BallStateId.SHOT, () => new BallSimStateShot() },
+            { BallState.CARRIED, () => new BallSimStateCarried() },
+            { BallState.FREEFORM, () => new BallSimStateFreeform() },
+            { BallState.SHOT, () => new BallSimStateShot() },
         };
 
-    public BallSimState GetFreshState(BallStateId ballStateId)
+    public BallSimState GetFreshState(BallState ballState)
     {
-        if (_stateFactories.TryGetValue(ballStateId, out var factory))
+        if (_stateFactories.TryGetValue(ballState, out var factory))
             return factory();
 
-        throw new ArgumentException($"Ball state not registered: {ballStateId}");
+        throw new ArgumentException($"Ball state not registered: {ballState}");
     }
 }

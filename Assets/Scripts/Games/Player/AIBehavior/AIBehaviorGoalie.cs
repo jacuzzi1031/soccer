@@ -8,7 +8,7 @@ public class AIBehaviorGoalie : AIBehavior
     public override void PerformAIDecisions() {
         if (BallView.IsHeadedForScoringArea(PlayerView.ownGoal.GetScoringArea()))
         {
-            PlayerView.SwitchViewState(PlayerView.State.DIVING);
+            // PlayerView.SwitchViewState(PlayerView.State.DIVING);
         }
     }
 

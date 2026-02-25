@@ -4,18 +4,11 @@ using UnityEngine;
 
 public class SimulationFacade
 {
-    public PlayerSystem _playerSystem { get; }
-    public BallSim _ballSim { get; }
+    private readonly CommandBuffer _commandBuffer;
     public SimulationFacade(
-        PlayerSystem playerSystem,
-        BallSim ballSim)
+        CommandBuffer commandBuffer)
     {
-        _playerSystem = playerSystem;
-        _ballSim = ballSim;
+        _commandBuffer=commandBuffer;
     }
-    public void ResetTeams()
-    {
-        _playerSystem.ResetTeams();
-        _ballSim.ResetBall();
-    }
+
 }

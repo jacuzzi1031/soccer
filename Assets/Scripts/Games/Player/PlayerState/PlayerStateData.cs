@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class PlayerStateData
 {
-    public GameFrameSync.InputType InputType { get; private set; }
+    public int InputType { get; private set; }
     public Vector2 ResetPosition { get; private set; }
     public Vector2 MoveDir { get; private set; }
     public Vector2 ShotDirection { get; private set; }
     public float ShotPower { get; private set; }
     public bool isPowerShot { get; private set; }
+    public  bool IsInstant { get; private set; }
 
     public static PlayerStateData Build()
     {
@@ -32,7 +33,7 @@ public class PlayerStateData
     }
 
 
-    public PlayerStateData SetInputType(GameFrameSync.InputType inputType)
+    public PlayerStateData SetInputType(int inputType)
     {
         InputType = inputType;
         return this;
@@ -46,6 +47,11 @@ public class PlayerStateData
     public PlayerStateData SetResetPosition(Vector2 position)
     {
         ResetPosition = position;
+        return this;
+    }
+
+    public PlayerStateData SetIsInstant(bool isInstant) {
+        IsInstant = isInstant;
         return this;
     }
 }

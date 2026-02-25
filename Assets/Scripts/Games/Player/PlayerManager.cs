@@ -24,21 +24,20 @@ public class PlayerManager : MonoBehaviour
     private Dictionary<int, PlayerView> playersById = new Dictionary<int, PlayerView>();
     public static PlayerManager Instance{get; private set;}
     private int nextPlayerId = 0;
-    private int currentP1Id = -1;
-    private int currentP2Id = -1;
+    private int currentP1Id = 0;
+    private int currentP2Id = 0;
     private void Awake() {
         Instance = this;
     }
     private void OnDisable() {
         GameInterface.Interface.EventSystem.Unsubscribe<PlayStyleShowEvent>(OnPlayStyleShowEvent);
-        GameInterface.Interface.EventSystem.Unsubscribe<OnControlSwitchEvent>(OnPlayStyleShowEvent);
+
 
         
         GameInterface.Interface.EventSystem.Unsubscribe<SetControllerEvent>(OnSimSetControll);
     }
     private void OnEnable() {
         GameInterface.Interface.EventSystem.Subscribe<PlayStyleShowEvent>(OnPlayStyleShowEvent);
-        GameInterface.Interface.EventSystem.Subscribe<OnControlSwitchEvent>(OnPlayStyleShowEvent);
         
         
         GameInterface.Interface.EventSystem.Subscribe<SetControllerEvent>(OnSimSetControll);
@@ -55,11 +54,11 @@ public class PlayerManager : MonoBehaviour
         }
         if (obj.P2Id!=-1&&currentP2Id != obj.P2Id)
         {
-            if (squadHome[currentP2Id].controlScheme!=ControlScheme.CPU)
-                squadHome[currentP2Id].SetControlScheme(ControlScheme.CPU);
+            if (squadAway[currentP2Id].controlScheme!=ControlScheme.CPU)
+                squadAway[currentP2Id].SetControlScheme(ControlScheme.CPU);
 
-            currentP2Id = obj.P1Id;
-            squadHome[currentP2Id].SetControlScheme(ControlScheme.P2);
+            currentP2Id = obj.P2Id;
+            squadAway[currentP2Id].SetControlScheme(ControlScheme.P2);
         }
     }
     private void OnPlayStyleShowEvent(OnControlSwitchEvent e) {
@@ -86,12 +85,12 @@ public class PlayerManager : MonoBehaviour
         kickOffs.rotation = Quaternion.Euler(0, 180, 0);
 
         List<PlayerSim> PlayerSimsAway;
-        GameManager.MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
-        if (currentMatchType != GameManager.MatchType.Training && currentMatchType != GameManager.MatchType.TrainingWithEnemy)
+        MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
+        if (currentMatchType != MatchType.Training && currentMatchType != MatchType.TrainingWithEnemy)
         {
             PlayerSimsAway = SpawnPlayerViewsAndSims(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway, goalAway, false);
         }
-        else if (currentMatchType == GameManager.MatchType.Training)
+        else if (currentMatchType == MatchType.Training)
         {
             PlayerSimsAway=SpawnOpponentViewsAndSims(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway, goalAway, false, false);
         }
@@ -109,7 +108,7 @@ public class PlayerManager : MonoBehaviour
     private void OnPlayStyleShowEvent(PlayStyleShowEvent obj) {
         if (playersById.TryGetValue(obj.playerId, out var player))
         {   
-            player.ShowPlayStyle(obj.sprite);
+            player.ShowPlayStyle(obj.playerState);
         }
     }
     public List<PlayerSim> SpawnPlayerViewsAndSims(string country, Goal ownGoal, bool isHome)
@@ -123,11 +122,11 @@ public class PlayerManager : MonoBehaviour
 
         switch (GameInterface.Interface.GameManager.currentMatchType)
         {
-            case GameManager.MatchType.Training:
+            case MatchType.Training:
                 kickoffParent = training.transform;
                 startIndex = 4;
                 break;
-            case GameManager.MatchType.TrainingWithEnemy:
+            case MatchType.TrainingWithEnemy:
                 kickoffParent = training.transform;
                 startIndex = 5;
                 break;
@@ -140,11 +139,11 @@ public class PlayerManager : MonoBehaviour
 
         for (int i = startIndex; i < playerResources.Count; i++)
         {
-            GameManager.MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
+            MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
             Vector2 playerPosition;
             Vector2 kickoffPosition;
             
-            if (currentMatchType != GameManager.MatchType.Training && currentMatchType != GameManager.MatchType.TrainingWithEnemy)
+            if (currentMatchType != MatchType.Training && currentMatchType != MatchType.TrainingWithEnemy)
             {
                 playerPosition = spawns.GetChild(i).position;
                 kickoffPosition = (i > 3)
@@ -159,14 +158,15 @@ public class PlayerManager : MonoBehaviour
 
             Goal targetGoal = (ownGoal == goalAway) ? goalHome : goalAway;
             PlayerResource playerData = playerResources[i];
-            
+            bool initialFacingRight =(targetGoal.transform.position.x - transform.position.x)>0;
             PlayerSim playerSim = new PlayerSim(
                 nextPlayerId,
                 playerData,
                 playerPosition,
                 kickoffPosition,
                 country,
-                isHome
+                isHome,
+                initialFacingRight
             );
             
             PlayerView playerView = SpawnPlayer(
@@ -205,13 +205,15 @@ public class PlayerManager : MonoBehaviour
             Goal targetGoal = (ownGoal == goalAway) ? goalHome : goalAway;
             PlayerResource playerData = playerResources[i];
             Vector2 kickoffPosition = spawnPosition;
+            bool initialFacingRight =(targetGoal.transform.position.x - transform.position.x)>0;
             PlayerSim playerSim = new PlayerSim(
                 nextPlayerId,
                 playerData,
                 spawnPosition,
                 kickoffPosition,
                 country,
-                isHome
+                isHome,
+                initialFacingRight
             );
             PlayerView playerView = SpawnPlayer(
                 spawnPosition,

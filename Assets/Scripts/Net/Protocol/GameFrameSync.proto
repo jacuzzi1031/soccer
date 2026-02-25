@@ -1,19 +1,6 @@
 syntax = "proto3";
 package GameFrameSync;
 
-enum InputType
-{
-  None = 0;
-  move=2;
-  Swap=3;
-  IncisivePass=4;
-  ShortPass=5;
-  LongPass=6;
-  SHOOT_PRESS=7;
-  SHOOT_RELEASE=8;
-  Pause=9;
-}
-
 enum MessageType
 {
   FrameSync = 0;
@@ -38,21 +25,18 @@ message ReqFrameInputData
 {
   int32 frameId = 1;
   int32 OwnerPlayerId = 2;
-  InputType inputType = 3;
+  int32 inputType = 3;
   Vector2D position = 4;
   Vector2D moveVector = 8;
-  int32 activeUnitIndex=9;
-  int32 commandIndex=10;
 }
 
 message ResFrameInputData
 {
   int32 frameId = 1;
   int32 OwnerPlayerId = 2;
-  InputType inputType = 3;
+  int32 inputType = 3;
+  Vector2D position = 4;
   Vector2D moveVector = 8;
-//  int32 activeUnitIndex=9;
-//  int32 commandIndex=10;
 }
 message Vector3D
 {

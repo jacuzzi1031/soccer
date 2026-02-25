@@ -47,10 +47,10 @@ public class RoomUI : MonoBehaviour
     {
         roomNameText.text = GameInterface.Interface.GameManager.currentMatchType switch
         {
-            GameManager.MatchType.Training           => "训练模式",
-            GameManager.MatchType.TrainingWithEnemy  => "对抗训练",
-            GameManager.MatchType.UltimateTeam       => "锦标赛",
-            _                                        => "未知模式"
+            MatchType.Training           => "训练模式",
+            MatchType.TrainingWithEnemy  => "对抗训练",
+            MatchType.UltimateTeam       => "锦标赛",
+            _                            => "未知模式"
         };
     }
     public void Start()
@@ -69,6 +69,10 @@ public class RoomUI : MonoBehaviour
         GameInput.Instance.OnShootAction+= ConfirmCountryFromKeyboard;
         _mRoomPlayerSelectCountryRequest = GameInterface.Interface.RequestManager.GetRequest<RoomPlayerSelectCountryRequest>();
         _mRoomPlayerConfirmCountryRequest = GameInterface.Interface.RequestManager.GetRequest<RoomPlayerConfirmCountryRequest>();
+    }
+
+    public void OnDestroy() {
+        GameInput.Instance.OnShootAction-= ConfirmCountryFromKeyboard;
     }
 
     void BuildGrid()
@@ -121,7 +125,7 @@ public class RoomUI : MonoBehaviour
         if(localIndex == index) return;
         _mRoomPlayerSelectCountryRequest.SendSelectCountryRequest(index, items[index].CountryName);
     }
-    private void ConfirmCountryFromKeyboard(object sender, EventArgs e) {
+    private void ConfirmCountryFromKeyboard() {
         _mRoomPlayerConfirmCountryRequest.SendRoomPlayerConfirmCountryRequest(items[localIndex].CountryName);
     }
     public void ConfirmCountryFromClick(string countryName) {
@@ -133,6 +137,7 @@ public class RoomUI : MonoBehaviour
         selector.Init(positionId);
         selectorDict.Add(positionId, selector);
         selector.MoveTo(items[0].transform);
+        Debug.Log("CreateSelector in RoomUI");
     }
 
     public void selectCpuCountry(string excludeCountry, Action<string> onSelected)

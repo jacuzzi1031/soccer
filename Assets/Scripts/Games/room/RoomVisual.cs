@@ -24,7 +24,6 @@ public class RoomVisual : MonoBehaviour {
         GameInterface.Interface.RoomManager.OnRoomPlayerSelectCountryChanged+= OnSelectCountryChanged;
         GameInterface.Interface.RoomManager.OnRoomPlayerCountryConfirmed += OnCountryConfirmed;
         SpawnRoomPlayers();
-
     }
     private void OnDestroy() {
         GameInterface.Interface.RoomManager.OnRoomPlayerQuit -= OnRoomPlayerQuit;
@@ -78,8 +77,7 @@ public class RoomVisual : MonoBehaviour {
     {
 
         int index = excludeSeatIndex == 0 ? 1 : 0;
-
-        RoomUI.Instance.CreateSelector(index);
+        
         RoomPlayer rp = SpawnRoomPlayer(index, "Bot");
         rp.SetComfirmed(true);
         RoomUI.Instance.selectCpuCountry(excludeCountry, country =>

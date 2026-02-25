@@ -10,15 +10,12 @@ public class GameStateKickoff : GameState {
         string countryStarting = stateData.CountryScoredOn;
         if (countryStarting == null) countryStarting = Controller.currentMatch.countryHome;
         bool ScoreIsHome=Controller.currentMatch.countryHome==countryStarting?true:false;
-        List<int> entityIdListIsHome = EntityManager.Instance.GetEntityIdListIsHome(ScoreIsHome);
+
         
-        validEntityIdSet = new HashSet<int>(entityIdListIsHome);
-        
-        GameManager.MatchType matchType = GameInterface.Interface.GameManager.currentMatchType;
+        MatchType matchType = GameInterface.Interface.GameManager.currentMatchType;
         GameManager.GameMode gameMode = GameInterface.Interface.GameManager.currentGameMode;
-        if (matchType == GameManager.MatchType.Training || matchType == GameManager.MatchType.TrainingWithEnemy
+        if (matchType == MatchType.Training || matchType == MatchType.TrainingWithEnemy
                                                         ||gameMode==GameManager.GameMode.Single) {
-            validEntityIdSet.Add(EntityManager.Instance.GetEntityByID());
         }
         
         GameInterface.Interface.EventSystem.Subscribe<EntityForGameKickoffEvent>(onKickoffEvent);

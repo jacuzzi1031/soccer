@@ -40,7 +40,15 @@ public class RequestManager : BaseManager
     }
     private void HandleServerResponse(MainPack pack)
     {
-        _mRequestDict[pack.ActionCode].HandleServerResponse(pack);
+        
+        if (_mRequestDict.TryGetValue(pack.ActionCode, out var request))
+        {
+            request.HandleServerResponse(pack);
+        }
+        else
+        {
+            Debug.LogWarning($"Unhandled ActionCode: {pack.ActionCode}");
+        }
     }
     // ReSharper disable Unity.PerformanceAnalysis
     public T GetRequest<T>() where T : BaseRequest

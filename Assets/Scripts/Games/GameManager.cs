@@ -1,16 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager
 {
-    public void OnInit()
-    {
+    public GameManager() {
     }
-    public enum MatchType {
-        Training,          //自由训练
-        TrainingWithEnemy,//对抗训练
-        UltimateTeam     //正式比赛
+    public void OnInit() {
+        currentMatchType = MatchType.Training;
     }
     public MatchType currentMatchType;
     public enum GameMode {
@@ -27,6 +26,7 @@ public class GameManager
     }
     public void SetMatchCountry(int RoomIndex, string Country) {
         playerSetup[RoomIndex] = Country;
+        Debug.Log("Country:"+Country);
     }
     public void SetGameMode(GameMode gameMode) {
         currentGameMode = gameMode;
@@ -35,51 +35,42 @@ public class GameManager
     public MatchController MatchController { get; private set; }
     public PlayerSystem PlayerSystem { get; private set; }
     public BallSim BallSim { get; private set; }
+    public MatchSystem MatchSystem { get; private set; }
     public SimEventBus EventBus;
     public SimulationFacade SimulationFacade;
+    public event Action OnStartMatch;
 
-    public void StartMatch(BallView ballView)
+    public void StartMatch(BallView ballView,List<LineSegment> lineSegments)
     {
         EventBus = new SimEventBus();
         
-        var simState = new SimulationState();
-
-
-        BallSim = new BallSim(ballView.spawnPosition,EventBus);
+        var commandBuffer = new CommandBuffer();
+        SimulationFacade = new SimulationFacade(commandBuffer);
+        MatchController  = new MatchController(SimulationFacade,EventBus,playerSetup[0], playerSetup[1]);
+        
+        ControlContext controlContext =PrepareControlContext(GameInterface.Interface.RoomManager.RoomPlayerList);
+        
+        MatchSystem = new MatchSystem(EventBus,commandBuffer,currentMatchType,controlContext);
+        BallSim = new BallSim(ballView.spawnPosition,EventBus,commandBuffer,lineSegments);
         ballView.InjectSim(BallSim);
-        simState.Ball = BallSim;
-        /* 正确的方式创建是GameManager
-         * 先获取PlayerManager中inspector的引用（如Spawn/kickoffposition）
-         *  然后PlayerSystem 注入依赖initDataList/List<PlayerResource> playerResources ，创建并返回HomeSims/AwaySims
-         * 然后HomeSims/AwaySims作为PlayerManager的参数创建绑定
-         */
         
-        
-        PlayerSystem = new PlayerSystem(EventBus);
+        PlayerSystem = new PlayerSystem(EventBus,commandBuffer,lineSegments);
 
         PlayerManager.Instance.InitializeSquads((home, away) => {
                 PlayerSystem.RegisterTeams(home, away);
-                simState.Players.AddRange(home);
-                simState.Players.AddRange(away);
             }
         );  
-        ControlContext controlContext =PrepareControlContext(GameInterface.Interface.RoomManager.RoomPlayerList);
+        
         PlayerSystem.InjectControlContext(controlContext);
 
-        SimulationFacade = new SimulationFacade(PlayerSystem, BallSim);
-        MatchController  = new MatchController(SimulationFacade,EventBus,playerSetup[0], playerSetup[1]);
-        
-        var simulationContext = new SimulationContext();
-        SimulationDriver.Instance.SetState(simState);
-        SimulationDriver.Instance.SetContext(simulationContext);
-        var systems = new List<ISimulationSystem>
-        {
-            PlayerSystem,
-            BallSim
-        };
-        SimulationDriver.Instance.SetSystems(systems);
 
+        var simModel = new SimulationModel(MatchSystem,PlayerSystem,BallSim);
+        var simulationContext = new SimulationContext(simModel);
+        SimulationDriver.Instance.SetAttribute(simModel,commandBuffer,EventBus,simulationContext,controlContext,
+            new List<ISimulationSystem> { MatchSystem,PlayerSystem, BallSim });
         SimulationDriver.Instance.StartSimulation();
+        
+        OnStartMatch?.Invoke();
     }
 
     public ControlContext PrepareControlContext(List<RoomPlayerInfo> roomPlayerInfoList)
@@ -104,10 +95,7 @@ public class GameManager
         }
         return controlContext;
     }
-
-    private void Start() {
-        
-    }
+    
     public void EndMatch()
     {
         SimulationDriver.Instance.StopMatch();

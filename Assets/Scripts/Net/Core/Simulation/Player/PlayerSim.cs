@@ -1,57 +1,70 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerSim {
     public int playerId;
-    public PlayerSimStateFactory stateFactory;
+    public PlayerSimStateFactory stateFactory=new PlayerSimStateFactory();
     public ControlScheme controlScheme;
-    public Facing facing;
-    public Vector2 playerPosition;
+    public bool facingRight=true;
+    public Vector2 teamResetPosition;
     public Vector2 kickoffPosition;
+    public Vector2 Position;
     public Vector2 Velocity;
     public float Height;
     public bool HeadingRight;
     public PlayerSimState CurrentSimState;
-    public PlayerStateId CurrentStateId;
+    public PlayerState CurrentState;
     public bool isHome;
     public string fullName;
     public string country;
-    public float power;
-    public float speed;
+    public float Power;
+    public float Speed;
     public Role role = Role.MIDFIELD;
     public float weightOnDutySteering;
+    public bool initialFacingRight;
+    public SimEventBus _eventBus;
+    public CommandBuffer _commandBuffer;
+    public List<LineSegment> lines;
+    public float radius=6.5f;
+    public int Frame { get;private set;}
 
-    public PlayerSim(int nextPlayerId,PlayerResource contextPlayerData, Vector2 contextplayerPosition, Vector2 contextkickoffPosition, string contextcountry, bool contextisHome) {
+    
+
+    public PlayerSim(int nextPlayerId,PlayerResource contextPlayerData, Vector2 contextplayerPosition, Vector2 contextkickoffPosition, string contextcountry, bool contextisHome,bool ContextInitialFacingRight) {
         playerId = nextPlayerId;
-        playerPosition= contextplayerPosition;
+        teamResetPosition= contextplayerPosition;
         kickoffPosition= contextkickoffPosition;
         country= contextcountry;
         isHome = contextisHome;
-        speed = contextPlayerData.speed;
-        power = contextPlayerData.power;
+        Speed = contextPlayerData.speed;
+        Power = contextPlayerData.power;
         role = contextPlayerData.role;
         fullName = contextPlayerData.fullName;
         controlScheme = ControlScheme.CPU;
+        Position = isHome ? kickoffPosition : teamResetPosition;
+        initialFacingRight= ContextInitialFacingRight;
+        SwitchState(PlayerState.RESETING, PlayerStateData.Build().SetResetPosition(Position));
     }
 
-    public void Tick()
+    public void Tick(int frame,float deltaTime)
     {
-        CurrentSimState?._Update();
+        Frame=frame;
+        CurrentSimState?._Update(deltaTime);
     }
 
     public void OnTakeTackleHit(Vector2 dir)
     {
         // if (!HasBall()) return; 只有carrierSnapshot
-        SwitchState(PlayerStateId.HURT, PlayerStateData.Build().SetMoveDir(dir));
+        SwitchState(PlayerState.HURT, PlayerStateData.Build().SetMoveDir(dir));
     }
-    public void SwitchState(PlayerStateId id, PlayerStateData data = null)
-    {
-        CurrentSimState?.OnExit();
-
-        CurrentStateId = id;
+    public void SwitchState(PlayerState id, PlayerStateData data = null) {
+        if (CurrentState == id) return;
+        CurrentState = id;
         CurrentSimState = stateFactory.GetFreshState(id);
-        CurrentSimState.Setup(this, data ?? PlayerStateData.Build());
+        CurrentSimState.Setup(this, data ?? PlayerStateData.Build(),_eventBus,_commandBuffer);
 
         CurrentSimState.OnEnter();
     }
@@ -61,5 +74,19 @@ public class PlayerSim {
 
     public void SetControlScheme(ControlScheme ContextControlScheme) {
         controlScheme = ContextControlScheme;
+    }
+    public bool IsFacingTargetGoal() {
+
+         return (facingRight && initialFacingRight) || (!initialFacingRight && !facingRight);
+    }
+
+    public void OnTeamReset(bool isKickoff) {
+        SwitchState(PlayerState.RESETING,PlayerStateData.Build().SetResetPosition(isKickoff?kickoffPosition:teamResetPosition));
+    }
+
+    public void SetEventBusAndCommandBuffer(SimEventBus eventBus,CommandBuffer commandBuffer,List<LineSegment>lineSegments) {
+        _eventBus=eventBus;
+        _commandBuffer = commandBuffer;
+        lines = lineSegments;
     }
 }

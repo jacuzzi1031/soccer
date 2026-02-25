@@ -4,5 +4,52 @@ using UnityEngine;
 
 public class PlayerStatePreppingShot: PlayerSimState
 {
+    Vector2 shotDirection = Vector2.zero;
+    private float timeStartShot;
+    private const float DURATION_MAX_BONUS=1.0f;
+    private const float EASE_REWARD_FACTOR = 2.0f;
+    private float pressRaw;
+    private bool hasTriggeredBonusEvent = false;
+    private float pressTime = 0f;
+    public override void OnEnter() {
+        hasTriggeredBonusEvent = false;
+        pressTime = 0f;
+        shotDirection=_moveDirection.x>=0? Vector2.right:Vector2.left;
+    }
 
+    public override void OnExit() {
+        
+    }
+    public override void _Update(float deltaTime) {
+        pressTime += deltaTime;
+        shotDirection += _moveDirection;
+
+        if (!hasTriggeredBonusEvent && pressTime >= DURATION_MAX_BONUS * 0.5f)
+        {
+            _eventBus.Publish(
+                new PlayStyleShowSignal(playerSim.playerId, PlayerState.PREPPING_SHOT)
+            );
+            hasTriggeredBonusEvent = true;
+        }
+    }
+    public override void OnShootRelease()
+    {
+        float durationPress = Mathf.Clamp(pressTime, 0f, DURATION_MAX_BONUS);
+        
+        float easeTime = durationPress / DURATION_MAX_BONUS;
+        float bonus = Mathf.Pow(easeTime, EASE_REWARD_FACTOR);
+        
+        float shotPower = playerSim.Power * (1f + 1.5f * bonus);
+        
+        shotDirection = shotDirection.normalized;
+        
+        PlayerStateData data = PlayerStateData.Build()
+            .SetShotPower(shotPower)
+            .SetShotDirection(shotDirection)
+            .SetIsInstant(false);
+        
+        playerSim.SwitchState(PlayerState.SHOOTING, data);
+    }
 }
+
+

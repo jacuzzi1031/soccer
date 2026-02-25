@@ -35,6 +35,7 @@ public class ObjectPool<T> where T : class
         _mElementItems = new Element[size - 1];
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private T CreateInstance()
     {   
         //保存方法调用

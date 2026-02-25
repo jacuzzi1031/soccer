@@ -49,6 +49,7 @@ public class GameInterface : MonoBehaviour
         RoomManager.OnInit();
         RequestManager.OnInit();
         GameFrameSyncManager.OnInit();
+        GameManager.OnInit();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)

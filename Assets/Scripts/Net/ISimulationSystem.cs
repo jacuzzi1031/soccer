@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface ISimulationSystem
-{
-    void Tick(ISimulationContext context);
+{   
+    
+    void Tick(SimulationContext context);
     void Stop();
-
-    void SetInputBuffer(InputBuffer inputBuffer) {
-    }
 }

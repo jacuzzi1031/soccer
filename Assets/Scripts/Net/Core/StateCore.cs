@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public enum PlayerStateId
+public enum MatchType {
+    Training,          //自由训练
+    TrainingWithEnemy,//对抗训练
+    UltimateTeam     //正式比赛
+}
+public enum PlayerState
 {
     BICYCLE_KICK,
     CELEBRATING,
@@ -18,7 +22,8 @@ public enum PlayerStateId
     RECOVERING,
     SHOOTING,
     TACKLING,
-    VOLLEY_KICK_OR_HEADER,
+    VOLLEY_KICK,
+    HEADER,
 }
 public enum Role {
     GOALIE,
@@ -26,7 +31,7 @@ public enum Role {
     MIDFIELD,
     OFFENSE
 }
-public enum BallStateId {CARRIED, FREEFORM, SHOT}
+public enum BallState {CARRIED, FREEFORM, SHOT}
 public enum ControlScheme{ CPU,P1,P2};
 
 public class PlayerInitData
@@ -43,7 +48,41 @@ public class ControlContext
     public int HomeControlledPlayerId;
     public int AwayControlledPlayerId;
 }
-public     enum Facing{
-    Left,
-    Right
-};
+public struct SimulationCommand
+{
+    public SimulationCommandType Type;  
+    public int PlayerId;               
+    public Vector2 Direction;            
+    public int OwnerId;
+    public Vector2 ShotVelocity;
+
+}
+public enum SimulationCommandType
+{
+    ResetAndHomeKickoff,
+    ResetAndAwayKickoff,
+    AllPlayersReadyForKickoff,
+    KickoffStart,
+    ShortPass,
+    LongPass,
+    ShootPress,
+    ShootRelease,
+    IncisivePass,
+    NoneInputCommand,
+    Swap,
+    BallShoot,
+}
+
+public enum MatchState {
+    IN_PLAY,
+    SCORED,
+    RESET,
+    KICKOFF,
+    OVERTIME,
+    GAMEOVER
+}
+public struct LineSegment
+{
+    public Vector2 Start;
+    public Vector2 End;
+}

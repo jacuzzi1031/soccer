@@ -459,11 +459,11 @@ MonoBehaviour:
   controlSchemeSO: {fileID: 11400000, guid: 2b77bfc7f8ca05d4ea8cfd6825ea7e86, type: 2}
   teamPaletteTex: {fileID: 2800000, guid: 82e7c9366dc6c994aac78c3095b9df7e, type: 3}
   skinPaletteTex: {fileID: 2800000, guid: 4edb5619f7d4485459fa08c2ce43ae50, type: 3}
-  playerViewStateFactory:
+  playerStyleSpriteFactory:
     volleyKickSprite: {fileID: 21300000, guid: 17c09c7dde3244943b8608c2ce2e580c, type: 3}
     bicycleKickSprite: {fileID: 21300000, guid: d956639c99fba844c8557d133193fadd, type: 3}
     farReachSprite: {fileID: 21300000, guid: 0ad5c983eb54f2649880cf09cfee42bc, type: 3}
-    longballpassSrpite: {fileID: 21300000, guid: d3939771d07d6b742b3ff4e8cbc5fc0c, type: 3}
+    longpassSrpite: {fileID: 21300000, guid: d3939771d07d6b742b3ff4e8cbc5fc0c, type: 3}
     powershotSprite: {fileID: 21300000, guid: 3e1d23f1c1966994699a3428d8657ca1, type: 3}
     headerSprite: {fileID: 21300000, guid: 6c2f6abf8a4ace54ab2a0d36ed887e6e, type: 3}
     slidetackleSprite: {fileID: 21300000, guid: d7e651197bbc50e47b2747a441232acb, type: 3}
@@ -476,7 +476,7 @@ MonoBehaviour:
   KickoffPosition: {x: 0, y: 0}
   ownGoal: {fileID: 0}
   targetGoal: {fileID: 0}
-  ball: {fileID: 0}
+  ballView: {fileID: 0}
   skinColor: 0
   playStyleRenderer: {fileID: 2811148618072368356}
   playerSprite: {fileID: 6264108591919923548}
@@ -499,6 +499,7 @@ MonoBehaviour:
   weightOnDutySteering: 0
   opponentListNearby: []
   isHome: 0
+  lastConsumedFrame: 0
 --- !u!50 &7394438100784923822
 Rigidbody2D:
   serializedVersion: 4

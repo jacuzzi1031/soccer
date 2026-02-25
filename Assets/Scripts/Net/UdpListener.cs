@@ -77,14 +77,15 @@ public class UdpListener : IDisposable
         }
     }
 
-    public void Send(in ReqFrameSyncData resFrameSyncData)
+    // ReSharper disable Unity.PerformanceAnalysis
+    public void Send(in ReqFrameSyncData reqFrameSyncData)
     {
         if (Disposed) return;
-        resFrameSyncData.MessageType = MessageType.FrameSync;
+        reqFrameSyncData.MessageType = MessageType.FrameSync;
 
         try
         {
-            byte[] data = Serialize(resFrameSyncData);
+            byte[] data = Serialize(reqFrameSyncData);
 
             _mCurrentDataSequence++;
 

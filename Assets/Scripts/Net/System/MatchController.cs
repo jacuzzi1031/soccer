@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MatchController : MonoBehaviour
+public class MatchController
 {
     public Match currentMatch;
     // private const float DURATION_GAME_SEC = 2f;
     private const float DURATION_GAME_SEC = 2 * 60f;
     private SimEventBus _eventBus;
-    private SimulationFacade _simulation;
+    private SimulationFacade _simFacade;
     public enum State
     {
         IN_PLAY,
@@ -24,28 +24,42 @@ public class MatchController : MonoBehaviour
     private GameStateFactory _gameStateFactory=new GameStateFactory();
     public float timeLeft;
 
-    public MatchController(SimulationFacade simulation,SimEventBus EventBus,string countryHome, string CountryAway) {
+    public MatchController(SimulationFacade simFacade,SimEventBus EventBus,string countryHome, string CountryAway) {
         currentMatch=new Match(countryHome,CountryAway);
         _eventBus = EventBus;
-        _simulation = simulation;
+        _simFacade = simFacade;
         SubscribeSimSignal();
-        
-        StartGame();
     }
 
     private void SubscribeSimSignal() {
+        _eventBus.Subscribe<TeamResetSignal>(OnTeamReset);
         _eventBus.Subscribe<ControllerChangedSignal>(OnControllerChanged);
-        _eventBus.Subscribe<BallResetSignal>(OnBallReset);
+        _eventBus.Subscribe<KickoffStartSignal>(OnKickoffStart);
+        _eventBus.Subscribe<PlayStyleShowSignal>(OnPlayStyleShow);
     }
 
-    private void OnBallReset(BallResetSignal obj) {
+    private void OnPlayStyleShow(PlayStyleShowSignal obj) {
+        Invoker.Instance.DelegateList.Add(() => {
+            GameInterface.Interface.EventSystem.Publish(new PlayStyleShowEvent(obj.playerId,obj.playerState));
+        });
+    }
+
+    private void OnKickoffStart(KickoffStartSignal obj) {
+        Invoker.Instance.DelegateList.Add(() => {
+            SoundManager.Instance.Play(SoundManager.Instance.audioRefs.WHISTLE);
+        });
+    }
+
+    private void OnTeamReset(TeamResetSignal obj) {
         Invoker.Instance.DelegateList.Add(() =>
         {
-            GameInterface.Interface.EventSystem.Publish(
-                new BallResetEvent()
+            GameInterface.Interface.EventSystem.Publish(new OnTeamResetEvent());
+            MusicManager.Instance.Play(
+                MusicManager.Instance.Refs.GAMEPLAY
             );
         });
     }
+    
 
     void OnControllerChanged(ControllerChangedSignal s)
     {
@@ -57,23 +71,7 @@ public class MatchController : MonoBehaviour
             );
         });
     }
-
-    public void StartGame()
-    {
-        timeLeft = DURATION_GAME_SEC;
-        SwitchGameState(State.RESET);
-    }
-
-    public void SwitchGameState(State newState, GameStateData data = null) {
-        if (currentState != null) {
-            currentState.OnStateTransitionRequested-= SwitchGameState;
-            currentState.OnExit();
-        }
-        currentState = _gameStateFactory.GetFreshState(newState);
-        currentState.Setup(this,data);
-        currentState.OnStateTransitionRequested+= SwitchGameState;
-        currentState.OnEnter();
-    }
+    
     public bool IsTimeUp()
     {
         return timeLeft <= 0f;
@@ -89,24 +87,5 @@ public class MatchController : MonoBehaviour
     {
         currentMatch.IncreaseScore(countryScoredOn);
         GameInterface.Interface.EventSystem.Publish(new OnScoreChangedEvent());
-    }
-    public void Tick(int frame) {
-        currentState?._Update(frame);
-    }
-
-    public void Stop() {
-        currentState.OnStateTransitionRequested-= SwitchGameState;
-        currentMatch = null;
-    }
-
-    public void AllReady() {
-        Invoker.Instance.DelegateList.Add(() => {
-            
-            GameInterface.Interface.EventSystem.Publish(new OnKickoffReadyEvent());
-        });
-    }
-
-    public void RequestReset() {
-        _simulation.ResetTeams();
     }
 }

@@ -51,19 +51,21 @@ public class OptionsUI : MonoBehaviour {
         longPassButton.onClick.AddListener(() => { RebindBinding(GameInput.Binding.LongPass); });
         shootButton.onClick.AddListener(() => { RebindBinding(GameInput.Binding.Shoot); });
         swapdButton.onClick.AddListener(() => { RebindBinding(GameInput.Binding.Swap); });
+        
+        Hide();
     }
 
     private void Start() {
-        EntityManager.Instance.OnGameUnpaused += OnGameUnpaused;
+        PauseManager.Instance.OnGameUnpaused += OnGameUnpaused;
 
         UpdateVisual();
 
         HidePressToRebindKey();
-        Hide();
+
     }
 
     public void OnDestroy() {
-        EntityManager.Instance.OnGameUnpaused -= OnGameUnpaused;
+        PauseManager.Instance.OnGameUnpaused -= OnGameUnpaused;
     }
 
     private void OnGameUnpaused(object sender, System.EventArgs e) {

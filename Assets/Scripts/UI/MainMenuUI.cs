@@ -25,16 +25,16 @@ public class MainMenuUI : BaseUIPanel {
         Time.timeScale = 1f;
         
         //for test single player
-        trainButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.Training));
-        trainWithEnemyButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.TrainingWithEnemy));
-        championShipButton.onClick.AddListener(() => OnModeButtonClicked(GameManager.MatchType.UltimateTeam));
+        trainButton.onClick.AddListener(() => OnModeButtonClicked(MatchType.Training));
+        trainWithEnemyButton.onClick.AddListener(() => OnModeButtonClicked(MatchType.TrainingWithEnemy));
+        championShipButton.onClick.AddListener(() => OnModeButtonClicked(MatchType.UltimateTeam));
     }
 
     private void Start() {
         startAnimation.Play("StartMainMenuAnimation");
     }
 
-    private void OnModeButtonClicked(GameManager.MatchType mode)
+    private void OnModeButtonClicked(MatchType mode)
     {
         GameInterface.Interface.GameManager.SetCurrentMatchType(mode);
         

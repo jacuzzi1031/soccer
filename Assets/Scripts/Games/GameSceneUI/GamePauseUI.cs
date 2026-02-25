@@ -14,7 +14,7 @@ public class GamePauseUI : MonoBehaviour {
 
     private void Awake() {
         resumeButton.onClick.AddListener(() => {
-            EntityManager.Instance.TogglePauseGame();
+            PauseManager.Instance.TogglePauseGame();
         });
         mainMenuButton.onClick.AddListener(() => {
             GameInterface.Interface.SceneLoader.LoadScene(Scene.MainMenuScene);
@@ -23,18 +23,19 @@ public class GamePauseUI : MonoBehaviour {
             Hide();
             OptionsUI.Instance.Show(Show);
         });
+        Hide();
     }
 
     private void Start() {
-        EntityManager.Instance.OnGamePaused += OnGamePaused;
-        EntityManager.Instance.OnGameUnpaused += OnGameUnpaused;
+        PauseManager.Instance.OnGamePaused += OnGamePaused;
+        PauseManager.Instance.OnGameUnpaused += OnGameUnpaused;
 
         Hide();
     }
 
     private void OnDestroy() {
-        EntityManager.Instance.OnGamePaused -= OnGamePaused;
-        EntityManager.Instance.OnGameUnpaused -= OnGameUnpaused;
+        PauseManager.Instance.OnGamePaused -= OnGamePaused;
+        PauseManager.Instance.OnGameUnpaused -= OnGameUnpaused;
     }
 
     private void OnGameUnpaused(object sender, System.EventArgs e) {

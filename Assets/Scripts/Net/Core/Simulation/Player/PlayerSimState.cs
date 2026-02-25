@@ -6,31 +6,44 @@ using UnityEngine;
 public class PlayerSimState 
 {   
     protected PlayerSim playerSim;
-    protected PlayerStateData stateData;
-    public event Action<PlayerStateId, PlayerStateData> StateTransitionRequested;
+    private PlayerStateData _stateData;
+    public PlayerStateData stateData => _stateData;
+    protected Vector2 _moveDirection;
+    protected SimEventBus _eventBus;
+    protected CommandBuffer _commandBuffer;
     public void Setup(
         PlayerSim contextPlayerView,
-        PlayerStateData contextData
+        PlayerStateData contextData,
+        SimEventBus eventBus,
+        CommandBuffer commandBuffer
     )
     {
         playerSim = contextPlayerView;
-        stateData = contextData;
+        _stateData = contextData;
+        _eventBus = eventBus;
+        _commandBuffer=commandBuffer;
     }
-    protected void TransitionState(PlayerStateId newState, PlayerStateData data = null)
-    {
-        StateTransitionRequested?.Invoke(newState, data ?? PlayerStateData.Build());
+    public virtual void _Update(float deltaTime) {
     }
-    public virtual void _Update() {
-        
+
+    public void SetMoveDirection(Vector2 moveDirection) {
+        _moveDirection = moveDirection;
     }
-    public virtual void _FixedUpdate() {
-        
-    }
+
 
     public virtual void OnEnter() {
         
     }
     public virtual void OnExit() {
+        
     }
+    public virtual void OnShootPress(bool isReleased,bool hasBall,bool BallCanAirInteract) {
+    }
+    public virtual void OnShootRelease(){}
+    public virtual void OnPass(int passType) {
+        
+    }
+    public virtual bool CanCarryBall()=> false;
+
     public virtual bool IsReadyForKickoff() => false;
 }

@@ -29,8 +29,6 @@ public class BallView : MonoBehaviour
     [SerializeField] private ParticleSystem shotParticles;
     [SerializeField] private Transform ballSprite;
     [SerializeField]  public Rigidbody2D rb;
-    public BallStateFactory ballStateFactory=new BallStateFactory();
-    [HideInInspector]public BallViewState CurrentViewState;
     public LayerMask LayerMask;
     public CircleCollider2D  colliderForWall;
     [HideInInspector]public List<PlayerView> playerListInProximityArea = new List<PlayerView>();
@@ -38,46 +36,30 @@ public class BallView : MonoBehaviour
     public float frictionAir = 35f;
     public float frictionGround = 250f;
     private BallSim ballSim;
+    private bool _matchStarted = false;
 
     private void Awake() {
-
-        SwitchViewState(BallStateId.FREEFORM);
     }
 
     private void Start() {
-        //OnTriggerStay2D是因为freedomState有LockDuration
         playerDetectArea.OnStay += PlayerDetectAreaOnOnEnter;
         playerProximityArea.OnTriggered+= PlayerProximityAreaOnOnTriggered;
         playerProximityArea.OnTriggerExit+= PlayerProximityAreaOnOnTriggerExit;
-        GameManager.MatchType currentMathType = GameInterface.Interface.GameManager.currentMatchType;
-        if (currentMathType == GameManager.MatchType.Training||currentMathType == GameManager.MatchType.TrainingWithEnemy) {
+        MatchType currentMathType = GameInterface.Interface.GameManager.currentMatchType;
+        if (currentMathType == MatchType.Training||currentMathType == MatchType.TrainingWithEnemy) {
             transform.position=trainingSpawnPosition.position;
         }
         spawnPosition = transform.position;
     }
     private void OnEnable() {
-        GameInterface.Interface.EventSystem.Subscribe<BallResetEvent>(OnBallReset);
-        GameInterface.Interface.EventSystem.Subscribe<OnKickoffStartedEvent>(OnKickoffStarted);
+        GameInterface.Interface.GameManager.OnStartMatch += () => {_matchStarted = true; };
     }
     private void OnDestroy() {
-        SwitchViewState(BallStateId.FREEFORM);
         playerDetectArea.OnStay -= PlayerDetectAreaOnOnEnter;
         playerProximityArea.OnTriggered-= PlayerProximityAreaOnOnTriggered;
         playerProximityArea.OnTriggerExit-= PlayerProximityAreaOnOnTriggerExit;
-        
-        GameInterface.Interface.EventSystem.Unsubscribe<BallResetEvent>(OnBallReset);
-        GameInterface.Interface.EventSystem.Unsubscribe<OnKickoffStartedEvent>(OnKickoffStarted);
-    }
-    private void OnKickoffStarted(OnKickoffStartedEvent obj) {
-        passTo(spawnPosition + Vector2.down * KICKOFF_PASS_DISTANCE, true, null);
     }
 
-    private void OnBallReset(BallResetEvent obj) {
-        transform.position = spawnPosition;
-        rb.velocity = Vector2.zero;
-        height=0.0f;
-        SwitchViewState(BallStateId.FREEFORM);
-    }
 
     private void PlayerProximityAreaOnOnTriggerExit(Collider2D obj) {
         PlayerView p = obj.GetComponentInParent<PlayerView>();
@@ -95,43 +77,133 @@ public class BallView : MonoBehaviour
     }
 
     private void PlayerDetectAreaOnOnEnter(Collider2D obj) {
-        if (!CurrentViewState.CanCarriedBall())
+        // if (!CurrentViewState.CanCarriedBall())
+        //     return;
+        // PlayerView body = obj.GetComponentInParent<PlayerView>();
+        // if (!body) return;
+        //
+        // if (body.CanCarryBall() && height < MAX_CAPTURE_HEIGHT)
+        // {   
+        //     carrier = body;
+        //     body.ControlBall();
+        //     SwitchViewState(BallState.CARRIED);
+        // }
+    }
+
+
+
+
+    private void Update() {
+        if (!_matchStarted)
             return;
-        PlayerView body = obj.GetComponentInParent<PlayerView>();
-        if (!body) return;
-
-        if (body.CanCarryBall() && height < MAX_CAPTURE_HEIGHT)
-        {   
-            carrier = body;
-            body.ControlBall();
-            SwitchViewState(BallStateId.CARRIED);
-        }
+        ConsumeStateChange();
+        UpdateInterpolatedTransform();
+        UpdateStateView();
     }
 
-
-
-    private void Update()
-    {
-        ballSprite.localPosition = height*3f*Vector3.up;
-        CurrentViewState?._Update();
-    }
-    private void FixedUpdate()
-    {
-        CurrentViewState?._FixedUpdate();
-    }
-    
-    public void SwitchViewState(BallStateId type, BallStateData data = null)
-    {
-        if (CurrentViewState != null)
+    private void UpdateStateView() {
+        switch (ballSim.ballState)
         {
-            CurrentViewState.StateTransitionRequested -= SwitchViewState;
-            CurrentViewState.OnExit();
+            case BallState.CARRIED:
+                break;
+            case BallState.FREEFORM:
+                SetBallAnimationFromVelocity();
+                break;
+            case BallState.SHOT:
+                SetBallAnimationFromVelocity();
+                break;
         }
-        CurrentViewState = ballStateFactory.GetFreshState(type);
-        CurrentViewState.Setup(this, data ?? new BallStateData(),animator,shotParticles,playerDetectArea,carrier,ballSprite,rb,LayerMask,colliderForWall);
-        CurrentViewState.StateTransitionRequested += SwitchViewState;
-        CurrentViewState.OnEnter();
     }
+    const float idleThreshold = 0.01f;
+    public void SetBallAnimationFromVelocity()
+    {
+        if (ballSim.Velocity.sqrMagnitude <= idleThreshold)
+        {
+            animator.Play("idle");
+            animator.speed = 1;
+            return;
+        }
+
+        if (ballSim.Velocity.x > 0)
+        {
+            animator.Play("roll");
+            animator.speed = 1;
+        }
+        else
+        {
+            animator.Play("rollback");
+            animator.speed = 1;
+        }
+    }
+    [HideInInspector]public int lastConsumedFrame;
+    Vector2 prevPos;
+    Vector2 targetPos;
+    float prevHeight;
+    float targetHeight;
+    float interpTimer;
+    BallState lastState;
+    public const float FRAME_DT = 1f / 30f;
+    private void UpdateInterpolatedTransform() {
+        //逻辑帧推进
+        if (ballSim.Frame != lastConsumedFrame)
+        {
+            prevPos = targetPos;
+            targetPos = ballSim.Position;
+
+            prevHeight = targetHeight;
+            targetHeight = ballSim.height;
+
+            interpTimer = 0f;
+            lastConsumedFrame = ballSim.Frame;
+        }
+        interpTimer += Time.deltaTime;
+        float t = Mathf.Clamp01(interpTimer / FRAME_DT);
+
+        Vector2 pos = Vector2.Lerp(prevPos, targetPos, t);
+        float height = Mathf.Lerp(prevHeight, targetHeight, t);
+
+        transform.position = pos;
+        ballSprite.localPosition =  height * 3f*Vector3.up;
+    }
+
+    private void ConsumeStateChange() {
+        if (ballSim.ballState != lastState)
+        {
+            OnStateExit(lastState);
+            lastState = ballSim.ballState;
+            OnStateEnter(ballSim.ballState);
+        }
+    }
+
+    private void OnStateExit(BallState ballSimBallState) {
+        switch (ballSimBallState) {
+            case BallState.CARRIED:
+                break;
+            case BallState.FREEFORM:
+                GameInterface.Interface.EventSystem.Publish(new BallFreeformToLerpCameraOffsetEvent(false));
+                break;
+            case BallState.SHOT:
+                ballSprite.localScale = new Vector3(1, 1, 1);
+                shotParticles.Stop();
+                break;
+        }
+    }
+    private const float SHOT_SPRITE_SCALE = 0.8f;
+    private void OnStateEnter(BallState ballSimBallState) {
+        switch (ballSimBallState) {
+            case BallState.CARRIED:
+                break;
+            case BallState.FREEFORM:
+                GameInterface.Interface.EventSystem.Publish(new BallFreeformToLerpCameraOffsetEvent(true));
+                break;
+            case BallState.SHOT:
+                ballSprite.localScale = new Vector3(1, SHOT_SPRITE_SCALE, 1);
+                shotParticles.Play();
+                break;
+        }
+    }
+
+
     public bool IsHeadedForScoringArea(Collider2D scoringArea)
     {
         RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position, velocity.normalized, castDistance, collideForScoreAreaLayer);
@@ -146,41 +218,16 @@ public class BallView : MonoBehaviour
         heightVelocity = TUMBLE_HEIGHT_VELOCITY;
 
         // 切换状态
-        SwitchViewState(BallStateId.FREEFORM, BallStateData.Build().SetLockDuration(DURATION_TUMBLE_LOCK));
+        // SwitchViewState(BallState.FREEFORM, BallStateData.Build().SetLockDuration(DURATION_TUMBLE_LOCK));
     }
     public void Stop() {
         velocity = Vector2.zero;
     }
 
-    public bool CanAirInteract() {
-        return CurrentViewState != null && CurrentViewState.CanAirInteract();
-    }
 
-    public void shoot(Vector2 ShotVelocity) {
-        velocity = ShotVelocity;
-        carrier = null;
-        SwitchViewState(BallStateId.SHOT);
-    }
 
-    public void passTo(Vector2 destination,bool overground,PlayerView passTarget, float lockDuration = DURATION_PASS_LOCK) {
-        Vector2 direction = (destination - (Vector2)transform.position).normalized;
-        float distance = Vector2.Distance(transform.position, destination);
-        float intensity = Mathf.Sqrt(2f * distance * frictionGround);
-        velocity = intensity * direction;
 
-        // 如果是高空的，视为水平是匀速，速度为原本速度intensity  x=Vx*t  t=x/Vx
-        // 垂直方向终点y=0,Vy=gt/2  代入t Vy=gx/2Vx 高度增加 /2->/1.85 也会有更快速度，飞到球员脸上而不是脚下
-        if (!overground)
-        {
-            heightVelocity = BallViewState.GRAVITY * distance / (1.85f * intensity);
-        }
-        else
-        {
-            heightVelocity = 0f;
-        }
-        carrier = null;
-        SwitchViewState(BallStateId.FREEFORM, BallStateData.Build().SetLockDuration(lockDuration));
-    }
+    
 
 
     public void InjectSim(BallSim ballSim) {

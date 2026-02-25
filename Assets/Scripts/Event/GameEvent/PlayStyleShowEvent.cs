@@ -5,9 +5,9 @@ using UnityEngine;
 public struct PlayStyleShowEvent : IEvent
 {
     public int playerId;
-    public Sprite sprite;
-    public PlayStyleShowEvent(int playerId, Sprite sprite) {
+    public PlayerState playerState;
+    public PlayStyleShowEvent(int playerId, PlayerState PlayerState) {
         this.playerId = playerId;
-        this.sprite = sprite;
+        this.playerState = PlayerState;
     }
 }

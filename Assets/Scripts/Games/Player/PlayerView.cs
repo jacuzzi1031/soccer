@@ -10,7 +10,7 @@ public class PlayerView : MonoBehaviour {
     public ControlScriptObject controlSchemeSO;
     public Texture2D teamPaletteTex;
     public Texture2D skinPaletteTex;
-    [SerializeField] private PlayerViewStateFactory playerViewStateFactory = new PlayerViewStateFactory();
+    [SerializeField] private PlayerStyleSpriteFactory playerStyleSpriteFactory=new PlayerStyleSpriteFactory();
     [Space]
     [Header("Settings")]
     public string fullName;
@@ -63,6 +63,8 @@ public class PlayerView : MonoBehaviour {
 
 
 
+
+
     public enum SkinColor {
         LIGHT,
         MEDIUM,
@@ -71,7 +73,7 @@ public class PlayerView : MonoBehaviour {
     private Vector3 lastInteractDir;
     [HideInInspector]public bool headingRight = true;
 
-    public PlayerViewState CurrentViewState;
+
     private const float BALL_CONTROL_HEIGHT_MAX = 10f;
     private float originalPlayerSpriteY;
     private float originalControlSpriteY;
@@ -86,13 +88,11 @@ public class PlayerView : MonoBehaviour {
     private PlayerSim playerSim;
     public void OnEnable() {
         GameInterface.Interface.EventSystem.Subscribe<OnGameOverEvent>(OnGameOver);
-        GameInterface.Interface.EventSystem.Subscribe<OnTeamScoredEvent>(OnteamScored);
+
     }
     public void OnDestroy() {
-        CurrentViewState.OnExit();
-        CurrentViewState=null;
         GameInterface.Interface.EventSystem.Unsubscribe<OnGameOverEvent>(OnGameOver);
-        GameInterface.Interface.EventSystem.Unsubscribe<OnTeamScoredEvent>(OnteamScored);
+
         ballDetectionArea.OnStay-= BallDetectionAreaOnOnStay;
         opponentDetectionArea.OnTriggered-= OpponentDetectionAreaOnOnTriggered;
         opponentDetectionArea.OnTriggerExit-= OpponentDetectionAreaOnOnTriggerExit;
@@ -102,20 +102,9 @@ public class PlayerView : MonoBehaviour {
     public void InjectSim(PlayerSim playerSim) {
         this.playerSim=playerSim;
     }
-    private void OnteamScored(OnTeamScoredEvent obj) {
-        if(country==obj.CountryScoredOn)
-            SwitchViewState(State.MOURNING);
-        else {
-            SwitchViewState(State.CELEBRATING);
-        }
-    }
+
     
     private void OnGameOver(OnGameOverEvent obj) {
-        if(country==obj.CountryWinner)
-            SwitchViewState(State.CELEBRATING);
-        else {
-            SwitchViewState(State.MOURNING);
-        }
     }
 
     private void Awake() {
@@ -145,7 +134,7 @@ public class PlayerView : MonoBehaviour {
          tackleEmitterArea.enabled = false;
          spawnPosition=transform.position;
          Vector2 initialPosition=country==GameInterface.Interface.GameManager.MatchController.currentMatch.countryHome?KickoffPosition:spawnPosition;
-         SwitchViewState(State.RESETING, PlayerStateData.Build().SetResetPosition(initialPosition));
+
 
          
          //充当player reseting state
@@ -174,7 +163,6 @@ public class PlayerView : MonoBehaviour {
 
     private void TakeTackleHit(Vector2 emitterVelocity) {
         if (!HasBall()) return;
-        SwitchViewState(PlayerView.State.HURT, PlayerStateData.Build().SetMoveDir(emitterVelocity.normalized));
     }
 
     private void OpponentDetectionAreaOnOnTriggerExit(Collider2D obj) {
@@ -195,8 +183,6 @@ public class PlayerView : MonoBehaviour {
     private void BallDetectionAreaOnOnStay(Collider2D obj) {
 
         if (obj.CompareTag("PlayerDetectArea")) {
-            if (!CurrentViewState.CanVolleyKickOrHeader()) return;
-            CurrentViewState?.VolleyShot(obj.GetComponentInParent<BallView>());
         }
 
     }
@@ -241,15 +227,152 @@ public class PlayerView : MonoBehaviour {
         currentAIBehavior = aiBehaviorFactory.GetFreshAIBehavior(role);
         currentAIBehavior.Setup(this, ballView, opponentDetectionArea);
     }
-
-    void LateUpdate() {
-        transform.position = playerSim.playerPosition;
-        // ApplyHeightVisual();
-        // ApplyFlip();
-    }
+    [HideInInspector]public int lastConsumedFrame;
+    Vector2 prevPos;
+    Vector2 targetPos;
+    float interpTimer;
+    PlayerState lastState;
+    public const float FRAME_DT = 1f / 30f;
     private void Update() {
-        CurrentViewState?._Update();
+        
+        ConsumeStateChange();
+        UpdateInterpolatedTransform();
+        UpdateStateView();
+    }
+
+    private void UpdateStateView() {
+        switch (playerSim.CurrentState)
+        {
+            case PlayerState.RESETING:
+                SetMovementAnimation();
+                break;
+            case PlayerState.MOVING:
+                SetMovementAnimation();
+                break;
+        }
+    }
+
+    private void UpdateInterpolatedTransform() {
+        //逻辑帧推进
+        if (playerSim.Frame != lastConsumedFrame)
+        {
+            prevPos = targetPos;
+            targetPos = playerSim.Position;
+            interpTimer = 0f;
+            lastConsumedFrame = playerSim.Frame;
+        }
+        interpTimer += Time.deltaTime;
+        float t = Mathf.Clamp01(interpTimer / FRAME_DT);
+        transform.position = Vector2.Lerp(prevPos, targetPos, t);
         FlipSprite();
+    }
+    /// <summary>
+    /// 仿真阶段（Deterministic Simulation）”内部修改 Unity 对象，都必须通过 Command / Invoker 隔离。否则破坏确定性
+    /// 轮询 View Pull Model，纯表现层逻辑，不影响 Simulation，是可以直接调用 Unity View 的
+    /// 但是View 的行为会反向影响 Simulation。Unity 碰撞触发回写 Simulation 需要CommandBuffer
+    /// </summary>
+    private void ConsumeStateChange() {
+        if (playerSim.CurrentState != lastState)
+        {
+            OnStateExit(playerSim.CurrentState);
+            OnStateEnter(playerSim.CurrentState);
+            lastState = playerSim.CurrentState;
+        }
+    }
+
+    private void OnStateExit(PlayerState state) {
+        switch (state) {
+            case PlayerState.PREPPING_SHOT:
+                CameraManager.Instance.PowerShotZoom(false);
+                break;
+            case PlayerState.CELEBRATING:
+                break;
+        }
+    }
+
+    public void OnStateEnter(PlayerState state)
+    {
+        switch (state)
+        {
+            case PlayerState.BICYCLE_KICK:
+                break;
+            case PlayerState.CELEBRATING:
+                break;
+            case PlayerState.CHEST_CONTROL:
+                break;
+            case PlayerState.DIVING:
+                break;
+            case PlayerState.HURT:
+                break;
+            case PlayerState.MOURNING:
+                break;
+            case PlayerState.RESETING:
+            case PlayerState.MOVING:
+                animator.Play("movement");
+                break;
+            case PlayerState.PASSING:
+                break;
+            case PlayerState.PREPPING_SHOT:
+                animator.Play("pre_kick");
+                CameraManager.Instance.PowerShotZoom(true);
+                break;
+            case PlayerState.RECOVERING:
+                animator.Play("recover");
+                break;
+            case PlayerState.SHOOTING:
+                if (playerSim.CurrentSimState.stateData.IsInstant) {
+                    animator.Play("instant_kick");
+                }
+                else {
+                    animator.Play("kick");
+                }
+                break;
+            case PlayerState.TACKLING:
+                break;
+            case PlayerState.VOLLEY_KICK:
+                break;
+            case PlayerState.HEADER:
+                break;
+        }
+
+    }
+    public void FlipSprite() {
+        float flipX = playerSim.Velocity.x;
+        if (Mathf.Abs(flipX) < 0.001f) 
+            return;
+        if (flipX > 0 && !headingRight)
+        {
+            Flip(true);
+        }
+        else if (flipX < 0 && headingRight)
+        {
+            Flip(false);
+        }
+    }
+    private static readonly int SpeedHash =
+        Animator.StringToHash("Speed");
+    private float runThreshold = 45f;
+    public void SetMovementAnimation() {
+        float speed = playerSim.Velocity.magnitude;
+        animator.SetFloat(SpeedHash, speed);
+        AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (!info.IsName("movement"))
+        {
+            if (runParticles.isPlaying)
+                runParticles.Stop();
+            return;
+        }
+        if (speed >= runThreshold)
+        {
+            if (!runParticles.isPlaying)
+                runParticles.Play();
+        }
+        else
+        {
+            if (runParticles.isPlaying)
+                runParticles.Stop();
+        }
     }
 
     private void ApplyHeight()
@@ -278,35 +401,10 @@ public class PlayerView : MonoBehaviour {
             controlSprite.transform.localPosition = controlPos;
         }
     }
-    private void FixedUpdate() {
-        CurrentViewState?._FixedUpdate();
-        ApplyHeight();
-    }
-    public void SwitchViewState(State type, PlayerStateData data = null)
-    {
-        if (CurrentViewState != null) {
-            CurrentViewState.StateTransitionRequested -= SwitchViewState;
-            CurrentViewState.OnExit();
-        }
-        CurrentViewState = playerViewStateFactory.GetFreshState(type);
-        CurrentViewState.Setup(this, data ?? new PlayerStateData(),rb,animator,ballView,runParticles,ownGoal,targetGoal,currentAIBehavior,tackleEmitterArea);
-        CurrentViewState.StateTransitionRequested += SwitchViewState;
-        CurrentViewState.OnEnter();
-    }
 
-    public void FlipSprite() {
-        float flipX = rb.velocity.x;
-        if (Mathf.Abs(flipX) < 0.001f) 
-            return;
-        if (flipX > 0 && !headingRight)
-        {
-            Flip(true);
-        }
-        else if (flipX < 0 && headingRight)
-        {
-            Flip(false);
-        }
-    }
+
+
+
 
     public void Flip(bool faceRight) {
         headingRight = faceRight;
@@ -319,14 +417,7 @@ public class PlayerView : MonoBehaviour {
 
     }
 
-    public bool CanCarryBall() {
-        return CurrentViewState != null && CurrentViewState.CanCarryBall()&&role!=Role.GOALIE;
-    }
-    public void ControlBall() {
-        if(ballView.height > BALL_CONTROL_HEIGHT_MAX) {
-            SwitchViewState(State.CHEST_CONTROL);
-        }
-    }
+
 
     public bool HasBall() {
         return ballView.carrier == this;
@@ -336,10 +427,6 @@ public class PlayerView : MonoBehaviour {
 
         float directionToTarget = targetGoal.transform.position.x - transform.position.x;
         return (headingRight && directionToTarget > 0) || (!headingRight && directionToTarget < 0);
-    }
-
-    public void OnAnimationComplete() {
-        CurrentViewState?.OnAnimationComplete();
     }
 
     public void Initialize(
@@ -392,15 +479,13 @@ public class PlayerView : MonoBehaviour {
         controlScheme = newScheme;
         SetControlTexture();
     }
-    private void InstanceOnOnShootAction(object sender, EventArgs e) {
-        CurrentViewState?.OnShoot();
-    }
+
     public void SetControlTexture() {
         controlSprite.sprite=controlSchemeSO.GetSprite(controlScheme);
     }
 
-    public void ShowPlayStyle(Sprite playStyleSprite) {
-        playStyleRenderer.sprite = playStyleSprite;
+    public void ShowPlayStyle(PlayerState playerState) {
+        playStyleRenderer.sprite = playerStyleSpriteFactory.GetPlayerSytleSprite(playerState);
         
         if (traitRoutine != null)
             StopCoroutine(traitRoutine);
@@ -414,8 +499,6 @@ public class PlayerView : MonoBehaviour {
         playStyleRenderer.enabled = false;
     }
 
-
-    public bool IsReadyForKickoff() {
-        return CurrentViewState != null && CurrentViewState.IsReadyForKickoff();
+    public void OnAnimationComplete() {
     }
 }

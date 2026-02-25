@@ -66,7 +66,7 @@ private const float PASS_PROBABILITY = 0.05f;
             Vector2.Distance(PlayerView.transform.position, BallView.transform.position) < TACKLE_DISTANCE &&
             Random.value < TACKLE_PROBABILITY)
         {
-            PlayerView.SwitchViewState(PlayerView.State.TACKLING);
+            // PlayerView.SwitchViewState(PlayerView.State.TACKLING);
         }
         //当cpu控制为玩家所在队伍，不进行shot/pass
         if (GameInterface.Interface.GameManager.playerSetup[0] == PlayerView.country)
@@ -87,13 +87,13 @@ private const float PASS_PROBABILITY = 0.05f;
                     .SetShotPower(PlayerView.power)
                     .SetShotDirection(direction);
 
-                PlayerView.SwitchViewState(PlayerView.State.SHOOTING, data);
+                // PlayerView.SwitchViewState(PlayerView.State.SHOOTING, data);
             }
             else if (Random.value < PASS_PROBABILITY &&
                      HasOpponentsNearby()
                      )
             {
-                PlayerView.SwitchViewState(PlayerView.State.PASSING);
+                // PlayerView.SwitchViewState(PlayerView.State.PASSING);
             }
         }
     }

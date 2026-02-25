@@ -24,9 +24,9 @@ public class RoomTabUI : MonoBehaviour, IPointerClickHandler
         roomName.text = roomInfo.roomName;
         RoomMatchType.text = GameInterface.Interface.GameManager.currentMatchType switch
         {
-            GameManager.MatchType.Training           => "训练模式",
-            GameManager.MatchType.TrainingWithEnemy  => "对抗训练",
-            GameManager.MatchType.UltimateTeam       => "锦标赛",
+            MatchType.Training           => "训练模式",
+            MatchType.TrainingWithEnemy  => "对抗训练",
+            MatchType.UltimateTeam       => "锦标赛",
             _                                        => "未知模式"
         };
         roomPlayers.text = $"{roomInfo.currentPlayers}/{roomInfo.maxPlayer}";

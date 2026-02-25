@@ -3,30 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerSimStateFactory : MonoBehaviour
+public class PlayerSimStateFactory
 {
-    private readonly Dictionary<PlayerStateId, Func<PlayerSimState>> _stateFactories;
+    private readonly Dictionary<PlayerState, Func<PlayerSimState>> _stateFactories;
 
     public PlayerSimStateFactory() {
-        _stateFactories= new Dictionary<PlayerStateId, Func<PlayerSimState>> {
-            { PlayerStateId.BICYCLE_KICK, () => new PlayerStateBicycleKick() },
-            { PlayerStateId.CELEBRATING, () => new PlayerStateCelebrating() },
-            { PlayerStateId.CHEST_CONTROL, () => new PlayerStateChestControl() },
-            { PlayerStateId.DIVING, () => new PlayerStateDiving() },
-            { PlayerStateId.HURT, () => new PlayerStateHurt() },
-            { PlayerStateId.MOURNING, () => new PlayerStateMourning() },
-            { PlayerStateId.MOVING, () => new PlayerStateMoving() },
-            { PlayerStateId.PASSING, () => new PlayerStatePassing() },
-            { PlayerStateId.PREPPING_SHOT, () => new PlayerStatePreppingShot() },
-            { PlayerStateId.RESETING, () => new PlayerStateReseting() },
-            { PlayerStateId.RECOVERING, () => new PlayerStateRecovering() },
-            { PlayerStateId.SHOOTING, () => new PlayerStateShooting() },
-            { PlayerStateId.TACKLING, () => new PlayerStateTackling() },
-            { PlayerStateId.VOLLEY_KICK_OR_HEADER, () => new PlayerStateVolleyKickOrHeader() },
+        _stateFactories= new Dictionary<PlayerState, Func<PlayerSimState>> {
+            { PlayerState.BICYCLE_KICK, () => new PlayerStateBicycleKick() },
+            { PlayerState.CELEBRATING, () => new PlayerStateCelebrating() },
+            { PlayerState.CHEST_CONTROL, () => new PlayerStateChestControl() },
+            { PlayerState.DIVING, () => new PlayerStateDiving() },
+            { PlayerState.HURT, () => new PlayerStateHurt() },
+            { PlayerState.MOURNING, () => new PlayerStateMourning() },
+            { PlayerState.MOVING, () => new PlayerStateMoving() },
+            { PlayerState.PASSING, () => new PlayerStatePassing() },
+            { PlayerState.PREPPING_SHOT, () => new PlayerStatePreppingShot() },
+            { PlayerState.RESETING, () => new PlayerStateReseting() },
+            { PlayerState.RECOVERING, () => new PlayerStateRecovering() },
+            { PlayerState.SHOOTING, () => new PlayerStateShooting() },
+            { PlayerState.TACKLING, () => new PlayerStateTackling() },
+            { PlayerState.VOLLEY_KICK, () => new PlayerStateVolleyKickOrHeader() },
+            { PlayerState.HEADER, () => new PlayerStateVolleyKickOrHeader() },
         };
     }
 
-    public PlayerSimState GetFreshState(PlayerStateId state)
+    public PlayerSimState GetFreshState(PlayerState state)
     {
         if (_stateFactories.TryGetValue(state, out var factory))
             return factory();
