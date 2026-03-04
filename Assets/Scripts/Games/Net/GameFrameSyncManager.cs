@@ -6,16 +6,27 @@ using UnityEngine;
 
 public class GameFrameSyncManager : BaseManager
 {
-    private bool _initialized=false;
-    private int _serverFrameId;
-    public event Action<int> OnFirstFrameArrived;
-    private ObjectPool<ReqFrameSyncData> _mReqFrameSyncDataPool;
-    
-
+    public InputBuffer InputBuffer { get; private set; }
+    public int playerCount{ get; private set; }
     public override void OnInit()
     {
         GameInterface.Interface.UdpListener.OnReceiveFrameSync += ServerFrameSyncDataUpdate;
-        base.OnInit();
+        InputBuffer = new InputBuffer();
+    }
+    public void PrepareControlContext() {
+        var RoomPlayerList = GameInterface.Interface.RoomManager.RoomPlayerList;
+        int playerCount = 0;
+        foreach (var info in RoomPlayerList)
+        {
+            if (info.isHome) {
+                playerCount++;
+            }
+            else {
+                playerCount++;
+            }
+        }
+        InputBuffer.SetmaxPlayers(playerCount);
+        this.playerCount = playerCount;
     }
 
     public override void OnDestroy()
@@ -23,20 +34,13 @@ public class GameFrameSyncManager : BaseManager
         GameInterface.Interface.UdpListener.OnReceiveFrameSync -= ServerFrameSyncDataUpdate;
         base.OnDestroy();
     }
-
+    public int _latestServerFrame = -1;
     private void ServerFrameSyncDataUpdate(ResFrameSyncData res)
     {
-        _serverFrameId = res.FrameId;
-        if (!_initialized)
-        {
-            _initialized = true;
-            SimulationDriver.Instance.PrepareMatch(_serverFrameId);
-            OnFirstFrameArrived?.Invoke(_serverFrameId);
-        }
-        
+        _latestServerFrame = res.FrameId;
         foreach (var frameInput in res.PlayersFrameInputData)
         {
-            SimulationDriver.Instance.InputBuffer.Push(frameInput);
+            InputBuffer.Push(frameInput);
         }
     }
 }

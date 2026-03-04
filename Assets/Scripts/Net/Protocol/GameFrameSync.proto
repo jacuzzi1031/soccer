@@ -24,7 +24,7 @@ message ReqFrameSyncData
 message ReqFrameInputData
 {
   int32 frameId = 1;
-  int32 OwnerPlayerId = 2;
+  int32 seatIndex = 2;
   int32 inputType = 3;
   Vector2D position = 4;
   Vector2D moveVector = 8;
@@ -33,7 +33,7 @@ message ReqFrameInputData
 message ResFrameInputData
 {
   int32 frameId = 1;
-  int32 OwnerPlayerId = 2;
+  int32 seatIndex = 2;
   int32 inputType = 3;
   Vector2D position = 4;
   Vector2D moveVector = 8;

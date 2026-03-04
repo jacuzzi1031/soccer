@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SocketProtocol;
 using UnityEngine;
 
 public class BallView : MonoBehaviour
@@ -39,21 +40,28 @@ public class BallView : MonoBehaviour
     private bool _matchStarted = false;
 
     private void Awake() {
+        RoomMatchType currentMathType = GameInterface.Interface.GameManager.currentMatchType;
+        if (currentMathType == RoomMatchType.Training||currentMathType == RoomMatchType.TrainingWithEnemy) {
+            spawnPosition=trainingSpawnPosition.position;
+        }
+        transform.position = spawnPosition;
     }
 
     private void Start() {
         playerDetectArea.OnStay += PlayerDetectAreaOnOnEnter;
         playerProximityArea.OnTriggered+= PlayerProximityAreaOnOnTriggered;
         playerProximityArea.OnTriggerExit+= PlayerProximityAreaOnOnTriggerExit;
-        MatchType currentMathType = GameInterface.Interface.GameManager.currentMatchType;
-        if (currentMathType == MatchType.Training||currentMathType == MatchType.TrainingWithEnemy) {
-            transform.position=trainingSpawnPosition.position;
-        }
-        spawnPosition = transform.position;
+
     }
+
     private void OnEnable() {
-        GameInterface.Interface.GameManager.OnStartMatch += () => {_matchStarted = true; };
+        GameInterface.Interface.EventSystem.Subscribe<MatchStartEvent>(OnMatchStart);
     }
+
+    private void OnMatchStart(MatchStartEvent obj) {
+        _matchStarted = true; 
+    }
+
     private void OnDestroy() {
         playerDetectArea.OnStay -= PlayerDetectAreaOnOnEnter;
         playerProximityArea.OnTriggered-= PlayerProximityAreaOnOnTriggered;
@@ -142,7 +150,7 @@ public class BallView : MonoBehaviour
     float targetHeight;
     float interpTimer;
     BallState lastState;
-    public const float FRAME_DT = 1f / 30f;
+    public const float FRAME_DT = 1f / 60f;
     private void UpdateInterpolatedTransform() {
         //逻辑帧推进
         if (ballSim.Frame != lastConsumedFrame)

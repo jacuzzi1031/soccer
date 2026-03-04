@@ -39,6 +39,7 @@ enum ActionCode
   ChangeRound =16;
   ChangeOperation = 17;
   SetGameOver = 18;
+  OnTimeSync=19;
 }
 
 enum RoomMatchType
@@ -105,10 +106,11 @@ message MainPack
   RoundPack roundPack = 21;
   ChangeOperationPack changeOperationPack = 22;
   GameOverPack gameOverPack = 23;
-
   GameState currentGameState = 24;
   repeated int32 recipeIdArray = 25;
   int32 deliverRecipeId = 26;
+  SyncTimePack syncTimePack=27;
+  SyncTimeForOffsetPack syncTimeForOffsetPack=28;
 }
 
 message PlayerCoinPack
@@ -144,7 +146,16 @@ message RoomInfoPack
   int32 currentPlayers = 4;
   int32 maxPlayer = 5;
 }
-
+message SyncTimeForOffsetPack
+{
+  int64 clientSendTime = 1;
+  int64 serverTime = 2;
+}
+message SyncTimePack
+{
+  int64 startTime = 1;
+  int32 startFrame = 2;
+}
 message SearchRoomResultPack
 {
   repeated RoomInfoPack roomInfoList = 1;

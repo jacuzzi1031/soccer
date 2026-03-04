@@ -7,9 +7,6 @@ public class MainMenuUI : BaseUIPanel {
 
     [SerializeField] private Button playButton;
     [SerializeField] private Button quitButton;
-    [SerializeField] private Button trainButton;
-    [SerializeField] private Button trainWithEnemyButton;
-    [SerializeField] private Button championShipButton;
     [SerializeField] private Animator startAnimation;
 
 
@@ -23,27 +20,10 @@ public class MainMenuUI : BaseUIPanel {
             Application.Quit();
         });
         Time.timeScale = 1f;
-        
-        //for test single player
-        trainButton.onClick.AddListener(() => OnModeButtonClicked(MatchType.Training));
-        trainWithEnemyButton.onClick.AddListener(() => OnModeButtonClicked(MatchType.TrainingWithEnemy));
-        championShipButton.onClick.AddListener(() => OnModeButtonClicked(MatchType.UltimateTeam));
     }
 
     private void Start() {
         startAnimation.Play("StartMainMenuAnimation");
-    }
-
-    private void OnModeButtonClicked(MatchType mode)
-    {
-        GameInterface.Interface.GameManager.SetCurrentMatchType(mode);
-        
-        var ui = GameInterface.Interface.UIManager;
-        ui.HideUIPanel(UIPanelType.CreateRoomUI);
-        ui.HideUIPanel(UIPanelType.RoomListUI);
-        ui.HideUIPanel(UIPanelType.MainMenuUI);
-        
-        GameInterface.Interface.SceneLoader.LoadScene(Scene.RoomScene);
     }
 
 }

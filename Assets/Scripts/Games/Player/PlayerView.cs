@@ -133,7 +133,7 @@ public class PlayerView : MonoBehaviour {
          }
          tackleEmitterArea.enabled = false;
          spawnPosition=transform.position;
-         Vector2 initialPosition=country==GameInterface.Interface.GameManager.MatchController.currentMatch.countryHome?KickoffPosition:spawnPosition;
+         Vector2 initialPosition=country==GameSceneBootstrap.Instance.MatchController.currentMatch.countryHome?KickoffPosition:spawnPosition;
 
 
          
@@ -232,7 +232,7 @@ public class PlayerView : MonoBehaviour {
     Vector2 targetPos;
     float interpTimer;
     PlayerState lastState;
-    public const float FRAME_DT = 1f / 30f;
+    public const float FRAME_DT = 1f / 60f;
     private void Update() {
         
         ConsumeStateChange();

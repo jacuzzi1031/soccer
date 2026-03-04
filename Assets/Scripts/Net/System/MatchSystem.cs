@@ -1,4 +1,5 @@
 
+    using SocketProtocol;
     using UnityEngine;
 
     public class MatchSystem:ISimulationSystem {
@@ -11,25 +12,23 @@
         private GameSimStateFactory _gameSimStateFactory=new GameSimStateFactory();
         public SimEventBus _eventBus;
         private CommandBuffer _commandBuffer;
-        private MatchType _currentMatchType;
+        private RoomMatchType _currentMatchType;
         public int goalsHome;
         public int goalsAway;
-        public ControlContext _controlContext;
-        public MatchSystem(SimEventBus eventBus,CommandBuffer commandBuffer,MatchType matchType,ControlContext controlContext) {
+        public MatchSystem(SimEventBus eventBus,CommandBuffer commandBuffer,RoomMatchType matchType) {
             _eventBus=eventBus;
             _commandBuffer=commandBuffer;
             _currentMatchType=matchType;
             goalsHome=0; goalsAway=0;
-            _controlContext=controlContext;
             SwitchGameState(MatchState.RESET);
         }
 
         public bool resetAndHomeKickoff() {
-            if (_currentMatchType != MatchType.UltimateTeam) {
+            if (_currentMatchType != RoomMatchType.UltimateTeam) {
                 return true;
             }
             //比赛初始
-            if (_currentMatchType == MatchType.UltimateTeam && goalsHome == 0 && goalsAway == 0) {
+            if (_currentMatchType == RoomMatchType.UltimateTeam && goalsHome == 0 && goalsAway == 0) {
                 return true;
             }
             //which score
@@ -47,7 +46,7 @@
                         SwitchGameState(MatchState.KICKOFF);
                         break;
                     case SimulationCommandType.ShortPass:
-                        currentSimState?.OnKickoffStart(command.OwnerId);
+                        currentSimState?.OnKickoffStart(command.SeatIndex);
                         break;
                 }
             }

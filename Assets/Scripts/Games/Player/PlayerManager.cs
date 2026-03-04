@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using SocketProtocol;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -44,21 +45,21 @@ public class PlayerManager : MonoBehaviour
     }
 
     private void OnSimSetControll(SetControllerEvent obj) {
-        if (obj.P1Id!=-1&&currentP1Id != obj.P1Id)
+        if (currentP1Id != obj.P1Id)
         {
             if (squadHome[currentP1Id].controlScheme!=ControlScheme.CPU)
-                squadHome[currentP1Id].SetControlScheme(ControlScheme.CPU);
+                playersById[currentP1Id].SetControlScheme(ControlScheme.CPU);
 
             currentP1Id = obj.P1Id;
-            squadHome[currentP1Id].SetControlScheme(ControlScheme.P1);
+            playersById[currentP1Id].SetControlScheme(ControlScheme.P1);
         }
         if (obj.P2Id!=-1&&currentP2Id != obj.P2Id)
         {
             if (squadAway[currentP2Id].controlScheme!=ControlScheme.CPU)
-                squadAway[currentP2Id].SetControlScheme(ControlScheme.CPU);
+                playersById[currentP2Id].SetControlScheme(ControlScheme.CPU);
 
             currentP2Id = obj.P2Id;
-            squadAway[currentP2Id].SetControlScheme(ControlScheme.P2);
+            playersById[currentP2Id].SetControlScheme(ControlScheme.P2);
         }
     }
     private void OnPlayStyleShowEvent(OnControlSwitchEvent e) {
@@ -77,27 +78,27 @@ public class PlayerManager : MonoBehaviour
     public void InitializeSquads(Action<List<PlayerSim>, List<PlayerSim>> onTeamsReady)
     {
         // 创建 Home 和 Away 球员并初始化 PlayerView 和 PlayerSim
-        List<PlayerSim> PlayerSimsHome = SpawnPlayerViewsAndSims(GameInterface.Interface.GameManager.MatchController.currentMatch.countryHome, goalHome, true);
-        goalHome.initialize(GameInterface.Interface.GameManager.MatchController.currentMatch.countryHome);
-        goalAway.initialize(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway);
+        List<PlayerSim> PlayerSimsHome = SpawnPlayerViewsAndSims(GameSceneBootstrap.Instance.MatchController.currentMatch.countryHome, goalHome, true);
+        goalHome.initialize(GameSceneBootstrap.Instance.MatchController.currentMatch.countryHome);
+        goalAway.initialize(GameSceneBootstrap.Instance.MatchController.currentMatch.countryAway);
 
         spawns.rotation = Quaternion.Euler(0, 180, 0);
         kickOffs.rotation = Quaternion.Euler(0, 180, 0);
 
         List<PlayerSim> PlayerSimsAway;
-        MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
-        if (currentMatchType != MatchType.Training && currentMatchType != MatchType.TrainingWithEnemy)
+        RoomMatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
+        if (currentMatchType != RoomMatchType.Training && currentMatchType != RoomMatchType.TrainingWithEnemy)
         {
-            PlayerSimsAway = SpawnPlayerViewsAndSims(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway, goalAway, false);
+            PlayerSimsAway = SpawnPlayerViewsAndSims(GameSceneBootstrap.Instance.MatchController.currentMatch.countryAway, goalAway, false);
         }
-        else if (currentMatchType == MatchType.Training)
+        else if (currentMatchType == RoomMatchType.Training)
         {
-            PlayerSimsAway=SpawnOpponentViewsAndSims(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway, goalAway, false, false);
+            PlayerSimsAway=SpawnOpponentViewsAndSims(GameSceneBootstrap.Instance.MatchController.currentMatch.countryAway, goalAway, false, false);
         }
         else
         {
             //TrainingWithEnemy
-            PlayerSimsAway=SpawnOpponentViewsAndSims(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway, goalAway, true, false);
+            PlayerSimsAway=SpawnOpponentViewsAndSims(GameSceneBootstrap.Instance.MatchController.currentMatch.countryAway, goalAway, true, false);
         }
         // 回调 PlayerSim 列表
         onTeamsReady?.Invoke(PlayerSimsHome, PlayerSimsAway);
@@ -122,11 +123,11 @@ public class PlayerManager : MonoBehaviour
 
         switch (GameInterface.Interface.GameManager.currentMatchType)
         {
-            case MatchType.Training:
+            case RoomMatchType.Training:
                 kickoffParent = training.transform;
                 startIndex = 4;
                 break;
-            case MatchType.TrainingWithEnemy:
+            case RoomMatchType.TrainingWithEnemy:
                 kickoffParent = training.transform;
                 startIndex = 5;
                 break;
@@ -139,11 +140,11 @@ public class PlayerManager : MonoBehaviour
 
         for (int i = startIndex; i < playerResources.Count; i++)
         {
-            MatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
+            RoomMatchType currentMatchType = GameInterface.Interface.GameManager.currentMatchType;
             Vector2 playerPosition;
             Vector2 kickoffPosition;
             
-            if (currentMatchType != MatchType.Training && currentMatchType != MatchType.TrainingWithEnemy)
+            if (currentMatchType != RoomMatchType.Training && currentMatchType != RoomMatchType.TrainingWithEnemy)
             {
                 playerPosition = spawns.GetChild(i).position;
                 kickoffPosition = (i > 3)

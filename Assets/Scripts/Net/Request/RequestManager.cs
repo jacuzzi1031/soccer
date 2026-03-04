@@ -32,6 +32,7 @@ public class RequestManager : BaseManager
         RegisterRequest(new LoadGameSceneCompleteRequest());
         RegisterRequest(new GameStateChangeResponse());
         RegisterRequest(new RoomPlayerSelectCountryRequest());
+        RegisterRequest(new TimeSyncRequest());
     }
     private void RegisterRequest(BaseRequest request)
     {

@@ -11,31 +11,22 @@ public class InputBuffer
     public class Command
     {
         public int frame;
-        public int playerId;
-        public int slot;
+        public int seatIndex;
         public int inputType;
         public Vector2 moveVector;
-        public int ownerId;
     }
 // frame -> [player0Cmd, player1Cmd]
     private readonly Dictionary<int, Command[]> buffer;
 
     private readonly ObjectPool<Command> _commandPool;
     public  int maxPlayers;
-    private Dictionary<int, int> _playerIdToSlot;
     public InputBuffer() {
         buffer = new Dictionary<int, Command[]>();
         _commandPool = new ObjectPool<Command>(() => new Command());
     }
-    public void Push(ResFrameInputData msg)
-    {
-        if (!_playerIdToSlot.TryGetValue(msg.OwnerPlayerId, out var slot))
-        {
-            // 非法玩家，丢弃
-            return;
-        }
-
-        if ((uint)slot >= (uint)maxPlayers)
+    public void Push(ResFrameInputData msg) {
+        int seatIndex = msg.SeatIndex;
+        if ((uint)seatIndex >= (uint)maxPlayers)
             return;
 
         if (!buffer.TryGetValue(msg.FrameId, out var frameCmds))
@@ -44,19 +35,44 @@ public class InputBuffer
             buffer.Add(msg.FrameId, frameCmds);
         }
 
-        if (frameCmds[slot] != null)
+        if (frameCmds[seatIndex] != null)
         {
-            _commandPool.Release(frameCmds[slot]);
+            _commandPool.Release(frameCmds[seatIndex]);
         }
 
         var cmd = _commandPool.Allocate();
         cmd.frame = msg.FrameId;
-        cmd.slot = slot;          
-        cmd.ownerId = msg.OwnerPlayerId; 
+        cmd.seatIndex = seatIndex;          
         cmd.inputType = msg.InputType;
         cmd.moveVector = DecodeMoveDir(msg.MoveVector);
 
-        frameCmds[slot] = cmd;
+        frameCmds[seatIndex] = cmd;
+    }
+    public void ConsumeFrame(int frame, Action<Command> visitor)
+    {
+        if (!buffer.TryGetValue(frame, out var frameCmds))
+            return;
+    
+        for (int seatIndex = 0; seatIndex < frameCmds.Length; seatIndex++)
+        {
+            var cmd = frameCmds[seatIndex];
+    
+            if (cmd == null)
+            {
+                // 这里说明你的窗口判断有 bug
+                throw new InvalidOperationException(
+                    $"Frame {frame} seatIndex {seatIndex} missing input.");
+            }
+    
+            visitor(cmd);
+            _commandPool.Release(cmd);
+            frameCmds[seatIndex] = null;
+        }
+    
+        buffer.Remove(frame);
+    }
+    public void SetmaxPlayers(int playerCount) {
+        maxPlayers=playerCount;
     }
     public static Vector2 DecodeMoveDir(Vector2D v)
     {
@@ -65,43 +81,30 @@ public class InputBuffer
 
         return new Vector2(v.X, v.Y).normalized;
     }
-
-    public void ConsumeFrame(int frame, Action<Command> visitor)
-    {
-        if (!buffer.TryGetValue(frame, out var frameCmds))
-            return;
-
-        for (int slot = 0; slot < frameCmds.Length; slot++)
-        {
-            var cmd = frameCmds[slot];
-
-            if (cmd == null)
-            {
-                // 这里说明你的窗口判断有 bug
-                throw new InvalidOperationException(
-                    $"Frame {frame} slot {slot} missing input.");
-            }
-
-            visitor(cmd);
-            _commandPool.Release(cmd);
-            frameCmds[slot] = null;
-        }
-
-        buffer.Remove(frame);
-    }
-
-
-    public void SetPlayerIdToSlot(ControlContext controlContext) {
-        _playerIdToSlot=new Dictionary<int, int>();
-        int slotId = 0;
-        if (controlContext.HomeOwnerId != -1) {
-            _playerIdToSlot[controlContext.HomeOwnerId] = slotId++;
-        }
-        if (controlContext.AwayOwnerId != -1) {
-            _playerIdToSlot[controlContext.AwayOwnerId] = slotId++;
-        }
-
-        maxPlayers = slotId;
-    }
+    // public void ConsumeFrame(int frame, Action<Command> visitor)
+    // {
+    //     if (!buffer.TryGetValue(frame, out var frameCmds))
+    //     {
+    //         // 整帧都没到，直接用预测
+    //         SimulateNoneFrame(frame, visitor);
+    //         return;
+    //     }
+    //
+    //     for (int seatIndex = 0; seatIndex < frameCmds.Length; seatIndex++)
+    //     {
+    //         var cmd = frameCmds[seatIndex];
+    //
+    //         if (cmd == null)
+    //         {
+    //             // 缺失玩家输入 → 用 NoneInput 或 上一帧输入
+    //             cmd = CreatePredictedInput(seatIndex);
+    //         }
+    //
+    //         visitor(cmd);
+    //     }
+    //
+    //     buffer.Remove(frame);
+    // }
+  
 }
 

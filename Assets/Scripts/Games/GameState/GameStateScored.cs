@@ -7,7 +7,7 @@ public class GameStateScored : GameState
     private const float CELEBRATION_DURATION = 3f;
     private static readonly int CELEBRATION_DURATION_FRAMES =
         Mathf.CeilToInt(
-            CELEBRATION_DURATION / SimulationDriver.FRAME_DT
+            CELEBRATION_DURATION / SimulationClock.FRAME_DT
         );
     private int celebrationFrames;
     public override void OnEnter() {

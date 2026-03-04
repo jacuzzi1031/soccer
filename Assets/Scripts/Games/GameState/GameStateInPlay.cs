@@ -27,7 +27,7 @@ public class GameStateInPlay : GameState
         if (_transitionQueued)
             return;
         
-        Controller.timeLeft -=SimulationDriver.FRAME_DT;
+        Controller.timeLeft -=SimulationClock.FRAME_DT;
         
         if (!Controller.IsTimeUp())
             return;

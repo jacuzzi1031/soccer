@@ -41,7 +41,9 @@ public class JoinRoomRequest : BaseRequest
                 };
                 return roomPlayerInfo;
             }).ToList();
-            GameInterface.Interface.RoomManager.JoinRoom(currentRoomInfo, roomPlayerInfoList);
+            int seatIndex = pack.RoomPlayerInfoPack.SeatIndex;
+            GameInterface.Interface.GameManager.SetCurrentMatchType(currentRoomInfo.RoomMatchType);
+            GameInterface.Interface.RoomManager.JoinRoom(currentRoomInfo, roomPlayerInfoList,seatIndex);
             //for delete uiPanel
             base.HandleServerSuccessResponse(pack);
         }
@@ -60,8 +62,6 @@ public class JoinRoomRequest : BaseRequest
             };
             GameInterface.Interface.RoomManager.JoinNewRoomPlayer(roomPlayerInfo);
         }
-
-
     }
 
     protected override void HandleServerFailResponse(MainPack pack)

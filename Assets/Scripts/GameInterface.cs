@@ -59,7 +59,6 @@ public class GameInterface : MonoBehaviour
         foreach (var roomPlayer in RoomManager.RoomPlayerList) {
             roomPlayer.ready=false;
         }
-        GameManager.OnInit();
         UIManager.OnInit();
         UIManager.PushUIPanel(
             UIPanelType.MainMenuUI,

@@ -54,6 +54,10 @@ public class GameUI : MonoBehaviour
         playerText.text = "";
     }
 
+    private void Start() {
+        
+    }
+
     public void OnEnable() {
         GameInterface.Interface.EventSystem.Subscribe<OnBallPossessedEvent>(OnBallPossessed);
         GameInterface.Interface.EventSystem.Subscribe<OnBallReleasedEvent>(OnBallReleased);
@@ -61,10 +65,10 @@ public class GameUI : MonoBehaviour
         GameInterface.Interface.EventSystem.Subscribe<OnTeamResetEvent>(OnTeamReset);
         GameInterface.Interface.EventSystem.Subscribe<OnGameOverEvent>(OnGameOver);
         
-        GameInterface.Interface.GameManager.OnStartMatch+= GameManagerOnOnStartMatch;
+        GameInterface.Interface.EventSystem.Subscribe<MatchStartEvent>(OnMatchStart);
     }
 
-    private void GameManagerOnOnStartMatch() {
+    private void OnMatchStart(MatchStartEvent obj) {
         _matchStarted = true;
         UpdateScore();
         UpdateFlags();
@@ -103,7 +107,7 @@ public class GameUI : MonoBehaviour
 
     private void UpdateScore()
     {
-        scoreText.text = GetScoreText(GameInterface.Interface.GameManager.MatchController.currentMatch);
+        scoreText.text = GetScoreText(GameSceneBootstrap.Instance.MatchController.currentMatch);
     }
     public string GetScoreText(Match match)
     {   
@@ -113,21 +117,21 @@ public class GameUI : MonoBehaviour
     private void UpdateFlags()
     {
         homeFlagImage.sprite =
-            GetSprite(GameInterface.Interface.GameManager.MatchController.currentMatch.countryHome);
+            GetSprite(GameSceneBootstrap.Instance.MatchController.currentMatch.countryHome);
 
         awayFlagImage.sprite =
-            GetSprite(GameInterface.Interface.GameManager.MatchController.currentMatch.countryAway);
+            GetSprite(GameSceneBootstrap.Instance.MatchController.currentMatch.countryAway);
     }
 
     private void UpdateClock()
     {
-        if (GameInterface.Interface.GameManager.MatchController.timeLeft < 0)
+        if (GameSceneBootstrap.Instance.MatchController.timeLeft < 0)
             timeText.color = Color.yellow;
         else {
             timeText.color = Color.white;
         }
 
-        timeText.text = GetTimeText(GameInterface.Interface.GameManager.MatchController.timeLeft);
+        timeText.text = GetTimeText(GameSceneBootstrap.Instance.MatchController.timeLeft);
     }
     public static string GetTimeText(float timeLeft)
     {
@@ -158,11 +162,11 @@ public class GameUI : MonoBehaviour
 
     private void OnScoreChanged(OnScoreChangedEvent obj)
     {
-        if (!GameInterface.Interface.GameManager.MatchController.IsTimeUp())
+        if (!GameSceneBootstrap.Instance.MatchController.IsTimeUp())
         {
             goalScorerText.text = $"{lastBallCarrier} 进球!";
             scoreInfoText.text =
-                GetCurrentScoreInfo(GameInterface.Interface.GameManager.MatchController.currentMatch);
+                GetCurrentScoreInfo(GameSceneBootstrap.Instance.MatchController.currentMatch);
             animator.Play("GoalAppear");
         }
 
@@ -182,7 +186,7 @@ public class GameUI : MonoBehaviour
 
     private void OnTeamReset(OnTeamResetEvent obj)
     {
-        if (GameInterface.Interface.GameManager.MatchController.currentMatch.HasSomeoneScored())
+        if (GameSceneBootstrap.Instance.MatchController.currentMatch.HasSomeoneScored())
         {
             animator.Play("GoalHide");
         }
@@ -191,7 +195,7 @@ public class GameUI : MonoBehaviour
     private void OnGameOver(OnGameOverEvent obj)
     {
         scoreInfoText.text =
-            GetFinalScoreInfo(GameInterface.Interface.GameManager.MatchController.currentMatch);
+            GetFinalScoreInfo(GameSceneBootstrap.Instance.MatchController.currentMatch);
 
         animator.Play("GameOver");
     }
@@ -202,7 +206,7 @@ public class GameUI : MonoBehaviour
 
     public void OnGameOverAnimationComplete() {
         // StartCoroutine(ReturnToMainMenu());
-        GameInterface.Interface.GameManager.EndMatch();
+        GameSceneBootstrap.Instance.EndMatch();
     }
 
     // private IEnumerator ReturnToMainMenu() {

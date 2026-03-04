@@ -33,8 +33,9 @@ public class CreateRoomRequest : BaseRequest
             nickname = roomPlayerInfoPack.Nickname,
             ready = roomPlayerInfoPack.Ready
         };
-        GameInterface.Interface.RoomManager.JoinRoom(currentRoomInfo, new List<RoomPlayerInfo> { roomPlayerInfo });
-        
+        int seatIndex = roomPlayerInfoPack.SeatIndex;
+        GameInterface.Interface.RoomManager.JoinRoom(currentRoomInfo, new List<RoomPlayerInfo> { roomPlayerInfo },seatIndex);
+        GameInterface.Interface.GameManager.SetCurrentMatchType(currentRoomInfo.RoomMatchType);
         base.HandleServerSuccessResponse(pack);
     }
 

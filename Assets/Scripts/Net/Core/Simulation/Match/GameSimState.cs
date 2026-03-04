@@ -23,7 +23,7 @@
             
         }
 
-        public virtual void OnKickoffStart(int ownerId) {
+        public virtual void OnKickoffStart(int seatIndex) {
         }
 
         public virtual void OnTeamScored(OnTeamScoredEvent obj) {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using SocketProtocol;
 using UnityEngine;
 
 public class GameStateKickoff : GameState {
@@ -12,10 +13,10 @@ public class GameStateKickoff : GameState {
         bool ScoreIsHome=Controller.currentMatch.countryHome==countryStarting?true:false;
 
         
-        MatchType matchType = GameInterface.Interface.GameManager.currentMatchType;
+        RoomMatchType matchType = GameInterface.Interface.GameManager.currentMatchType;
         GameManager.GameMode gameMode = GameInterface.Interface.GameManager.currentGameMode;
-        if (matchType == MatchType.Training || matchType == MatchType.TrainingWithEnemy
-                                                        ||gameMode==GameManager.GameMode.Single) {
+        if (matchType == RoomMatchType.Training || matchType == RoomMatchType.TrainingWithEnemy
+                                                ||gameMode==GameManager.GameMode.Single) {
         }
         
         GameInterface.Interface.EventSystem.Subscribe<EntityForGameKickoffEvent>(onKickoffEvent);

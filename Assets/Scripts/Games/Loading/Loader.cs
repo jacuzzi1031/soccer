@@ -61,6 +61,7 @@ public class Loader : MonoBehaviour
     }
     private void OnAllPlayerLoadComplete()
     {
+        Debug.Log("All player load complete");
         _mLoadSceneAsyncOperation.allowSceneActivation = true;
     }
     // IEnumerator DelayToComplete()

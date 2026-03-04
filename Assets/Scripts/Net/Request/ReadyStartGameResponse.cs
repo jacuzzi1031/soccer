@@ -17,7 +17,10 @@ public class ReadyStartGameResponse : BaseRequest
         Invoker.Instance.DelegateList.Add(() =>
         {
             GameInterface.Interface.UIManager.ShowMessage("开始游戏!");
-            GameInterface.Interface.SceneLoader.LoadScene(Scene.LoadingScene);
+            GameInterface.Interface.GameFrameSyncManager.PrepareControlContext();
+            
+            TimeSyncManager.Instance.EnterGameWhenSynced();
+            // GameInterface.Interface.SceneLoader.LoadScene(Scene.LoadingScene);
         });
 
         GameInterface.Interface.UdpListener.StartListen();

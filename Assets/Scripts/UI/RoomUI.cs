@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using SocketProtocol;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,9 +48,9 @@ public class RoomUI : MonoBehaviour
     {
         roomNameText.text = GameInterface.Interface.GameManager.currentMatchType switch
         {
-            MatchType.Training           => "训练模式",
-            MatchType.TrainingWithEnemy  => "对抗训练",
-            MatchType.UltimateTeam       => "锦标赛",
+            RoomMatchType.Training           => "训练模式",
+            RoomMatchType.TrainingWithEnemy  => "对抗训练",
+            RoomMatchType.UltimateTeam       => "锦标赛",
             _                            => "未知模式"
         };
     }

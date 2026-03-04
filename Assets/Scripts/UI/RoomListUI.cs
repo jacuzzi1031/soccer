@@ -17,8 +17,8 @@ public class RoomListUI : BaseUIPanel
     [SerializeField] private Button closeButton;
 
     private SearchRoomRequest _mSearchRoomRequest;
-    private ObjectPool<RoomTabUI> _roomTabPool;
     private List<RoomTabUI> _activeRoomTabs = new List<RoomTabUI>();
+    private int _searchVersion = 0;
     public override void OnInit()
     {
         _mSearchRoomRequest = GameInterface.Interface.RequestManager.GetRequest<SearchRoomRequest>();
@@ -28,7 +28,6 @@ public class RoomListUI : BaseUIPanel
     private void Start()
     {
         searchRoomButton.onClick.AddListener(SearchRoom);
-        SearchRoom();
         createRoomButton.onClick.AddListener(() =>
         {
             GameInterface.Interface.UIManager.PushUIPanelAppend(UIPanelType.CreateRoomUI,
@@ -38,69 +37,68 @@ public class RoomListUI : BaseUIPanel
         {
             GameInterface.Interface.UIManager.PopUIPanel();
         });
-        
-        _roomTabPool = new ObjectPool<RoomTabUI>(() =>
-        {
-            GameObject go = Instantiate(roomTabPrefab, roomTabsContainer);
-            go.SetActive(false);
-            return go.GetComponent<RoomTabUI>();
-        });
     }
 
     public override void OnShow()
     {
-        Debug.Log("搜索房间中...");
-        // 搜索所有房间
-        _mSearchRoomRequest.SendSearchRoomRequest(roomInfo =>
+        RequestRoomList(roomInfo =>
         {
             roomInfo.RoomMatchType = RoomMatchType.None;
             roomInfo.roomName = string.Empty;
-        }, UpdateRoomList);
+        });
 
         base.OnShow();
     }
+    private void RequestRoomList(Action<RoomInfo> filter)
+    {
+        _searchVersion++;
+        int currentVersion = _searchVersion;
 
+        _mSearchRoomRequest.SendSearchRoomRequest(filter, roomList =>
+        {
+            if (currentVersion != _searchVersion)
+                return;
+
+            UpdateRoomList(roomList);
+        });
+    }
     private void SearchRoom()
     {
         string roomName = searchRoomNameInput.text;
-        RoomMatchType roomMatchType =(RoomMatchType)GameTypeDropdown.value;
-        _mSearchRoomRequest.SendSearchRoomRequest(roomInfo =>
+        RoomMatchType roomMatchType = (RoomMatchType)GameTypeDropdown.value;
+
+        RequestRoomList(roomInfo =>
         {
             roomInfo.roomName = roomName;
             roomInfo.RoomMatchType = roomMatchType;
-        }, UpdateRoomList);
+        });
+    }
+    private void ClearRoomList()
+    {
+        for (int i = roomTabsContainer.childCount - 1; i >= 0; i--)
+        {
+            Destroy(roomTabsContainer.GetChild(i).gameObject);
+        }
+
+        _activeRoomTabs.Clear();
     }
     private void UpdateRoomList(List<RoomInfo> roomInfoList)
     {
-        Debug.Log($"RoomListUI搜索结果:{roomInfoList.Count}");
-        
-        for (int i = 0; i < _activeRoomTabs.Count; i++)
-        {
-            RoomTabUI tab = _activeRoomTabs[i];
-            tab.gameObject.SetActive(false);
-            _roomTabPool.Release(tab);
-        }
-        _activeRoomTabs.Clear();
-        
-        var layout = roomTabsContainer.GetComponent<VerticalLayoutGroup>();
-        float spacing = layout.spacing;
-        float perHeight = roomTabPrefab.GetComponent<RectTransform>().rect.height;
-
-        float height = roomInfoList.Count > 0
-            ? perHeight * roomInfoList.Count + (roomInfoList.Count - 1) * spacing
-            : 0f;
-
-        roomTabsContainer.sizeDelta =
-            new Vector2(roomTabsContainer.sizeDelta.x, height);
+        ClearRoomList();
 
         foreach (var roomInfo in roomInfoList)
         {
-            RoomTabUI roomTabUI = _roomTabPool.Allocate();
-            roomTabUI.transform.SetParent(roomTabsContainer, false);
-            roomTabUI.gameObject.SetActive(true);
+            GameObject go = Instantiate(roomTabPrefab, roomTabsContainer);
+            RoomTabUI roomTabUI = go.GetComponent<RoomTabUI>();
             roomTabUI.SetRoomTab(roomInfo);
-
-            _activeRoomTabs.Add(roomTabUI);
         }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(roomTabsContainer);
+    }
+    public override void OnHide()
+    {
+        _searchVersion++;
+        ClearRoomList();
+        base.OnHide();
     }
 }

@@ -494,6 +494,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomName: {fileID: 2406538739203305258}
-  RoomMatchType: {fileID: 809041970818969955}
+  roomMatchTypeText: {fileID: 809041970818969955}
   roomPlayers: {fileID: 8531628960868182662}
-  roomVisibility: {fileID: 0}

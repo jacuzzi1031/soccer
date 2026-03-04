@@ -9,7 +9,6 @@ public class MatchController
     // private const float DURATION_GAME_SEC = 2f;
     private const float DURATION_GAME_SEC = 2 * 60f;
     private SimEventBus _eventBus;
-    private SimulationFacade _simFacade;
     public enum State
     {
         IN_PLAY,
@@ -23,12 +22,15 @@ public class MatchController
     [HideInInspector] public GameState currentState;
     private GameStateFactory _gameStateFactory=new GameStateFactory();
     public float timeLeft;
-
-    public MatchController(SimulationFacade simFacade,SimEventBus EventBus,string countryHome, string CountryAway) {
+    public MatchController(SimEventBus EventBus,string countryHome, string CountryAway) {
         currentMatch=new Match(countryHome,CountryAway);
         _eventBus = EventBus;
-        _simFacade = simFacade;
         SubscribeSimSignal();
+        
+                
+        Invoker.Instance.DelegateList.Add(() => {
+            GameInterface.Interface.EventSystem.Publish(new MatchStartEvent());
+        });
     }
 
     private void SubscribeSimSignal() {

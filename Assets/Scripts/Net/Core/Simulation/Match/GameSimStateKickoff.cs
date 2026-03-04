@@ -10,15 +10,15 @@
         }
 
 
-        public override void OnKickoffStart(int ownerId) {
+        public override void OnKickoffStart(int seatIndex) {
             bool homeKickoff = _matchSystem.resetAndHomeKickoff();
             bool isHome =
                 homeKickoff &&
-                ownerId == _matchSystem._controlContext.HomeOwnerId;
+                seatIndex == 0;
 
             bool isAway =
                 !homeKickoff &&
-                ownerId == _matchSystem._controlContext.AwayOwnerId;
+                seatIndex == 1;
 
             if (!isHome && !isAway)
                 return;

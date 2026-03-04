@@ -15,6 +15,10 @@ public class LoadGameSceneCompleteRequest : BaseRequest
     protected override void HandleServerSuccessResponse(MainPack pack)
     {
         Debug.Log("LoadGameSceneCompleteRequest:LoadGameScene...");
+
+        long startTime=pack.SyncTimePack.StartTime;
+        int startFrame=pack.SyncTimePack.StartFrame;
+        SimulationClock.Instance.OnStartGame(startTime,startFrame);
         base.HandleServerSuccessResponse(pack);
     }
         
@@ -27,7 +31,7 @@ public class LoadGameSceneCompleteRequest : BaseRequest
     {
         int playerId = GameInterface.Interface.LocalPlayerInfo.id;
         string roomCode = GameInterface.Interface.RoomManager.CurrentRoomInfo.roomCode;
-
+        
         PlayerInfoPack playerInfoPack = new PlayerInfoPack { Id = playerId };
         RoomInfoPack roomInfoPack = new RoomInfoPack
         {
@@ -42,7 +46,6 @@ public class LoadGameSceneCompleteRequest : BaseRequest
         };
         OnServerSuccessResponse += onSuccess;
         OnServerFailResponse += onFail;
-            
         SendRequest(mainPack);
     }
 }

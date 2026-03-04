@@ -33,24 +33,24 @@ namespace GameFrameSync {
             "ChBSZXFGcmFtZVN5bmNEYXRhEg8KB2ZyYW1lSWQYASABKAUSOwoRcmVxRnJh",
             "bWVJbnB1dERhdGEYAyABKAsyIC5HYW1lRnJhbWVTeW5jLlJlcUZyYW1lSW5w",
             "dXREYXRhEi8KC21lc3NhZ2VUeXBlGAYgASgOMhouR2FtZUZyYW1lU3luYy5N",
-            "ZXNzYWdlVHlwZRIQCghyb29tQ29kZRgHIAEoCSKmAQoRUmVxRnJhbWVJbnB1",
-            "dERhdGESDwoHZnJhbWVJZBgBIAEoBRIVCg1Pd25lclBsYXllcklkGAIgASgF",
-            "EhEKCWlucHV0VHlwZRgDIAEoBRIpCghwb3NpdGlvbhgEIAEoCzIXLkdhbWVG",
-            "cmFtZVN5bmMuVmVjdG9yMkQSKwoKbW92ZVZlY3RvchgIIAEoCzIXLkdhbWVG",
-            "cmFtZVN5bmMuVmVjdG9yMkQipgEKEVJlc0ZyYW1lSW5wdXREYXRhEg8KB2Zy",
-            "YW1lSWQYASABKAUSFQoNT3duZXJQbGF5ZXJJZBgCIAEoBRIRCglpbnB1dFR5",
-            "cGUYAyABKAUSKQoIcG9zaXRpb24YBCABKAsyFy5HYW1lRnJhbWVTeW5jLlZl",
-            "Y3RvcjJEEisKCm1vdmVWZWN0b3IYCCABKAsyFy5HYW1lRnJhbWVTeW5jLlZl",
-            "Y3RvcjJEIisKCFZlY3RvcjNEEgkKAXgYASABKBESCQoBeRgCIAEoERIJCgF6",
-            "GAMgASgRIiAKCFZlY3RvcjJEEgkKAXgYASABKBESCQoBeRgCIAEoESolCgtN",
-            "ZXNzYWdlVHlwZRINCglGcmFtZVN5bmMQABIHCgNBQ0sQAmIGcHJvdG8z"));
+            "ZXNzYWdlVHlwZRIQCghyb29tQ29kZRgHIAEoCSKiAQoRUmVxRnJhbWVJbnB1",
+            "dERhdGESDwoHZnJhbWVJZBgBIAEoBRIRCglzZWF0SW5kZXgYAiABKAUSEQoJ",
+            "aW5wdXRUeXBlGAMgASgFEikKCHBvc2l0aW9uGAQgASgLMhcuR2FtZUZyYW1l",
+            "U3luYy5WZWN0b3IyRBIrCgptb3ZlVmVjdG9yGAggASgLMhcuR2FtZUZyYW1l",
+            "U3luYy5WZWN0b3IyRCKiAQoRUmVzRnJhbWVJbnB1dERhdGESDwoHZnJhbWVJ",
+            "ZBgBIAEoBRIRCglzZWF0SW5kZXgYAiABKAUSEQoJaW5wdXRUeXBlGAMgASgF",
+            "EikKCHBvc2l0aW9uGAQgASgLMhcuR2FtZUZyYW1lU3luYy5WZWN0b3IyRBIr",
+            "Cgptb3ZlVmVjdG9yGAggASgLMhcuR2FtZUZyYW1lU3luYy5WZWN0b3IyRCIr",
+            "CghWZWN0b3IzRBIJCgF4GAEgASgREgkKAXkYAiABKBESCQoBehgDIAEoESIg",
+            "CghWZWN0b3IyRBIJCgF4GAEgASgREgkKAXkYAiABKBEqJQoLTWVzc2FnZVR5",
+            "cGUSDQoJRnJhbWVTeW5jEAASBwoDQUNLEAJiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameFrameSync.MessageType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResFrameSyncData), global::GameFrameSync.ResFrameSyncData.Parser, new[]{ "FrameId", "PlayersFrameInputData", "ReqFrameInputData", "MessageType", "RoomCode" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqFrameSyncData), global::GameFrameSync.ReqFrameSyncData.Parser, new[]{ "FrameId", "ReqFrameInputData", "MessageType", "RoomCode" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqFrameInputData), global::GameFrameSync.ReqFrameInputData.Parser, new[]{ "FrameId", "OwnerPlayerId", "InputType", "Position", "MoveVector" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResFrameInputData), global::GameFrameSync.ResFrameInputData.Parser, new[]{ "FrameId", "OwnerPlayerId", "InputType", "Position", "MoveVector" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqFrameInputData), global::GameFrameSync.ReqFrameInputData.Parser, new[]{ "FrameId", "SeatIndex", "InputType", "Position", "MoveVector" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResFrameInputData), global::GameFrameSync.ResFrameInputData.Parser, new[]{ "FrameId", "SeatIndex", "InputType", "Position", "MoveVector" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.Vector3D), global::GameFrameSync.Vector3D.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.Vector2D), global::GameFrameSync.Vector2D.Parser, new[]{ "X", "Y" }, null, null, null, null)
           }));
@@ -765,7 +765,7 @@ namespace GameFrameSync {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ReqFrameInputData(ReqFrameInputData other) : this() {
       frameId_ = other.frameId_;
-      ownerPlayerId_ = other.ownerPlayerId_;
+      seatIndex_ = other.seatIndex_;
       inputType_ = other.inputType_;
       position_ = other.position_ != null ? other.position_.Clone() : null;
       moveVector_ = other.moveVector_ != null ? other.moveVector_.Clone() : null;
@@ -790,15 +790,15 @@ namespace GameFrameSync {
       }
     }
 
-    /// <summary>Field number for the "OwnerPlayerId" field.</summary>
-    public const int OwnerPlayerIdFieldNumber = 2;
-    private int ownerPlayerId_;
+    /// <summary>Field number for the "seatIndex" field.</summary>
+    public const int SeatIndexFieldNumber = 2;
+    private int seatIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int OwnerPlayerId {
-      get { return ownerPlayerId_; }
+    public int SeatIndex {
+      get { return seatIndex_; }
       set {
-        ownerPlayerId_ = value;
+        seatIndex_ = value;
       }
     }
 
@@ -854,7 +854,7 @@ namespace GameFrameSync {
         return true;
       }
       if (FrameId != other.FrameId) return false;
-      if (OwnerPlayerId != other.OwnerPlayerId) return false;
+      if (SeatIndex != other.SeatIndex) return false;
       if (InputType != other.InputType) return false;
       if (!object.Equals(Position, other.Position)) return false;
       if (!object.Equals(MoveVector, other.MoveVector)) return false;
@@ -866,7 +866,7 @@ namespace GameFrameSync {
     public override int GetHashCode() {
       int hash = 1;
       if (FrameId != 0) hash ^= FrameId.GetHashCode();
-      if (OwnerPlayerId != 0) hash ^= OwnerPlayerId.GetHashCode();
+      if (SeatIndex != 0) hash ^= SeatIndex.GetHashCode();
       if (InputType != 0) hash ^= InputType.GetHashCode();
       if (position_ != null) hash ^= Position.GetHashCode();
       if (moveVector_ != null) hash ^= MoveVector.GetHashCode();
@@ -892,9 +892,9 @@ namespace GameFrameSync {
         output.WriteRawTag(8);
         output.WriteInt32(FrameId);
       }
-      if (OwnerPlayerId != 0) {
+      if (SeatIndex != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(OwnerPlayerId);
+        output.WriteInt32(SeatIndex);
       }
       if (InputType != 0) {
         output.WriteRawTag(24);
@@ -922,9 +922,9 @@ namespace GameFrameSync {
         output.WriteRawTag(8);
         output.WriteInt32(FrameId);
       }
-      if (OwnerPlayerId != 0) {
+      if (SeatIndex != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(OwnerPlayerId);
+        output.WriteInt32(SeatIndex);
       }
       if (InputType != 0) {
         output.WriteRawTag(24);
@@ -951,8 +951,8 @@ namespace GameFrameSync {
       if (FrameId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrameId);
       }
-      if (OwnerPlayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(OwnerPlayerId);
+      if (SeatIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SeatIndex);
       }
       if (InputType != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(InputType);
@@ -978,8 +978,8 @@ namespace GameFrameSync {
       if (other.FrameId != 0) {
         FrameId = other.FrameId;
       }
-      if (other.OwnerPlayerId != 0) {
-        OwnerPlayerId = other.OwnerPlayerId;
+      if (other.SeatIndex != 0) {
+        SeatIndex = other.SeatIndex;
       }
       if (other.InputType != 0) {
         InputType = other.InputType;
@@ -1020,7 +1020,7 @@ namespace GameFrameSync {
             break;
           }
           case 16: {
-            OwnerPlayerId = input.ReadInt32();
+            SeatIndex = input.ReadInt32();
             break;
           }
           case 24: {
@@ -1065,7 +1065,7 @@ namespace GameFrameSync {
             break;
           }
           case 16: {
-            OwnerPlayerId = input.ReadInt32();
+            SeatIndex = input.ReadInt32();
             break;
           }
           case 24: {
@@ -1129,7 +1129,7 @@ namespace GameFrameSync {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ResFrameInputData(ResFrameInputData other) : this() {
       frameId_ = other.frameId_;
-      ownerPlayerId_ = other.ownerPlayerId_;
+      seatIndex_ = other.seatIndex_;
       inputType_ = other.inputType_;
       position_ = other.position_ != null ? other.position_.Clone() : null;
       moveVector_ = other.moveVector_ != null ? other.moveVector_.Clone() : null;
@@ -1154,15 +1154,15 @@ namespace GameFrameSync {
       }
     }
 
-    /// <summary>Field number for the "OwnerPlayerId" field.</summary>
-    public const int OwnerPlayerIdFieldNumber = 2;
-    private int ownerPlayerId_;
+    /// <summary>Field number for the "seatIndex" field.</summary>
+    public const int SeatIndexFieldNumber = 2;
+    private int seatIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int OwnerPlayerId {
-      get { return ownerPlayerId_; }
+    public int SeatIndex {
+      get { return seatIndex_; }
       set {
-        ownerPlayerId_ = value;
+        seatIndex_ = value;
       }
     }
 
@@ -1218,7 +1218,7 @@ namespace GameFrameSync {
         return true;
       }
       if (FrameId != other.FrameId) return false;
-      if (OwnerPlayerId != other.OwnerPlayerId) return false;
+      if (SeatIndex != other.SeatIndex) return false;
       if (InputType != other.InputType) return false;
       if (!object.Equals(Position, other.Position)) return false;
       if (!object.Equals(MoveVector, other.MoveVector)) return false;
@@ -1230,7 +1230,7 @@ namespace GameFrameSync {
     public override int GetHashCode() {
       int hash = 1;
       if (FrameId != 0) hash ^= FrameId.GetHashCode();
-      if (OwnerPlayerId != 0) hash ^= OwnerPlayerId.GetHashCode();
+      if (SeatIndex != 0) hash ^= SeatIndex.GetHashCode();
       if (InputType != 0) hash ^= InputType.GetHashCode();
       if (position_ != null) hash ^= Position.GetHashCode();
       if (moveVector_ != null) hash ^= MoveVector.GetHashCode();
@@ -1256,9 +1256,9 @@ namespace GameFrameSync {
         output.WriteRawTag(8);
         output.WriteInt32(FrameId);
       }
-      if (OwnerPlayerId != 0) {
+      if (SeatIndex != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(OwnerPlayerId);
+        output.WriteInt32(SeatIndex);
       }
       if (InputType != 0) {
         output.WriteRawTag(24);
@@ -1286,9 +1286,9 @@ namespace GameFrameSync {
         output.WriteRawTag(8);
         output.WriteInt32(FrameId);
       }
-      if (OwnerPlayerId != 0) {
+      if (SeatIndex != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(OwnerPlayerId);
+        output.WriteInt32(SeatIndex);
       }
       if (InputType != 0) {
         output.WriteRawTag(24);
@@ -1315,8 +1315,8 @@ namespace GameFrameSync {
       if (FrameId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrameId);
       }
-      if (OwnerPlayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(OwnerPlayerId);
+      if (SeatIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SeatIndex);
       }
       if (InputType != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(InputType);
@@ -1342,8 +1342,8 @@ namespace GameFrameSync {
       if (other.FrameId != 0) {
         FrameId = other.FrameId;
       }
-      if (other.OwnerPlayerId != 0) {
-        OwnerPlayerId = other.OwnerPlayerId;
+      if (other.SeatIndex != 0) {
+        SeatIndex = other.SeatIndex;
       }
       if (other.InputType != 0) {
         InputType = other.InputType;
@@ -1384,7 +1384,7 @@ namespace GameFrameSync {
             break;
           }
           case 16: {
-            OwnerPlayerId = input.ReadInt32();
+            SeatIndex = input.ReadInt32();
             break;
           }
           case 24: {
@@ -1429,7 +1429,7 @@ namespace GameFrameSync {
             break;
           }
           case 16: {
-            OwnerPlayerId = input.ReadInt32();
+            SeatIndex = input.ReadInt32();
             break;
           }
           case 24: {

@@ -34,26 +34,11 @@ public enum Role {
 public enum BallState {CARRIED, FREEFORM, SHOT}
 public enum ControlScheme{ CPU,P1,P2};
 
-public class PlayerInitData
-{
-    public int ownerPlayerId;
-    public bool isHome;
-    public ControlScheme controlScheme; 
-}
-public class ControlContext
-{
-    public int HomeOwnerId;
-    public int AwayOwnerId;
-
-    public int HomeControlledPlayerId;
-    public int AwayControlledPlayerId;
-}
 public struct SimulationCommand
 {
     public SimulationCommandType Type;  
-    public int PlayerId;               
     public Vector2 Direction;            
-    public int OwnerId;
+    public int SeatIndex;
     public Vector2 ShotVelocity;
 
 }

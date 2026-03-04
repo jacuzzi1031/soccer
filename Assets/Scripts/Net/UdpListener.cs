@@ -26,7 +26,7 @@ public class UdpListener : IDisposable
         IPEndPoint clientLocalEndPoint = _mSocket.LocalEndPoint as IPEndPoint;
         UdpListenPort = clientLocalEndPoint.Port;
         Debug.Log("Current UDP available port:" + UdpListenPort);
-        
+        RemoteEp = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 10040);
     }
 
     public void StartListen()

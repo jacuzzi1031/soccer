@@ -7,6 +7,7 @@ using UnityEngine;
 public class RoomManager : BaseManager
 {
     public RoomInfo CurrentRoomInfo { get; private set; }
+    public int localSeatIndex { get;private set; }
     public bool JoinedRoom { get; private set; }
     private Dictionary<int, int> _playerIdToRoomIndex
         = new Dictionary<int, int>();
@@ -14,11 +15,12 @@ public class RoomManager : BaseManager
     public event Action<RoomPlayerInfo,RoomPlayerInfo> OnRoomPlayerQuit;
     public event Action<RoomPlayerInfo,int,string> OnRoomPlayerSelectCountryChanged;
     public event Action<RoomPlayerInfo, string> OnRoomPlayerCountryConfirmed;
-    public void JoinRoom(RoomInfo roomInfo, List<RoomPlayerInfo> roomPlayerList)
+    public void JoinRoom(RoomInfo roomInfo, List<RoomPlayerInfo> roomPlayerList,int seatIndex)
     {
         JoinedRoom = true;
         CurrentRoomInfo = roomInfo;
         RoomPlayerList = roomPlayerList;
+        localSeatIndex = seatIndex;
     }
     public void JoinNewRoomPlayer(RoomPlayerInfo roomPlayerInfo)
     {
@@ -103,7 +105,4 @@ public class RoomManager : BaseManager
     //     yield return new WaitForSeconds(1f);
     //     GameInterface.Interface.SceneLoader.LoadScene(Scene.LoadingScene);
     // }
-
-
-
 }

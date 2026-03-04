@@ -27,15 +27,15 @@ public class GamePauseUI : MonoBehaviour {
     }
 
     private void Start() {
-        PauseManager.Instance.OnGamePaused += OnGamePaused;
-        PauseManager.Instance.OnGameUnpaused += OnGameUnpaused;
+        // PauseManager.Instance.OnGamePaused += OnGamePaused;
+        // PauseManager.Instance.OnGameUnpaused += OnGameUnpaused;
 
         Hide();
     }
 
     private void OnDestroy() {
-        PauseManager.Instance.OnGamePaused -= OnGamePaused;
-        PauseManager.Instance.OnGameUnpaused -= OnGameUnpaused;
+        // PauseManager.Instance.OnGamePaused -= OnGamePaused;
+        // PauseManager.Instance.OnGameUnpaused -= OnGameUnpaused;
     }
 
     private void OnGameUnpaused(object sender, System.EventArgs e) {
