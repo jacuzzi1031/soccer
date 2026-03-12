@@ -10,38 +10,38 @@ public class BallSim:ISimulationSystem
     public float height=0.0f;
     public float heightVelocity=0.0f;
     private const float KICKOFF_PASS_DISTANCE = 30f;
-    private const float DURATION_PASS_LOCK = 0.2f;
-    public const float GRAVITY = 8f;
+    private const float DURATION_PASS_LOCK = 0.3f;
+    private const float DURATION_KICKOFF_LOCK = 0.6f;
+    public const float GRAVITY = 80f;
     public Vector2 spawnPosition;
-    public BallSimState _ballSimState;
+    public BallSimState currentState;
     public BallSimStateFactory stateFactory=new BallSimStateFactory();
     private bool _running;
     public SimEventBus _eventBus;
-    public int carrierId=-1;
     public BallState ballState;
     public CommandBuffer _commandBuffer;
     public int Frame { get;private set;}
-    public float frictionAir = 1.94f;
-    public float frictionGround = 10f;
-    public PlayerSim carrier;
-    public List<LineSegment> lines;
+    [HideInInspector]public float frictionAir = 10f;
+    [HideInInspector]public float frictionGround = 60f;
+    [HideInInspector]public PlayerSim carrier;
+    public const int INVALID_PLAYER_ID = -1;
+    public int BallCarrierId => carrier?.playerId ?? INVALID_PLAYER_ID;
     public float radius=4.68f;
-    public BallSim(Vector2 ContextSpawnPosition,SimEventBus eventBus,CommandBuffer commandBuffer,List<LineSegment> lineSegments)
+    public BallSim(Vector2 ContextSpawnPosition,SimEventBus eventBus,CommandBuffer commandBuffer)
     {
         spawnPosition = ContextSpawnPosition;
         _eventBus = eventBus;
         Position=spawnPosition;
         _commandBuffer = commandBuffer;
-        lines=lineSegments;
         SwitchState(BallState.FREEFORM);
     }
     public void SwitchState(BallState type, BallStateData data = null) {
-        if (ballState == type) return;
-        _ballSimState?.OnExit();
+
+        currentState?.OnExit();
         ballState = type;
-        _ballSimState = stateFactory.GetFreshState(type);
-        _ballSimState.Setup(this, data ?? new BallStateData(),_eventBus);
-        _ballSimState.OnEnter();
+        currentState = stateFactory.GetFreshState(type);
+        currentState.Setup(this, data ?? new BallStateData(),_eventBus);
+        currentState.OnEnter();
     }
 
     public void Tick(SimulationContext context) {
@@ -50,25 +50,24 @@ public class BallSim:ISimulationSystem
         {
             switch (command.Type)
             {
+                case SimulationCommandType.KickoffStart:
+                    passTo(spawnPosition + Vector2.down * KICKOFF_PASS_DISTANCE, true,DURATION_KICKOFF_LOCK);
+                    break;
                 case SimulationCommandType.ResetAndHomeKickoff:
                 case SimulationCommandType.ResetAndAwayKickoff:
                     Position = spawnPosition;
+                    Debug.Log("ball spawnPosition:"+spawnPosition+"  Position:"+Position);
                     Velocity = Vector2.zero;
                     height=0.0f;
+                    _eventBus.Publish(new BallBacktoSpawnPositionSignal());
                     SwitchState(BallState.FREEFORM);
-                    break;
-                case SimulationCommandType.KickoffStart:
-                    passTo(spawnPosition + Vector2.down * KICKOFF_PASS_DISTANCE, true);
-                    break;
-                case SimulationCommandType.BallShoot:
-                    shoot(command.ShotVelocity);
                     break;
             }
         }
-        _ballSimState?._Update(context.DeltaTime);
+        currentState?._Update(context.DeltaTime);
     }
 
-    private void shoot(Vector2 ShotVelocity) {
+    public void shoot(Vector2 ShotVelocity) {
         Velocity = ShotVelocity;
         carrier = null;
         SwitchState(BallState.SHOT);
@@ -79,19 +78,17 @@ public class BallSim:ISimulationSystem
         float distance = Vector2.Distance(Position, destination);
         float intensity = Mathf.Sqrt(2f * distance * frictionGround);
         Velocity = intensity * direction;
-
+        Velocity *= 1.2f;
         // 如果是高空的，视为水平是匀速，速度为原本速度intensity  x=Vx*t  t=x/Vx
         // 垂直方向终点y=0,Vy=gt/2  代入t Vy=gx/2Vx 高度增加 /2->/1.85 也会有更快速度，飞到球员脸上而不是脚下
-        if (!overground)
-        {
-            heightVelocity = GRAVITY * distance / (1.85f * intensity);
+        if (!overground) {
+            heightVelocity = GRAVITY * distance / (2f * intensity);
         }
         else
         {
             heightVelocity = 0f;
         }
         carrier = null;
-        carrierId = -1;
         SwitchState(BallState.FREEFORM, BallStateData.Build().SetLockDuration(lockDuration));
     }
 
@@ -101,6 +98,6 @@ public class BallSim:ISimulationSystem
         _running = false;
     }
     public bool CanAirInteract() {
-        return _ballSimState != null && _ballSimState.CanAirInteract();
+        return currentState != null && currentState.CanAirInteract();
     }
 }

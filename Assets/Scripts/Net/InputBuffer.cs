@@ -81,6 +81,19 @@ public class InputBuffer
 
         return new Vector2(v.X, v.Y).normalized;
     }
+
+    public void Clear()
+    {
+        foreach (var frameCmds in buffer.Values)
+        {
+            for (int i = 0; i < frameCmds.Length; i++)
+            {
+                if (frameCmds[i] != null)
+                    _commandPool.Release(frameCmds[i]);
+            }
+        }
+        buffer.Clear();
+    }
     // public void ConsumeFrame(int frame, Action<Command> visitor)
     // {
     //     if (!buffer.TryGetValue(frame, out var frameCmds))

@@ -25,7 +25,7 @@ public class CameraFollowObject : MonoBehaviour
     {   
         
         if (_ballView.carrier) {
-            _isFacingRight = _ballView.carrier.headingRight;
+            _isFacingRight = _ballView.carrier.playerSim.HeadingRight;
             transform.position = _ballView.carrier.transform.position;
         }
         else {

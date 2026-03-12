@@ -48,58 +48,36 @@ public class BallView : MonoBehaviour
     }
 
     private void Start() {
-        playerDetectArea.OnStay += PlayerDetectAreaOnOnEnter;
-        playerProximityArea.OnTriggered+= PlayerProximityAreaOnOnTriggered;
-        playerProximityArea.OnTriggerExit+= PlayerProximityAreaOnOnTriggerExit;
-
     }
 
     private void OnEnable() {
         GameInterface.Interface.EventSystem.Subscribe<MatchStartEvent>(OnMatchStart);
+        GameInterface.Interface.EventSystem.Subscribe<BallBacktoSpawnPositionEvent>(OnBallBacktoSpawnPosition);
+    }
+
+    private void OnDestroy() {
+        GameInterface.Interface.EventSystem.Unsubscribe<MatchStartEvent>(OnMatchStart);
+        GameInterface.Interface.EventSystem.Unsubscribe<BallBacktoSpawnPositionEvent>(OnBallBacktoSpawnPosition);
+    }
+
+    private void OnBallBacktoSpawnPosition(BallBacktoSpawnPositionEvent obj) {
+        Vector2 pos = ballSim.Position;
+
+        prevPos = pos;
+        targetPos = pos;
+
+        prevHeight = ballSim.height;
+        targetHeight = ballSim.height;
+
+        transform.position = pos;
     }
 
     private void OnMatchStart(MatchStartEvent obj) {
         _matchStarted = true; 
     }
-
-    private void OnDestroy() {
-        playerDetectArea.OnStay -= PlayerDetectAreaOnOnEnter;
-        playerProximityArea.OnTriggered-= PlayerProximityAreaOnOnTriggered;
-        playerProximityArea.OnTriggerExit-= PlayerProximityAreaOnOnTriggerExit;
-    }
-
-
-    private void PlayerProximityAreaOnOnTriggerExit(Collider2D obj) {
-        PlayerView p = obj.GetComponentInParent<PlayerView>();
-        if (p != null)
-            playerListInProximityArea.Remove(p);
-    }
-
-    private void PlayerProximityAreaOnOnTriggered(Collider2D obj) {
-        PlayerView p = obj.GetComponentInParent<PlayerView>();
-        if (p != null && !playerListInProximityArea.Contains(p))
-            playerListInProximityArea.Add(p);
-    }
     public int GetProximityTeammatesCount(string playerCountry) {
         return playerListInProximityArea.FindAll(p => p.country == playerCountry).Count;
     }
-
-    private void PlayerDetectAreaOnOnEnter(Collider2D obj) {
-        // if (!CurrentViewState.CanCarriedBall())
-        //     return;
-        // PlayerView body = obj.GetComponentInParent<PlayerView>();
-        // if (!body) return;
-        //
-        // if (body.CanCarryBall() && height < MAX_CAPTURE_HEIGHT)
-        // {   
-        //     carrier = body;
-        //     body.ControlBall();
-        //     SwitchViewState(BallState.CARRIED);
-        // }
-    }
-
-
-
 
     private void Update() {
         if (!_matchStarted)
@@ -113,6 +91,7 @@ public class BallView : MonoBehaviour
         switch (ballSim.ballState)
         {
             case BallState.CARRIED:
+                SetBallAnimationAndCameraFromVelocity();
                 break;
             case BallState.FREEFORM:
                 SetBallAnimationFromVelocity();
@@ -122,6 +101,43 @@ public class BallView : MonoBehaviour
                 break;
         }
     }
+    
+    private float cameraCheckTimer = 0f;
+    public float cameraCheckInterval = 0.2f;
+    private void SetBallAnimationAndCameraFromVelocity() {
+        if (ballSim.carrier.Velocity.sqrMagnitude <= idleThreshold)
+        {
+            cameraCheckTimer += Time.deltaTime;
+            if (cameraCheckTimer > cameraCheckInterval)
+            {
+                cameraCheckTimer = 0f;
+                CheckCameraY(ballSim.Velocity.y);
+            }
+            animator.Play("idle");
+            animator.speed = 1;
+            return;
+        }
+        if (ballSim.Velocity.x > 0)
+        {
+            animator.Play("roll");
+            animator.speed = 1;
+        }
+        else
+        {
+            animator.Play("rollback");
+            animator.speed = 1;
+        }
+    }
+    void CheckCameraY(float velocityY)
+    {
+        if (CameraManager.Instance.IsLerpingScreenY) return;
+
+        if (Mathf.Abs(velocityY) > idleThreshold)
+            CameraManager.Instance.LerpScreenY(velocityY);
+        else
+            CameraManager.Instance.LerpScreenY(0);
+    }
+
     const float idleThreshold = 0.01f;
     public void SetBallAnimationFromVelocity()
     {
@@ -171,7 +187,7 @@ public class BallView : MonoBehaviour
         float height = Mathf.Lerp(prevHeight, targetHeight, t);
 
         transform.position = pos;
-        ballSprite.localPosition =  height * 3f*Vector3.up;
+        ballSprite.localPosition =  height * 2.5f*Vector3.up;
     }
 
     private void ConsumeStateChange() {
@@ -186,6 +202,7 @@ public class BallView : MonoBehaviour
     private void OnStateExit(BallState ballSimBallState) {
         switch (ballSimBallState) {
             case BallState.CARRIED:
+                GameInterface.Interface.EventSystem.Publish(new OnBallReleasedEvent());
                 break;
             case BallState.FREEFORM:
                 GameInterface.Interface.EventSystem.Publish(new BallFreeformToLerpCameraOffsetEvent(false));
@@ -200,6 +217,7 @@ public class BallView : MonoBehaviour
     private void OnStateEnter(BallState ballSimBallState) {
         switch (ballSimBallState) {
             case BallState.CARRIED:
+                GameInterface.Interface.EventSystem.Publish(new OnBallPossessedEvent(ballSim.carrier.fullName));
                 break;
             case BallState.FREEFORM:
                 GameInterface.Interface.EventSystem.Publish(new BallFreeformToLerpCameraOffsetEvent(true));
@@ -231,13 +249,6 @@ public class BallView : MonoBehaviour
     public void Stop() {
         velocity = Vector2.zero;
     }
-
-
-
-
-    
-
-
     public void InjectSim(BallSim ballSim) {
         this.ballSim=ballSim;
     }

@@ -39,7 +39,6 @@ public class PlayerView : MonoBehaviour {
     [SerializeField] private Collider2D goalieHandsArea;
     [SerializeField] private ParticleSystem runParticles;
     [SerializeField] private Transform FlipComponent;
-    public Rigidbody2D rb;
     [SerializeField] private TriggerDetection ballDetectionArea;
     [HideInInspector]public float height=0f;
     [HideInInspector]public float heightVelocity=0f;
@@ -71,9 +70,6 @@ public class PlayerView : MonoBehaviour {
         DARK
     }
     private Vector3 lastInteractDir;
-    [HideInInspector]public bool headingRight = true;
-
-
     private const float BALL_CONTROL_HEIGHT_MAX = 10f;
     private float originalPlayerSpriteY;
     private float originalControlSpriteY;
@@ -85,28 +81,12 @@ public class PlayerView : MonoBehaviour {
     [HideInInspector]public List<PlayerView> opponentListNearby = new List<PlayerView>();
     [HideInInspector] public bool isHome;
 
-    private PlayerSim playerSim;
-    public void OnEnable() {
-        GameInterface.Interface.EventSystem.Subscribe<OnGameOverEvent>(OnGameOver);
+    public PlayerSim playerSim;
 
-    }
-    public void OnDestroy() {
-        GameInterface.Interface.EventSystem.Unsubscribe<OnGameOverEvent>(OnGameOver);
-
-        ballDetectionArea.OnStay-= BallDetectionAreaOnOnStay;
-        opponentDetectionArea.OnTriggered-= OpponentDetectionAreaOnOnTriggered;
-        opponentDetectionArea.OnTriggerExit-= OpponentDetectionAreaOnOnTriggerExit;
-        tackleAcceptArea.OnTriggered-= TackleAcceptAreaOnOnTriggered;
-    }
 
     public void InjectSim(PlayerSim playerSim) {
         this.playerSim=playerSim;
     }
-
-    
-    private void OnGameOver(OnGameOverEvent obj) {
-    }
-
     private void Awake() {
         // 先检查自己是否还活着
         if (this == null || gameObject == null) return;
@@ -124,69 +104,29 @@ public class PlayerView : MonoBehaviour {
          setShaderProperties();
          if (role == Role.GOALIE) {
              goalieHandsArea.enabled = true;
-             rb.constraints =
-                 RigidbodyConstraints2D.FreezePositionX |
-                 RigidbodyConstraints2D.FreezeRotation;
          }
          else {
              goalieHandsArea.enabled = false;
          }
          tackleEmitterArea.enabled = false;
          spawnPosition=transform.position;
-         Vector2 initialPosition=country==GameSceneBootstrap.Instance.MatchController.currentMatch.countryHome?KickoffPosition:spawnPosition;
+         Vector2 initialPosition=country==GameSceneBootstrap.Instance.MatchController.countryHome?KickoffPosition:spawnPosition;
 
-
+         transform.position=initialPosition;
          
          //充当player reseting state
-         FaceTowardsTargetGoal();
-         Flip(headingRight);
-         
-         ballDetectionArea.OnStay+= BallDetectionAreaOnOnStay;
-         opponentDetectionArea.OnTriggered+= OpponentDetectionAreaOnOnTriggered;
-         opponentDetectionArea.OnTriggerExit+= OpponentDetectionAreaOnOnTriggerExit;
-         tackleAcceptArea.OnTriggered+= TackleAcceptAreaOnOnTriggered;
+         Flip(playerSim.HeadingRight);
          
          originalPlayerSpriteY = playerSprite.transform.localPosition.y;
          originalControlSpriteY = controlSprite.transform.localPosition.y;
 
     }
-
-
-
-    private void TackleAcceptAreaOnOnTriggered(Collider2D obj) {
-        PlayerView p = obj.GetComponentInParent<PlayerView>();
-        if (p != null)
-        {
-            TakeTackleHit(p.rb.velocity);
-        }
-    }
-
     private void TakeTackleHit(Vector2 emitterVelocity) {
         if (!HasBall()) return;
-    }
-
-    private void OpponentDetectionAreaOnOnTriggerExit(Collider2D obj) {
-        PlayerView p = obj.GetComponentInParent<PlayerView>();
-        if (p != null)
-            opponentListNearby.Remove(p);
-    }
-
-    private void OpponentDetectionAreaOnOnTriggered(Collider2D obj) {
-        PlayerView p = obj.GetComponentInParent<PlayerView>();
-        if (p != null)
-            opponentListNearby.Add(p);
     }
     public bool HasOpponentsNearby() {
         return opponentListNearby.Find(p => p.country != country);
     }
-
-    private void BallDetectionAreaOnOnStay(Collider2D obj) {
-
-        if (obj.CompareTag("PlayerDetectArea")) {
-        }
-
-    }
-    
 
     private void setShaderProperties()
     {
@@ -241,7 +181,7 @@ public class PlayerView : MonoBehaviour {
     }
 
     private void UpdateStateView() {
-        switch (playerSim.CurrentState)
+        switch (playerSim.playerState)
         {
             case PlayerState.RESETING:
                 SetMovementAnimation();
@@ -251,19 +191,27 @@ public class PlayerView : MonoBehaviour {
                 break;
         }
     }
-
+    float prevHeight;
+    float targetHeight;
     private void UpdateInterpolatedTransform() {
         //逻辑帧推进
         if (playerSim.Frame != lastConsumedFrame)
         {
             prevPos = targetPos;
             targetPos = playerSim.Position;
+            prevHeight = targetHeight;
+            targetHeight = playerSim.Height;
             interpTimer = 0f;
             lastConsumedFrame = playerSim.Frame;
         }
         interpTimer += Time.deltaTime;
         float t = Mathf.Clamp01(interpTimer / FRAME_DT);
         transform.position = Vector2.Lerp(prevPos, targetPos, t);
+
+        float height = Mathf.Lerp(prevHeight, targetHeight, t);
+        playerSprite.transform.localPosition =new Vector3(0f,height+originalPlayerSpriteY,0f);
+        controlSprite.transform.localPosition =new Vector3(0f,height+originalControlSpriteY,0f);
+        
         FlipSprite();
     }
     /// <summary>
@@ -272,11 +220,11 @@ public class PlayerView : MonoBehaviour {
     /// 但是View 的行为会反向影响 Simulation。Unity 碰撞触发回写 Simulation 需要CommandBuffer
     /// </summary>
     private void ConsumeStateChange() {
-        if (playerSim.CurrentState != lastState)
+        if (playerSim.playerState != lastState)
         {
-            OnStateExit(playerSim.CurrentState);
-            OnStateEnter(playerSim.CurrentState);
-            lastState = playerSim.CurrentState;
+            OnStateExit(lastState);
+            OnStateEnter(playerSim.playerState);
+            lastState = playerSim.playerState;
         }
     }
 
@@ -295,22 +243,30 @@ public class PlayerView : MonoBehaviour {
         switch (state)
         {
             case PlayerState.BICYCLE_KICK:
+                animator.Play("bicycle_kick");
                 break;
             case PlayerState.CELEBRATING:
+                animator.Play("celebrate");
                 break;
             case PlayerState.CHEST_CONTROL:
+                animator.Play("chest_control");
                 break;
             case PlayerState.DIVING:
                 break;
             case PlayerState.HURT:
                 break;
             case PlayerState.MOURNING:
+                animator.Play("mourn");
                 break;
             case PlayerState.RESETING:
+                animator.Play("movement");
+                break;
             case PlayerState.MOVING:
                 animator.Play("movement");
                 break;
             case PlayerState.PASSING:
+                animator.Play("kick");
+                GameInterface.Interface.EventSystem.Publish(new PlayStyleShowEvent(playerId,PlayerState.PASSING));
                 break;
             case PlayerState.PREPPING_SHOT:
                 animator.Play("pre_kick");
@@ -320,7 +276,7 @@ public class PlayerView : MonoBehaviour {
                 animator.Play("recover");
                 break;
             case PlayerState.SHOOTING:
-                if (playerSim.CurrentSimState.stateData.IsInstant) {
+                if (playerSim.currentState.stateData.IsInstant) {
                     animator.Play("instant_kick");
                 }
                 else {
@@ -328,10 +284,13 @@ public class PlayerView : MonoBehaviour {
                 }
                 break;
             case PlayerState.TACKLING:
+                animator.Play("tackle");
                 break;
             case PlayerState.VOLLEY_KICK:
+                animator.Play("volley_kick");
                 break;
             case PlayerState.HEADER:
+                animator.Play("header");
                 break;
         }
 
@@ -340,11 +299,11 @@ public class PlayerView : MonoBehaviour {
         float flipX = playerSim.Velocity.x;
         if (Mathf.Abs(flipX) < 0.001f) 
             return;
-        if (flipX > 0 && !headingRight)
+        if (flipX > 0)
         {
             Flip(true);
         }
-        else if (flipX < 0 && headingRight)
+        else if (flipX < 0)
         {
             Flip(false);
         }
@@ -374,47 +333,13 @@ public class PlayerView : MonoBehaviour {
                 runParticles.Stop();
         }
     }
-
-    private void ApplyHeight()
-    {
-        Vector3 playerPos = playerSprite.transform.localPosition;
-        Vector3 controlPos = controlSprite.transform.localPosition;
-        float dt = Time.deltaTime;
-        if (height > 0f)
-        {
-            heightVelocity -= GRAVITY*dt;
-            height += heightVelocity;
-
-            if (height <= 0f)
-            {
-                height = 0f;
-                playerPos.y = originalPlayerSpriteY;
-                controlPos.y = originalControlSpriteY;
-            }
-            else
-            {
-                playerPos.y = originalPlayerSpriteY + height;
-                controlPos.y = originalControlSpriteY + height;
-            }
-
-            playerSprite.transform.localPosition = playerPos;
-            controlSprite.transform.localPosition = controlPos;
-        }
-    }
-
-
-
-
-
     public void Flip(bool faceRight) {
-        headingRight = faceRight;
         float yRotation = faceRight ? 0f : 180f;
-        Vector3 rotator=new Vector3(transform.rotation.eulerAngles.x, yRotation, transform.rotation.eulerAngles.x);
+        Vector3 rotator=new Vector3(transform.rotation.eulerAngles.x, yRotation, transform.rotation.eulerAngles.z);
         FlipComponent.transform.rotation=Quaternion.Euler(rotator);
-        if (HasBall()) {
+        if (playerSim._ballSim.BallCarrierId==playerId) {
             CameraFollowObject.Instance.CallTurn();
         }
-
     }
 
 
@@ -422,13 +347,6 @@ public class PlayerView : MonoBehaviour {
     public bool HasBall() {
         return ballView.carrier == this;
     }
-
-    public bool IsFacingTargetGoal() {
-
-        float directionToTarget = targetGoal.transform.position.x - transform.position.x;
-        return (headingRight && directionToTarget > 0) || (!headingRight && directionToTarget < 0);
-    }
-
     public void Initialize(
         int playerid,
         Vector2 contextPosition,
@@ -453,26 +371,12 @@ public class PlayerView : MonoBehaviour {
         skinColor = contextPlayerData.skin;
         fullName = contextPlayerData.fullName;
         SetControlScheme(ControlScheme.CPU);
-
-        // Godot: Vector2.LEFT if target_goal.position.x < position.x else Vector2.RIGHT
-        if (targetGoal.transform.position.x < transform.position.x)
-            headingRight = false;
-        else
-            headingRight = true;
-
+        
         country = contextCountry;
         isHome = contextIsHome;
         
     }
     
-    public void FaceTowardsTargetGoal()
-    {
-        if (!IsFacingTargetGoal())
-        {
-            headingRight =!headingRight;
-            Flip(headingRight);
-        }
-    }
 
     public void SetControlScheme(ControlScheme newScheme) {
         if (controlScheme == newScheme) return;
@@ -485,8 +389,8 @@ public class PlayerView : MonoBehaviour {
     }
 
     public void ShowPlayStyle(PlayerState playerState) {
-        playStyleRenderer.sprite = playerStyleSpriteFactory.GetPlayerSytleSprite(playerState);
         
+        playStyleRenderer.sprite = playerStyleSpriteFactory.GetPlayerSytleSprite(playerState);
         if (traitRoutine != null)
             StopCoroutine(traitRoutine);
 
@@ -498,7 +402,5 @@ public class PlayerView : MonoBehaviour {
         yield return new WaitForSeconds(3f);
         playStyleRenderer.enabled = false;
     }
-
-    public void OnAnimationComplete() {
-    }
+    
 }

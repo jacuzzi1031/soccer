@@ -22,8 +22,8 @@ public class PlayerSimStateFactory
             { PlayerState.RECOVERING, () => new PlayerStateRecovering() },
             { PlayerState.SHOOTING, () => new PlayerStateShooting() },
             { PlayerState.TACKLING, () => new PlayerStateTackling() },
-            { PlayerState.VOLLEY_KICK, () => new PlayerStateVolleyKickOrHeader() },
-            { PlayerState.HEADER, () => new PlayerStateVolleyKickOrHeader() },
+            { PlayerState.VOLLEY_KICK, () => new PlayerStateVolleyKick() },
+            { PlayerState.HEADER, () => new PlayerStateHeader() },
         };
     }
 

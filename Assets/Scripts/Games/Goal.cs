@@ -14,11 +14,6 @@ public class Goal : MonoBehaviour
     {
         backNetArea.OnTriggered += OnBallEnterBackNet;
         
-        scoringArea.OnTriggered += OnBallEnterScoringArea;
-        
-        // if (GameInterface.Interface.GameManager.currentMatchType == GameManager.MatchType.Training) {
-        //     InvisibleWalls.enabled = false;
-        // }
         scoringAreaCollider=scoringArea.GetComponent<Collider2D>();
     }
 
@@ -31,14 +26,7 @@ public class Goal : MonoBehaviour
         ballView.Stop();
     }
     
-    private void OnBallEnterScoringArea(Collider2D other)
-    {
-        BallView ballView = other.GetComponentInParent<BallView>();
-        if (ballView == null) return;
-        GameInterface.Interface.EventSystem.Publish(new OnTeamScoredEvent(country));
-        SoundManager.Instance.Play(SoundManager.Instance.audioRefs.WHISTLE);
-        Debug.Log("scoring!!!");
-    }
+
     
     public Vector2 GetRandomTargetPosition()
     {

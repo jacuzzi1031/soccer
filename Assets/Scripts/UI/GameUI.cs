@@ -21,6 +21,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreInfoText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI timeText;
+    private MatchController _matchController;
 
     private string lastBallCarrier = "";
     private static Dictionary<string, Sprite> flagSpritesDict =
@@ -54,10 +55,6 @@ public class GameUI : MonoBehaviour
         playerText.text = "";
     }
 
-    private void Start() {
-        
-    }
-
     public void OnEnable() {
         GameInterface.Interface.EventSystem.Subscribe<OnBallPossessedEvent>(OnBallPossessed);
         GameInterface.Interface.EventSystem.Subscribe<OnBallReleasedEvent>(OnBallReleased);
@@ -70,18 +67,21 @@ public class GameUI : MonoBehaviour
 
     private void OnMatchStart(MatchStartEvent obj) {
         _matchStarted = true;
-        UpdateScore();
+        _matchController=GameSceneBootstrap.Instance.MatchController;
+        UpdateStartScore();
         UpdateFlags();
         UpdateClock();
     }
 
-    private void OnDestroy()
-    {
+    private void OnDestroy() {
+        _matchController = null;
         GameInterface.Interface.EventSystem.Unsubscribe<OnBallPossessedEvent>(OnBallPossessed);
         GameInterface.Interface.EventSystem.Unsubscribe<OnBallReleasedEvent>(OnBallReleased);
         GameInterface.Interface.EventSystem.Unsubscribe<OnScoreChangedEvent>(OnScoreChanged);
         GameInterface.Interface.EventSystem.Unsubscribe<OnTeamResetEvent>(OnTeamReset);
         GameInterface.Interface.EventSystem.Unsubscribe<OnGameOverEvent>(OnGameOver);
+        
+        GameInterface.Interface.EventSystem.Unsubscribe<MatchStartEvent>(OnMatchStart);
     }
 
     private void Update()
@@ -105,10 +105,11 @@ public class GameUI : MonoBehaviour
         return flagSpritesDict[country];
     }
 
-    private void UpdateScore()
+    private void UpdateStartScore()
     {
-        scoreText.text = GetScoreText(GameSceneBootstrap.Instance.MatchController.currentMatch);
+        scoreText.text = $"0 - 0";
     }
+
     public string GetScoreText(Match match)
     {   
         return $"{match.goalsHome} - {match.goalsAway}";
@@ -117,34 +118,33 @@ public class GameUI : MonoBehaviour
     private void UpdateFlags()
     {
         homeFlagImage.sprite =
-            GetSprite(GameSceneBootstrap.Instance.MatchController.currentMatch.countryHome);
+            GetSprite(_matchController.countryHome);
 
         awayFlagImage.sprite =
-            GetSprite(GameSceneBootstrap.Instance.MatchController.currentMatch.countryAway);
+            GetSprite(_matchController.countryAway);
     }
 
     private void UpdateClock()
     {
-        if (GameSceneBootstrap.Instance.MatchController.timeLeft < 0)
+        if (_matchController.TimeLeft < 0)
             timeText.color = Color.yellow;
         else {
             timeText.color = Color.white;
         }
 
-        timeText.text = GetTimeText(GameSceneBootstrap.Instance.MatchController.timeLeft);
+        timeText.text = GetTimeText(_matchController.TimeLeft);
     }
     public static string GetTimeText(float timeLeft)
     {
         if (timeLeft < 0f)
         {
-            return "00:00";
+            return "00 : 00";
         }
         else
         {   
             int totalSeconds = Mathf.CeilToInt(timeLeft);
             int minutes = Mathf.FloorToInt(totalSeconds / 60f);
             int seconds = Mathf.FloorToInt(totalSeconds - minutes * 60);
-
             return $"{minutes:00} : {seconds:00}";
         }
     }
@@ -162,31 +162,34 @@ public class GameUI : MonoBehaviour
 
     private void OnScoreChanged(OnScoreChangedEvent obj)
     {
-        if (!GameSceneBootstrap.Instance.MatchController.IsTimeUp())
+        var goalHome = _matchController.GoalsHome;
+        var goalAway = _matchController.GoalsAway;
+        var winner = _matchController.Winner;
+        if (!_matchController.IsTimeUp())
         {
             goalScorerText.text = $"{lastBallCarrier} 进球!";
+
             scoreInfoText.text =
-                GetCurrentScoreInfo(GameSceneBootstrap.Instance.MatchController.currentMatch);
+                GetCurrentScoreInfo(goalHome, goalAway,winner);
             animator.Play("GoalAppear");
         }
-
-        UpdateScore();
+        scoreText.text = $"{goalHome} - {goalAway}";
     }
-    public string GetCurrentScoreInfo(Match match)
+    public string GetCurrentScoreInfo(int goalHome,int goalAway,string winner)
     {
-        if (match.IsTied())
+        if (goalHome==goalAway)
         {
-            return $"比分持平 {match.goalsHome} - {match.goalsAway}";
+            return $"比分持平 {goalHome} - {goalAway}";
         }
         else
         {
-            return $"{ToChinese(match.winner)} 领先 {match.finalScore}";
+            return $"{ToChinese(winner)} 领先 {goalHome} - {goalAway}";
         }
     }
 
     private void OnTeamReset(OnTeamResetEvent obj)
     {
-        if (GameSceneBootstrap.Instance.MatchController.currentMatch.HasSomeoneScored())
+        if (_matchController.HasSomeoneScored())
         {
             animator.Play("GoalHide");
         }
@@ -194,20 +197,24 @@ public class GameUI : MonoBehaviour
 
     private void OnGameOver(OnGameOverEvent obj)
     {
+
+        var goalsHome = _matchController.GoalsHome;
+        var goalsAway = _matchController.GoalsAway;
+        var winner = _matchController.Winner;
         scoreInfoText.text =
-            GetFinalScoreInfo(GameSceneBootstrap.Instance.MatchController.currentMatch);
+            GetFinalScoreInfo(winner, goalsHome, goalsAway);
 
         animator.Play("GameOver");
-    }
-    public string GetFinalScoreInfo(Match match)
-    {
-        return $"{ToChinese(match.winner)} 获胜 {match.finalScore}";
-    }
-
-    public void OnGameOverAnimationComplete() {
-        // StartCoroutine(ReturnToMainMenu());
         GameSceneBootstrap.Instance.EndMatch();
     }
+    public string GetFinalScoreInfo(string winnerName,int goalsHome,int goalsAway)
+    {
+        return $"{ToChinese(winnerName)} 获胜 {goalsHome} - {goalsAway}";
+    }
+
+    // public void OnGameOverAnimationComplete() {
+    //     GameSceneBootstrap.Instance.EndMatch();
+    // }
 
     // private IEnumerator ReturnToMainMenu() {
     //     yield return new WaitForSeconds(2.5f);

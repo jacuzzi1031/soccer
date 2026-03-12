@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class GameStateData
 {
-    public string CountryScoredOn { get; private set; }
+    public bool scoringIsHome { get; private set; }
     
     public static GameStateData Build()
     {
         return new GameStateData();
     }
-    public GameStateData SetCountryScoredOn(string country)
+    public GameStateData SetIsHomeScoring(bool isHome)
     {
-        CountryScoredOn = country;
+        scoringIsHome = isHome;
         return this;
     }
 }

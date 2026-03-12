@@ -3,17 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class GameSceneBootstrap : MonoBehaviour
 {
     public static GameSceneBootstrap Instance { get;private set; }
     [SerializeField] BallView ballView;
-    [SerializeField] Transform topLeft;
-    [SerializeField] Transform topRight;
-    [SerializeField] Transform downLeft;
-    [SerializeField] Transform downRight;
+    
+    [SerializeField] Transform[] ballBoundaryUpPoints;
+    [SerializeField] Transform[] ballBoundaryDownPoints;
+    [SerializeField] Transform[] playerBoundaryPoints;
+    [SerializeField] Transform[] goalleftBoundaryPoints;
+    [SerializeField] Transform[] goalrightBoundaryPoints;
+    [SerializeField] Transform[] stopballleftPoints;
+    [SerializeField] Transform[] stopballrightPoints;
+    
+    [SerializeField] Transform[] GoalHomePosition;
+    [SerializeField] Transform[] GoalAwayPosition;
+    
     public MatchController MatchController;
-
+    Vector2 fieldCenter=new Vector2(0,0);
     void Awake() {
         Instance = this;
     }
@@ -21,34 +30,84 @@ public class GameSceneBootstrap : MonoBehaviour
     public void Start() {
         BuildSimulationWorld();
     }
+    LineSegment BuildLine(Vector2 a, Vector2 b)
+    {
+        Vector2 edge = b - a;
+
+
+        return new LineSegment
+        {
+            Start = a,
+            End = b,
+            Edge = edge,
+            EdgeSqr = Vector2.Dot(edge, edge),
+        };
+    }
+
+    List<LineSegment> LineaddRange(Transform[] boundaryPoints) {
+        List<LineSegment> segments=new List<LineSegment>();
+        for (int i = 0; i < boundaryPoints.Length-1; i++)
+        {
+            Vector2 a = boundaryPoints[i].position;
+            Vector2 b = boundaryPoints[i + 1].position;
+
+            segments.Add(BuildLine(a, b));
+        }
+
+        return segments;
+    }
     private void BuildSimulationWorld() {
-        List<LineSegment> lineSegments = new List<LineSegment>();
-        lineSegments.Add(new LineSegment{Start=topLeft.position, End=topRight.position});
-        lineSegments.Add(new LineSegment{Start=downLeft.position, End=downRight.position});
-        lineSegments.Add(new LineSegment{Start=topLeft.position, End=downLeft.position});
-        lineSegments.Add(new LineSegment{Start=topRight.position, End=downRight.position});
+        List<LineSegment> ballLines = new List<LineSegment>();
+        ballLines.AddRange(LineaddRange(ballBoundaryUpPoints));
+        ballLines.AddRange(LineaddRange(ballBoundaryDownPoints));
+        
+        List<LineSegment> playerLines = LineaddRange(playerBoundaryPoints);
+        
+        List<LineSegment> stopballLines = new List<LineSegment>();
+        stopballLines.AddRange(LineaddRange(stopballleftPoints));
+        stopballLines.AddRange(LineaddRange(stopballrightPoints));
+        
+        List<LineSegment> scoreLines = new List<LineSegment>();
+        scoreLines.AddRange(LineaddRange(goalleftBoundaryPoints));
+        scoreLines.AddRange(LineaddRange(goalrightBoundaryPoints));
+        
+        List<Vector2> goalHomePos = new List<Vector2>();
+        foreach (var transform in GoalHomePosition) {
+            goalHomePos.Add(transform.position);
+        }
+        List<Vector2> goalAwayPos = new List<Vector2>();
+        foreach (var transform in GoalAwayPosition) {
+            goalAwayPos.Add(transform.position);
+        }
         
         var EventBus = new SimEventBus();
         
         var commandBuffer = new CommandBuffer();
         
-        MatchController  = new MatchController(EventBus,
-            GameInterface.Interface.GameManager.playerSetup[0], 
-            GameInterface.Interface.GameManager.playerSetup[1]);
-        int playerCount = GameInterface.Interface.GameFrameSyncManager.playerCount;
+        var countryHome = GameInterface.Interface.GameManager.playerSetup[0];
+        var countryAway = GameInterface.Interface.GameManager.playerSetup[1];
+
+
 
         var MatchSystem = new MatchSystem(EventBus,commandBuffer,GameInterface.Interface.GameManager.currentMatchType);
-        var BallSim = new BallSim(ballView.spawnPosition,EventBus,commandBuffer,lineSegments);
+        MatchController  = new MatchController(MatchSystem,EventBus, countryHome, countryAway);
+        
+        var BallSim = new BallSim(ballView.spawnPosition,EventBus,commandBuffer);
         ballView.InjectSim(BallSim);
         
-        var PlayerSystem = new PlayerSystem(EventBus,commandBuffer,lineSegments);
-
+        
+        int playerCount = GameInterface.Interface.GameFrameSyncManager.playerCount;
+        var PlayerSystem = new PlayerSystem(EventBus,commandBuffer,playerCount);
+        
+        var simConfig = new SimulationConfig();
+        var CollisionSystem = new CollisionSystem();
+        var BoundarySystem = new BoundarySystem();
         PlayerManager.Instance.InitializeSquads((home, away) => {
-                PlayerSystem.RegisterTeams(home, away);
+                PlayerSystem.RegisterTeams(home, away,BallSim,goalHomePos,goalAwayPos);
+                CollisionSystem.RegisterTeams(home, away,simConfig,BallSim,playerLines);
+                BoundarySystem.RegisterTeams(home, away,commandBuffer,simConfig,BallSim,playerLines,ballLines,scoreLines,stopballLines);
             }
         );  
-        
-        PlayerSystem.setPlayerCount(playerCount);
 
 
         var simModel = new SimulationModel(MatchSystem,PlayerSystem,BallSim);
@@ -60,7 +119,7 @@ public class GameSceneBootstrap : MonoBehaviour
             Debug.LogError("Input buffer is null");
         }
         var world = new SimulationWorld(
-            new List<ISimulationSystem> { MatchSystem, PlayerSystem, BallSim },
+            new List<ISimulationSystem> { MatchSystem, PlayerSystem, BallSim,CollisionSystem, BoundarySystem },
             simulationContext,
             commandBuffer,
             EventBus,
@@ -69,12 +128,16 @@ public class GameSceneBootstrap : MonoBehaviour
         SimulationClock.Instance.SetWorld(world);
     }
     
-    public void EndMatch()
-    {
-        GameInterface.Interface.SceneLoader
-            .LoadScene(Scene.MainMenuScene);
-
+    public void EndMatch() {
+        StartCoroutine(ReturnToMainMenu());
+    }
+    private IEnumerator ReturnToMainMenu() {
+        yield return new WaitForSeconds(2.5f);
         MatchController  = null;
+        GameInterface.Interface.GameFrameSyncManager.ClearInputBuffer();
+        SimulationClock.Instance.OnGameOver();
+        QuitRoomRequest quitRoomRequest = GameInterface.Interface.RequestManager.GetRequest<QuitRoomRequest>();
+        quitRoomRequest.SendQuitRoomRequest();
     }
 }
 

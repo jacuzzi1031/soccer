@@ -80,7 +80,7 @@ private const float PASS_PROBABILITY = 0.05f;
             if (Vector2.Distance(PlayerView.transform.position, target) < SHOT_DISTANCE &&
                 Random.value < SHOT_PROBABILITY)
             {
-                PlayerView.FaceTowardsTargetGoal();
+                // PlayerView.FaceTowardsTargetGoal();
                 Vector2 direction = (PlayerView.targetGoal.GetRandomTargetPosition() - (Vector2)PlayerView.transform.position).normalized;
 
                 var data = new PlayerStateData()

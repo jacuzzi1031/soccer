@@ -32,7 +32,12 @@ public class SimulationClock : MonoBehaviour
     {
         world = simulationWorld;
     }
-    
+
+    public void OnGameOver() {
+        _waitingStart = false;  
+        running = false;
+        world = null;
+    }
 
     public void OnStartGame(long startTime, int startFrame) {
         _startFrame = startFrame;
@@ -102,6 +107,7 @@ public class SimulationClock : MonoBehaviour
         sendData.RoomCode = GameInterface.Interface.RoomManager.CurrentRoomInfo.roomCode;
 
         GameInterface.Interface.UdpListener.Send(sendData);
+        _mReqFrameSyncDataPool.Release(sendData);
         _mReqFrameInputDataPool.Release(req);
         _mVector2DPool.Release(moveVector);
     }

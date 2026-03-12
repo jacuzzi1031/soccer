@@ -5,15 +5,16 @@ using UnityEngine;
 public class PlayerStateReseting: PlayerSimState
 {
   public bool hasArrived = false;
-  public float arriveDistance = 2f;
+  public float arriveDistance = 1f;
   public override void OnEnter() {
+    hasArrived = false;
   }
 
   public override void _Update(float deltaTime) {
     if (hasArrived) return;
-
-    Vector2 dir = (stateData.ResetPosition - playerSim.Position).normalized;
-    if ((stateData.ResetPosition - playerSim.Position).sqrMagnitude < arriveDistance * arriveDistance)
+    Vector2 playerPosition = playerSim.Position;
+    Vector2 dir = (stateData.ResetPosition - playerPosition).normalized;
+    if ((stateData.ResetPosition - playerPosition).sqrMagnitude < arriveDistance * arriveDistance)
     {
       hasArrived = true;
       playerSim.Velocity = Vector2.zero;
@@ -22,7 +23,8 @@ public class PlayerStateReseting: PlayerSimState
     {
       playerSim.Velocity = dir * playerSim.Speed;
     }
-    playerSim.Position += playerSim.Velocity * deltaTime;
+    playerPosition += playerSim.Velocity * deltaTime;
+    playerSim.Position = playerPosition;
   }
   
   public override bool IsReadyForKickoff()

@@ -39,8 +39,7 @@ public struct SimulationCommand
     public SimulationCommandType Type;  
     public Vector2 Direction;            
     public int SeatIndex;
-    public Vector2 ShotVelocity;
-
+    public bool isHome;
 }
 public enum SimulationCommandType
 {
@@ -55,7 +54,8 @@ public enum SimulationCommandType
     IncisivePass,
     NoneInputCommand,
     Swap,
-    BallShoot,
+    TeamScoring,
+    GameOverWinner,
 }
 
 public enum MatchState {
@@ -70,4 +70,8 @@ public struct LineSegment
 {
     public Vector2 Start;
     public Vector2 End;
+
+    public Vector2 Edge;     // End - Start
+    public float EdgeSqr;    // length^2
+    public Vector2 Normal;   // outward normal
 }

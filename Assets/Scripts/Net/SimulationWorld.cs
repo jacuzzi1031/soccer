@@ -29,13 +29,13 @@ public class SimulationWorld
         Debug.Log("world Step frame:"+frame);
         InputBuffer.ConsumeFrame(frame, DispatchCommand);
 
-        context.BuildFrom(frame, SimulationClock.FRAME_DT, commandBuffer.Consume());
+        context.BuildFrom(frame,commandBuffer.Consume());
 
         for (int i = 0; i < systems.Count; i++)
         {
             systems[i].Tick(context);
         }
-
+        
         eventBus.Flush();
     }
 

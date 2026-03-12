@@ -12,11 +12,12 @@
                 }
                 else
                 {
-                    _matchSystem.SwitchGameState(MatchState.GAMEOVER);
+                    bool isHome=_matchSystem.goalsHome>_matchSystem.goalsAway;
+                    _matchSystem.SwitchGameState(MatchState.GAMEOVER,GameStateData.Build().SetIsHomeScoring(isHome));
                 }
             }
         }
-        public override void OnTeamScored(OnTeamScoredEvent obj) {
-            _matchSystem.SwitchGameState(MatchState.SCORED,GameStateData.Build().SetCountryScoredOn(obj.CountryScoredOn));
+        public override void OnTeamScoring(bool isHome) {
+            _matchSystem.SwitchGameState(MatchState.SCORED,GameStateData.Build().SetIsHomeScoring(isHome));
         }
     }

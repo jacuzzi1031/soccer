@@ -29,6 +29,10 @@ public class GameFrameSyncManager : BaseManager
         this.playerCount = playerCount;
     }
 
+    public void ClearInputBuffer() {
+        InputBuffer?.Clear();
+    }
+
     public override void OnDestroy()
     {
         GameInterface.Interface.UdpListener.OnReceiveFrameSync -= ServerFrameSyncDataUpdate;

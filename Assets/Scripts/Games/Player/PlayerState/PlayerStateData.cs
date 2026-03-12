@@ -9,6 +9,8 @@ public class PlayerStateData
     public float ShotPower { get; private set; }
     public bool isPowerShot { get; private set; }
     public  bool IsInstant { get; private set; }
+    public  PlayerSim passTarget { get; private set; }
+    
 
     public static PlayerStateData Build()
     {
@@ -52,6 +54,11 @@ public class PlayerStateData
 
     public PlayerStateData SetIsInstant(bool isInstant) {
         IsInstant = isInstant;
+        return this;
+    }
+
+    public PlayerStateData setPassTarget(PlayerSim PassTarget) {
+        passTarget=PassTarget;
         return this;
     }
 }

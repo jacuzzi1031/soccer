@@ -6,7 +6,7 @@ public class PlayerStatePreppingShot: PlayerSimState
 {
     Vector2 shotDirection = Vector2.zero;
     private float timeStartShot;
-    private const float DURATION_MAX_BONUS=1.0f;
+    private const float DURATION_MAX_BONUS=2.0f;
     private const float EASE_REWARD_FACTOR = 2.0f;
     private float pressRaw;
     private bool hasTriggeredBonusEvent = false;
@@ -14,11 +14,11 @@ public class PlayerStatePreppingShot: PlayerSimState
     public override void OnEnter() {
         hasTriggeredBonusEvent = false;
         pressTime = 0f;
+        playerSim.Velocity = Vector2.zero;
         shotDirection=_moveDirection.x>=0? Vector2.right:Vector2.left;
     }
 
     public override void OnExit() {
-        
     }
     public override void _Update(float deltaTime) {
         pressTime += deltaTime;
@@ -32,14 +32,17 @@ public class PlayerStatePreppingShot: PlayerSimState
             hasTriggeredBonusEvent = true;
         }
     }
-    public override void OnShootRelease()
+    public override void OnShootRelease(bool hasBall,bool ballCanAirInteract)
     {
+        if (!hasBall) {
+            return;
+        }
         float durationPress = Mathf.Clamp(pressTime, 0f, DURATION_MAX_BONUS);
         
         float easeTime = durationPress / DURATION_MAX_BONUS;
         float bonus = Mathf.Pow(easeTime, EASE_REWARD_FACTOR);
         
-        float shotPower = playerSim.Power * (1f + 1.5f * bonus);
+        float shotPower = playerSim.Power * (1f + 1.3f * bonus);
         
         shotDirection = shotDirection.normalized;
         
@@ -47,7 +50,6 @@ public class PlayerStatePreppingShot: PlayerSimState
             .SetShotPower(shotPower)
             .SetShotDirection(shotDirection)
             .SetIsInstant(false);
-        
         playerSim.SwitchState(PlayerState.SHOOTING, data);
     }
 }

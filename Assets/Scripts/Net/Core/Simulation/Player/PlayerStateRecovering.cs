@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class PlayerStateRecovering: PlayerSimState
 {
-    private const int RECOVERY_TICKS = 30;
-    private int recoveryTickCounter;
-    public override void OnEnter()
-    {
-        recoveryTickCounter = 0;
-    }
-    public override void _Update(float deltaTime)
-    {
-        recoveryTickCounter++;
+    private float _elapsedTicks;
+    private float _durationTicks=0.1f;
 
-        if (recoveryTickCounter >= RECOVERY_TICKS)
+    public override void OnEnter() {
+        _elapsedTicks = 0f;
+    }
+
+    public override void _Update(float deltaTime) {
+        _elapsedTicks+=deltaTime;
+
+        if (_elapsedTicks >= _durationTicks)
         {
             playerSim.SwitchState(PlayerState.MOVING);
         }

@@ -8,15 +8,15 @@ public class PlayerSim {
     public int playerId;
     public PlayerSimStateFactory stateFactory=new PlayerSimStateFactory();
     public ControlScheme controlScheme;
-    public bool facingRight=true;
     public Vector2 teamResetPosition;
     public Vector2 kickoffPosition;
     public Vector2 Position;
     public Vector2 Velocity;
     public float Height;
-    public bool HeadingRight;
-    public PlayerSimState CurrentSimState;
-    public PlayerState CurrentState;
+    public float HeightVelocity;
+    public bool HeadingRight=true;
+    public PlayerSimState currentState;
+    public PlayerState playerState;
     public bool isHome;
     public string fullName;
     public string country;
@@ -27,10 +27,11 @@ public class PlayerSim {
     public bool initialFacingRight;
     public SimEventBus _eventBus;
     public CommandBuffer _commandBuffer;
-    public List<LineSegment> lines;
-    public float radius=6.5f;
+    private const float BALL_CONTROL_HEIGHT_MAX = 10f;
+    [HideInInspector]public float GRAVITY = 160f;
     public int Frame { get;private set;}
-
+    public BallSim _ballSim;
+    public List<Vector2> targetGoalPosition;
     
 
     public PlayerSim(int nextPlayerId,PlayerResource contextPlayerData, Vector2 contextplayerPosition, Vector2 contextkickoffPosition, string contextcountry, bool contextisHome,bool ContextInitialFacingRight) {
@@ -46,30 +47,42 @@ public class PlayerSim {
         controlScheme = ControlScheme.CPU;
         Position = isHome ? kickoffPosition : teamResetPosition;
         initialFacingRight= ContextInitialFacingRight;
+        HeadingRight=initialFacingRight;
         SwitchState(PlayerState.RESETING, PlayerStateData.Build().SetResetPosition(Position));
     }
 
     public void Tick(int frame,float deltaTime)
     {
         Frame=frame;
-        CurrentSimState?._Update(deltaTime);
+        currentState?._Update(deltaTime);
+        ApplyHeight(deltaTime);
     }
 
-    public void OnTakeTackleHit(Vector2 dir)
-    {
-        // if (!HasBall()) return; 只有carrierSnapshot
-        SwitchState(PlayerState.HURT, PlayerStateData.Build().SetMoveDir(dir));
+    private void ApplyHeight(float deltaTime) {
+        if (Height > 0f) {
+            HeightVelocity -= GRAVITY*deltaTime;
+            Height += HeightVelocity*deltaTime;
+            if (Height < 0)
+            {
+                Height = 0;
+                HeightVelocity = 0;
+            }
+        }
+
     }
+
     public void SwitchState(PlayerState id, PlayerStateData data = null) {
-        if (CurrentState == id) return;
-        CurrentState = id;
-        CurrentSimState = stateFactory.GetFreshState(id);
-        CurrentSimState.Setup(this, data ?? PlayerStateData.Build(),_eventBus,_commandBuffer);
-
-        CurrentSimState.OnEnter();
+        if (playerState == id) return;
+        if (currentState != null) {
+            currentState.OnExit();
+        }
+        playerState = id;
+        currentState = stateFactory.GetFreshState(id);
+        currentState.Setup(this, data ?? PlayerStateData.Build(),_eventBus,_commandBuffer,_ballSim);
+        currentState.OnEnter();
     }
     public bool IsReadyForKickoff() {
-        return CurrentSimState != null && CurrentSimState.IsReadyForKickoff();
+        return currentState != null && currentState.IsReadyForKickoff();
     }
 
     public void SetControlScheme(ControlScheme ContextControlScheme) {
@@ -77,16 +90,43 @@ public class PlayerSim {
     }
     public bool IsFacingTargetGoal() {
 
-         return (facingRight && initialFacingRight) || (!initialFacingRight && !facingRight);
+         return (HeadingRight && initialFacingRight) || (!initialFacingRight && !HeadingRight);
     }
 
     public void OnTeamReset(bool isKickoff) {
         SwitchState(PlayerState.RESETING,PlayerStateData.Build().SetResetPosition(isKickoff?kickoffPosition:teamResetPosition));
     }
 
-    public void SetEventBusAndCommandBuffer(SimEventBus eventBus,CommandBuffer commandBuffer,List<LineSegment>lineSegments) {
+    public void SetEventBusAndCommandBuffer(SimEventBus eventBus,CommandBuffer commandBuffer,BallSim ballSim
+        ,List<Vector2> TargetGoalPosition) {
         _eventBus=eventBus;
         _commandBuffer = commandBuffer;
-        lines = lineSegments;
+        _ballSim=ballSim;
+        targetGoalPosition = TargetGoalPosition;
+    }
+
+    public bool CanCarryBall() {
+        return currentState.CanCarryBall();
+    }
+
+    public void SetHeadingRight(Vector2 moveDir) {
+        if (moveDir.x > 0) {
+            HeadingRight = true;
+        }else if (moveDir.x < 0) {
+            HeadingRight = false;
+        }
+    }
+    public Vector2 GetFarTargetPosition()
+    {
+        float farDistance=float.MinValue;
+        int farIndex=0;
+        for(int i=0;i<targetGoalPosition.Count;i++) {
+            float dist = (Position - targetGoalPosition[i]).sqrMagnitude;
+            if (dist >= farDistance) {
+                farDistance = dist;
+                farIndex = i;
+            }
+        }
+        return targetGoalPosition[farIndex];
     }
 }

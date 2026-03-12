@@ -26,43 +26,8 @@ public class PlayerStateMoving: PlayerSimState
 
         Vector2 nextPos = playerSim.Position + playerSim.Velocity * deltaTime;
 
-        ResolveBoundary(ref nextPos);
-
         playerSim.Position = nextPos;
-    }
-
-    private void ResolveBoundary(ref Vector2 position) {
-        foreach (var line in playerSim.lines)
-        {
-            Vector2 closest = ClosestPointOnSegment(position, line);
-
-            Vector2 diff = position - closest;
-            float sqrDist = diff.sqrMagnitude;
-
-            if (sqrDist < playerSim.radius * playerSim.radius)
-            {
-                if (sqrDist < 0.0000001f)
-                    continue;
-
-                float dist = Mathf.Sqrt(sqrDist);
-                Vector2 normal = diff / dist;
-                
-                position = closest + normal * playerSim.radius;
-            }
-        }
-    }
-    private Vector2 ClosestPointOnSegment(Vector2 point, LineSegment line)
-    {
-        Vector2 ab = line.End - line.Start;
-        float abSqr = Vector2.Dot(ab, ab);
-
-        if (abSqr < 0.000001f)
-            return line.Start;
-
-        float t = Vector2.Dot(point - line.Start, ab) / abSqr;
-        t = Mathf.Clamp01(t);
-
-        return line.Start + ab * t;
+        playerSim.SetHeadingRight(moveDir);
     }
 
     public override void OnShootPress(bool isInstant,bool hasBall,bool ballCanAirInteract) {
@@ -70,26 +35,42 @@ public class PlayerStateMoving: PlayerSimState
         {
             playerSim.SwitchState(PlayerState.PREPPING_SHOT);
         }
-        else if (ballCanAirInteract)
-        {
-            if (playerSim.IsFacingTargetGoal())
-            {
-                playerSim.SwitchState(PlayerState.VOLLEY_KICK);
-                playerSim.SwitchState(PlayerState.HEADER);
-            }
-            else
-            {
-                playerSim.SwitchState(PlayerState.BICYCLE_KICK);
-            }
+        else if (ballCanAirInteract) {
+            InstantShot();
         }
     }
-
-    public override void OnShootRelease() {
+    public override void OnShootRelease(bool hasBall,bool ballCanAirInteract) {
+        if (!hasBall&&ballCanAirInteract) {
+            InstantShot();
+        }
         PlayerStateData data = PlayerStateData.Build()
             .SetShotPower(playerSim.Power)
             .SetShotDirection(_moveDirection)
             .SetIsInstant(true);
         playerSim.SwitchState(PlayerState.SHOOTING, data);
+    }
+    private void InstantShot() {
+        if (playerSim.IsFacingTargetGoal())
+        {
+            if (_ballSim.height <= 4.3f) {
+                playerSim.SwitchState(PlayerState.VOLLEY_KICK);
+            }
+            else {
+                playerSim.SwitchState(PlayerState.HEADER);
+            }
+
+        }
+        else
+        {
+            playerSim.SwitchState(PlayerState.BICYCLE_KICK);
+        }
+    }
+    public override void OnPass(int passType,PlayerSim passTarget) {
+        bool hasBall = playerSim._ballSim.BallCarrierId == playerSim.playerId;
+        if (!hasBall) {//tackle
+            return;
+        }
+        playerSim.SwitchState(PlayerState.PASSING,PlayerStateData.Build().SetInputType(passType).SetMoveDir(moveDir).setPassTarget(passTarget));
     }
 
     public override bool CanCarryBall() {

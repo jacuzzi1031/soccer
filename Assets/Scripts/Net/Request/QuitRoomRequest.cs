@@ -30,6 +30,10 @@ public class QuitRoomRequest : BaseRequest
                     });
             });
         }
+        else {
+            //if homeowner quit,then the member of the room quit
+            SendQuitRoomRequest();
+        }
         base.HandleServerSuccessResponse(pack);
     }
 

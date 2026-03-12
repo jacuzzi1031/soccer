@@ -36,7 +36,7 @@ public class CameraManager : MonoBehaviour
     private float _startingOrthographicSize;
     private Coroutine _PowerShotZoomCoroutine;
     private LensSettings currentCameraMLens;
-    public float ShrinkZoomSizeWhileShoot = 90f;
+    public float ShrinkZoomSizeWhileShoot = 80f;
     public float ShrinkZoomSizeTime = 1.0f;
     
     private void Awake()

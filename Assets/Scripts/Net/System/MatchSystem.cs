@@ -20,6 +20,8 @@
             _commandBuffer=commandBuffer;
             _currentMatchType=matchType;
             goalsHome=0; goalsAway=0;
+            // timeLeft = DURATION_GAME_SEC;
+            timeLeft = 2f;
             SwitchGameState(MatchState.RESET);
         }
 
@@ -48,6 +50,9 @@
                     case SimulationCommandType.ShortPass:
                         currentSimState?.OnKickoffStart(command.SeatIndex);
                         break;
+                    case SimulationCommandType.TeamScoring:
+                        currentSimState?.OnTeamScoring(command.isHome);
+                        break;
                 }
             }
             currentSimState._Update(context.DeltaTime);
@@ -55,10 +60,10 @@
 
         //是否需要SimulationContext作为OnEnter的参数
         public void SwitchGameState(MatchState newState, GameStateData data = null) {
+            if (currentState == newState) return;
             if (currentSimState != null) {
                 currentSimState.OnExit();
             }
-            if (currentState == newState) return;
             currentState=newState;
             currentSimState = _gameSimStateFactory.GetFreshState(newState);
             currentSimState.Setup(this,data,_eventBus,_commandBuffer);
@@ -72,5 +77,9 @@
         public bool IsTied()
         {
             return goalsHome == goalsAway;
+        }
+
+        public bool getWinnerIsHome() {
+            return goalsHome > goalsAway;
         }
     }

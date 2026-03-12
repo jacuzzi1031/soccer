@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class PlayerStateShooting: PlayerSimState
 {
-    private int _elapsedTicks;
-    private int _durationTicks;
+    private float _elapsedTicks;
+    private float _durationTicks;
     public override void OnEnter() {
-        _elapsedTicks = 0;
-        _durationTicks =stateData.IsInstant? 3:2; 
+        _elapsedTicks = 0f;
+        _durationTicks =stateData.IsInstant? 0.04f:0.03f; 
     }
-
     public override void _Update(float deltaTime) {
-        _elapsedTicks++;
+        _elapsedTicks+=deltaTime;
 
         if (_elapsedTicks >= _durationTicks)
         {
@@ -26,12 +25,8 @@ public class PlayerStateShooting: PlayerSimState
         else {
             playerSim.SwitchState(PlayerState.MOVING);
         }
-        // ShootBall
-        _commandBuffer.Enqueue(new SimulationCommand
-        {
-            Type = SimulationCommandType.BallShoot,
-            ShotVelocity=stateData.ShotDirection * stateData.ShotPower
-        });
+        
+        _ballSim.shoot(stateData.ShotDirection * stateData.ShotPower);
     }
 }
 

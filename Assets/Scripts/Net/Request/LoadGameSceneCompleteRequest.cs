@@ -9,9 +9,6 @@ public class LoadGameSceneCompleteRequest : BaseRequest
         Request = RequestCode.Game;
         Action = ActionCode.LoadGameSceneComplete;
     }
-
-    private GameState _mChangeState;
-
     protected override void HandleServerSuccessResponse(MainPack pack)
     {
         Debug.Log("LoadGameSceneCompleteRequest:LoadGameScene...");

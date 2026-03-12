@@ -26,6 +26,6 @@
         public virtual void OnKickoffStart(int seatIndex) {
         }
 
-        public virtual void OnTeamScored(OnTeamScoredEvent obj) {
+        public virtual void OnTeamScoring(bool scoringIsHome) {
         }
     }

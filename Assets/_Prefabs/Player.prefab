@@ -329,7 +329,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4872396038752500571}
   - component: {fileID: 8339130255792086573}
-  m_Layer: 18
+  m_Layer: 13
   m_Name: PlayerForPlayer
   m_TagString: PlayerCol
   m_Icon: {fileID: 0}
@@ -397,7 +397,6 @@ GameObject:
   - component: {fileID: 93380649304555503}
   - component: {fileID: 8784266599693007654}
   - component: {fileID: 5671396866889332008}
-  - component: {fileID: 7394438100784923822}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -488,45 +487,16 @@ MonoBehaviour:
   goalieHandsArea: {fileID: 7523934469206323416}
   runParticles: {fileID: 1204252572053807556}
   FlipComponent: {fileID: 1682230148597570969}
-  rb: {fileID: 7394438100784923822}
   ballDetectionArea: {fileID: 2751089920907780289}
   height: 0
   heightVelocity: 0
   GRAVITY: 6
-  headingRight: 1
   spawnPosition: {x: 0, y: 0}
   playerId: 0
   weightOnDutySteering: 0
   opponentListNearby: []
   isHome: 0
   lastConsumedFrame: 0
---- !u!50 &7394438100784923822
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4860840060563642476}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 0.0001
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 1
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!1 &4921424399640328375
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,7 +508,6 @@ GameObject:
   - component: {fileID: 8547074335225289193}
   - component: {fileID: 6264108591919923548}
   - component: {fileID: 4813953148699080707}
-  - component: {fileID: 553156924196139063}
   m_Layer: 0
   m_Name: PlayerSprite
   m_TagString: Untagged
@@ -634,19 +603,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &553156924196139063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4921424399640328375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0646a50c5f69594c94beef07ead9671, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerView: {fileID: 0}
 --- !u!1 &5297465238096267811
 GameObject:
   m_ObjectHideFlags: 0

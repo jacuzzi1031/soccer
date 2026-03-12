@@ -4,10 +4,4 @@ using UnityEngine;
 
 public struct OnGameOverEvent : IEvent
 {
-    public string CountryWinner;
-
-    public OnGameOverEvent(string countryWinner)
-    {
-        CountryWinner = countryWinner;
-    }
 }
