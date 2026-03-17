@@ -8,6 +8,8 @@ public class RoomManager : BaseManager
 {
     public RoomInfo CurrentRoomInfo { get; private set; }
     public int localSeatIndex { get;private set; }
+    
+    public bool IsHome=>localSeatIndex==0;
     public bool JoinedRoom { get; private set; }
     private Dictionary<int, int> _playerIdToRoomIndex
         = new Dictionary<int, int>();

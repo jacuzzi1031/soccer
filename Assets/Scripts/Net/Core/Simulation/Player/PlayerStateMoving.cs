@@ -65,15 +65,23 @@ public class PlayerStateMoving: PlayerSimState
             playerSim.SwitchState(PlayerState.BICYCLE_KICK);
         }
     }
-    public override void OnPass(int passType,PlayerSim passTarget) {
-        bool hasBall = playerSim._ballSim.BallCarrierId == playerSim.playerId;
-        if (!hasBall) {//tackle
-            return;
-        }
-        playerSim.SwitchState(PlayerState.PASSING,PlayerStateData.Build().SetInputType(passType).SetMoveDir(moveDir).setPassTarget(passTarget));
+    public override void OnPass(Vector2 Direction,int passType,PlayerSim passTarget) {
+        playerSim.SwitchState(PlayerState.PASSING,PlayerStateData.Build().SetInputType(passType).SetMoveDir(Direction).setPassTarget(passTarget));
+    }
+
+    public override void OnTackle(Vector2 direction) {
+        playerSim.SwitchState(PlayerState.TACKLING,PlayerStateData.Build().SetMoveDir(Direction));
+
     }
 
     public override bool CanCarryBall() {
         return playerSim.role != Role.GOALIE;
+    }
+
+    public override bool CouldHurt() {
+        if (_ballSim.carrier.playerId == playerSim.playerId) {
+            return true;
+        }
+        return false;
     }
 }

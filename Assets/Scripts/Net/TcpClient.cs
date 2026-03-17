@@ -101,7 +101,6 @@ public class TcpClient : IDisposable
     {
         if (e.SocketError != SocketError.Success)
         {
-            Debug.LogError("Connect failed: " + e.SocketError);
             Reconnect();
             return;
         }
@@ -154,7 +153,6 @@ public class TcpClient : IDisposable
     {
         if (pack.ResponseCode is ResponseCode.HeartBeatResponse && pack.Heartbeat is { Triggered: true, Type: "PONG" })
         {
-            Debug.Log("接收到服务端的心跳...");
             _mLastPongTime = DateTime.Now;
             return;
         }
@@ -162,7 +160,6 @@ public class TcpClient : IDisposable
         if (pack.ActionCode == ActionCode.AssignClient)
         {
             ClientId = pack.ClientPack.ClientId;
-            Debug.Log($"当前客户端Id: {ClientId}");
             // GameInterface.Interface.UdpListener.UdpListenPort = pack.ClientPack.UdpListenPort;
             return;
         }
@@ -174,7 +171,6 @@ public class TcpClient : IDisposable
         Debug.Log("Checking heartbeat timeout:" + (DateTime.Now - _mLastPongTime).TotalSeconds);
         if (_mSocket.Connected && (DateTime.Now - _mLastPongTime).TotalSeconds > 20)
         {
-            Debug.Log("服务器心跳未返回，尝试重新连接");
             CloseSocket();
 
             ReConnectSocket();
@@ -201,7 +197,6 @@ public class TcpClient : IDisposable
 
         // 重连后，完成登录操作
         Invoker.Instance.DelegateList.Add(ReSignInByAuthorization);
-        Debug.Log("重连成功!");
     }
     private void HandleReconnect(object sender, ElapsedEventArgs e)
     {
@@ -251,7 +246,6 @@ public class TcpClient : IDisposable
 
     private void SendHeartbeat(object state, ElapsedEventArgs e)
     {
-        Debug.Log("发送心跳包...");
         HeartbeatPack heartbeatPack = new HeartbeatPack
         {
             Triggered = true,

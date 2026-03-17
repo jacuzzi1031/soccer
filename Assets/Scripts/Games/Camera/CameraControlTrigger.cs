@@ -11,7 +11,7 @@ public class CameraControlTrigger : MonoBehaviour
     public CustomInspectorObjects   customInspectorObjects;
     
     private Collider2D _coll;
-
+    bool _isPanned = false;
     private void Start()
     {
     }
@@ -20,10 +20,11 @@ public class CameraControlTrigger : MonoBehaviour
         if (!CameraManager.Instance || !CameraManager.Instance.gameObject.activeInHierarchy) return;
         if (collision.GetComponentInParent<BallView>())
         {   
-            if (customInspectorObjects.panCameraOnContact)
+            if (customInspectorObjects.panCameraOnContact&& !_isPanned)
             {
                 // pan the camera
-				CameraManager.Instance.PanCameraOnContact(customInspectorObjects.panDistance,customInspectorObjects.panTime,customInspectorObjects.panDirection,false);
+                _isPanned = true;
+				// CameraManager.Instance.PanCameraOnContact(customInspectorObjects.panDistance,customInspectorObjects.panTime,customInspectorObjects.panDirection,false);
             }
         }
     }
@@ -33,10 +34,11 @@ public class CameraControlTrigger : MonoBehaviour
         if (!CameraManager.Instance || !CameraManager.Instance.gameObject.activeInHierarchy) return;
         if (collision.GetComponentInParent<BallView>())
         {   
-            if (customInspectorObjects.panCameraOnContact)
-            {
+            if (customInspectorObjects.panCameraOnContact && _isPanned)
+            {            
                 // pan the camera
-                CameraManager.Instance.PanCameraOnContact(customInspectorObjects.panDistance,customInspectorObjects.panTime,customInspectorObjects.panDirection,true);
+                _isPanned = false;
+                // CameraManager.Instance.PanCameraOnContact(customInspectorObjects.panDistance,customInspectorObjects.panTime,customInspectorObjects.panDirection,true);
             }
         }
     }

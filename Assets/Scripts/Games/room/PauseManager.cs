@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PauseManager : MonoBehaviour {
-    [SerializeField] private GameObject entityPrefab;
-    private List<RoomPlayerInfo> roomPlayerInfoList;
-
     public static PauseManager Instance{get; private set;}
 
     private void Awake() {
@@ -14,8 +11,8 @@ public class PauseManager : MonoBehaviour {
     }
     #region for PauseGame
     private bool isGamePaused = false;
-    public event EventHandler OnGamePaused;
-    public event EventHandler OnGameUnpaused;
+    public event Action OnGamePaused;
+    public event Action OnGameUnpaused;
     public void OnEnable() {
         GameInput.Instance.OnPauseAction+= OnPauseAction;
     }
@@ -26,11 +23,11 @@ public class PauseManager : MonoBehaviour {
         isGamePaused=!isGamePaused;
         if (isGamePaused) {
             // Time.timeScale = 0f;
-            OnGamePaused?.Invoke(this, EventArgs.Empty);
+            OnGamePaused?.Invoke();
         }
         else {
             // Time.timeScale = 1f;
-            OnGameUnpaused?.Invoke(this, EventArgs.Empty);
+            OnGameUnpaused?.Invoke();
         }
     }
     #endregion

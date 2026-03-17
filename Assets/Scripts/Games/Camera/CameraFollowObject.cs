@@ -9,11 +9,12 @@ public class CameraFollowObject : MonoBehaviour
     [SerializeField] private Transform _ballTransform;
 
     [Header("Flip Rotation Stats")]
-    [SerializeField] private float _flipYRotationTime = 0.5f;
+    [SerializeField] private float _flipYRotationTime = 1f;
     private Coroutine _turnCoroutine; 
     private bool _isFacingRight;
     private BallView _ballView;
-
+    BallSim _ballSim;
+    PlayerSim _carrier=null;
     public static CameraFollowObject Instance{get;private set;}
     
     private void Awake()
@@ -21,19 +22,22 @@ public class CameraFollowObject : MonoBehaviour
         Instance=this;
         _ballView = _ballTransform.gameObject.GetComponent<BallView>();
     }
-    private void Update()
-    {   
-        
-        if (_ballView.carrier) {
-            _isFacingRight = _ballView.carrier.playerSim.HeadingRight;
-            transform.position = _ballView.carrier.transform.position;
-        }
-        else {
-            transform.position = _ballTransform.position;
-        }
-    }
-    public void CallTurn()
+    private void LateUpdate()
     {
+        Vector2 pos;
+
+        if (_carrier != null)
+            pos = _carrier.Position;
+        else
+            pos = _ballSim.Position;
+
+        transform.position = new Vector3(pos.x, pos.y, transform.position.z);
+    }
+
+    private bool FaceRight;
+    public void CallTurn(bool faceRight) {
+        if (FaceRight == faceRight) return;
+        FaceRight = faceRight;
         if (_turnCoroutine != null)
             StopCoroutine(_turnCoroutine);
 
@@ -42,7 +46,7 @@ public class CameraFollowObject : MonoBehaviour
     private IEnumerator FlipYLerp()
     {
         float startRotation = transform.localEulerAngles.y;
-        float endRotationAmount = DetermineEndRotation();
+        float endRotationAmount = FaceRight ? 0f : 180f;;
         float yRotation = 0f;
     
         float elapsedTime = 0f;
@@ -56,18 +60,14 @@ public class CameraFollowObject : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, endRotationAmount, 0f);
         _turnCoroutine = null;
     }
-
-    private float DetermineEndRotation()
+    public void FollowBall(BallSim ball)
     {
-        _isFacingRight = !_isFacingRight; 
+        _ballSim = ball;
+        _carrier = null;
+    }
 
-        if (_isFacingRight)
-        {
-            return 0f;
-        } 
-        else
-        {
-            return 180f;
-        }
+    public void FollowCarrier(PlayerSim player)
+    {
+        _carrier = player;
     }
 }

@@ -44,7 +44,6 @@ public class SimulationClock : MonoBehaviour
         _startTime = startTime;
         _waitingStart = true;
         running = true;
-        Debug.Log("simulationClock Starting game");
     }
     private void Update()
     {
@@ -81,7 +80,6 @@ public class SimulationClock : MonoBehaviour
             world?.Step(currentFrame);
             currentFrame++;
         }
-
     }
     private const int INPUT_DELAY = 8;
     private ObjectPool<ReqFrameInputData> _mReqFrameInputDataPool=new ObjectPool<ReqFrameInputData>(()=>new ReqFrameInputData());
@@ -112,5 +110,5 @@ public class SimulationClock : MonoBehaviour
         _mVector2DPool.Release(moveVector);
     }
 
-
+    
 }

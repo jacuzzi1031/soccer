@@ -52,6 +52,13 @@ public class PlayerStatePreppingShot: PlayerSimState
             .SetIsInstant(false);
         playerSim.SwitchState(PlayerState.SHOOTING, data);
     }
+
+    public override bool CouldHurt() {
+        if (_ballSim.carrier.playerId == playerSim.playerId) {
+            return true;
+        }
+        return false;
+    }
 }
 
 

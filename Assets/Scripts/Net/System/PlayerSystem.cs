@@ -181,7 +181,7 @@ public class PlayerSystem:ISimulationSystem
         bool hasBall = currentPlayer._ballSim.BallCarrierId == currentPlayer.playerId;
         if (!hasBall) {
             //tackle
-            // currentPlayer.SwitchState(PlayerState.TACKLING,PlayerStateData.Build().SetMoveDir(Direction));
+            currentPlayer.currentState.OnTackle(Direction);
             return;
         }
         //get passTarget
@@ -199,8 +199,7 @@ public class PlayerSystem:ISimulationSystem
                 passTarget = GetShortPassTarget(currentPlayer, team, Direction);
                 break;
         } 
-        currentPlayer.SwitchState(PlayerState.PASSING,PlayerStateData.Build()
-            .SetInputType(inputType).SetMoveDir(Direction).setPassTarget(passTarget));
+        currentPlayer.currentState.OnPass(Direction,inputType,passTarget);
 
         if (passTarget != null) {
             int delayFrames = (int)(0.23f / deltaTime);

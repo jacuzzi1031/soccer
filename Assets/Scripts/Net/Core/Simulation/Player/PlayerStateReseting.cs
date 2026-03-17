@@ -17,6 +17,7 @@ public class PlayerStateReseting: PlayerSimState
     if ((stateData.ResetPosition - playerPosition).sqrMagnitude < arriveDistance * arriveDistance)
     {
       hasArrived = true;
+      playerSim.HeadingRight = playerSim.initialFacingRight;
       playerSim.Velocity = Vector2.zero;
     }
     else

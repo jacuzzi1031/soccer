@@ -20,8 +20,8 @@
             _commandBuffer=commandBuffer;
             _currentMatchType=matchType;
             goalsHome=0; goalsAway=0;
-            // timeLeft = DURATION_GAME_SEC;
-            timeLeft = 2f;
+            timeLeft = DURATION_GAME_SEC;
+            // timeLeft = 2f;
             SwitchGameState(MatchState.RESET);
         }
 

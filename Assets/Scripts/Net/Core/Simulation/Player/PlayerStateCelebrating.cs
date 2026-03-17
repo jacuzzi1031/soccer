@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PlayerStateCelebrating: PlayerSimState {
     private float startCelebratingTime;
-    private const float AIR_FRICTION = 60f;
+
     private float initialDelay;
     private const float CELEBRATING_HEIGHT = 50f;
+    private const float AIR_FRICTION = 60f;
     public override void OnEnter() {
         float r = HashRandom(playerSim.playerId);
         initialDelay = 0.2f + r * 0.3f;
@@ -18,31 +19,10 @@ public class PlayerStateCelebrating: PlayerSimState {
         {
             Celebrate();
         }
-        MoveHorizontal(deltaTime);
+        MoveHorizontal(deltaTime,AIR_FRICTION);
     }
 
-    private void MoveHorizontal(float deltaTime) {
-        Vector2 velocity = playerSim.Velocity;
-        Vector2 position = playerSim.Position;
-        
-        velocity = Vector2.MoveTowards(
-            velocity,
-            Vector2.zero,
-            AIR_FRICTION * deltaTime
-        );
-        if (velocity.sqrMagnitude < 0.0001f)
-        {
-            playerSim.Velocity = Vector2.zero;
-            return;
-        }
 
-        Vector2 move = velocity * deltaTime;
-
-        position += move;
-
-        playerSim.Velocity = velocity;
-        playerSim.Position = position;
-    }
 
     private void Celebrate()
     {

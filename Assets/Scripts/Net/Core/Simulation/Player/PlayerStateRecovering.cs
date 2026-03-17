@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerStateRecovering: PlayerSimState
 {
     private float _elapsedTicks;
-    private float _durationTicks=0.1f;
+    private float _durationTicks=0.4f;
 
     public override void OnEnter() {
         _elapsedTicks = 0f;

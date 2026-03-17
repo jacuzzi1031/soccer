@@ -50,7 +50,7 @@ public class GameSceneBootstrap : MonoBehaviour
         {
             Vector2 a = boundaryPoints[i].position;
             Vector2 b = boundaryPoints[i + 1].position;
-
+            
             segments.Add(BuildLine(a, b));
         }
 
@@ -133,6 +133,14 @@ public class GameSceneBootstrap : MonoBehaviour
     }
     private IEnumerator ReturnToMainMenu() {
         yield return new WaitForSeconds(2.5f);
+        MatchController  = null;
+        GameInterface.Interface.GameFrameSyncManager.ClearInputBuffer();
+        SimulationClock.Instance.OnGameOver();
+        QuitRoomRequest quitRoomRequest = GameInterface.Interface.RequestManager.GetRequest<QuitRoomRequest>();
+        quitRoomRequest.SendQuitRoomRequest();
+    }
+
+    public void PauseThenQuitMatch() {
         MatchController  = null;
         GameInterface.Interface.GameFrameSyncManager.ClearInputBuffer();
         SimulationClock.Instance.OnGameOver();

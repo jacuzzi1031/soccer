@@ -1,6 +1,4 @@
 
-    using UnityEngine.iOS;
-
     public class GameSimStateGameOver: GameSimState {
         public override void OnEnter() {
             if (stateData.scoringIsHome) {

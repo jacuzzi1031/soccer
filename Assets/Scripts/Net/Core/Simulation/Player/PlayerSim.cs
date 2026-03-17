@@ -68,7 +68,6 @@ public class PlayerSim {
                 HeightVelocity = 0;
             }
         }
-
     }
 
     public void SwitchState(PlayerState id, PlayerStateData data = null) {

@@ -121,9 +121,6 @@ public class PlayerView : MonoBehaviour {
          originalControlSpriteY = controlSprite.transform.localPosition.y;
 
     }
-    private void TakeTackleHit(Vector2 emitterVelocity) {
-        if (!HasBall()) return;
-    }
     public bool HasOpponentsNearby() {
         return opponentListNearby.Find(p => p.country != country);
     }
@@ -254,6 +251,7 @@ public class PlayerView : MonoBehaviour {
             case PlayerState.DIVING:
                 break;
             case PlayerState.HURT:
+                animator.Play("hurt");
                 break;
             case PlayerState.MOURNING:
                 animator.Play("mourn");
@@ -338,7 +336,7 @@ public class PlayerView : MonoBehaviour {
         Vector3 rotator=new Vector3(transform.rotation.eulerAngles.x, yRotation, transform.rotation.eulerAngles.z);
         FlipComponent.transform.rotation=Quaternion.Euler(rotator);
         if (playerSim._ballSim.BallCarrierId==playerId) {
-            CameraFollowObject.Instance.CallTurn();
+            CameraFollowObject.Instance.CallTurn(faceRight);
         }
     }
 

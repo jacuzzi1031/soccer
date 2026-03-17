@@ -6,6 +6,7 @@ public struct BallFreeformToLerpCameraOffsetEvent : IEvent
 {
     public bool IsFreeform;
 
+
     public BallFreeformToLerpCameraOffsetEvent(bool isFreeform)
     {
         IsFreeform = isFreeform;

@@ -17,39 +17,39 @@ public class GamePauseUI : MonoBehaviour {
             PauseManager.Instance.TogglePauseGame();
         });
         mainMenuButton.onClick.AddListener(() => {
-            GameInterface.Interface.SceneLoader.LoadScene(Scene.MainMenuScene);
+            GameSceneBootstrap.Instance.PauseThenQuitMatch();
         });
         optionsButton.onClick.AddListener(() => {
             Hide();
             OptionsUI.Instance.Show(Show);
         });
-        Hide();
     }
 
     private void Start() {
-        // PauseManager.Instance.OnGamePaused += OnGamePaused;
-        // PauseManager.Instance.OnGameUnpaused += OnGameUnpaused;
-
+        PauseManager.Instance.OnGamePaused += OnGamePaused;
+        PauseManager.Instance.OnGameUnpaused += OnGameUnpaused;
         Hide();
     }
 
     private void OnDestroy() {
-        // PauseManager.Instance.OnGamePaused -= OnGamePaused;
-        // PauseManager.Instance.OnGameUnpaused -= OnGameUnpaused;
+        PauseManager.Instance.OnGamePaused -= OnGamePaused;
+        PauseManager.Instance.OnGameUnpaused -= OnGameUnpaused;
     }
 
-    private void OnGameUnpaused(object sender, System.EventArgs e) {
+    private void OnGameUnpaused() {
+        Debug.Log("OnGameUnpaused");
         Hide();
     }
 
-    private void OnGamePaused(object sender, System.EventArgs e) {
+    private void OnGamePaused() {
+        Debug.Log("OnGamepaused");
         Show();
     }
 
     private void Show() {
         gameObject.SetActive(true);
 
-        resumeButton.Select();
+        // resumeButton.Select();
     }
 
     private void Hide() {

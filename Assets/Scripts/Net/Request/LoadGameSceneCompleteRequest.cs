@@ -11,7 +11,7 @@ public class LoadGameSceneCompleteRequest : BaseRequest
     }
     protected override void HandleServerSuccessResponse(MainPack pack)
     {
-        Debug.Log("LoadGameSceneCompleteRequest:LoadGameScene...");
+
 
         long startTime=pack.SyncTimePack.StartTime;
         int startFrame=pack.SyncTimePack.StartFrame;

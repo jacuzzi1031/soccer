@@ -16,22 +16,25 @@ public class QuitRoomRequest : BaseRequest
 
         int playerId = pack.PlayerInfoPack.Id;
         
+        GameInterface.Interface.GameFrameSyncManager.ClearInputBuffer();
+        SimulationClock.Instance.OnGameOver();
+        
         GameInterface.Interface.RoomManager.QuitRoom(playerId,localPlayerId);
 
         if (localPlayerId == playerId)
         {
-            Invoker.Instance.DelegateList.Add(() =>
-            {
+            Invoker.Instance.DelegateList.Add(() => {
                 GameInterface.Interface.SceneLoader.LoadSceneAsync(Scene.MainMenuScene,
                     () =>
                     {
+
+                        
                         GameInterface.Interface.UIManager.PushUIPanelAppend(UIPanelType.RoomListUI,
                             ShowUIPanelType.FadeIn);
                     });
             });
         }
         else {
-            //if homeowner quit,then the member of the room quit
             SendQuitRoomRequest();
         }
         base.HandleServerSuccessResponse(pack);

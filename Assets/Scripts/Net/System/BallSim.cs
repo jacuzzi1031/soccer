@@ -56,7 +56,6 @@ public class BallSim:ISimulationSystem
                 case SimulationCommandType.ResetAndHomeKickoff:
                 case SimulationCommandType.ResetAndAwayKickoff:
                     Position = spawnPosition;
-                    Debug.Log("ball spawnPosition:"+spawnPosition+"  Position:"+Position);
                     Velocity = Vector2.zero;
                     height=0.0f;
                     _eventBus.Publish(new BallBacktoSpawnPositionSignal());
@@ -99,5 +98,13 @@ public class BallSim:ISimulationSystem
     }
     public bool CanAirInteract() {
         return currentState != null && currentState.CanAirInteract();
+    }
+    private const float TUMBLE_HEIGHT_VELOCITY = 25f;
+    private const float DURATION_TUMBLE_LOCK = 0.2f;
+    public void Tumble(Vector2 tumbleVelocity) {
+        Velocity = tumbleVelocity;
+        carrier = null;
+        heightVelocity = TUMBLE_HEIGHT_VELOCITY;
+        SwitchState(BallState.FREEFORM, BallStateData.Build().SetLockDuration(DURATION_TUMBLE_LOCK));
     }
 }

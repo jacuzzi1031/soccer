@@ -16,10 +16,15 @@
         public CommandBuffer commandBuffer;
         public const float BOUNCINESS = 0.8f;
         bool goalTriggered=false;
+        public Vector2 playerInnerOffset=new Vector2(0,8f);
 
         public void Tick(SimulationContext context) {
             foreach (var player in team) {
-                ResolveBoundary(player);
+                Vector2 center = player.Position + playerInnerOffset;
+
+                center = ResolveBoundary(center);
+
+                player.Position = center - playerInnerOffset;
             }
             ResolveBallBoundary();
             
@@ -103,12 +108,12 @@
         }
 
 
-        private void ResolveBoundary(PlayerSim player) {
+        private Vector2 ResolveBoundary(Vector2 playerPosition) {
             foreach (var line in playerLines)
             {
-                Vector2 closest = ClosestPointOnSegment(player.Position, line);
+                Vector2 closest = ClosestPointOnSegment(playerPosition, line);
 
-                Vector2 diff = player.Position - closest;
+                Vector2 diff = playerPosition - closest;
                 float sqrDist = diff.sqrMagnitude;
 
                 if (sqrDist < playerRadius * playerRadius)
@@ -119,9 +124,11 @@
                     float dist = Mathf.Sqrt(sqrDist);
                     Vector2 normal = diff / dist;
                 
-                    player.Position = closest + normal * playerRadius;
+                    playerPosition = closest + normal * playerRadius;
                 }
             }
+
+            return playerPosition;
         }
         Vector2 ClosestPointOnSegment(Vector2 p, LineSegment line)
         {

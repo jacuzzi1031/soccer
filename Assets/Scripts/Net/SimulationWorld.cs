@@ -26,7 +26,6 @@ public class SimulationWorld
 
     public void Step(int frame)
     {
-        Debug.Log("world Step frame:"+frame);
         InputBuffer.ConsumeFrame(frame, DispatchCommand);
 
         context.BuildFrom(frame,commandBuffer.Consume());
@@ -42,7 +41,6 @@ public class SimulationWorld
     private void DispatchCommand(InputBuffer.Command cmd)
     {
         var flags = (GameInput.InputEventFlags)cmd.inputType;
-        Debug.Log("flags:"+flags);
         if ((flags & GameInput.InputEventFlags.Swap) != 0) {
             EnqueueCommad(SimulationCommandType.Swap, cmd);
             return;

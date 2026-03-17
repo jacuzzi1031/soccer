@@ -36,7 +36,7 @@ public class BallView : MonoBehaviour
 
     public float frictionAir = 35f;
     public float frictionGround = 250f;
-    private BallSim ballSim;
+    public BallSim ballSim;
     private bool _matchStarted = false;
 
     private void Awake() {
@@ -102,60 +102,89 @@ public class BallView : MonoBehaviour
         }
     }
     
-    private float cameraCheckTimer = 0f;
-    public float cameraCheckInterval = 0.2f;
+    // private float cameraCheckTimer = 0f;
+    // public float cameraCheckInterval = 0.2f;
     private void SetBallAnimationAndCameraFromVelocity() {
-        if (ballSim.carrier.Velocity.sqrMagnitude <= idleThreshold)
+        var velocity = ballSim.carrier != null 
+            ? ballSim.carrier.Velocity 
+            : ballSim.Velocity;
+        // if (velocity.sqrMagnitude > idleThreshold)
+        // {
+        //     cameraCheckTimer += Time.deltaTime;
+        //
+        //     if (cameraCheckTimer > cameraCheckInterval)
+        //     {
+        //         cameraCheckTimer = 0f;
+        //         CheckCameraY(velocity.y);
+        //     }
+        // }
+        BallAnimState newState;
+
+        if (velocity.sqrMagnitude <= idleThreshold)
         {
-            cameraCheckTimer += Time.deltaTime;
-            if (cameraCheckTimer > cameraCheckInterval)
-            {
-                cameraCheckTimer = 0f;
-                CheckCameraY(ballSim.Velocity.y);
-            }
-            animator.Play("idle");
-            animator.speed = 1;
-            return;
+            newState = BallAnimState.Idle;
         }
-        if (ballSim.Velocity.x > 0)
+        else if (velocity.x > 0)
         {
-            animator.Play("roll");
-            animator.speed = 1;
+            newState = BallAnimState.Roll;
         }
         else
         {
-            animator.Play("rollback");
+            newState = BallAnimState.Rollback;
+        }
+        if (newState != _currentState)
+        {
+            _currentState = newState;
+
+            switch (_currentState)
+            {
+                case BallAnimState.Idle:
+                    animator.Play("idle");
+                    break;
+
+                case BallAnimState.Roll:
+                    animator.Play("roll");
+                    break;
+
+                case BallAnimState.Rollback:
+                    animator.Play("rollback");
+                    break;
+            }
+
             animator.speed = 1;
         }
     }
     void CheckCameraY(float velocityY)
-    {
-        if (CameraManager.Instance.IsLerpingScreenY) return;
-
+    {   
+        // if (CameraManager.Instance.IsLerpingScreenY) return;
         if (Mathf.Abs(velocityY) > idleThreshold)
             CameraManager.Instance.LerpScreenY(velocityY);
         else
             CameraManager.Instance.LerpScreenY(0);
     }
-
+    enum BallAnimState
+    {
+        Idle,
+        Roll,
+        Rollback
+    }
+    private BallAnimState _currentState;
     const float idleThreshold = 0.01f;
     public void SetBallAnimationFromVelocity()
     {
+        BallAnimState newState;
         if (ballSim.Velocity.sqrMagnitude <= idleThreshold)
-        {
-            animator.Play("idle");
-            animator.speed = 1;
-            return;
-        }
-
-        if (ballSim.Velocity.x > 0)
-        {
-            animator.Play("roll");
-            animator.speed = 1;
-        }
+            newState = BallAnimState.Idle;
+        else if (ballSim.Velocity.x > 0)
+            newState = BallAnimState.Roll;
         else
+            newState = BallAnimState.Rollback;
+
+        if (newState != _currentState)
         {
-            animator.Play("rollback");
+            _currentState = newState;
+
+            animator.Play(_currentState.ToString().ToLower());
             animator.speed = 1;
         }
     }
@@ -203,9 +232,9 @@ public class BallView : MonoBehaviour
         switch (ballSimBallState) {
             case BallState.CARRIED:
                 GameInterface.Interface.EventSystem.Publish(new OnBallReleasedEvent());
+                CameraFollowObject.Instance.FollowBall(ballSim);
                 break;
             case BallState.FREEFORM:
-                GameInterface.Interface.EventSystem.Publish(new BallFreeformToLerpCameraOffsetEvent(false));
                 break;
             case BallState.SHOT:
                 ballSprite.localScale = new Vector3(1, 1, 1);
@@ -218,6 +247,11 @@ public class BallView : MonoBehaviour
         switch (ballSimBallState) {
             case BallState.CARRIED:
                 GameInterface.Interface.EventSystem.Publish(new OnBallPossessedEvent(ballSim.carrier.fullName));
+                CameraFollowObject.Instance.FollowCarrier(ballSim.carrier);
+                
+                if(GameInterface.Interface.RoomManager.IsHome&&ballSim.carrier.isHome||
+                   !GameInterface.Interface.RoomManager.IsHome&&!ballSim.carrier.isHome)
+                    GameInterface.Interface.EventSystem.Publish(new BallFreeformToLerpCameraOffsetEvent(false));
                 break;
             case BallState.FREEFORM:
                 GameInterface.Interface.EventSystem.Publish(new BallFreeformToLerpCameraOffsetEvent(true));
@@ -251,5 +285,6 @@ public class BallView : MonoBehaviour
     }
     public void InjectSim(BallSim ballSim) {
         this.ballSim=ballSim;
+        CameraFollowObject.Instance.FollowBall(ballSim);
     }
 }

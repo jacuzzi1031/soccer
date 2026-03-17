@@ -56,7 +56,7 @@ public class OptionsUI : MonoBehaviour {
     }
 
     private void Start() {
-        // PauseManager.Instance.OnGameUnpaused += OnGameUnpaused;
+        PauseManager.Instance.OnGameUnpaused += OnGameUnpaused;
 
         UpdateVisual();
 
@@ -65,10 +65,10 @@ public class OptionsUI : MonoBehaviour {
     }
 
     public void OnDestroy() {
-        // PauseManager.Instance.OnGameUnpaused -= OnGameUnpaused;
+        PauseManager.Instance.OnGameUnpaused -= OnGameUnpaused;
     }
 
-    private void OnGameUnpaused(object sender, System.EventArgs e) {
+    private void OnGameUnpaused() {
         Hide();
     }
 
