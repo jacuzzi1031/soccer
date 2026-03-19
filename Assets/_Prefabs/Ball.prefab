@@ -5065,7 +5065,6 @@ MonoBehaviour:
   playerListInProximityArea: []
   frictionAir: 1.94
   frictionGround: 10
-  cameraCheckInterval: 0.2
   lastConsumedFrame: 0
 --- !u!1 &3525503145679319771
 GameObject:

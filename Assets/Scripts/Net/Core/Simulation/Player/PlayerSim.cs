@@ -7,8 +7,10 @@ using UnityEngine;
 public class PlayerSim {
     public int playerId;
     public PlayerSimStateFactory stateFactory=new PlayerSimStateFactory();
+    private AIBehaviorFactory aiBehaviorFactory=new AIBehaviorFactory();
+    public AIBehavior aiBehavior;
     public ControlScheme controlScheme;
-    public Vector2 teamResetPosition;
+    public Vector2 spawnPosition;
     public Vector2 kickoffPosition;
     public Vector2 Position;
     public Vector2 Velocity;
@@ -36,7 +38,7 @@ public class PlayerSim {
 
     public PlayerSim(int nextPlayerId,PlayerResource contextPlayerData, Vector2 contextplayerPosition, Vector2 contextkickoffPosition, string contextcountry, bool contextisHome,bool ContextInitialFacingRight) {
         playerId = nextPlayerId;
-        teamResetPosition= contextplayerPosition;
+        spawnPosition= contextplayerPosition;
         kickoffPosition= contextkickoffPosition;
         country= contextcountry;
         isHome = contextisHome;
@@ -45,14 +47,23 @@ public class PlayerSim {
         role = contextPlayerData.role;
         fullName = contextPlayerData.fullName;
         controlScheme = ControlScheme.CPU;
-        Position = isHome ? kickoffPosition : teamResetPosition;
+        Position = isHome ? kickoffPosition : spawnPosition;
         initialFacingRight= ContextInitialFacingRight;
         HeadingRight=initialFacingRight;
         SwitchState(PlayerState.RESETING, PlayerStateData.Build().SetResetPosition(Position));
     }
+    private void SetupAIBehavior(Rect GoalArea,int matchPlayerCount) {
+        aiBehavior = aiBehaviorFactory.GetFreshAIBehavior(role);
+        aiBehavior.Setup(this, _ballSim,GoalArea,matchPlayerCount);
+    }
 
-    public void Tick(int frame,float deltaTime)
+    
+    public void Tick(int frame,float deltaTime,int homeCount,int awayCount)
     {
+        aiBehavior.aiTimer += deltaTime;
+        aiBehavior.homeCount= homeCount;
+        aiBehavior.awayCount= homeCount;
+        
         Frame=frame;
         currentState?._Update(deltaTime);
         ApplyHeight(deltaTime);
@@ -91,17 +102,24 @@ public class PlayerSim {
 
          return (HeadingRight && initialFacingRight) || (!initialFacingRight && !HeadingRight);
     }
+    public void FaceTowardsBall() {
+        if (!IsFacingTargetGoal()) {
+            HeadingRight = !HeadingRight;
+        }
+    }
 
     public void OnTeamReset(bool isKickoff) {
-        SwitchState(PlayerState.RESETING,PlayerStateData.Build().SetResetPosition(isKickoff?kickoffPosition:teamResetPosition));
+        SwitchState(PlayerState.RESETING,PlayerStateData.Build().SetResetPosition(isKickoff?kickoffPosition:spawnPosition));
     }
 
     public void SetEventBusAndCommandBuffer(SimEventBus eventBus,CommandBuffer commandBuffer,BallSim ballSim
-        ,List<Vector2> TargetGoalPosition) {
+        ,List<Vector2> TargetGoalPosition,Rect GoalArea,int playerCount) {
         _eventBus=eventBus;
         _commandBuffer = commandBuffer;
         _ballSim=ballSim;
         targetGoalPosition = TargetGoalPosition;
+
+        SetupAIBehavior(GoalArea,playerCount);
     }
 
     public bool CanCarryBall() {
@@ -128,4 +146,22 @@ public class PlayerSim {
         }
         return targetGoalPosition[farIndex];
     }
+
+    public Vector2 GetTopTargetPosition() {
+        return targetGoalPosition[0];
+    }
+
+    public Vector2 GetBottomTargetPosition() {
+        return targetGoalPosition[^1];
+    }
+    public Vector2 GetCenterTargetPosition() {
+        return targetGoalPosition[1];
+    }
+
+    public bool HasBall() {
+        return _ballSim.carrier==null||_ballSim.carrier.playerId == playerId;
+    }
+
+
+
 }

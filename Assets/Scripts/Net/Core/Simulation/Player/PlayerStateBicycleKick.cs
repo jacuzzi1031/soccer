@@ -26,4 +26,7 @@ public class PlayerStateBicycleKick : PlayerSimState
         _ballSim.shoot( playerSim.Power * BONUS_POWER*direction);
         return true;
     }
+    public override bool CanCarryBall() {
+        return true;
+    }
 }

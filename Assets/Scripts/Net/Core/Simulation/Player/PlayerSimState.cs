@@ -14,7 +14,16 @@ public class PlayerSimState
     protected BallSim _ballSim;
     public const float BONUS_POWER =1.8f;
     protected Vector2 Direction;
+    public Vector2 diveDir;
+    public float HashRandom(int seed)
+    {
+        uint x = (uint)seed;
+        x ^= x << 13;
+        x ^= x >> 17;
+        x ^= x << 5;
 
+        return (x & 0xFFFFFF) / (float)0x1000000;
+    }
     public void Setup(
         PlayerSim contextPlayerView,
         PlayerStateData contextData,

@@ -195,7 +195,7 @@ public class BallView : MonoBehaviour
     float targetHeight;
     float interpTimer;
     BallState lastState;
-    public const float FRAME_DT = 1f / 60f;
+    public const float FRAME_DT = SimulationClock.FRAME_DT;
     private void UpdateInterpolatedTransform() {
         //逻辑帧推进
         if (ballSim.Frame != lastConsumedFrame)
@@ -216,7 +216,7 @@ public class BallView : MonoBehaviour
         float height = Mathf.Lerp(prevHeight, targetHeight, t);
 
         transform.position = pos;
-        ballSprite.localPosition =  height * 2.5f*Vector3.up;
+        ballSprite.localPosition =  height * 25f*Vector3.up;
     }
 
     private void ConsumeStateChange() {

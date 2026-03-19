@@ -12,8 +12,6 @@ public class ReadyStartGameResponse : BaseRequest
 
     protected override void HandleServerSuccessResponse(MainPack pack)
     {
-        Debug.Log("开始游戏！");
-
         Invoker.Instance.DelegateList.Add(() =>
         {
             GameInterface.Interface.UIManager.ShowMessage("开始游戏!");

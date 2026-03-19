@@ -12,7 +12,7 @@ public readonly struct CarrierSnapshot
     public CarrierSnapshot(PlayerSim playerSim)
     {
         Id = playerSim.playerId;
-        Position = playerSim.teamResetPosition;
+        Position = playerSim.spawnPosition;
         Velocity = playerSim.Velocity;
 
     }

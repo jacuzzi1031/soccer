@@ -7,7 +7,7 @@ using UnityEngine;
 public class GameFrameSyncManager : BaseManager
 {
     public InputBuffer InputBuffer { get; private set; }
-    public int playerCount{ get; private set; }
+    public int matchPlayerCount{ get; private set; }
     public override void OnInit()
     {
         GameInterface.Interface.UdpListener.OnReceiveFrameSync += ServerFrameSyncDataUpdate;
@@ -26,7 +26,7 @@ public class GameFrameSyncManager : BaseManager
             }
         }
         InputBuffer.SetmaxPlayers(playerCount);
-        this.playerCount = playerCount;
+        this.matchPlayerCount = playerCount;
     }
 
     public void ClearInputBuffer() {

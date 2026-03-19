@@ -6,12 +6,14 @@
     public class BoundarySystem:ISimulationSystem {
         public float ballRadius;
         public float playerRadius;
+        public float playerVerticalOffset;
         public List<LineSegment> playerLines;
         public List<LineSegment> ballLines;
         public List<LineSegment> scoreLines;
         public List<LineSegment> stopballLines;
         
         public List<PlayerSim> team;
+        public List<PlayerSim> goalies=new List<PlayerSim>();
         public BallSim ball;
         public CommandBuffer commandBuffer;
         public const float BOUNCINESS = 0.8f;
@@ -61,8 +63,48 @@
                     break;
                 }
             }
+            
+            //for goalkeeper
+            if (ball.ballState == BallState.CARRIED) { return; }
+            foreach (var goalKeeper in goalies) {
+                ResolveBallGoalieCollision(goalKeeper.Position, ball.Position,ball.Velocity);
+            }
         }
+        void ResolveBallGoalieCollision(Vector2 center,Vector2 ballPos,Vector2 ballVelocity)
+        {
+            
+            float halfHeight = playerVerticalOffset;
+            float radius = playerRadius;
 
+            Vector2 top = center + Vector2.up * halfHeight;
+            Vector2 bottom = center + Vector2.down * halfHeight;
+
+            Vector2 closest = ClosestPointOnPlayerSegment(bottom, top, ballPos);
+
+            float dist = Vector2.Distance(ballPos, closest);
+            float combinedRadius = ballRadius + radius;
+
+            if (dist < combinedRadius)
+            {
+                Vector2 normal = (ballPos - closest).normalized;
+
+                // 反弹
+                ballVelocity = Vector2.Reflect(ballVelocity, normal);
+
+                // 推出重叠
+                float penetration = combinedRadius - dist;
+                ballPos += normal * penetration;
+                ball.Velocity=ballVelocity*0.7f;
+                ball.Position=ballPos;
+            }
+        }
+        Vector2 ClosestPointOnPlayerSegment(Vector2 a, Vector2 b, Vector2 p)
+        {
+            Vector2 ab = b - a;
+            float t = Vector2.Dot(p - a, ab) / ab.sqrMagnitude;
+            t = Mathf.Clamp01(t);
+            return a + ab * t;
+        }
         private void ResolveBallBoundary()
         {
             Vector2 position = ball.Position;
@@ -148,12 +190,18 @@
             team.AddRange(away);
             ballRadius=simConfig.BallRadius;
             playerRadius=simConfig.PlayerRadius;
+            playerVerticalOffset = simConfig.playerVerticalOffset;
             ball = ballSim;
             playerLines = PlayerLines;
             ballLines = BallLines;
             scoreLines=ScoreLines;
             stopballLines=StopballLines;
             commandBuffer=CommandBuffer;
+            foreach (PlayerSim player in team) {
+                if (player.role == Role.GOALIE) {
+                    goalies.Add(player);
+                }
+            }
         }
         public void Stop() {
         }

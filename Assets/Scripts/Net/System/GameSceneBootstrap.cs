@@ -20,6 +20,8 @@ public class GameSceneBootstrap : MonoBehaviour
     
     [SerializeField] Transform[] GoalHomePosition;
     [SerializeField] Transform[] GoalAwayPosition;
+    [SerializeField] Transform[] GoalHomeArea;
+    [SerializeField] Transform[] GoalAwayArea;
     
     public MatchController MatchController;
     Vector2 fieldCenter=new Vector2(0,0);
@@ -79,6 +81,10 @@ public class GameSceneBootstrap : MonoBehaviour
         foreach (var transform in GoalAwayPosition) {
             goalAwayPos.Add(transform.position);
         }
+        Rect goalHomeArea = CreateGoalRect(GoalHomeArea);
+        Rect goalAwayArea = CreateGoalRect(GoalAwayArea);
+        
+        
         
         var EventBus = new SimEventBus();
         
@@ -96,14 +102,14 @@ public class GameSceneBootstrap : MonoBehaviour
         ballView.InjectSim(BallSim);
         
         
-        int playerCount = GameInterface.Interface.GameFrameSyncManager.playerCount;
-        var PlayerSystem = new PlayerSystem(EventBus,commandBuffer,playerCount);
+        int matchPlayerCount = GameInterface.Interface.GameFrameSyncManager.matchPlayerCount;
+        var PlayerSystem = new PlayerSystem(EventBus,commandBuffer,matchPlayerCount);
         
         var simConfig = new SimulationConfig();
         var CollisionSystem = new CollisionSystem();
         var BoundarySystem = new BoundarySystem();
         PlayerManager.Instance.InitializeSquads((home, away) => {
-                PlayerSystem.RegisterTeams(home, away,BallSim,goalHomePos,goalAwayPos);
+                PlayerSystem.RegisterTeams(home, away,BallSim,goalHomePos,goalAwayPos,goalHomeArea,goalAwayArea);
                 CollisionSystem.RegisterTeams(home, away,simConfig,BallSim,playerLines);
                 BoundarySystem.RegisterTeams(home, away,commandBuffer,simConfig,BallSim,playerLines,ballLines,scoreLines,stopballLines);
             }
@@ -127,7 +133,25 @@ public class GameSceneBootstrap : MonoBehaviour
         );
         SimulationClock.Instance.SetWorld(world);
     }
-    
+
+    private Rect CreateGoalRect(Transform[] goalPoints) {
+        if (goalPoints == null || goalPoints.Length < 2)
+        {
+            Debug.LogError("GoalHomeArea 至少需要两个点");
+            return new Rect();
+        }
+
+        Vector2 p1 = goalPoints[0].position;
+        Vector2 p2 = goalPoints[1].position;
+
+        float xMin = Mathf.Min(p1.x, p2.x);
+        float xMax = Mathf.Max(p1.x, p2.x);
+        float yMin = Mathf.Min(p1.y, p2.y);
+        float yMax = Mathf.Max(p1.y, p2.y);
+
+        return Rect.MinMaxRect(xMin, yMin, xMax, yMax);
+    }
+
     public void EndMatch() {
         StartCoroutine(ReturnToMainMenu());
     }

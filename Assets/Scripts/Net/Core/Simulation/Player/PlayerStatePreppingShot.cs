@@ -42,9 +42,20 @@ public class PlayerStatePreppingShot: PlayerSimState
         float easeTime = durationPress / DURATION_MAX_BONUS;
         float bonus = Mathf.Pow(easeTime, EASE_REWARD_FACTOR);
         
-        float shotPower = playerSim.Power * (1f + 1.3f * bonus);
-        
-        shotDirection = shotDirection.normalized;
+        float shotPower = playerSim.Power * (1f + 1.1f * bonus);
+        if (hasTriggeredBonusEvent) {
+            if (shotDirection.y > 0.1f) {
+                var Dir = playerSim.GetTopTargetPosition() - playerSim.Position;
+                shotDirection = Dir.normalized;
+            }
+            else if (shotDirection.y < -0.1f) {
+                var Dir = playerSim.GetBottomTargetPosition() - playerSim.Position;
+                shotDirection = Dir.normalized;
+            }
+        }
+        else {
+            shotDirection = shotDirection.normalized;
+        }
         
         PlayerStateData data = PlayerStateData.Build()
             .SetShotPower(shotPower)

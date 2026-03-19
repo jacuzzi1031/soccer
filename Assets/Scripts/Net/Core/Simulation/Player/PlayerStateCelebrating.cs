@@ -34,18 +34,10 @@ public class PlayerStateCelebrating: PlayerSimState {
         playerSim.Height = 0.0f;
         playerSim.HeightVelocity=0f;
     }
-    float HashRandom(int seed)
-    {
-        uint x = (uint)seed;
-        x ^= x << 13;
-        x ^= x >> 17;
-        x ^= x << 5;
 
-        return (x % 1000) / 1000f;
-    }
 
     public override void OnTeamReset(bool isHomeKickoff) {
-        playerSim.SwitchState(PlayerState.RESETING,PlayerStateData.Build().SetResetPosition(isHomeKickoff?playerSim.kickoffPosition:playerSim.teamResetPosition));
+        playerSim.SwitchState(PlayerState.RESETING,PlayerStateData.Build().SetResetPosition(isHomeKickoff?playerSim.kickoffPosition:playerSim.spawnPosition));
 
     }
 }

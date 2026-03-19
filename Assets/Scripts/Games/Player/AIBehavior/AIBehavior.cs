@@ -5,23 +5,26 @@ using UnityEngine;
 public class AIBehavior
 {  
     protected Vector2 moveDir=Vector2.zero;
-    protected BallView BallView;
+    protected BallSim ballSim;
     protected TriggerDetection opponentDetectionArea;
-    protected PlayerView PlayerView;
+    protected PlayerSim playerSim;
     private float nextAiTickTime;
-    public const float aiTickFrequency = 0.2f;
+    public float aiTimer;
+    private const float aiTickFrequency = 0.2f;
+    protected Rect GoalArea;
+    public int homeCount;
+    public int awayCount;
+    public int matchPlayerCount;
 
-    public void Start() {
-        nextAiTickTime = Time.time + Random.Range(0f, aiTickFrequency);
-    }
     public void UpdateAI()
     {
-        if (Time.time-nextAiTickTime > aiTickFrequency) {
-            nextAiTickTime=Time.time;
+        while (aiTimer >= aiTickFrequency)
+        {
+            aiTimer -= aiTickFrequency;
+
             PerformAIMovement();
             PerformAIDecisions();
         }
-
     }
     public virtual void PerformAIMovement() {
     }
@@ -31,9 +34,22 @@ public class AIBehavior
         return moveDir;
     }
 
-    public void Setup(PlayerView playerView, BallView ballView, TriggerDetection opponentDetectionArea) {
-        this.PlayerView=playerView;
-        this.BallView=ballView;
-        this.opponentDetectionArea=opponentDetectionArea;
+    public void Setup(PlayerSim playerSim, BallSim ballSim,Rect GoalArea,int MatchPlayerCount) {
+        this.playerSim=playerSim;
+        this.ballSim=ballSim;
+        this.GoalArea=GoalArea;
+        matchPlayerCount=MatchPlayerCount;
+        float r = HashRandom(playerSim.playerId);
+
+        aiTimer = r * aiTickFrequency;
+    }
+    public float HashRandom(int seed)
+    {
+        uint x = (uint)seed;
+        x ^= x << 13;
+        x ^= x >> 17;
+        x ^= x << 5;
+
+        return (x & 0xFFFFFF) / (float)0x1000000;
     }
 }

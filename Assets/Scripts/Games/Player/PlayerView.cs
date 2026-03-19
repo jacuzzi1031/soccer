@@ -100,14 +100,7 @@ public class PlayerView : MonoBehaviour {
 
     private void Start() {
          SetControlSprite();
-         SetupAIBehavior();
          setShaderProperties();
-         if (role == Role.GOALIE) {
-             goalieHandsArea.enabled = true;
-         }
-         else {
-             goalieHandsArea.enabled = false;
-         }
          tackleEmitterArea.enabled = false;
          spawnPosition=transform.position;
          Vector2 initialPosition=country==GameSceneBootstrap.Instance.MatchController.countryHome?KickoffPosition:spawnPosition;
@@ -159,17 +152,12 @@ public class PlayerView : MonoBehaviour {
     private void SetControlSprite() {
         controlSprite.sprite = controlSchemeSO.GetSprite(controlScheme);
     }
-
-    private void SetupAIBehavior() {
-        currentAIBehavior = aiBehaviorFactory.GetFreshAIBehavior(role);
-        currentAIBehavior.Setup(this, ballView, opponentDetectionArea);
-    }
     [HideInInspector]public int lastConsumedFrame;
     Vector2 prevPos;
     Vector2 targetPos;
     float interpTimer;
     PlayerState lastState;
-    public const float FRAME_DT = 1f / 60f;
+    public const float FRAME_DT = SimulationClock.FRAME_DT;
     private void Update() {
         
         ConsumeStateChange();
@@ -190,6 +178,7 @@ public class PlayerView : MonoBehaviour {
     }
     float prevHeight;
     float targetHeight;
+    private bool prevHeading;
     private void UpdateInterpolatedTransform() {
         //逻辑帧推进
         if (playerSim.Frame != lastConsumedFrame)
@@ -249,6 +238,12 @@ public class PlayerView : MonoBehaviour {
                 animator.Play("chest_control");
                 break;
             case PlayerState.DIVING:
+                if (playerSim.currentState.diveDir.y > 0) {
+                    animator.Play("dive_up");
+                }
+                else {
+                    animator.Play("dive_down");
+                }
                 break;
             case PlayerState.HURT:
                 animator.Play("hurt");
@@ -294,17 +289,13 @@ public class PlayerView : MonoBehaviour {
 
     }
     public void FlipSprite() {
-        float flipX = playerSim.Velocity.x;
-        if (Mathf.Abs(flipX) < 0.001f) 
+        bool currentHeading = playerSim.HeadingRight;
+        
+        if (currentHeading == prevHeading)
             return;
-        if (flipX > 0)
-        {
-            Flip(true);
-        }
-        else if (flipX < 0)
-        {
-            Flip(false);
-        }
+
+        Flip(currentHeading);
+        prevHeading = currentHeading;
     }
     private static readonly int SpeedHash =
         Animator.StringToHash("Speed");

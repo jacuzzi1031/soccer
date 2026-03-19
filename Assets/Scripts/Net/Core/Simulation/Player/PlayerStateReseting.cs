@@ -23,6 +23,7 @@ public class PlayerStateReseting: PlayerSimState
     else
     {
       playerSim.Velocity = dir * playerSim.Speed;
+      playerSim.SetHeadingRight(dir);
     }
     playerPosition += playerSim.Velocity * deltaTime;
     playerSim.Position = playerPosition;

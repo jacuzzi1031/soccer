@@ -5,14 +5,27 @@ using UnityEngine;
 public class PlayerStateMoving: PlayerSimState
 {   
     private Vector2 moveDir;
-    private float goalieSpeed = 44f;
+    private float goalieSpeed = 34f;
+    private bool couldCarrer;
+    private float _elapsedTicks;
+    private float couldCarryTicks=0.4f;
     public override void OnEnter() {
+        _elapsedTicks = 0f;
+        couldCarrer = false;
     }
 
     public override void _Update(float deltaTime) {
+        if (!couldCarrer&&_elapsedTicks<couldCarryTicks) {
+            _elapsedTicks += deltaTime;
+        }
+        else {
+            couldCarrer = true;
+        }
+        
+        
         if (playerSim.controlScheme == ControlScheme.CPU) {
-            // aiBehavior.UpdateAI();                  
-            // moveDir = aiBehavior.GetAIMoveDir();  
+            playerSim.aiBehavior.UpdateAI();
+            moveDir = playerSim.aiBehavior.GetAIMoveDir();
         }
         else {
             moveDir = _moveDirection;
@@ -52,7 +65,7 @@ public class PlayerStateMoving: PlayerSimState
     private void InstantShot() {
         if (playerSim.IsFacingTargetGoal())
         {
-            if (_ballSim.height <= 4.3f) {
+            if (_ballSim.height <= 3.3f) {
                 playerSim.SwitchState(PlayerState.VOLLEY_KICK);
             }
             else {
@@ -75,7 +88,7 @@ public class PlayerStateMoving: PlayerSimState
     }
 
     public override bool CanCarryBall() {
-        return playerSim.role != Role.GOALIE;
+        return playerSim.role != Role.GOALIE&&couldCarrer;
     }
 
     public override bool CouldHurt() {

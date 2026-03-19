@@ -5,8 +5,7 @@ using UnityEngine;
 public class PlayerStatePassing: PlayerSimState
 {
     private float _elapsedTicks;
-    private float _durationTicks=0.03f;
-    
+    private float _animationTicks=0.05f;
     private Vector2 passDestination;
     private bool overground;
     public override void OnEnter() {
@@ -25,13 +24,13 @@ public class PlayerStatePassing: PlayerSimState
             switch (stateData.InputType)
             {
                 case 0:
-                    passDestination = passTargetPosition + passTargetVelocity * 0.8f;
+                    passDestination = passTargetPosition + passTargetVelocity * 0.2f;
                     overground = true;
                     _ballSim.passTo(passDestination,true);
                     break;
                     
                 case 1:
-                    passDestination = passTargetPosition + passTargetVelocity * 0.8f;
+                    passDestination = passTargetPosition + passTargetVelocity * 0.2f;
                     overground = false;
                     _ballSim.passTo(passDestination,false);
                     break;
@@ -48,14 +47,11 @@ public class PlayerStatePassing: PlayerSimState
     public override void _Update(float deltaTime) {
         _elapsedTicks+=deltaTime;
 
-        if (_elapsedTicks >= _durationTicks)
+        if (_elapsedTicks >= _animationTicks)
         {
-            OnAnimationComplete();
+            _ballSim.passTo(passDestination,overground);
+            playerSim.SwitchState(PlayerState.MOVING);
         }
     }
-
-    private void OnAnimationComplete() {
-        _ballSim.passTo(passDestination,overground);
-        playerSim.SwitchState(PlayerState.MOVING);
-    }
+    
 }

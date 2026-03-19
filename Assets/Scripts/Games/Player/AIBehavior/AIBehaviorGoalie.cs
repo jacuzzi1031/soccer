@@ -6,9 +6,9 @@ public class AIBehaviorGoalie : AIBehavior
 {
     private const float PROXIMITY_CONCERN = 10f;
     public override void PerformAIDecisions() {
-        if (BallView.IsHeadedForScoringArea(PlayerView.ownGoal.GetScoringArea()))
+        if (IsBallHeadingToGoal(ballSim.Position, ballSim.Velocity, GoalArea))
         {
-            // PlayerView.SwitchViewState(PlayerView.State.DIVING);
+            playerSim.SwitchState(PlayerState.DIVING);
         }
     }
 
@@ -18,18 +18,37 @@ public class AIBehaviorGoalie : AIBehavior
         if (moveDir.magnitude > 1f)
             moveDir = moveDir.normalized;
     }
+    public bool IsBallHeadingToGoal(
+        Vector2 ballPos,
+        Vector2 ballVel,
+        Rect goalArea)
+    {
+        if (ballVel.sqrMagnitude < 0.0001f)
+            return false;
+        Vector2 dir = ballVel.normalized;
 
+        float maxDistance = ballVel.magnitude * 1.0f;
+
+        float hitTime;
+        return DeterministicGeometry2D.RayIntersectsAABB(
+            ballPos,
+            dir,
+            goalArea,
+            maxDistance,
+            out hitTime
+        );
+    }
 
     public Vector2 GetGoalieSteeringForce()
     {
-        Vector2 top = PlayerView.ownGoal.GetTopTargetPosition();
-        Vector2 bottom = PlayerView.ownGoal.GetBottomTargetPosition();
+        Vector2 top = playerSim.GetTopTargetPosition();
+        Vector2 bottom = playerSim.GetBottomTargetPosition();
 
         float minY = Mathf.Min(top.y, bottom.y);
         float maxY = Mathf.Max(top.y, bottom.y);
 
-        float targetY = Mathf.Clamp(BallView.transform.position.y, minY, maxY);
-        float distanceY = targetY - PlayerView.transform.position.y;
+        float targetY = Mathf.Clamp(ballSim.Position.y, minY, maxY);
+        float distanceY = targetY - playerSim.Position.y;
         float weight = Mathf.Clamp01(Mathf.Abs(distanceY) / PROXIMITY_CONCERN);
 
         Vector2 direction = new Vector2(0f, Mathf.Sign(distanceY));

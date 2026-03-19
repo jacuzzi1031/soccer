@@ -10,9 +10,9 @@ public class BallSim:ISimulationSystem
     public float height=0.0f;
     public float heightVelocity=0.0f;
     private const float KICKOFF_PASS_DISTANCE = 30f;
-    private const float DURATION_PASS_LOCK = 0.3f;
+    private const float DURATION_PASS_LOCK = 0.1f;
     private const float DURATION_KICKOFF_LOCK = 0.6f;
-    public const float GRAVITY = 80f;
+    public const float GRAVITY = 10f;
     public Vector2 spawnPosition;
     public BallSimState currentState;
     public BallSimStateFactory stateFactory=new BallSimStateFactory();
@@ -22,7 +22,7 @@ public class BallSim:ISimulationSystem
     public CommandBuffer _commandBuffer;
     public int Frame { get;private set;}
     [HideInInspector]public float frictionAir = 10f;
-    [HideInInspector]public float frictionGround = 60f;
+    [HideInInspector]public float frictionGround = 75;
     [HideInInspector]public PlayerSim carrier;
     public const int INVALID_PLAYER_ID = -1;
     public int BallCarrierId => carrier?.playerId ?? INVALID_PLAYER_ID;
@@ -77,7 +77,6 @@ public class BallSim:ISimulationSystem
         float distance = Vector2.Distance(Position, destination);
         float intensity = Mathf.Sqrt(2f * distance * frictionGround);
         Velocity = intensity * direction;
-        Velocity *= 1.2f;
         // 如果是高空的，视为水平是匀速，速度为原本速度intensity  x=Vx*t  t=x/Vx
         // 垂直方向终点y=0,Vy=gt/2  代入t Vy=gx/2Vx 高度增加 /2->/1.85 也会有更快速度，飞到球员脸上而不是脚下
         if (!overground) {

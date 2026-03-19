@@ -22,33 +22,34 @@ public class PlayerSystem:ISimulationSystem
     public CommandBuffer _commandBuffer;
     public BallSim _ballSim;
     const float EPS = 0.0001f;  
-    private int playerCount;
+    private int matchPlayerCount;
     
     //for passing delay to swap / or by another scheduler
     private int _switchControlFrame = -1;
     private PlayerSim _fromPlayer;
     private PlayerSim _toPlayer;
     private ControlScheme _scheme;
-	public PlayerSystem(SimEventBus eventBus,CommandBuffer commandBuffer,int PlayerCount) {
+	public PlayerSystem(SimEventBus eventBus,CommandBuffer commandBuffer,int MatchPlayerCount) {
         _eventBus = eventBus;
         _commandBuffer=commandBuffer;
-        playerCount = PlayerCount;
-        weightCacheIntervalFrames=Mathf.RoundToInt(SimulationClock.FRAME_DT * DURATION_WEIGHT_CACHE);
+        matchPlayerCount = MatchPlayerCount;
+        weightCacheIntervalFrames=Mathf.RoundToInt(DURATION_WEIGHT_CACHE / SimulationClock.FRAME_DT);
     }
 
     public void RegisterTeams(
         List<PlayerSim> home,
         List<PlayerSim> away,
-        BallSim ballSim,List<Vector2> goalHomePos,List<Vector2> goalAwayPos)
+        BallSim ballSim,List<Vector2> goalHomePos,List<Vector2> goalAwayPos,
+        Rect goalHomeArea,Rect goalAwayArea)
     {
         teamHome = home;
         teamAway = away;
         _ballSim=ballSim;
         foreach (var homePlayer in teamHome) {
-            homePlayer.SetEventBusAndCommandBuffer(_eventBus,_commandBuffer,_ballSim,goalAwayPos);
+            homePlayer.SetEventBusAndCommandBuffer(_eventBus,_commandBuffer,_ballSim,goalAwayPos,goalHomeArea,matchPlayerCount);
         }
         foreach (var awayPlayer in teamAway) {
-            awayPlayer.SetEventBusAndCommandBuffer(_eventBus,_commandBuffer,_ballSim,goalHomePos);
+            awayPlayer.SetEventBusAndCommandBuffer(_eventBus,_commandBuffer,_ballSim,goalHomePos,goalAwayArea,matchPlayerCount);
         }
         ResetControlSchemesSim();
     }
@@ -99,21 +100,41 @@ public class PlayerSystem:ISimulationSystem
                     break;
             }
         }
+        if (isCheckingForKickoffReadiness)
+        {
+            CheckForKickoffReadiness();
+        }
         if (lastCacheRefreshFrame < 0 ||
             context.Frame - lastCacheRefreshFrame >= weightCacheIntervalFrames)
         {
             lastCacheRefreshFrame = context.Frame;
             SetOnDutyWeights(context.BallPosition);
+            //主要这个力太大导致靠太近
         }
-        if (isCheckingForKickoffReadiness)
+        int homeCount = 0;
+        int awayCount = 0;
+
+        foreach (var player in teamHome)
         {
-            CheckForKickoffReadiness();
+            if (IsNearBall(player.Position))
+            {
+                    homeCount++;
+            }
         }
+        foreach (var player in teamAway)
+        {
+            if (IsNearBall(player.Position))
+            {
+                awayCount++;
+            }
+        }
+        
+        
         foreach (var homePlayer in teamHome) {
-            homePlayer.Tick(context.Frame,context.DeltaTime);
+            homePlayer.Tick(context.Frame,context.DeltaTime,homeCount,awayCount);
         }
         foreach (var awayPlayer in teamAway) {
-            awayPlayer.Tick(context.Frame,context.DeltaTime);
+            awayPlayer.Tick(context.Frame,context.DeltaTime,homeCount,awayCount);
         }
         
         //for passing delay to swap
@@ -122,6 +143,16 @@ public class PlayerSystem:ISimulationSystem
             SwitchControlTo(_fromPlayer, _toPlayer, _scheme);
             _switchControlFrame = -1;
         }
+    }
+
+    public float playerProximitySqr = 55f * 55f;
+    private bool IsNearBall(Vector2 playerPosition) {
+        var ballPos = _ballSim.Position;
+        float distSqr= (playerPosition-ballPos).sqrMagnitude;
+        if (distSqr < playerProximitySqr) {
+            return true;
+        } 
+        return false;
     }
 
     private void HandleSwap(int seatIndex,int ballCarrierId,Vector2 ballPosition) {
@@ -298,7 +329,7 @@ public class PlayerSystem:ISimulationSystem
         SwitchControlTo(currentHomePlayer,teamHome[^1], ControlScheme.P1);
         
         
-        if (playerCount==2) {
+        if (matchPlayerCount==2) {
             SwitchControlTo(currentAwayPlayer,teamAway[^1], ControlScheme.P2);
         }
     }
@@ -348,8 +379,8 @@ public class PlayerSystem:ISimulationSystem
             }
             cpuPlayers.Sort((p1, p2) =>
             {
-                float d1 = (p1.teamResetPosition - ballPosition).sqrMagnitude;
-                float d2 = (p2.teamResetPosition - ballPosition).sqrMagnitude;
+                float d1 = (p1.spawnPosition - ballPosition).sqrMagnitude;
+                float d2 = (p2.spawnPosition - ballPosition).sqrMagnitude;
 
                 int cmp = d1.CompareTo(d2);
                 if (cmp != 0)
@@ -386,12 +417,12 @@ public class PlayerSystem:ISimulationSystem
             }
         }
     }
-    public PlayerSim GetShortPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, Vector2 moveDir)
+    public PlayerSim GetShortPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, Vector2 moveDir=new Vector2())
     { 
         var list = GetEligibleTargets(self, team, moveDir);
         return list.Count > 0 ? list[0] : null;
     }
-    public static PlayerSim GetLongPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, Vector2 moveDir)
+    public static PlayerSim GetLongPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, Vector2 moveDir=new Vector2())
     {
         var list = GetEligibleTargets(self, team, moveDir);
 

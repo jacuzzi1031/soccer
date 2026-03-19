@@ -14,6 +14,6 @@ public class PlayerStateMourning: PlayerSimState
     }
 
     public override void OnTeamReset(bool isHomeKickoff) {
-        playerSim.SwitchState(PlayerState.RESETING,PlayerStateData.Build().SetResetPosition(isHomeKickoff?playerSim.kickoffPosition:playerSim.teamResetPosition));
+        playerSim.SwitchState(PlayerState.RESETING,PlayerStateData.Build().SetResetPosition(isHomeKickoff?playerSim.kickoffPosition:playerSim.spawnPosition));
     }
 }

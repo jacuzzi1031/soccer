@@ -13,6 +13,7 @@
         public List<PlayerSim> team;
         public BallSim ball;
         public float captureRadiusSqr;
+        public float volleycaptureRadiusSqr;
 
         //实际  ballView height*2.5f
         private const float MAX_CAPTURE_HEIGHT = 8f;  //20
@@ -73,11 +74,16 @@
             
             foreach (var player in team)
             {
+                if (!player.CanCarryBall()) {
+                    continue;
+                }
                 float distSqr = (player.Position+playerForBallOffset - ball.Position).sqrMagnitude;
-                if (distSqr < captureRadiusSqr && ball.height < MAX_CAPTURE_HEIGHT) {
+                if (distSqr < volleycaptureRadiusSqr && ball.height < MAX_CAPTURE_HEIGHT) {
                     bool hasVolleyShot = player.currentState.VolleyShot();
-                    if(hasVolleyShot||!player.CanCarryBall()) continue;
-                    
+                    if(hasVolleyShot) continue;
+                }
+
+                if (distSqr < captureRadiusSqr && ball.height < MAX_CAPTURE_HEIGHT) {
                     if (ball.height > BALL_CONTROL_HEIGHT_MAX) {
                         player.SwitchState(PlayerState.CHEST_CONTROL);
                     }
@@ -99,6 +105,7 @@
             playerRadius=simConfig.PlayerRadius;
             ballCaptureRadius=simConfig.ballCaptureRadius;
             captureRadiusSqr = (playerRadius + ballCaptureRadius) * (playerRadius + ballCaptureRadius);
+            volleycaptureRadiusSqr = (simConfig.playervolleyRadius + ballCaptureRadius) * (simConfig.playervolleyRadius + ballCaptureRadius);
             tacklingRadiusSqr=playerRadius*playerRadius;
             ballRadiusSqr = ballRadius * ballRadius;
             lines = lineSegments;
