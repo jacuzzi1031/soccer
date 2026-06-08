@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class BallSimState
 {
-    public const float GRAVITY = 10f;
     protected BallSim ballSim=null;
     public PlayerView carrier=null;
     protected BallStateData stateData = new BallStateData();
@@ -74,7 +73,7 @@ public class BallSimState
         {
             float dt = deltaTime;
 
-            heightVelocity -= GRAVITY * dt;
+            heightVelocity -= BallSim.GRAVITY * dt;
             height += heightVelocity * dt;
 
             if (height < 0)

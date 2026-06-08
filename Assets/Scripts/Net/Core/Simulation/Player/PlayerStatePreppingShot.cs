@@ -6,7 +6,7 @@ public class PlayerStatePreppingShot: PlayerSimState
 {
     Vector2 shotDirection = Vector2.zero;
     private float timeStartShot;
-    private const float DURATION_MAX_BONUS=2.0f;
+    private const float DURATION_MAX_BONUS=1.5f;
     private const float EASE_REWARD_FACTOR = 2.0f;
     private float pressRaw;
     private bool hasTriggeredBonusEvent = false;
@@ -42,7 +42,7 @@ public class PlayerStatePreppingShot: PlayerSimState
         float easeTime = durationPress / DURATION_MAX_BONUS;
         float bonus = Mathf.Pow(easeTime, EASE_REWARD_FACTOR);
         
-        float shotPower = playerSim.Power * (1f + 1.1f * bonus);
+        float shotPower = playerSim.Power * (1f + 0.7f * bonus);
         if (hasTriggeredBonusEvent) {
             if (shotDirection.y > 0.1f) {
                 var Dir = playerSim.GetTopTargetPosition() - playerSim.Position;
@@ -51,6 +51,9 @@ public class PlayerStatePreppingShot: PlayerSimState
             else if (shotDirection.y < -0.1f) {
                 var Dir = playerSim.GetBottomTargetPosition() - playerSim.Position;
                 shotDirection = Dir.normalized;
+            }
+            else {
+                shotDirection = shotDirection.normalized;
             }
         }
         else {

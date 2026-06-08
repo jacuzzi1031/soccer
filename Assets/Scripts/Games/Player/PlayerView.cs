@@ -42,7 +42,6 @@ public class PlayerView : MonoBehaviour {
     [SerializeField] private TriggerDetection ballDetectionArea;
     [HideInInspector]public float height=0f;
     [HideInInspector]public float heightVelocity=0f;
-    [HideInInspector]public float GRAVITY = 6f;
     public enum State {
         MOVING,
         TACKLING,

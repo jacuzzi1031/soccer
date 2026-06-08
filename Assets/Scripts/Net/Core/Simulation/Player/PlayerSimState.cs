@@ -12,7 +12,7 @@ public class PlayerSimState
     protected SimEventBus _eventBus;
     protected CommandBuffer _commandBuffer;
     protected BallSim _ballSim;
-    public const float BONUS_POWER =1.8f;
+    public const float BONUS_POWER =1.4f;
     protected Vector2 Direction;
     public Vector2 diveDir;
     public float HashRandom(int seed)

@@ -405,7 +405,7 @@ public class PlayerSystem:ISimulationSystem
     }
     public void OnPlayerBecomesCarrier(int playerPlayerId,bool isHome) {
         PlayerSim currentPlayer=isHome?currentHomePlayer:currentAwayPlayer;
-        if (currentPlayer.playerId == playerPlayerId) {
+        if (currentPlayer==null||currentPlayer.playerId == playerPlayerId) {
             return;
         }
         List<PlayerSim>team=isHome?teamHome:teamAway;

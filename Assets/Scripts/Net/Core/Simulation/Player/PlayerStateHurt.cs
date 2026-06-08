@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerStateHurt: PlayerSimState
 {
-    private const float AIR_FRICTION = 35f;
+    private const float AIR_FRICTION = 25f;
     private const float HURT_HEIGHT_VELOCITY = 50f;
-    private const float BALL_TUMBLE_SPEED = 100f;
+    private const float BALL_TUMBLE_SPEED = 20f;
     private float _elapsedTicks;
     private float DURATION_HURT=1f;
     public override void OnEnter() {

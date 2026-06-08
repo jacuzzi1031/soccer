@@ -16,14 +16,14 @@
         public float volleycaptureRadiusSqr;
 
         //实际  ballView height*2.5f
-        private const float MAX_CAPTURE_HEIGHT = 8f;  //20
-        private const float BALL_CONTROL_HEIGHT_MAX = 4.3f;
+        private const float MAX_CAPTURE_HEIGHT = 2f;  //20
+        private const float BALL_CONTROL_HEIGHT_MAX = 0.6f;
         public Vector2 playerForBallOffset = new Vector2(0, 4f);
         public Vector2 attackRightOffset=new Vector2(16f,16f);
         public Vector2 attackLeftOffset=new Vector2(-16f,16f);
         public Vector2 targetRightOffset=new Vector2(10.8f, 4f);
         public Vector2 targetLeftOffset=new Vector2(-10.8f, 4f);
-        public Vector2 acceptOffset=new Vector2(0f,12f);
+        public Vector2 acceptOffset=new Vector2(0f,6f);
         public float tacklingRadiusSqr;
         public float ballRadiusSqr;
         
@@ -55,7 +55,8 @@
             var attackOffset= attacker.HeadingRight?attackRightOffset: attackLeftOffset;
             Vector2 attckerPos = attacker.Position + attackOffset;
             Vector2 targetPos1=target.Position+acceptOffset;
-            float distSqr= (attckerPos-targetPos1).sqrMagnitude;
+            float distSqr= (attacker.Position-target.Position).sqrMagnitude;
+            Debug.Log("distSqr"+distSqr);
             if (distSqr < tacklingRadiusSqr) {
                 return true;
             } 
@@ -106,8 +107,8 @@
             ballCaptureRadius=simConfig.ballCaptureRadius;
             captureRadiusSqr = (playerRadius + ballCaptureRadius) * (playerRadius + ballCaptureRadius);
             volleycaptureRadiusSqr = (simConfig.playervolleyRadius + ballCaptureRadius) * (simConfig.playervolleyRadius + ballCaptureRadius);
-            tacklingRadiusSqr=playerRadius*playerRadius;
-            ballRadiusSqr = ballRadius * ballRadius;
+            tacklingRadiusSqr=(playerRadius+4f)*(playerRadius+4f);
+            ballRadiusSqr = (ballRadius+4f) * (ballRadius+4f);
             lines = lineSegments;
             ball=ballSim;
         }

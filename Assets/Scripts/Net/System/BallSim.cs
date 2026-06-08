@@ -12,7 +12,7 @@ public class BallSim:ISimulationSystem
     private const float KICKOFF_PASS_DISTANCE = 30f;
     private const float DURATION_PASS_LOCK = 0.1f;
     private const float DURATION_KICKOFF_LOCK = 0.6f;
-    public const float GRAVITY = 10f;
+    public const float GRAVITY = 20f;
     public Vector2 spawnPosition;
     public BallSimState currentState;
     public BallSimStateFactory stateFactory=new BallSimStateFactory();
@@ -98,10 +98,10 @@ public class BallSim:ISimulationSystem
     public bool CanAirInteract() {
         return currentState != null && currentState.CanAirInteract();
     }
-    private const float TUMBLE_HEIGHT_VELOCITY = 25f;
+    private const float TUMBLE_HEIGHT_VELOCITY = 8f;
     private const float DURATION_TUMBLE_LOCK = 0.2f;
     public void Tumble(Vector2 tumbleVelocity) {
-        Velocity = tumbleVelocity;
+        Velocity = tumbleVelocity*3f;
         carrier = null;
         heightVelocity = TUMBLE_HEIGHT_VELOCITY;
         SwitchState(BallState.FREEFORM, BallStateData.Build().SetLockDuration(DURATION_TUMBLE_LOCK));

@@ -77,7 +77,7 @@
             float radius = playerRadius;
 
             Vector2 top = center + Vector2.up * halfHeight;
-            Vector2 bottom = center + Vector2.down * halfHeight;
+            Vector2 bottom = center;
 
             Vector2 closest = ClosestPointOnPlayerSegment(bottom, top, ballPos);
 

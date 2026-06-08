@@ -74,7 +74,7 @@ private const float PASS_PROBABILITY = 0.05f;
             return;
         }
         
-        if (ballSim.carrier.playerId == playerSim.playerId)
+        if (ballSim.carrier?.playerId == playerSim.playerId)
         {
             Vector2 target = playerSim.GetCenterTargetPosition();
             

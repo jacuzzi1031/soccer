@@ -7,8 +7,8 @@ public class BallSimStateCarried : BallSimState
     public override void OnEnter() {
         ballSim.Velocity=Vector2.zero;
         ballSim.heightVelocity=0.0f;
-        if (ballSim.height > 6f) {
-            ballSim.height -= 0.5f;
+        if (ballSim.height > 0.6f) {
+            ballSim.height -= 0.2f;
         }
     }
     private float dribbleTime = 0f;
