@@ -19,13 +19,13 @@ public class PlayerStateShooting: PlayerSimState
         }
     }
     public void OnAnimationComplete() {
-        if (playerSim.controlScheme == ControlScheme.CPU) {
-            playerSim.SwitchState(PlayerState.RECOVERING);
-        }
-        else {
-            playerSim.SwitchState(PlayerState.MOVING);
-        }
-        
+        // if (playerSim.controlScheme == ControlScheme.CPU) {
+        //     playerSim.SwitchState(PlayerState.RECOVERING);
+        // }
+        // else {
+        //     playerSim.SwitchState(PlayerState.MOVING);
+        // }
+        playerSim.SwitchState(PlayerState.RECOVERING);
         _ballSim.shoot(stateData.ShotDirection * stateData.ShotPower);
     }
 }

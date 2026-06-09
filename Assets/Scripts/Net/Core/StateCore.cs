@@ -31,7 +31,7 @@ public enum Role {
     MIDFIELD,
     OFFENSE
 }
-public enum BallState {CARRIED, FREEFORM, SHOT}
+public enum BallState {CARRIED, FREEFORM, SHOT,RESET}
 public enum ControlScheme{ CPU,P1,P2};
 
 public struct SimulationCommand
@@ -47,6 +47,7 @@ public enum SimulationCommandType
     ResetAndAwayKickoff,
     AllPlayersReadyForKickoff,
     KickoffStart,
+    KickoffEnd,
     ShortPass,
     LongPass,
     ShootPress,

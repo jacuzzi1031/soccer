@@ -28,12 +28,15 @@ public class AIBehaviorGoalie : AIBehavior
         Vector2 dir = ballVel.normalized;
 
         float maxDistance = ballVel.magnitude * 1.0f;
-
+        // 只扩大Y范围
+        Rect expandedGoal = goalArea;
+        expandedGoal.yMin -= 12.0f;
+        expandedGoal.yMax += 12.0f;
         float hitTime;
         return DeterministicGeometry2D.RayIntersectsAABB(
             ballPos,
             dir,
-            goalArea,
+            expandedGoal,
             maxDistance,
             out hitTime
         );

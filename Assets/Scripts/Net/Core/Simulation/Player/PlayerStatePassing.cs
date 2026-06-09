@@ -6,6 +6,7 @@ public class PlayerStatePassing: PlayerSimState
 {
     private float _elapsedTicks;
     private float _animationTicks=0.05f;
+    private float playerRecoverTicks=0.3f;
     private Vector2 passDestination;
     private bool overground;
     public override void OnEnter() {
@@ -50,6 +51,8 @@ public class PlayerStatePassing: PlayerSimState
         if (_elapsedTicks >= _animationTicks)
         {
             _ballSim.passTo(passDestination,overground);
+        }
+        if (_elapsedTicks >= playerRecoverTicks) {
             playerSim.SwitchState(PlayerState.MOVING);
         }
     }

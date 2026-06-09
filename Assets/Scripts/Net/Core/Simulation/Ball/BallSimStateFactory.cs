@@ -11,6 +11,7 @@ public class BallSimStateFactory
             { BallState.CARRIED, () => new BallSimStateCarried() },
             { BallState.FREEFORM, () => new BallSimStateFreeform() },
             { BallState.SHOT, () => new BallSimStateShot() },
+            { BallState.RESET, () => new BallSimStateReset() },
         };
 
     public BallSimState GetFreshState(BallState ballState)

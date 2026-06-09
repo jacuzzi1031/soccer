@@ -159,7 +159,7 @@ public class PlayerSim {
     }
 
     public bool HasBall() {
-        return _ballSim.carrier==null||_ballSim.carrier.playerId == playerId;
+        return _ballSim.carrier!=null&&_ballSim.carrier.playerId == playerId;
     }
 
 

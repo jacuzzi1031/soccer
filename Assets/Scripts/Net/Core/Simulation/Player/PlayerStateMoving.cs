@@ -92,7 +92,7 @@ public class PlayerStateMoving: PlayerSimState
     }
 
     public override bool CouldHurt() {
-        if (_ballSim.carrier.playerId == playerSim.playerId) {
+        if (_ballSim.carrier?.playerId == playerSim.playerId) {
             return true;
         }
         return false;

@@ -7,7 +7,7 @@ public class PlayerStateCelebrating: PlayerSimState {
 
     private float initialDelay;
     private const float CELEBRATING_HEIGHT = 50f;
-    private const float AIR_FRICTION = 60f;
+
     public override void OnEnter() {
         float r = HashRandom(playerSim.playerId);
         initialDelay = 0.2f + r * 0.3f;

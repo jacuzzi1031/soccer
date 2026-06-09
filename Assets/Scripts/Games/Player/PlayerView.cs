@@ -237,7 +237,7 @@ public class PlayerView : MonoBehaviour {
                 animator.Play("chest_control");
                 break;
             case PlayerState.DIVING:
-                if (playerSim.currentState.diveDir.y > 0) {
+                if (playerSim.currentState.diveDirY > 0) {
                     animator.Play("dive_up");
                 }
                 else {

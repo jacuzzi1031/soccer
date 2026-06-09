@@ -14,7 +14,8 @@ public class PlayerSimState
     protected BallSim _ballSim;
     public const float BONUS_POWER =1.4f;
     protected Vector2 Direction;
-    public Vector2 diveDir;
+    protected const float AIR_FRICTION = 25f;
+    public float diveDirY;
     public float HashRandom(int seed)
     {
         uint x = (uint)seed;

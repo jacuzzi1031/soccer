@@ -17,7 +17,7 @@ public class PlayerManager : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Transform spawns;
     [SerializeField] private Transform kickOffs;
-    [SerializeField] private Transform training;
+    [SerializeField] private Transform trainingPosition;
     
     
     private Dictionary<int, PlayerView> playersById = new Dictionary<int, PlayerView>();
@@ -98,11 +98,11 @@ public class PlayerManager : MonoBehaviour
         switch (GameInterface.Interface.GameManager.currentMatchType)
         {
             case RoomMatchType.Training:
-                kickoffParent = training.transform;
+                kickoffParent = trainingPosition.transform;
                 startIndex = 4;
                 break;
             case RoomMatchType.TrainingWithEnemy:
-                kickoffParent = training.transform;
+                kickoffParent = trainingPosition.transform;
                 startIndex = 5;
                 break;
 
@@ -127,8 +127,8 @@ public class PlayerManager : MonoBehaviour
             }
             else
             {
-                playerPosition = training.GetChild(i - 4).position;
-                kickoffPosition = training.GetChild(i - 4).position;
+                playerPosition = trainingPosition.GetChild(i - 4).position;
+                kickoffPosition = trainingPosition.GetChild(i - 4).position;
             }
 
             Goal targetGoal = (ownGoal == goalAway) ? goalHome : goalAway;

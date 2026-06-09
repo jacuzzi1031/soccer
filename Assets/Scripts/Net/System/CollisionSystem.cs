@@ -16,8 +16,8 @@
         public float volleycaptureRadiusSqr;
 
         //实际  ballView height*2.5f
-        private const float MAX_CAPTURE_HEIGHT = 2f;  //20
-        private const float BALL_CONTROL_HEIGHT_MAX = 0.6f;
+        private const float MAX_CAPTURE_HEIGHT = 0.6f;
+        private const float BALL_CONTROL_HEIGHT_MAX = 0.5f;
         public Vector2 playerForBallOffset = new Vector2(0, 4f);
         public Vector2 attackRightOffset=new Vector2(16f,16f);
         public Vector2 attackLeftOffset=new Vector2(-16f,16f);
@@ -54,9 +54,7 @@
         private bool DistanceQualify(PlayerSim attacker, PlayerSim target) {
             var attackOffset= attacker.HeadingRight?attackRightOffset: attackLeftOffset;
             Vector2 attckerPos = attacker.Position + attackOffset;
-            Vector2 targetPos1=target.Position+acceptOffset;
             float distSqr= (attacker.Position-target.Position).sqrMagnitude;
-            Debug.Log("distSqr"+distSqr);
             if (distSqr < tacklingRadiusSqr) {
                 return true;
             } 
@@ -90,7 +88,11 @@
                     }
                     ball.carrier = player;
                     ball.SwitchState(BallState.CARRIED);
-                    context._simulationModel.PlayerSystem.OnPlayerBecomesCarrier(player.playerId,player.isHome);
+
+                    context._simulationModel.PlayerSystem.OnPlayerBecomesCarrier(player.playerId,player.isHome,ball.firstPlayerCarryBall);
+                    if (!ball.firstPlayerCarryBall) {
+                        ball.firstPlayerCarryBall = true;
+                    }
                     break;
                 }
             }

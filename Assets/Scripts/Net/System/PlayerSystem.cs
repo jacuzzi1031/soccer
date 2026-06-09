@@ -65,9 +65,6 @@ public class PlayerSystem:ISimulationSystem
                 case SimulationCommandType.ResetAndAwayKickoff:
                     HandleResetTeams(false);
                     break;
-                case SimulationCommandType.KickoffStart:
-                    OnKickoffStarted();
-                    break;
                 case SimulationCommandType.Swap:
                     HandleSwap(command.SeatIndex,context.BallCarrierId,context.BallPosition);
                     break;
@@ -261,7 +258,7 @@ public class PlayerSystem:ISimulationSystem
         // if (Direction.x != 0) currentPlayer.HeadingRight = Direction.x > 0;
     }
 
-    private void OnKickoffStarted() {
+    private void OnKickoffEnd() {
         foreach (var squad in new[] { teamHome, teamAway })
         {
             foreach (PlayerSim player in squad)
@@ -403,7 +400,10 @@ public class PlayerSystem:ISimulationSystem
     public void Stop()
     {
     }
-    public void OnPlayerBecomesCarrier(int playerPlayerId,bool isHome) {
+    public void OnPlayerBecomesCarrier(int playerPlayerId,bool isHome,bool ballFirstPlayerCarryBall) {
+        if (!ballFirstPlayerCarryBall) {
+            OnKickoffEnd();
+        }
         PlayerSim currentPlayer=isHome?currentHomePlayer:currentAwayPlayer;
         if (currentPlayer==null||currentPlayer.playerId == playerPlayerId) {
             return;
@@ -416,6 +416,7 @@ public class PlayerSystem:ISimulationSystem
                 break;
             }
         }
+
     }
     public PlayerSim GetShortPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, Vector2 moveDir=new Vector2())
     { 

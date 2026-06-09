@@ -27,13 +27,14 @@ public class BallSim:ISimulationSystem
     public const int INVALID_PLAYER_ID = -1;
     public int BallCarrierId => carrier?.playerId ?? INVALID_PLAYER_ID;
     public float radius=4.68f;
+    public bool firstPlayerCarryBall;
     public BallSim(Vector2 ContextSpawnPosition,SimEventBus eventBus,CommandBuffer commandBuffer)
     {
         spawnPosition = ContextSpawnPosition;
         _eventBus = eventBus;
         Position=spawnPosition;
         _commandBuffer = commandBuffer;
-        SwitchState(BallState.FREEFORM);
+        SwitchState(BallState.RESET);
     }
     public void SwitchState(BallState type, BallStateData data = null) {
 
@@ -51,19 +52,21 @@ public class BallSim:ISimulationSystem
             switch (command.Type)
             {
                 case SimulationCommandType.KickoffStart:
-                    passTo(spawnPosition + Vector2.down * KICKOFF_PASS_DISTANCE, true,DURATION_KICKOFF_LOCK);
+                    kickoffPass(spawnPosition + Vector2.down * KICKOFF_PASS_DISTANCE);
                     break;
                 case SimulationCommandType.ResetAndHomeKickoff:
                 case SimulationCommandType.ResetAndAwayKickoff:
+                    firstPlayerCarryBall = false;
                     Position = spawnPosition;
                     Velocity = Vector2.zero;
                     height=0.0f;
                     _eventBus.Publish(new BallBacktoSpawnPositionSignal());
-                    SwitchState(BallState.FREEFORM);
+                    SwitchState(BallState.RESET);
                     break;
             }
         }
         currentState?._Update(context.DeltaTime);
+        
     }
 
     public void shoot(Vector2 ShotVelocity) {
@@ -88,6 +91,14 @@ public class BallSim:ISimulationSystem
         }
         carrier = null;
         SwitchState(BallState.FREEFORM, BallStateData.Build().SetLockDuration(lockDuration));
+    }
+    public void kickoffPass(Vector2 destination) {
+        Vector2 direction = (destination - Position).normalized;
+        float distance = Vector2.Distance(Position, destination);
+        float intensity = Mathf.Sqrt(3f * distance * frictionGround);
+        Velocity = intensity * direction;
+        carrier = null;
+        SwitchState(BallState.FREEFORM, BallStateData.Build().SetLockDuration(0.5f));
     }
 
     public void Stop()

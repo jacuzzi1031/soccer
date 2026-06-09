@@ -490,7 +490,6 @@ MonoBehaviour:
   ballDetectionArea: {fileID: 2751089920907780289}
   height: 0
   heightVelocity: 0
-  GRAVITY: 6
   spawnPosition: {x: 0, y: 0}
   playerId: 0
   weightOnDutySteering: 0

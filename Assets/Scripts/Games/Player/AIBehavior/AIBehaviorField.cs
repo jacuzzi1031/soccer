@@ -38,7 +38,7 @@ private const float PASS_PROBABILITY = 0.05f;
             //依次上抢
             moveDir += GetOnDutySteeringForce();
     
-            if (moveDir.sqrMagnitude < 1f)
+            if (moveDir.sqrMagnitude < 0.95f)
             {
                 if (IsBallPossessedByOpponent())
                 {
@@ -102,9 +102,6 @@ private const float PASS_PROBABILITY = 0.05f;
         }
     }
     
-    // ------------------------------
-    // STEERING FORCE FUNCTIONS
-    // ------------------------------
     Vector2 GetOnDutySteeringForce()
     {
         return playerSim.weightOnDutySteering *
@@ -180,7 +177,7 @@ private const float PASS_PROBABILITY = 0.05f;
     Vector2 GetBallProximitySteeringForce()
     {
         var playerPos = playerSim.Position;
-        var carrierPos = ballSim.carrier.Position;
+        var carrierPos = ballSim.Position;
         float weight = GetBiCircularWeight(playerPos, carrierPos, 50, 1, 120, 0);
         Vector2 direction = (carrierPos - playerPos).normalized;
     
@@ -200,7 +197,7 @@ private const float PASS_PROBABILITY = 0.05f;
         int count = playerSim.isHome?homeCount:awayCount;
         if (count == 0) return Vector2.zero;
     
-        float weight = 1 - (1f / count);
+        float weight = (count - 1) * 0.8f;
         Vector2 direction = (playerSim.Position - ballSim.Position).normalized;
     
         return direction * weight;

@@ -8,6 +8,7 @@ public class PlayerStateRecovering: PlayerSimState
     private float _durationTicks=0.4f;
 
     public override void OnEnter() {
+        playerSim.Velocity=Vector2.zero;
         _elapsedTicks = 0f;
     }
 

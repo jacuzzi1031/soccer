@@ -33,4 +33,8 @@ public class PlayerStateReseting: PlayerSimState
   {
     return hasArrived;
   }
+
+  public override bool CanCarryBall() {
+    return hasArrived;
+  }
 }
