@@ -70,11 +70,6 @@ public class SimulationClock : MonoBehaviour
     private void Step()
     {
         UploadLocalInput(currentFrame+INPUT_DELAY);
-        // if (currentFrame > GameInterface.Interface.GameFrameSyncManager._latestServerFrame)
-        // {
-        //     return; 
-        // }
-        // world?.Step(currentFrame);
         if (currentFrame <= GameInterface.Interface.GameFrameSyncManager._latestServerFrame)
         {
             world?.Step(currentFrame);
