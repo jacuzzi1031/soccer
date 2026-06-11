@@ -25,8 +25,8 @@ namespace Net.FixFloat
         /// </summary>
         private const long MULTIPLIER_FACTOR = 1L << BITMOVE_COUNT;
 
-        public static readonly FixedFloat zero = new FixedFloat(0L, true);
-        public static readonly FixedFloat one = new FixedFloat(1);
+        public static readonly FixedFloat Zero = new FixedFloat(0L, true);
+        public static readonly FixedFloat One = new FixedFloat(1);
 
         /// <summary>
         /// 内部构造（scaledValue已经缩放）
@@ -57,6 +57,10 @@ namespace Net.FixFloat
         public FixedFloat(double value)
         {
             scaledValue = (long)Math.Round(value * MULTIPLIER_FACTOR);
+        }
+        public float ToFloat()
+        {
+            return RawFloat;
         }
 
         #region 类型转换

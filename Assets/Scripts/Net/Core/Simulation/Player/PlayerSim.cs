@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class PlayerSim {
     public ControlScheme controlScheme;
     public Vector2 spawnPosition;
     public Vector2 kickoffPosition;
-    public Vector2 Position;
+    public FixedVector2 Position;
     public Vector2 Velocity;
     public float Height;
     public float HeightVelocity;
@@ -33,7 +34,7 @@ public class PlayerSim {
     [HideInInspector]public float GRAVITY = 160f;
     public int Frame { get;private set;}
     public BallSim _ballSim;
-    public List<Vector2> targetGoalPosition;
+    public List<FixedVector2> targetGoalPosition;
     
 
     public PlayerSim(int nextPlayerId,PlayerResource contextPlayerData, Vector2 contextplayerPosition, Vector2 contextkickoffPosition, string contextcountry, bool contextisHome,bool ContextInitialFacingRight) {
@@ -113,7 +114,7 @@ public class PlayerSim {
     }
 
     public void SetEventBusAndCommandBuffer(SimEventBus eventBus,CommandBuffer commandBuffer,BallSim ballSim
-        ,List<Vector2> TargetGoalPosition,Rect GoalArea,int playerCount) {
+        ,List<FixedVector2> TargetGoalPosition,Rect GoalArea,int playerCount) {
         _eventBus=eventBus;
         _commandBuffer = commandBuffer;
         _ballSim=ballSim;

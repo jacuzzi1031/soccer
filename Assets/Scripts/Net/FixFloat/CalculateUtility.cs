@@ -13,11 +13,11 @@ namespace Net.FixFloat
         /// </summary>
         public static FixedFloat Sqrt(FixedFloat value)
         {
-            if (value < FixedFloat.zero)
+            if (value < FixedFloat.Zero)
                 throw new ArgumentOutOfRangeException(nameof(value));
 
-            if (value == FixedFloat.zero)
-                return FixedFloat.zero;
+            if (value == FixedFloat.Zero)
+                return FixedFloat.Zero;
 
             return value * InvSqrt(value);
         }
@@ -28,10 +28,10 @@ namespace Net.FixFloat
         /// </summary>
         public static FixedFloat InvSqrt(FixedFloat value)
         {
-            if (value <= FixedFloat.zero)
+            if (value <= FixedFloat.Zero)
                 throw new ArgumentOutOfRangeException(nameof(value));
 
-            return FixedFloat.one / BetterSqrt(value);
+            return FixedFloat.One / BetterSqrt(value);
         }
 
         /// <summary>
@@ -42,10 +42,10 @@ namespace Net.FixFloat
             FixedFloat value,
             int iteratorCount = 8)
         {
-            if (value == FixedFloat.zero)
-                return FixedFloat.zero;
+            if (value == FixedFloat.Zero)
+                return FixedFloat.Zero;
 
-            if (value < FixedFloat.zero)
+            if (value < FixedFloat.Zero)
                 throw new ArgumentOutOfRangeException(nameof(value));
 
             FixedFloat result = value;
@@ -78,7 +78,7 @@ namespace Net.FixFloat
 
             rate = Clamp(
                 rate,
-                FixedFloat.zero,
+                FixedFloat.Zero,
                 AcosTable.IndexCount);
 
             int index = rate.RawInt;
@@ -134,7 +134,7 @@ namespace Net.FixFloat
         /// </summary>
         public static FixedFloat Abs(FixedFloat value)
         {
-            return value >= FixedFloat.zero
+            return value >= FixedFloat.Zero
                 ? value
                 : -value;
         }

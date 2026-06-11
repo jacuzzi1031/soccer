@@ -18,7 +18,7 @@ public class BallSimState
         stateData = ContextBallStateData;
         _eventBus=eventBus;
     }
-    public virtual void _Update(float deltaTime) {
+    public virtual void _Update() {
     }
     public virtual void _FixedUpdate() {
         

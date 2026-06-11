@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public enum MatchType {
@@ -69,10 +70,9 @@ public enum MatchState {
 }
 public struct LineSegment
 {
-    public Vector2 Start;
-    public Vector2 End;
+    public FixedVector2 Start;
+    public FixedVector2 End;
 
-    public Vector2 Edge;     // End - Start
-    public float EdgeSqr;    // length^2
-    public Vector2 Normal;   // outward normal
+    public FixedVector2 Edge;     // End - Start
+    public FixedFloat EdgeSqr;    // length^2
 }

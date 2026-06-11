@@ -35,14 +35,23 @@ namespace Net.FixFloat
         {
             get
             {
-                if (magnitude > FixedFloat.zero)
+                if (magnitude > FixedFloat.Zero)
                 {
-                    FixedFloat rate = FixedFloat.one / magnitude;
+                    FixedFloat rate = FixedFloat.One / magnitude;
                     return new FixedVector2(x * rate, y * rate);
                 }
 
-                return zero;
+                return Zero;
             }
+        }
+        public static FixedVector2 Reflect(
+            FixedVector2 dir,
+            FixedVector2 normal)
+        {
+            return dir
+                   - 2 *
+                   Dot(dir, normal)
+                   * normal;
         }
 
         public FixedVector2(FixedFloat x, FixedFloat y)
@@ -50,6 +59,14 @@ namespace Net.FixFloat
             this.x = x;
             this.y = y;
         }
+        #if UNITY_ENV
+        public Vector2 ToVector2()
+        {
+            return new Vector2(
+                x.RawFloat,
+                y.RawFloat);
+        }
+        #endif
         public static FixedVector2 MoveTowards(
             FixedVector2 current,
             FixedVector2 target,
@@ -59,7 +76,7 @@ namespace Net.FixFloat
 
             FixedFloat sqrDist = delta.sqrMagnitude;
 
-            if (sqrDist == FixedFloat.zero)
+            if (sqrDist == FixedFloat.Zero)
                 return target;
 
             FixedFloat dist = CalculateUtility.BetterSqrt(sqrDist);
@@ -76,11 +93,22 @@ namespace Net.FixFloat
             x = (FixedFloat)vector.x;
             y = (FixedFloat)vector.y;
         }
-
         public FixedVector2(Vector3 vector)
         {
             x = (FixedFloat)vector.x;
             y = (FixedFloat)vector.y;
+        }
+        public static explicit operator FixedVector2(Vector2 v)
+        {
+            return new FixedVector2(
+                (FixedFloat)v.x,
+                (FixedFloat)v.y);
+        }
+        public static explicit operator FixedVector2(Vector3 v)
+        {
+            return new FixedVector2(
+                (FixedFloat)v.x,
+                (FixedFloat)v.y);
         }
 #endif
 
@@ -92,7 +120,7 @@ namespace Net.FixFloat
                 {
                     case 0: return x;
                     case 1: return y;
-                    default: return FixedFloat.zero;
+                    default: return FixedFloat.Zero;
                 }
             }
             set
@@ -111,17 +139,17 @@ namespace Net.FixFloat
 
         #region 常用向量
 
-        public static FixedVector2 zero => new FixedVector2(0, 0);
+        public static FixedVector2 Zero => new FixedVector2(0, 0);
 
-        public static FixedVector2 one => new FixedVector2(1, 1);
+        public static FixedVector2 One => new FixedVector2(1, 1);
 
-        public static FixedVector2 right => new FixedVector2(1, 0);
+        public static FixedVector2 Right => new FixedVector2(1, 0);
 
-        public static FixedVector2 left => new FixedVector2(-1, 0);
+        public static FixedVector2 Left => new FixedVector2(-1, 0);
 
-        public static FixedVector2 up => new FixedVector2(0, 1);
+        public static FixedVector2 Up => new FixedVector2(0, 1);
 
-        public static FixedVector2 down => new FixedVector2(0, -1);
+        public static FixedVector2 Down => new FixedVector2(0, -1);
 
         #endregion
 
@@ -223,6 +251,13 @@ namespace Net.FixFloat
                 x.RawFloat,
                 y.RawFloat);
         }
+        public Vector3 ConvertUnityVector3()
+        {
+            return new Vector3(
+                x.RawFloat,
+                y.RawFloat,
+                0f);
+        }
 #endif
 
         #endregion
@@ -241,24 +276,24 @@ namespace Net.FixFloat
 
         public static FixedVector2 Normalize(FixedVector2 v)
         {
-            if (v.magnitude > FixedFloat.zero)
+            if (v.magnitude > FixedFloat.Zero)
             {
-                FixedFloat rate = FixedFloat.one / v.magnitude;
+                FixedFloat rate = FixedFloat.One / v.magnitude;
 
                 return new FixedVector2(
                     v.x * rate,
                     v.y * rate);
             }
 
-            return zero;
+            return Zero;
         }
 
         public void Normalize()
         {
-            if (magnitude <= FixedFloat.zero)
+            if (magnitude <= FixedFloat.Zero)
                 return;
 
-            FixedFloat rate = FixedFloat.one / magnitude;
+            FixedFloat rate = FixedFloat.One / magnitude;
 
             x *= rate;
             y *= rate;
@@ -288,8 +323,8 @@ namespace Net.FixFloat
             FixedFloat dot = Dot(from, to);
             FixedFloat mod = from.magnitude * to.magnitude;
 
-            if (mod == FixedFloat.zero)
-                return FixedFloat.zero;
+            if (mod == FixedFloat.Zero)
+                return FixedFloat.Zero;
 
             return CalculateUtility.Acos(dot / mod);
         }
@@ -303,5 +338,34 @@ namespace Net.FixFloat
         }
 
         #endregion
+    }
+    
+    
+    public struct FixedRect
+    {
+        public FixedFloat xMin;
+        public FixedFloat yMin;
+        public FixedFloat xMax;
+        public FixedFloat yMax;
+
+        public FixedRect(
+            FixedFloat xMin,
+            FixedFloat yMin,
+            FixedFloat xMax,
+            FixedFloat yMax)
+        {
+            this.xMin = xMin;
+            this.yMin = yMin;
+            this.xMax = xMax;
+            this.yMax = yMax;
+        }
+
+        public bool Contains(FixedVector2 p)
+        {
+            return p.x >= xMin &&
+                   p.x <= xMax &&
+                   p.y >= yMin &&
+                   p.y <= yMax;
+        }
     }
 }

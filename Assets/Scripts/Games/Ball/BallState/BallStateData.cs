@@ -1,16 +1,18 @@
 
 
 
+using Net.FixFloat;
+
 public class BallStateData
 {
-    public float LockDuration { get; set; }
+    public FixedFloat LockDuration { get; set; }
     
     public static BallStateData Build()
     {
         return new BallStateData();
     }
     
-    public BallStateData SetLockDuration(float duration)
+    public BallStateData SetLockDuration(FixedFloat duration)
     {
         LockDuration = duration;
         return this;

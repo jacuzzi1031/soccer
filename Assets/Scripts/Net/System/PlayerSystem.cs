@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Net.FixFloat;
 using UnityEngine;
 /// <summary>
 /// PlayerSystem 唯一可以推进帧的地方（Tick）
@@ -39,7 +40,7 @@ public class PlayerSystem:ISimulationSystem
     public void RegisterTeams(
         List<PlayerSim> home,
         List<PlayerSim> away,
-        BallSim ballSim,List<Vector2> goalHomePos,List<Vector2> goalAwayPos,
+        BallSim ballSim,List<FixedVector2> goalHomePos,List<FixedVector2> goalAwayPos,
         Rect goalHomeArea,Rect goalAwayArea)
     {
         teamHome = home;

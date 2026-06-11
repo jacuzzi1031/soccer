@@ -1,4 +1,5 @@
 
+    using Net.FixFloat;
     using Unity.VisualScripting;
 
     public class GameSimState {
@@ -19,7 +20,7 @@
         public virtual void OnExit() {
         
         }
-        public virtual void _Update(float deltaTime) {
+        public virtual void _Update(FixedFloat FixedDeltaTime) {
             
         }
 

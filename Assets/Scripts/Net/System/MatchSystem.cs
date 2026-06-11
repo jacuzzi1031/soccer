@@ -7,8 +7,10 @@
         }
         public GameSimState currentSimState;
         public MatchState currentState;
-        private const float DURATION_GAME_SEC = 2 * 60f;
-        public float timeLeft;
+        public const int GAME_DURATION_FRAMES =
+            2 * 60 * 60; // 7200帧
+
+        public int framesLeft;
         private GameSimStateFactory _gameSimStateFactory=new GameSimStateFactory();
         public SimEventBus _eventBus;
         private CommandBuffer _commandBuffer;
@@ -20,8 +22,7 @@
             _commandBuffer=commandBuffer;
             _currentMatchType=matchType;
             goalsHome=0; goalsAway=0;
-            timeLeft = DURATION_GAME_SEC;
-            // timeLeft = 2f;
+            framesLeft = GAME_DURATION_FRAMES;
             SwitchGameState(MatchState.RESET);
         }
 
@@ -55,7 +56,7 @@
                         break;
                 }
             }
-            currentSimState._Update(context.DeltaTime);
+            currentSimState._Update(SimulationContext.FixedDeltaTime);
         }
 
         //是否需要SimulationContext作为OnEnter的参数
@@ -71,7 +72,7 @@
         }
 
         public bool IsTimeUp() {
-            return timeLeft <= 0f;
+            return framesLeft <= 0;
         }
 
         public bool IsTied()

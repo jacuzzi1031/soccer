@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public sealed class SimulationContext
 {
     public int Frame { get; private set; }
-    public float DeltaTime = SimulationClock.FRAME_DT;
+    public static readonly FixedFloat FixedDeltaTime =
+        (FixedFloat)(1f / 60f);
     public const int INVALID_PLAYER_ID = -1;
     public MatchState MatchState { get; private set; }
     public SimulationModel _simulationModel;
@@ -14,7 +16,7 @@ public sealed class SimulationContext
         _simulationModel=model;
     }
     // 获取球位置和球主
-    public Vector2 BallPosition => _simulationModel.BallSim.Position;
+    public FixedVector2 BallPosition => _simulationModel.BallSim.Position;
     public bool ResetBall => _simulationModel.BallSim.Position == _simulationModel.BallSim.spawnPosition;
     public int BallCarrierId => 
         _simulationModel.BallSim.carrier?.playerId ?? INVALID_PLAYER_ID;

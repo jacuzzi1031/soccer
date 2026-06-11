@@ -2,7 +2,7 @@
     public class GameSimStateInPlay: GameSimState {
         public override void _Update(float deltaTime) {
 
-            _matchSystem.timeLeft -= deltaTime;
+            _matchSystem.framesLeft--;
 
             if (_matchSystem.IsTimeUp())
             {
