@@ -1,12 +1,13 @@
+using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerStateData
 {
     public int InputType { get; private set; }
-    public Vector2 ResetPosition { get; private set; }
-    public Vector2 MoveDir { get; private set; }
-    public Vector2 ShotDirection { get; private set; }
-    public float ShotPower { get; private set; }
+    public FixedVector2 ResetPosition { get; private set; }
+    public FixedVector2 MoveDir { get; private set; }
+    public FixedVector2 ShotDirection { get; private set; }
+    public FixedFloat ShotPower { get; private set; }
     public bool isPowerShot { get; private set; }
     public  bool IsInstant { get; private set; }
     public  PlayerSim passTarget { get; private set; }
@@ -17,13 +18,13 @@ public class PlayerStateData
         return new PlayerStateData();
     }
 
-    public PlayerStateData SetShotDirection(Vector2 direction)
+    public PlayerStateData SetShotDirection(FixedVector2 direction)
     {
         ShotDirection = direction;
         return this;
     }
 
-    public PlayerStateData SetShotPower(float power)
+    public PlayerStateData SetShotPower(FixedFloat power)
     {
         ShotPower = power;
         return this;
@@ -40,13 +41,13 @@ public class PlayerStateData
         InputType = inputType;
         return this;
     }
-    public PlayerStateData SetMoveDir(Vector2 moveDir)
+    public PlayerStateData SetMoveDir(FixedVector2 moveDir)
     {
         MoveDir = moveDir;
         return this;
     }
 
-    public PlayerStateData SetResetPosition(Vector2 position)
+    public PlayerStateData SetResetPosition(FixedVector2 position)
     {
         ResetPosition = position;
         return this;

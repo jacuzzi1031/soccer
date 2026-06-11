@@ -1,38 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerStateCelebrating: PlayerSimState {
-    private float startCelebratingTime;
+    private int startCelebratingFrame;
+    private int initialDelayFrames;
 
-    private float initialDelay;
-    private const float CELEBRATING_HEIGHT = 50f;
+    private const int CELEBRATING_HEIGHT = 50;
 
     public override void OnEnter() {
-        float r = HashRandom(playerSim.playerId);
-        initialDelay = 0.2f + r * 0.3f;
-        startCelebratingTime = 0f;
+        int r = HashRandom(playerSim.playerId);
+
+        // 0.2s = 12帧, 0.3s = 18帧
+        initialDelayFrames = 12 + (r % 19); // 0~18 → 12~30
+
+        startCelebratingFrame = 0;
     }
-    public override void _Update(float deltaTime) {
-        startCelebratingTime+= deltaTime;
-        if (playerSim.Height == 0f && startCelebratingTime > initialDelay)
-        {
+    public override void _Update() {
+        startCelebratingFrame++;
+
+        if (playerSim.Height == 0 && startCelebratingFrame > initialDelayFrames) {
             Celebrate();
         }
-        MoveHorizontal(deltaTime,AIR_FRICTION);
+
+        MoveHorizontal( AIR_FRICTION);
     }
 
 
 
     private void Celebrate()
     {
-        playerSim.Height = 0.1f;
+        playerSim.Height = (FixedFloat)0.1f;
         playerSim.HeightVelocity = CELEBRATING_HEIGHT;
     }
 
     public override void OnExit() {
-        playerSim.Height = 0.0f;
-        playerSim.HeightVelocity=0f;
+        playerSim.Height = FixedFloat.Zero;
+        playerSim.HeightVelocity= FixedFloat.Zero;
     }
 
 

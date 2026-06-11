@@ -1,26 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class AIBehavior
 {  
-    protected Vector2 moveDir=Vector2.zero;
+    protected FixedVector2 moveDir=FixedVector2.Zero;
     protected BallSim ballSim;
     protected TriggerDetection opponentDetectionArea;
     protected PlayerSim playerSim;
-    private float nextAiTickTime;
-    public float aiTimer;
-    private const float aiTickFrequency = 0.2f;
-    protected Rect GoalArea;
+    private FixedFloat nextAiTickTime;
+    private int aiFrameCounter = 0;
+    private const int aiTickIntervalFrames = 12; 
+    protected FixedRect GoalArea;
     public int homeCount;
     public int awayCount;
     public int matchPlayerCount;
 
     public void UpdateAI()
     {
-        while (aiTimer >= aiTickFrequency)
+        aiFrameCounter++;
+
+        if (aiFrameCounter >= aiTickIntervalFrames)
         {
-            aiTimer -= aiTickFrequency;
+            aiFrameCounter -= aiTickIntervalFrames;
 
             PerformAIMovement();
             PerformAIDecisions();
@@ -30,18 +33,21 @@ public class AIBehavior
     }
     public virtual void PerformAIDecisions() {
     }
-    public Vector2 GetAIMoveDir() {
+    public FixedVector2 GetAIMoveDir() {
         return moveDir;
     }
 
-    public void Setup(PlayerSim playerSim, BallSim ballSim,Rect GoalArea,int MatchPlayerCount) {
-        this.playerSim=playerSim;
-        this.ballSim=ballSim;
-        this.GoalArea=GoalArea;
-        matchPlayerCount=MatchPlayerCount;
+    public void Setup(PlayerSim playerSim, BallSim ballSim, FixedRect GoalArea, int MatchPlayerCount)
+    {
+        this.playerSim = playerSim;
+        this.ballSim = ballSim;
+        this.GoalArea = GoalArea;
+        matchPlayerCount = MatchPlayerCount;
+
         float r = HashRandom(playerSim.playerId);
 
-        aiTimer = r * aiTickFrequency;
+        // 随机初始偏移（0 ~ interval-1 帧）
+        aiFrameCounter = (int)(r * aiTickIntervalFrames);
     }
     public float HashRandom(int seed)
     {

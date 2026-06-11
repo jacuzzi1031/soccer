@@ -27,7 +27,8 @@ namespace Net.FixFloat
 
         public static readonly FixedFloat Zero = new FixedFloat(0L, true);
         public static readonly FixedFloat One = new FixedFloat(1);
-
+        public static readonly FixedFloat MaxValue = new FixedFloat(long.MaxValue, true);
+        public static readonly FixedFloat MinValue = new FixedFloat(long.MinValue, true);
         /// <summary>
         /// 内部构造（scaledValue已经缩放）
         /// </summary>

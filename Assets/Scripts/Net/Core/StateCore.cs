@@ -38,7 +38,7 @@ public enum ControlScheme{ CPU,P1,P2};
 public struct SimulationCommand
 {
     public SimulationCommandType Type;  
-    public Vector2 Direction;            
+    public FixedVector2 Direction;            
     public int SeatIndex;
     public bool isHome;
 }

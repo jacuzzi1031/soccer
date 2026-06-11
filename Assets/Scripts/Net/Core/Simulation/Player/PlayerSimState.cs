@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerSimState 
@@ -8,22 +9,23 @@ public class PlayerSimState
     protected PlayerSim playerSim;
     private PlayerStateData _stateData;
     public PlayerStateData stateData => _stateData;
-    protected Vector2 _moveDirection;
+    protected FixedVector2 _moveDirection;
     protected SimEventBus _eventBus;
     protected CommandBuffer _commandBuffer;
     protected BallSim _ballSim;
-    public const float BONUS_POWER =1.4f;
-    protected Vector2 Direction;
-    protected const float AIR_FRICTION = 25f;
+    public static FixedFloat BONUS_POWER =(FixedFloat)1.4f;
+    protected FixedVector2 Direction;
+    protected static FixedFloat AIR_FRICTION = (FixedFloat)25f;
     public float diveDirY;
-    public float HashRandom(int seed)
+    private static readonly FixedFloat STOP_THRESHOLD = (FixedFloat)0.0001f;
+    public int HashRandom(int seed)
     {
         uint x = (uint)seed;
         x ^= x << 13;
         x ^= x >> 17;
         x ^= x << 5;
 
-        return (x & 0xFFFFFF) / (float)0x1000000;
+        return (int)(x & 0x7fffffff);
     }
     public void Setup(
         PlayerSim contextPlayerView,
@@ -38,10 +40,10 @@ public class PlayerSimState
         _commandBuffer=commandBuffer;
         _ballSim=ballSim;
     }
-    public virtual void _Update(float deltaTime) {
+    public virtual void _Update() {
     }
 
-    public void SetMoveDirection(Vector2 moveDirection) {
+    public void SetMoveDirection(FixedVector2 moveDirection) {
         _moveDirection = moveDirection;
     }
 
@@ -55,7 +57,7 @@ public class PlayerSimState
     public virtual void OnShootPress(bool isReleased,bool hasBall,bool BallCanAirInteract) {
     }
     public virtual void OnShootRelease(bool hasBall,bool ballCanAirInteract){}
-    public virtual void OnPass(Vector2 Direction,int passType=0,PlayerSim passTarget=null) {
+    public virtual void OnPass(FixedVector2 Direction,int passType=0,PlayerSim passTarget=null) {
         
     }
     public virtual bool CanCarryBall()=> false;
@@ -69,22 +71,22 @@ public class PlayerSimState
     public virtual bool IsDamageEmitter()=> false;
 
     public virtual bool CouldHurt()=> false;
-    protected void MoveHorizontal(float deltaTime,float FRICTION) {
-        Vector2 velocity = playerSim.Velocity;
-        Vector2 position = playerSim.Position;
+    protected void MoveHorizontal(FixedFloat FRICTION) {
+        FixedVector2 velocity = playerSim.Velocity;
+        FixedVector2 position = playerSim.Position;
         
-        velocity = Vector2.MoveTowards(
+        velocity = FixedVector2.MoveTowards(
             velocity,
-            Vector2.zero,
-            FRICTION * deltaTime
+            FixedVector2.Zero,
+            FRICTION * SimulationConfig.DeltaTime
         );
-        if (velocity.sqrMagnitude < 0.0001f)
+        if (velocity.sqrMagnitude < STOP_THRESHOLD)
         {
-            playerSim.Velocity = Vector2.zero;
+            playerSim.Velocity = FixedVector2.Zero;
             return;
         }
 
-        Vector2 move = velocity * deltaTime;
+        FixedVector2 move = velocity * SimulationConfig.DeltaTime;
 
         position += move;
 
@@ -92,6 +94,6 @@ public class PlayerSimState
         playerSim.Position = position;
     }
 
-    public virtual void OnTackle(Vector2 direction) {
+    public virtual void OnTackle(FixedVector2 direction) {
     }
 }

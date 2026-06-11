@@ -1,28 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerStateBicycleKick : PlayerSimState
 {
-    private float _elapsedTicks;
-    // private float _durationTicks=0.4f;
-    private float _durationTicks=0.6f;
+    private int _elapsedFrames;
+    private int _durationFrames=36;
 
     public override void OnEnter() {
-        _elapsedTicks = 0f;
+        _elapsedFrames = 0;
     }
 
-    public override void _Update(float deltaTime) {
-        _elapsedTicks+=deltaTime;
+    public override void _Update() {
+        _elapsedFrames++;
 
-        if (_elapsedTicks >= _durationTicks)
-        {
+        if (_elapsedFrames >= _durationFrames) {
             playerSim.SwitchState(PlayerState.RECOVERING);
         }
     }
     public override bool VolleyShot() {
-        Vector2 destination = playerSim.GetFarTargetPosition();
-        Vector2 direction = (destination - playerSim.Position).normalized;
+        FixedVector2 destination = playerSim.GetFarTargetPosition();
+        FixedVector2 direction = (destination - playerSim.Position).normalized;
         _ballSim.shoot( playerSim.Power * BONUS_POWER*direction);
         return true;
     }

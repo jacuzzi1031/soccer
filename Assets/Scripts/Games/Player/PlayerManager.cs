@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Net.FixFloat;
 using SocketProtocol;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -137,8 +138,8 @@ public class PlayerManager : MonoBehaviour
             PlayerSim playerSim = new PlayerSim(
                 nextPlayerId,
                 playerData,
-                playerPosition,
-                kickoffPosition,
+                (FixedVector2)playerPosition,
+                (FixedVector2)kickoffPosition,
                 country,
                 isHome,
                 initialFacingRight
@@ -174,8 +175,8 @@ public class PlayerManager : MonoBehaviour
             PlayerSim playerSim = new PlayerSim(
                 nextPlayerId,
                 playerData,
-                spawnPosition,
-                kickoffPosition,
+                (FixedVector2)spawnPosition,
+                (FixedVector2)kickoffPosition,
                 country,
                 isHome,
                 initialFacingRight

@@ -11,40 +11,40 @@ public class PlayerSim {
     private AIBehaviorFactory aiBehaviorFactory=new AIBehaviorFactory();
     public AIBehavior aiBehavior;
     public ControlScheme controlScheme;
-    public Vector2 spawnPosition;
-    public Vector2 kickoffPosition;
+    public FixedVector2 spawnPosition;
+    public FixedVector2 kickoffPosition;
     public FixedVector2 Position;
-    public Vector2 Velocity;
-    public float Height;
-    public float HeightVelocity;
+    public FixedVector2 Velocity;
+    public FixedFloat Height;
+    public FixedFloat HeightVelocity;
     public bool HeadingRight=true;
     public PlayerSimState currentState;
     public PlayerState playerState;
     public bool isHome;
     public string fullName;
     public string country;
-    public float Power;
-    public float Speed;
+    public FixedFloat Power;
+    public FixedFloat Speed;
     public Role role = Role.MIDFIELD;
-    public float weightOnDutySteering;
+    public FixedFloat weightOnDutySteering;
     public bool initialFacingRight;
     public SimEventBus _eventBus;
     public CommandBuffer _commandBuffer;
     private const float BALL_CONTROL_HEIGHT_MAX = 10f;
-    [HideInInspector]public float GRAVITY = 160f;
+    [HideInInspector]public FixedFloat GRAVITY = (FixedFloat)160f;
     public int Frame { get;private set;}
     public BallSim _ballSim;
     public List<FixedVector2> targetGoalPosition;
     
 
-    public PlayerSim(int nextPlayerId,PlayerResource contextPlayerData, Vector2 contextplayerPosition, Vector2 contextkickoffPosition, string contextcountry, bool contextisHome,bool ContextInitialFacingRight) {
+    public PlayerSim(int nextPlayerId,PlayerResource contextPlayerData, FixedVector2 contextplayerPosition, FixedVector2 contextkickoffPosition, string contextcountry, bool contextisHome,bool ContextInitialFacingRight) {
         playerId = nextPlayerId;
         spawnPosition= contextplayerPosition;
         kickoffPosition= contextkickoffPosition;
         country= contextcountry;
         isHome = contextisHome;
-        Speed = contextPlayerData.speed;
-        Power = contextPlayerData.power;
+        Speed = (FixedFloat)contextPlayerData.speed;
+        Power = (FixedFloat)contextPlayerData.power;
         role = contextPlayerData.role;
         fullName = contextPlayerData.fullName;
         controlScheme = ControlScheme.CPU;
@@ -53,31 +53,30 @@ public class PlayerSim {
         HeadingRight=initialFacingRight;
         SwitchState(PlayerState.RESETING, PlayerStateData.Build().SetResetPosition(Position));
     }
-    private void SetupAIBehavior(Rect GoalArea,int matchPlayerCount) {
+    private void SetupAIBehavior(FixedRect GoalArea,int matchPlayerCount) {
         aiBehavior = aiBehaviorFactory.GetFreshAIBehavior(role);
         aiBehavior.Setup(this, _ballSim,GoalArea,matchPlayerCount);
     }
 
     
-    public void Tick(int frame,float deltaTime,int homeCount,int awayCount)
+    public void Tick(int frame,int homeCount,int awayCount)
     {
-        aiBehavior.aiTimer += deltaTime;
         aiBehavior.homeCount= homeCount;
         aiBehavior.awayCount= homeCount;
         
         Frame=frame;
-        currentState?._Update(deltaTime);
-        ApplyHeight(deltaTime);
+        currentState?._Update();
+        ApplyHeight();
     }
 
-    private void ApplyHeight(float deltaTime) {
-        if (Height > 0f) {
-            HeightVelocity -= GRAVITY*deltaTime;
-            Height += HeightVelocity*deltaTime;
-            if (Height < 0)
+    private void ApplyHeight() {
+        if (Height > FixedFloat.Zero) {
+            HeightVelocity -= GRAVITY*SimulationConfig.DeltaTime;
+            Height += HeightVelocity*SimulationConfig.DeltaTime;
+            if (Height < FixedFloat.Zero)
             {
-                Height = 0;
-                HeightVelocity = 0;
+                Height = FixedFloat.Zero;
+                HeightVelocity = FixedFloat.Zero;
             }
         }
     }
@@ -114,7 +113,7 @@ public class PlayerSim {
     }
 
     public void SetEventBusAndCommandBuffer(SimEventBus eventBus,CommandBuffer commandBuffer,BallSim ballSim
-        ,List<FixedVector2> TargetGoalPosition,Rect GoalArea,int playerCount) {
+        ,List<FixedVector2> TargetGoalPosition,FixedRect GoalArea,int playerCount) {
         _eventBus=eventBus;
         _commandBuffer = commandBuffer;
         _ballSim=ballSim;
@@ -127,19 +126,19 @@ public class PlayerSim {
         return currentState.CanCarryBall();
     }
 
-    public void SetHeadingRight(Vector2 moveDir) {
+    public void SetHeadingRight(FixedVector2 moveDir) {
         if (moveDir.x > 0) {
             HeadingRight = true;
         }else if (moveDir.x < 0) {
             HeadingRight = false;
         }
     }
-    public Vector2 GetFarTargetPosition()
+    public FixedVector2 GetFarTargetPosition()
     {
-        float farDistance=float.MinValue;
+        FixedFloat farDistance=FixedFloat.MinValue;
         int farIndex=0;
         for(int i=0;i<targetGoalPosition.Count;i++) {
-            float dist = (Position - targetGoalPosition[i]).sqrMagnitude;
+            FixedFloat dist = (Position - targetGoalPosition[i]).sqrMagnitude;
             if (dist >= farDistance) {
                 farDistance = dist;
                 farIndex = i;
@@ -148,14 +147,14 @@ public class PlayerSim {
         return targetGoalPosition[farIndex];
     }
 
-    public Vector2 GetTopTargetPosition() {
+    public FixedVector2 GetTopTargetPosition() {
         return targetGoalPosition[0];
     }
 
-    public Vector2 GetBottomTargetPosition() {
+    public FixedVector2 GetBottomTargetPosition() {
         return targetGoalPosition[^1];
     }
-    public Vector2 GetCenterTargetPosition() {
+    public FixedVector2 GetCenterTargetPosition() {
         return targetGoalPosition[1];
     }
 

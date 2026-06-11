@@ -14,17 +14,17 @@ public class PlayerSystem:ISimulationSystem
     private List<PlayerSim> teamAway;
     private PlayerSim currentHomePlayer;
     private PlayerSim currentAwayPlayer;
-    private int weightCacheIntervalFrames;
-    private const float DURATION_WEIGHT_CACHE = 0.2f;
+    private int weightCacheIntervalFrames=12;
     private const int FP = 1000;
-    private float lastCacheRefreshFrame = 0f;
+    private FixedFloat lastCacheRefreshFrame = (FixedFloat)0f;
     private bool isCheckingForKickoffReadiness=false;
 	public SimEventBus _eventBus;
     public CommandBuffer _commandBuffer;
     public BallSim _ballSim;
-    const float EPS = 0.0001f;  
     private int matchPlayerCount;
-    
+    private const int PassSwitchDelayFrames = 14;
+    private static readonly FixedFloat Cos45Deg = (FixedFloat)0.70710678f;
+    private static readonly FixedFloat minMoveDir = (FixedFloat)0.001;
     //for passing delay to swap / or by another scheduler
     private int _switchControlFrame = -1;
     private PlayerSim _fromPlayer;
@@ -34,14 +34,13 @@ public class PlayerSystem:ISimulationSystem
         _eventBus = eventBus;
         _commandBuffer=commandBuffer;
         matchPlayerCount = MatchPlayerCount;
-        weightCacheIntervalFrames=Mathf.RoundToInt(DURATION_WEIGHT_CACHE / SimulationClock.FRAME_DT);
     }
 
     public void RegisterTeams(
         List<PlayerSim> home,
         List<PlayerSim> away,
         BallSim ballSim,List<FixedVector2> goalHomePos,List<FixedVector2> goalAwayPos,
-        Rect goalHomeArea,Rect goalAwayArea)
+        FixedRect goalHomeArea,FixedRect goalAwayArea)
     {
         teamHome = home;
         teamAway = away;
@@ -79,13 +78,13 @@ public class PlayerSystem:ISimulationSystem
                     HandleShootPress(command.SeatIndex,context.BallCarrierId,context.BallCanAirInteract,command.Direction);
                     break;
                 case SimulationCommandType.ShortPass:
-                    HandlePass(command.SeatIndex,0,command.Direction,context.DeltaTime,context.Frame);
+                    HandlePass(command.SeatIndex,0,command.Direction,context.Frame);
                     break;
                 case SimulationCommandType.LongPass:
-                    HandlePass(command.SeatIndex,1,command.Direction,context.DeltaTime,context.Frame);
+                    HandlePass(command.SeatIndex,1,command.Direction,context.Frame);
                     break;
                 case SimulationCommandType.IncisivePass:
-                    HandlePass(command.SeatIndex,2,command.Direction,context.DeltaTime,context.Frame);
+                    HandlePass(command.SeatIndex,2,command.Direction,context.Frame);
                     break;
                 case SimulationCommandType.TeamScoring:
                 case SimulationCommandType.GameOverWinner:
@@ -129,10 +128,10 @@ public class PlayerSystem:ISimulationSystem
         
         
         foreach (var homePlayer in teamHome) {
-            homePlayer.Tick(context.Frame,context.DeltaTime,homeCount,awayCount);
+            homePlayer.Tick(context.Frame,homeCount,awayCount);
         }
         foreach (var awayPlayer in teamAway) {
-            awayPlayer.Tick(context.Frame,context.DeltaTime,homeCount,awayCount);
+            awayPlayer.Tick(context.Frame,homeCount,awayCount);
         }
         
         //for passing delay to swap
@@ -143,17 +142,17 @@ public class PlayerSystem:ISimulationSystem
         }
     }
 
-    public float playerProximitySqr = 55f * 55f;
-    private bool IsNearBall(Vector2 playerPosition) {
+    public FixedFloat playerProximitySqr = (FixedFloat)(55f * 55f);
+    private bool IsNearBall(FixedVector2 playerPosition) {
         var ballPos = _ballSim.Position;
-        float distSqr= (playerPosition-ballPos).sqrMagnitude;
+        FixedFloat distSqr= (playerPosition-ballPos).sqrMagnitude;
         if (distSqr < playerProximitySqr) {
             return true;
         } 
         return false;
     }
 
-    private void HandleSwap(int seatIndex,int ballCarrierId,Vector2 ballPosition) {
+    private void HandleSwap(int seatIndex,int ballCarrierId,FixedVector2 ballPosition) {
         PlayerSim currentPlayer = seatIndex == 0?currentHomePlayer:currentAwayPlayer;
         //fifa is when equal then call player pointed come
         if(currentPlayer.playerId==ballCarrierId) return;
@@ -161,7 +160,7 @@ public class PlayerSystem:ISimulationSystem
         List<PlayerSim> currentTeam=currentPlayer.isHome?teamHome:teamAway;
         
         PlayerSim closestCpuToBall = null;
-        float closestDist = float.MaxValue;
+        FixedFloat closestDist = FixedFloat.MaxValue;
 
         foreach (var p in currentTeam)
         {
@@ -169,12 +168,12 @@ public class PlayerSystem:ISimulationSystem
                 p.role == Role.GOALIE ||
                 p == currentPlayer)
                 continue;
-            float dist = (p.Position - ballPosition).sqrMagnitude;
-            if (dist + EPS < closestDist)
+            FixedFloat dist = (p.Position - ballPosition).sqrMagnitude;
+            if (dist < closestDist)
             {
                 closestDist = dist;
                 closestCpuToBall = p;
-            }else if (Mathf.Abs(dist - closestDist) <= EPS)
+            }else if (dist == closestDist)
             {
                 if (p.playerId < closestCpuToBall.playerId)
                 {
@@ -186,7 +185,7 @@ public class PlayerSystem:ISimulationSystem
 
         if (closestCpuToBall == null) return;
 
-        float senderDist = (currentPlayer.Position - ballPosition).sqrMagnitude;
+        FixedFloat senderDist = (currentPlayer.Position - ballPosition).sqrMagnitude;
 
         if (closestDist < senderDist)
         {
@@ -202,7 +201,7 @@ public class PlayerSystem:ISimulationSystem
         }
     }
 
-    private void HandlePass(int seatIndex,int inputType,Vector2 Direction,float deltaTime,int currentFrame) {
+    private void HandlePass(int seatIndex,int inputType,FixedVector2 Direction,int currentFrame) {
         
         PlayerSim currentPlayer = seatIndex ==0?currentHomePlayer:currentAwayPlayer;
         currentPlayer.currentState.SetMoveDirection(Direction);
@@ -219,41 +218,40 @@ public class PlayerSystem:ISimulationSystem
         
         switch (inputType) {
             case 0:
-                passTarget = GetShortPassTarget(currentPlayer, team, Direction);
+                passTarget = GetShortPassTarget(currentPlayer, team);
                 break;
             case 1:
-                passTarget  = GetLongPassTarget(currentPlayer, team, Direction);
+                passTarget  = GetLongPassTarget(currentPlayer, team);
                 break;
             case 2:
-                passTarget = GetShortPassTarget(currentPlayer, team, Direction);
+                passTarget = GetShortPassTarget(currentPlayer, team);
                 break;
         } 
         currentPlayer.currentState.OnPass(Direction,inputType,passTarget);
 
         if (passTarget != null) {
-            int delayFrames = (int)(0.23f / deltaTime);
-            _switchControlFrame = currentFrame + delayFrames;
+            _switchControlFrame = currentFrame + PassSwitchDelayFrames;
             _fromPlayer = currentPlayer;
             _toPlayer = passTarget;
             _scheme = seatIndex == 0 ? ControlScheme.P1 : ControlScheme.P2;
         }
     }
 
-    private void HandleShootPress(int seatIndex,int ballCarrierId,bool BallCanAirInteract,Vector2 Direction) {
+    private void HandleShootPress(int seatIndex,int ballCarrierId,bool BallCanAirInteract,FixedVector2 Direction) {
         PlayerSim currentPlayer = seatIndex == 0?currentHomePlayer:currentAwayPlayer;
         var hasBall = currentPlayer.playerId == ballCarrierId;
         currentPlayer.currentState.SetMoveDirection(Direction);
         currentPlayer.currentState?.OnShootPress(false,hasBall,BallCanAirInteract);
     }
 
-    private void HandleShootRelease(int seatIndex,int ballCarrierId,Vector2 Direction,bool BallCanAirInteract) {
+    private void HandleShootRelease(int seatIndex,int ballCarrierId,FixedVector2 Direction,bool BallCanAirInteract) {
         PlayerSim currentPlayer = seatIndex ==0?currentHomePlayer:currentAwayPlayer;
         var hasBall = currentPlayer.playerId == ballCarrierId;
         currentPlayer.currentState.SetMoveDirection(Direction);
         currentPlayer.currentState?.OnShootRelease(hasBall,BallCanAirInteract);
     }
 
-    private void HandleNoneInputCommand(int seatIndex,Vector2 Direction) {
+    private void HandleNoneInputCommand(int seatIndex,FixedVector2 Direction) {
         PlayerSim currentPlayer = seatIndex ==0?currentHomePlayer:currentAwayPlayer;
         currentPlayer.currentState.SetMoveDirection(Direction);
         // if (Direction.x != 0) currentPlayer.HeadingRight = Direction.x > 0;
@@ -360,7 +358,7 @@ public class PlayerSystem:ISimulationSystem
         });
     }
 
-    private void SetOnDutyWeights(Vector2 ballPosition) {
+    private void SetOnDutyWeights(FixedVector2 ballPosition) {
         List<List<PlayerSim>> squads = new List<List<PlayerSim>> { teamHome, teamAway };
 
         foreach (var squad in squads)
@@ -377,8 +375,8 @@ public class PlayerSystem:ISimulationSystem
             }
             cpuPlayers.Sort((p1, p2) =>
             {
-                float d1 = (p1.spawnPosition - ballPosition).sqrMagnitude;
-                float d2 = (p2.spawnPosition - ballPosition).sqrMagnitude;
+                FixedFloat d1 = (p1.spawnPosition - ballPosition).sqrMagnitude;
+                FixedFloat d2 = (p2.spawnPosition - ballPosition).sqrMagnitude;
 
                 int cmp = d1.CompareTo(d2);
                 if (cmp != 0)
@@ -419,12 +417,21 @@ public class PlayerSystem:ISimulationSystem
         }
 
     }
-    public PlayerSim GetShortPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, Vector2 moveDir=new Vector2())
+    public PlayerSim GetShortPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team)
+    {
+        return GetShortPassTarget(self, team, FixedVector2.Zero);
+    }
+    public PlayerSim GetShortPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, FixedVector2 moveDir)
     { 
         var list = GetEligibleTargets(self, team, moveDir);
         return list.Count > 0 ? list[0] : null;
     }
-    public static PlayerSim GetLongPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, Vector2 moveDir=new Vector2())
+
+    public static PlayerSim GetLongPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team) {
+        return GetLongPassTarget(self, team, FixedVector2.Zero);
+    }
+
+    public static PlayerSim GetLongPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, FixedVector2 moveDir)
     {
         var list = GetEligibleTargets(self, team, moveDir);
 
@@ -438,25 +445,25 @@ public class PlayerSystem:ISimulationSystem
     static List<PlayerSim> GetEligibleTargets(
         PlayerSim self,
         IReadOnlyList<PlayerSim> team,
-        Vector2 moveDir)
+        FixedVector2 moveDir)
     {
-        if (moveDir.sqrMagnitude <= 0.01f)
-            moveDir = self.HeadingRight ? Vector2.right : Vector2.left;
+        if (moveDir.sqrMagnitude <= minMoveDir)
+            moveDir = self.HeadingRight ? FixedVector2.Right : FixedVector2.Left;
 
         List<PlayerSim> list = new List<PlayerSim>();
 
         PlayerSim closest = null;
-        float closestDist = float.MaxValue;
+        FixedFloat closestDist = FixedFloat.MaxValue;
 
         for (int i = 0; i < team.Count; i++)
         {
             var p = team[i];
             if (p == self) continue;
 
-            Vector2 toTarget = p.Position - self.Position;
+            FixedVector2 toTarget = p.Position - self.Position;
             
 
-            float dist = (p.Position - self.Position).sqrMagnitude;
+            FixedFloat dist = (p.Position - self.Position).sqrMagnitude;
 
             if (dist < closestDist)
             {
@@ -474,16 +481,16 @@ public class PlayerSystem:ISimulationSystem
         
         list.Sort((a, b) =>
         {
-            float da = (a.Position - self.Position).sqrMagnitude;
-            float db = (b.Position - self.Position).sqrMagnitude;
+            FixedFloat da = (a.Position - self.Position).sqrMagnitude;
+            FixedFloat db = (b.Position - self.Position).sqrMagnitude;
             return da.CompareTo(db);
         });
 
         return list;
     }
-    static bool IsWithinAngle(Vector2 toTarget, Vector2 moveDir)
+    static bool IsWithinAngle(FixedVector2 toTarget, FixedVector2 moveDir)
     {
-        float dot = Vector2.Dot(toTarget.normalized, moveDir.normalized);
-        return dot >  0.7071f; 
+        FixedFloat dot = FixedVector2.Dot(toTarget.normalized, moveDir.normalized);
+        return dot >  Cos45Deg; 
     }
 }

@@ -1,22 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerStateMoving: PlayerSimState
 {   
-    private Vector2 moveDir;
-    private float goalieSpeed = 34f;
+    private FixedVector2 moveDir;
+    private FixedFloat goalieSpeed = (FixedFloat)34f;
     private bool couldCarrer;
-    private float _elapsedTicks;
-    private float couldCarryTicks=0.4f;
+    private int _elapsedFrames;
+    private int couldCarryFrames = 24;
     public override void OnEnter() {
-        _elapsedTicks = 0f;
+        _elapsedFrames = 0;
         couldCarrer = false;
     }
 
-    public override void _Update(float deltaTime) {
-        if (!couldCarrer&&_elapsedTicks<couldCarryTicks) {
-            _elapsedTicks += deltaTime;
+    public override void _Update() {
+        if (!couldCarrer && _elapsedFrames < couldCarryFrames) {
+            _elapsedFrames++;
         }
         else {
             couldCarrer = true;
@@ -31,13 +32,13 @@ public class PlayerStateMoving: PlayerSimState
             moveDir = _moveDirection;
         }
         
-        float speed = playerSim.role != Role.GOALIE
+        FixedFloat speed = playerSim.role != Role.GOALIE
             ? playerSim.Speed
             : goalieSpeed;
 
         playerSim.Velocity = moveDir * speed;
 
-        Vector2 nextPos = playerSim.Position + playerSim.Velocity * deltaTime;
+        FixedVector2 nextPos = playerSim.Position + playerSim.Velocity * SimulationConfig.DeltaTime;
 
         playerSim.Position = nextPos;
         playerSim.SetHeadingRight(moveDir);
@@ -65,7 +66,7 @@ public class PlayerStateMoving: PlayerSimState
     private void InstantShot() {
         if (playerSim.IsFacingTargetGoal())
         {
-            if (_ballSim.height <= 3.3f) {
+            if (_ballSim.height <= (FixedFloat)3.3f) {
                 playerSim.SwitchState(PlayerState.VOLLEY_KICK);
             }
             else {
@@ -78,11 +79,11 @@ public class PlayerStateMoving: PlayerSimState
             playerSim.SwitchState(PlayerState.BICYCLE_KICK);
         }
     }
-    public override void OnPass(Vector2 Direction,int passType,PlayerSim passTarget) {
+    public override void OnPass(FixedVector2 Direction,int passType,PlayerSim passTarget) {
         playerSim.SwitchState(PlayerState.PASSING,PlayerStateData.Build().SetInputType(passType).SetMoveDir(Direction).setPassTarget(passTarget));
     }
 
-    public override void OnTackle(Vector2 direction) {
+    public override void OnTackle(FixedVector2 direction) {
         playerSim.SwitchState(PlayerState.TACKLING,PlayerStateData.Build().SetMoveDir(Direction));
 
     }
