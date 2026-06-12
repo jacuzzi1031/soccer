@@ -1,24 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerStateHurt: PlayerSimState
 {
-    private const float HURT_HEIGHT_VELOCITY = 50f;
-    private const float BALL_TUMBLE_SPEED = 20f;
-    private float _elapsedTicks;
-    private float DURATION_HURT=1f;
-    public override void OnEnter() {
+    private static readonly FixedFloat HURT_HEIGHT_VELOCITY = (FixedFloat)50f;
+    private static readonly FixedFloat BALL_TUMBLE_SPEED = (FixedFloat)20f;
+
+    private const int DURATION_HURT_FRAMES = 60;
+
+    private int _hurtFrames;
+
+    public override void OnEnter()
+    {
         playerSim.HeightVelocity = HURT_HEIGHT_VELOCITY;
-        playerSim.Height = 0.1f;
-        Vector2 tumbleDir = stateData.MoveDir;
-        _ballSim.Tumble(tumbleDir * BALL_TUMBLE_SPEED);
+        playerSim.Height = (FixedFloat)0.1f;
+
+        FixedVector2 tumbleDir = stateData.MoveDir;
+
+        _ballSim.Tumble(
+            tumbleDir * BALL_TUMBLE_SPEED);
+
+        _hurtFrames = 0;
     }
 
-    public override void _Update(float deltaTime) {
-        MoveHorizontal(deltaTime,AIR_FRICTION);
-        _elapsedTicks+=deltaTime;
-        if (_elapsedTicks >= DURATION_HURT) {
+    public override void _Update()
+    {
+        _hurtFrames++;
+
+        MoveHorizontal( AIR_FRICTION);
+
+        if (_hurtFrames >= DURATION_HURT_FRAMES)
+        {
             playerSim.SwitchState(PlayerState.RECOVERING);
         }
     }

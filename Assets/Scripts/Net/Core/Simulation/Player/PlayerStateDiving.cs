@@ -1,29 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerStateDiving: PlayerSimState
 {
-    public float _durationTicks = 0.5f;
-    private float _elapsedTicks;
-    public float timeStartDive;
+    private const int DURATION_FRAMES = 30;
+
+    private int _elapsedFrames;
+    public FixedFloat timeStartDive;
+
     public override void OnEnter()
     {
-        float goalLineX = playerSim.spawnPosition.x;
+        FixedFloat goalLineX = playerSim.spawnPosition.x;
 
-        Vector2 ballPos = _ballSim.Position;
-        Vector2 ballVel = _ballSim.Velocity;
+        FixedVector2 ballPos = _ballSim.Position;
+        FixedVector2 ballVel = _ballSim.Velocity;
 
-        Vector2 targetDive;
+        FixedVector2 targetDive;
 
-        if (Mathf.Abs(ballVel.x) > 0.01f)
+        if (FixedFloat.Abs(ballVel.x) > (FixedFloat)0.01f)
         {
-            float t = (goalLineX - ballPos.x) / ballVel.x;
-            if (t > 0)
+            FixedFloat t = (goalLineX - ballPos.x) / ballVel.x;
+
+            if (t > FixedFloat.Zero)
             {
-                float impactY = ballPos.y + ballVel.y * t;
-                targetDive = new Vector2(goalLineX, impactY);
+                FixedFloat impactY = ballPos.y + ballVel.y * t;
+                targetDive = new FixedVector2(goalLineX, impactY);
             }
             else
             {
@@ -35,22 +39,33 @@ public class PlayerStateDiving: PlayerSimState
             targetDive = ballPos;
         }
 
-        Vector2 moveDir =
+        FixedVector2 moveDir =
             (targetDive - playerSim.Position).normalized;
 
         playerSim.Velocity =
             moveDir * playerSim.Speed;
+
         diveDirY = playerSim.Velocity.y;
-        _elapsedTicks = 0f;
+
+        _elapsedFrames = 0;
     }
 
-    public override void _Update(float deltaTime) {
-        _elapsedTicks+=deltaTime;
-        if (math.abs(playerSim.Velocity.y) < 0.1f) {
-            playerSim.Velocity = new Vector2(0f, diveDirY*1.1f);
+    public override void _Update()
+    {
+        _elapsedFrames++;
+
+        if (FixedFloat.Abs(playerSim.Velocity.y) < (FixedFloat)0.1f)
+        {
+            playerSim.Velocity =
+                new FixedVector2(
+                    FixedFloat.Zero,
+                    diveDirY * (FixedFloat)1.1f);
         }
-        playerSim.Position += deltaTime * playerSim.Velocity;
-        if (_elapsedTicks >= _durationTicks)
+
+        playerSim.Position +=
+            playerSim.Velocity * SimulationConfig.DeltaTime;
+
+        if (_elapsedFrames >= DURATION_FRAMES)
         {
             playerSim.SwitchState(PlayerState.RECOVERING);
         }

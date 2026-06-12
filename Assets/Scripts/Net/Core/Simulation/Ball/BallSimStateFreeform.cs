@@ -1,32 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class BallSimStateFreeform : BallSimState
 {
-    private float LockDurationCheckTimer = 0f;
-    private bool CanCarried=false;
-    public override  void OnEnter() {
-        CanCarried=false;
-        LockDurationCheckTimer = 0f;
+    private FixedFloat lockDurationCheckTimer = FixedFloat.Zero;
+    private bool canCarried = false;
+
+    public override void OnEnter()
+    {
+        canCarried = false;
+        lockDurationCheckTimer = FixedFloat.Zero;
     }
-    public override void _Update(float deltaTime) {
-        SetLockDuration(deltaTime);
-        MoveVertical(deltaTime,BOUNCINESS);
-        MoveHorizontal(deltaTime);
+
+    public override void _Update()
+    {
+        SetLockDuration();
+
+        MoveVertical(BOUNCINESS);
+        MoveHorizontal();
     }
-    private void SetLockDuration(float deltaTime) {
-        if (!CanCarried&&LockDurationCheckTimer < stateData.LockDuration) {
-            LockDurationCheckTimer+= deltaTime;
+
+    private void SetLockDuration()
+    {
+        if (!canCarried)
+        {
+            lockDurationCheckTimer += SimulationConfig.DeltaTime;
+
+            if (lockDurationCheckTimer >= stateData.LockDuration)
+            {
+                canCarried = true;
+                lockDurationCheckTimer = FixedFloat.Zero;
+            }
         }
-        else {
-            LockDurationCheckTimer = 0f;
-            CanCarried = true;
-        }
     }
-    
     public override bool CanCarriedBall() {
-        return CanCarried;
+        return canCarried;
     }
     public override bool CanAirInteract() {
         return true; 

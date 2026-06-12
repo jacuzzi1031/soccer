@@ -183,9 +183,9 @@ public class PlayerView : MonoBehaviour {
         if (playerSim.Frame != lastConsumedFrame)
         {
             prevPos = targetPos;
-            targetPos = playerSim.Position;
+            targetPos = playerSim.Position.ToVector2();
             prevHeight = targetHeight;
-            targetHeight = playerSim.Height;
+            targetHeight = playerSim.Height.ToFloat();
             interpTimer = 0f;
             lastConsumedFrame = playerSim.Frame;
         }
@@ -300,7 +300,7 @@ public class PlayerView : MonoBehaviour {
         Animator.StringToHash("Speed");
     private float runThreshold = 45f;
     public void SetMovementAnimation() {
-        float speed = playerSim.Velocity.magnitude;
+        float speed = playerSim.Velocity.magnitude.ToFloat();
         animator.SetFloat(SpeedHash, speed);
         AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
 

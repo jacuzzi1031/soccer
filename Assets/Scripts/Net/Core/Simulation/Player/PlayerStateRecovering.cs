@@ -1,21 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerStateRecovering: PlayerSimState
 {
-    private float _elapsedTicks;
-    private float _durationTicks=0.4f;
+    private const int DURATION_FRAMES = 24;
 
-    public override void OnEnter() {
-        playerSim.Velocity=Vector2.zero;
-        _elapsedTicks = 0f;
+    private int _elapsedFrames;
+
+    public override void OnEnter()
+    {
+        playerSim.Velocity = FixedVector2.Zero;
+        _elapsedFrames = 0;
     }
 
-    public override void _Update(float deltaTime) {
-        _elapsedTicks+=deltaTime;
+    public override void _Update()
+    {
+        _elapsedFrames++;
 
-        if (_elapsedTicks >= _durationTicks)
+        if (_elapsedFrames >= DURATION_FRAMES)
         {
             playerSim.SwitchState(PlayerState.MOVING);
         }

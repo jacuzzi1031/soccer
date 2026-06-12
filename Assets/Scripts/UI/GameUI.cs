@@ -126,27 +126,32 @@ public class GameUI : MonoBehaviour
 
     private void UpdateClock()
     {
-        if (_matchController.TimeLeft < 0)
+        if (_matchController.FramesLeft <= 0)
+        {
             timeText.color = Color.yellow;
-        else {
+        }
+        else
+        {
             timeText.color = Color.white;
         }
 
-        timeText.text = GetTimeText(_matchController.TimeLeft);
+        timeText.text = GetTimeText(_matchController.FramesLeft);
     }
-    public static string GetTimeText(float timeLeft)
+    private const int FPS = 60;
+
+    public static string GetTimeText(int framesLeft)
     {
-        if (timeLeft < 0f)
+        if (framesLeft <= 0)
         {
             return "00 : 00";
         }
-        else
-        {   
-            int totalSeconds = Mathf.CeilToInt(timeLeft);
-            int minutes = Mathf.FloorToInt(totalSeconds / 60f);
-            int seconds = Mathf.FloorToInt(totalSeconds - minutes * 60);
-            return $"{minutes:00} : {seconds:00}";
-        }
+
+        int totalSeconds = (framesLeft + FPS - 1) / FPS; // Ceil
+
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+
+        return $"{minutes:00} : {seconds:00}";
     }
 
     private void OnBallPossessed(OnBallPossessedEvent obj)

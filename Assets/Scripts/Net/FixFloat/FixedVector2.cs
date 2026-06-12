@@ -26,7 +26,7 @@ namespace Net.FixFloat
         /// </summary>
         public FixedFloat magnitude
         {
-            get => CalculateUtility.BetterSqrt(sqrMagnitude);
+            get => FixedMath.BetterSqrt(sqrMagnitude);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Net.FixFloat
             if (sqrDist == FixedFloat.Zero)
                 return target;
 
-            FixedFloat dist = CalculateUtility.BetterSqrt(sqrDist);
+            FixedFloat dist = FixedMath.BetterSqrt(sqrDist);
 
             if (dist <= maxDistanceDelta)
                 return target;
@@ -272,7 +272,7 @@ namespace Net.FixFloat
 
         public static FixedFloat Magnitude(FixedVector2 v)
         {
-            return CalculateUtility.BetterSqrt(v.sqrMagnitude);
+            return FixedMath.BetterSqrt(v.sqrMagnitude);
         }
 
         public static FixedVector2 Normalize(FixedVector2 v)
@@ -327,7 +327,7 @@ namespace Net.FixFloat
             if (mod == FixedFloat.Zero)
                 return FixedFloat.Zero;
 
-            return CalculateUtility.Acos(dot / mod);
+            return FixedMath.Acos(dot / mod);
         }
 
         /// <summary>
@@ -339,6 +339,16 @@ namespace Net.FixFloat
         }
 
         #endregion
+
+        public static FixedVector2 ClampMagnitude(
+            FixedVector2 vector,
+            FixedFloat maxLength)
+        {
+            if (vector.sqrMagnitude <= maxLength * maxLength)
+                return vector;
+
+            return vector.normalized * maxLength;
+        }
     }
     
     

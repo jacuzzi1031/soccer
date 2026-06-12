@@ -12,7 +12,7 @@ public class MatchController
     public string countryHome;
     public string countryAway;
     private MatchSystem _matchSystem;
-    public float TimeLeft => _matchSystem.timeLeft;
+    public int FramesLeft => _matchSystem.framesLeft;
     public int GoalsHome => _matchSystem.goalsHome;
     public int GoalsAway => _matchSystem.goalsAway;
     public string Winner=>_matchSystem.goalsHome>_matchSystem.goalsAway?countryHome:countryAway;
@@ -111,8 +111,10 @@ public class MatchController
         });
     }
     
+
+
     public bool IsTimeUp()
     {
-        return TimeLeft <= 0f;
+        return FramesLeft <= 0;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using SocketProtocol;
 using UnityEngine;
 
@@ -61,13 +62,13 @@ public class BallView : MonoBehaviour
     }
 
     private void OnBallBacktoSpawnPosition(BallBacktoSpawnPositionEvent obj) {
-        Vector2 pos = ballSim.Position;
+        Vector2 pos = ballSim.Position.ToVector2();
 
         prevPos = pos;
         targetPos = pos;
 
-        prevHeight = ballSim.height;
-        targetHeight = ballSim.height;
+        prevHeight = ballSim.height.ToFloat();
+        targetHeight = ballSim.height.ToFloat();
 
         transform.position = pos;
     }
@@ -120,7 +121,7 @@ public class BallView : MonoBehaviour
         // }
         BallAnimState newState;
 
-        if (velocity.sqrMagnitude <= idleThreshold)
+        if (velocity.sqrMagnitude <= (FixedFloat)idleThreshold)
         {
             newState = BallAnimState.Idle;
         }
@@ -173,7 +174,7 @@ public class BallView : MonoBehaviour
     public void SetBallAnimationFromVelocity()
     {
         BallAnimState newState;
-        if (ballSim.Velocity.sqrMagnitude <= idleThreshold)
+        if (ballSim.Velocity.sqrMagnitude <= (FixedFloat)idleThreshold)
             newState = BallAnimState.Idle;
         else if (ballSim.Velocity.x > 0)
             newState = BallAnimState.Roll;
@@ -201,10 +202,10 @@ public class BallView : MonoBehaviour
         if (ballSim.Frame != lastConsumedFrame)
         {
             prevPos = targetPos;
-            targetPos = ballSim.Position;
+            targetPos = ballSim.Position.ToVector2();
 
             prevHeight = targetHeight;
-            targetHeight = ballSim.height;
+            targetHeight = ballSim.height.ToFloat();
 
             interpTimer = 0f;
             lastConsumedFrame = ballSim.Frame;

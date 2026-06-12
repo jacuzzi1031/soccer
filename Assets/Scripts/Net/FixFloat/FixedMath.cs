@@ -5,8 +5,71 @@ namespace Net.FixFloat
     /// <summary>
     /// 常用定点数数学运算
     /// </summary>
-    public static class CalculateUtility
+    public static class FixedMath
     {
+        
+        private static uint _randomState = 123456789u;
+
+        /// <summary>
+        /// 设置随机种子（锁步时所有客户端必须一致）
+        /// </summary>
+        public static void SetRandomSeed(uint seed)
+        {
+            _randomState = seed;
+        }
+
+        /// <summary>
+        /// Xorshift32
+        /// </summary>
+        private static uint NextUInt()
+        {
+            uint x = _randomState;
+
+            x ^= x << 13;
+            x ^= x >> 17;
+            x ^= x << 5;
+
+            _randomState = x;
+            return x;
+        }
+
+        /// <summary>
+        /// 返回[0,1)范围的随机FixedFloat
+        /// </summary>
+        public static FixedFloat RandomValue()
+        {
+            uint r = NextUInt() & ((1u << 20) - 1);
+
+            return FixedFloat.FromRaw(r);
+        }
+
+        /// <summary>
+        /// 按概率判定
+        /// probability范围[0,1]
+        /// </summary>
+        public static bool Roll(FixedFloat probability)
+        {
+            if (probability <= FixedFloat.Zero)
+                return false;
+
+            if (probability >= FixedFloat.One)
+                return true;
+
+            uint r = NextUInt() & ((1u << 20) - 1);
+
+            return r < probability.ToFloat();
+        }
+        public static FixedFloat Lerp(FixedFloat a, FixedFloat b, FixedFloat t)
+        {
+            // 可选：Clamp到[0,1]
+            if (t < FixedFloat.Zero)
+                t = FixedFloat.Zero;
+            else if (t > FixedFloat.One)
+                t = FixedFloat.One;
+
+            return a + (b - a) * t;
+        }
+        
         /// <summary>
         /// 快速平方根
         /// sqrt(x) = x * (1 / sqrt(x))
@@ -177,4 +240,55 @@ namespace Net.FixFloat
             }
         }
     }
+    public static class CosTable
+    {
+        public const int IndexCount = 10000;
+        public static readonly FixedFloat PI =
+            (FixedFloat)Math.PI;
+        
+        public static readonly FixedFloat TwoPI =
+            PI * 2;
+
+        public static readonly FixedFloat HalfPI =
+            PI / 2;
+
+        public static readonly FixedFloat[] table;
+
+        static CosTable()
+        {
+            table = new FixedFloat[IndexCount + 1];
+
+            for (int i = 0; i <= IndexCount; i++)
+            {
+                double radians =
+                    (double)i / IndexCount *
+                    Math.PI * 2.0;
+
+                table[i] =
+                    (FixedFloat)Math.Cos(radians);
+            }
+        }
+        public static FixedFloat Cos(FixedFloat radians)
+        {
+
+
+            radians %= TwoPI ;
+
+            if (radians < 0)
+                radians += TwoPI;
+
+            FixedFloat rate =
+                radians / TwoPI;
+
+            int index =
+                (rate * CosTable.IndexCount).RawInt;
+
+            return CosTable.table[index];
+        }
+        
+    }
+
+
+    
+    
 }

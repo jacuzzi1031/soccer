@@ -1,27 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class BallSimStateShot : BallSimState
 {
-    private const float SHOT_SPRITE_SCALE = 0.8f;
-    private const float SHOT_HEIGHT = 0.25f;
-    private const float DURATION_SHOT = 1.0f;
-    private float timeSinceShot;
-    public override void OnEnter() { 
+    private static readonly FixedFloat SHOT_HEIGHT = (FixedFloat)0.25f;
+    private const int DURATION_SHOT_FRAMES = 60;
+    
+    private int shotFrameCount;
+    
+
+    public override void OnEnter()
+    {
         ballSim.height = SHOT_HEIGHT;
-        timeSinceShot = 0f;
+        shotFrameCount = 0;
     }
 
-    public override void _Update(float deltaTime) {
+    public override void _Update()
+    {
+        shotFrameCount++;
 
-        timeSinceShot += deltaTime;
-
-        if (timeSinceShot >= DURATION_SHOT) {
+        if (shotFrameCount >= DURATION_SHOT_FRAMES)
+        {
             ballSim.SwitchState(BallState.FREEFORM);
         }
-        else {
-            MoveHorizontal(deltaTime);
+        else
+        {
+            MoveHorizontal();
         }
     }
 }

@@ -27,9 +27,9 @@ public class CameraFollowObject : MonoBehaviour
         Vector2 pos;
 
         if (_carrier != null)
-            pos = _carrier.Position;
+            pos = _carrier.Position.ToVector2();
         else
-            pos = _ballSim.Position;
+            pos = _ballSim.Position.ToVector2();
 
         transform.position = new Vector3(pos.x, pos.y, transform.position.z);
     }

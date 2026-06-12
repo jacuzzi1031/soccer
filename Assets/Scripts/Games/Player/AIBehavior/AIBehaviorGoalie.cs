@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class AIBehaviorGoalie : AIBehavior
 {
-    private const float PROXIMITY_CONCERN = 10f;
+    private static FixedFloat PROXIMITY_CONCERN = (FixedFloat)10f;
+    private static FixedFloat EXPAND_GOAL = (FixedFloat)12f;
     public override void PerformAIDecisions() {
         if (IsBallHeadingToGoal(ballSim.Position, ballSim.Velocity, GoalArea))
         {
@@ -15,24 +17,24 @@ public class AIBehaviorGoalie : AIBehavior
     public override void PerformAIMovement() {
          moveDir = GetGoalieSteeringForce();
         
-        if (moveDir.magnitude > 1f)
+        if (moveDir.magnitude > FixedFloat.One)
             moveDir = moveDir.normalized;
     }
     public bool IsBallHeadingToGoal(
-        Vector2 ballPos,
-        Vector2 ballVel,
-        Rect goalArea)
+        FixedVector2 ballPos,
+        FixedVector2 ballVel,
+        FixedRect goalArea)
     {
-        if (ballVel.sqrMagnitude < 0.0001f)
+        if (ballVel.sqrMagnitude < FixedFloat.Zero)
             return false;
-        Vector2 dir = ballVel.normalized;
+        FixedVector2 dir = ballVel.normalized;
 
-        float maxDistance = ballVel.magnitude * 1.0f;
-        // 只扩大Y范围
-        Rect expandedGoal = goalArea;
-        expandedGoal.yMin -= 12.0f;
-        expandedGoal.yMax += 12.0f;
-        float hitTime;
+        FixedFloat maxDistance = ballVel.magnitude * FixedFloat.One;
+
+        FixedRect expandedGoal = goalArea;
+        expandedGoal.yMin -= EXPAND_GOAL;
+        expandedGoal.yMax += EXPAND_GOAL;
+        FixedFloat hitTime;
         return DeterministicGeometry2D.RayIntersectsAABB(
             ballPos,
             dir,
@@ -42,19 +44,19 @@ public class AIBehaviorGoalie : AIBehavior
         );
     }
 
-    public Vector2 GetGoalieSteeringForce()
+    public FixedVector2 GetGoalieSteeringForce()
     {
-        Vector2 top = playerSim.GetTopTargetPosition();
-        Vector2 bottom = playerSim.GetBottomTargetPosition();
+        FixedVector2 top = playerSim.GetTopTargetPosition();
+        FixedVector2 bottom = playerSim.GetBottomTargetPosition();
 
-        float minY = Mathf.Min(top.y, bottom.y);
-        float maxY = Mathf.Max(top.y, bottom.y);
+        FixedFloat minY = FixedMath.Min(top.y, bottom.y);
+        FixedFloat maxY = FixedMath.Max(top.y, bottom.y);
 
-        float targetY = Mathf.Clamp(ballSim.Position.y, minY, maxY);
-        float distanceY = targetY - playerSim.Position.y;
-        float weight = Mathf.Clamp01(Mathf.Abs(distanceY) / PROXIMITY_CONCERN);
+        FixedFloat targetY = FixedFloat.Clamp(ballSim.Position.y, minY, maxY);
+        FixedFloat distanceY = targetY - playerSim.Position.y;
+        FixedFloat weight = FixedFloat.Clamp01(FixedFloat.Abs(distanceY) / PROXIMITY_CONCERN);
 
-        Vector2 direction = new Vector2(0f, Mathf.Sign(distanceY));
+        FixedVector2 direction =new FixedVector2(FixedFloat.Zero, FixedFloat.Sign(distanceY));
 
         return direction * weight;
     }

@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerStateMourning: PlayerSimState
 {
     public override void OnEnter() {
-        playerSim.Velocity=Vector2.zero;
+        playerSim.Velocity=FixedVector2.Zero;
     }
 
     public override void OnExit() {

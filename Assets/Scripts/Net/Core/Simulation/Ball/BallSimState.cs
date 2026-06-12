@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,19 +10,13 @@ public class BallSimState
     protected BallSim ballSim=null;
     public PlayerView carrier=null;
     protected BallStateData stateData = new BallStateData();
-    public const float BOUNCINESS = 0.8f;
-    const float idleThreshold = 0.01f;
-    public SimEventBus _eventBus;
+    public static  FixedFloat BOUNCINESS = (FixedFloat)0.8f;
 
     public void Setup(BallSim contextBallSim,BallStateData ContextBallStateData,SimEventBus eventBus){
         ballSim = contextBallSim;
         stateData = ContextBallStateData;
-        _eventBus=eventBus;
     }
     public virtual void _Update() {
-    }
-    public virtual void _FixedUpdate() {
-        
     }
     public virtual void OnExit() {
     }
@@ -30,57 +25,47 @@ public class BallSimState
         return false;
     }
     public virtual bool CanAirInteract() {return false;}
-    protected void MoveHorizontal(float deltaTime)
+    protected void MoveHorizontal()
     {
-        Vector2 velocity = ballSim.Velocity;
-        Vector2 position = ballSim.Position;
+        FixedFloat dt = SimulationConfig.DeltaTime;
 
-        float friction = ballSim.height > 0
-            ? ballSim.frictionAir
-            : ballSim.frictionGround;
-
-        velocity = Vector2.MoveTowards(
-            velocity,
-            Vector2.zero,
-            friction * deltaTime
+        FixedVector2 velocity = FixedVector2.MoveTowards(
+            ballSim.Velocity,
+            FixedVector2.Zero,
+            (ballSim.height > 0 ? ballSim.frictionAir : ballSim.frictionGround) * dt
         );
-        if (velocity.sqrMagnitude < 0.0001f)
+
+        if (velocity == FixedVector2.Zero)
         {
-            ballSim.Velocity = Vector2.zero;
+            ballSim.Velocity = FixedVector2.Zero;
             return;
         }
-
-        Vector2 move = velocity * deltaTime;
-        
-        if (move.sqrMagnitude < 0.000001f)
-        {
-            ballSim.Velocity = velocity;
-            return;
-        }
-
-        position += move;
 
         ballSim.Velocity = velocity;
-        ballSim.Position = position;
+        ballSim.Position += velocity * dt;
     }
-    public void MoveVertical(float deltaTime,float bounciness = 0.0f)
-    {   
-        float height = ballSim.height;
-        float heightVelocity = ballSim.heightVelocity;
-        Vector2 velocity = ballSim.Velocity;
 
-        if (height > 0 || heightVelocity > 0)
+    public void MoveVertical() {
+        MoveVertical(FixedFloat.Zero);
+    }
+    public void MoveVertical(FixedFloat bounciness)
+    {   
+        FixedFloat height = ballSim.height;
+        FixedFloat heightVelocity = ballSim.heightVelocity;
+        FixedVector2 velocity = ballSim.Velocity;
+
+        if (height > FixedFloat.Zero || heightVelocity > FixedFloat.Zero)
         {
-            float dt = deltaTime;
+            FixedFloat dt = SimulationConfig.DeltaTime;
 
             heightVelocity -= BallSim.GRAVITY * dt;
             height += heightVelocity * dt;
 
-            if (height < 0)
+            if (height < FixedFloat.Zero)
             {
-                height = 0;
+                height = FixedFloat.Zero;
 
-                if (heightVelocity < 0)
+                if (heightVelocity < FixedFloat.Zero)
                 {
                     heightVelocity = -heightVelocity * bounciness;
                     velocity *= bounciness;
@@ -92,24 +77,4 @@ public class BallSimState
         ballSim.heightVelocity = heightVelocity;
         ballSim.Velocity = velocity;
     }
-    // public void MoveVertical(float deltaTime, float bounciness = 0.0f)
-    // {
-    //     if (ballSim.height > 0 || ballSim.heightVelocity > 0)
-    //     {
-    //         ballSim.heightVelocity -= GRAVITY * deltaTime;
-    //
-    //         ballSim.height += ballSim.heightVelocity * deltaTime;
-    //
-    //         if (ballSim.height < 0)
-    //         {
-    //             ballSim.height = 0;
-    //
-    //             if (ballSim.heightVelocity < 0)
-    //             {
-    //                 ballSim.heightVelocity = -ballSim.heightVelocity * bounciness;
-    //                 ballSim.Velocity *= bounciness;
-    //             }
-    //         }
-    //     }
-    // }
 }
