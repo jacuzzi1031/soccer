@@ -1,38 +1,72 @@
-using UnityEngine;
-
+using Net.FixFloat;
 public static class DeterministicGeometry2D
 {
     // 判断射线是否会进入矩形（AABB）
     public static bool RayIntersectsAABB(
-        Vector2 rayOrigin,
-        Vector2 rayDir,
-        Rect aabb,
-        float maxDistance,
-        out float hitTime)
+        FixedVector2 rayOrigin,
+        FixedVector2 rayDir,
+        FixedRect aabb,
+        FixedFloat maxDistance,
+        out FixedFloat hitTime)
     {
-        hitTime = 0f;
+        hitTime = FixedFloat.Zero;
 
-        // 防止除0
-        float invDirX = Mathf.Abs(rayDir.x) > 1e-6f ? 1f / rayDir.x : float.MaxValue;
-        float invDirY = Mathf.Abs(rayDir.y) > 1e-6f ? 1f / rayDir.y : float.MaxValue;
+        FixedFloat tMin = FixedFloat.Zero;
+        FixedFloat tMax = maxDistance;
 
-        float t1 = (aabb.xMin - rayOrigin.x) * invDirX;
-        float t2 = (aabb.xMax - rayOrigin.x) * invDirX;
-        float t3 = (aabb.yMin - rayOrigin.y) * invDirY;
-        float t4 = (aabb.yMax - rayOrigin.y) * invDirY;
+        // X轴
+        if (rayDir.x == FixedFloat.Zero)
+        {
+            // 射线与X轴平行
+            if (rayOrigin.x < aabb.xMin || rayOrigin.x > aabb.xMax)
+                return false;
+        }
+        else
+        {
+            FixedFloat tx1 = (aabb.xMin - rayOrigin.x) / rayDir.x;
+            FixedFloat tx2 = (aabb.xMax - rayOrigin.x) / rayDir.x;
 
-        float tMin = Mathf.Max(Mathf.Min(t1, t2), Mathf.Min(t3, t4));
-        float tMax = Mathf.Min(Mathf.Max(t1, t2), Mathf.Max(t3, t4));
-        // tMax离开时间
-        if (tMax < 0f)
-            return false;
-        if (tMin > tMax)
-            return false;
-        // tMin 是进入时间
-        float tHit = tMin >= 0f ? tMin : tMax;
-        if (tHit < 0f || tHit > maxDistance)
-            return false;
-        hitTime = tHit;
-        return true;
+            if (tx1 > tx2)
+            {
+                FixedFloat temp = tx1;
+                tx1 = tx2;
+                tx2 = temp;
+            }
+
+            tMin = FixedMath.Max(tMin, tx1);
+            tMax = FixedMath.Min(tMax, tx2);
+
+            if (tMin > tMax)
+                return false;
+        }
+
+        // Y轴
+        if (rayDir.y == FixedFloat.Zero)
+        {
+            // 射线与Y轴平行
+            if (rayOrigin.y < aabb.yMin || rayOrigin.y > aabb.yMax)
+                return false;
+        }
+        else
+        {
+            FixedFloat ty1 = (aabb.yMin - rayOrigin.y) / rayDir.y;
+            FixedFloat ty2 = (aabb.yMax - rayOrigin.y) / rayDir.y;
+
+            if (ty1 > ty2)
+            {
+                FixedFloat temp = ty1;
+                ty1 = ty2;
+                ty2 = temp;
+            }
+
+            tMin = FixedMath.Max(tMin, ty1);
+            tMax = FixedMath.Min(tMax, ty2);
+
+            if (tMin > tMax)
+                return false;
+        }
+
+        hitTime = tMin;
+        return hitTime <= maxDistance;
     }
 }

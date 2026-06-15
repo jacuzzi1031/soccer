@@ -1,4 +1,6 @@
 //Script Define Symbols 添加 UNITY_ENV
+
+using GameFrameSync;
 #if UNITY_ENV
 using UnityEngine;
 #endif
@@ -12,7 +14,7 @@ namespace Net.FixFloat
     {
         public FixedFloat x;
         public FixedFloat y;
-
+        
         /// <summary>
         /// 平方长度
         /// </summary>
@@ -26,7 +28,7 @@ namespace Net.FixFloat
         /// </summary>
         public FixedFloat magnitude
         {
-            get => CalculateUtility.BetterSqrt(sqrMagnitude);
+            get => FixedMath.BetterSqrt(sqrMagnitude);
         }
 
         /// <summary>
@@ -80,7 +82,7 @@ namespace Net.FixFloat
             if (sqrDist == FixedFloat.Zero)
                 return target;
 
-            FixedFloat dist = CalculateUtility.BetterSqrt(sqrDist);
+            FixedFloat dist = FixedMath.BetterSqrt(sqrDist);
 
             if (dist <= maxDistanceDelta)
                 return target;
@@ -99,6 +101,11 @@ namespace Net.FixFloat
             x = (FixedFloat)vector.x;
             y = (FixedFloat)vector.y;
         }
+        public FixedVector2(Vector2D vector)
+        {
+            x = (FixedFloat)vector.X;
+            y = (FixedFloat)vector.Y;
+        }
         public static explicit operator FixedVector2(Vector2 v)
         {
             return new FixedVector2(
@@ -111,6 +118,7 @@ namespace Net.FixFloat
                 (FixedFloat)v.x,
                 (FixedFloat)v.y);
         }
+
 #endif
 
         public FixedFloat this[int index]
@@ -272,7 +280,7 @@ namespace Net.FixFloat
 
         public static FixedFloat Magnitude(FixedVector2 v)
         {
-            return CalculateUtility.BetterSqrt(v.sqrMagnitude);
+            return FixedMath.BetterSqrt(v.sqrMagnitude);
         }
 
         public static FixedVector2 Normalize(FixedVector2 v)
@@ -327,7 +335,7 @@ namespace Net.FixFloat
             if (mod == FixedFloat.Zero)
                 return FixedFloat.Zero;
 
-            return CalculateUtility.Acos(dot / mod);
+            return FixedMath.Acos(dot / mod);
         }
 
         /// <summary>
@@ -339,6 +347,16 @@ namespace Net.FixFloat
         }
 
         #endregion
+
+        public static FixedVector2 ClampMagnitude(
+            FixedVector2 vector,
+            FixedFloat maxLength)
+        {
+            if (vector.sqrMagnitude <= maxLength * maxLength)
+                return vector;
+
+            return vector.normalized * maxLength;
+        }
     }
     
     

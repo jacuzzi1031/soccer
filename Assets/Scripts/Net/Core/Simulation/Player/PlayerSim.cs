@@ -62,7 +62,7 @@ public class PlayerSim {
     public void Tick(int frame,int homeCount,int awayCount)
     {
         aiBehavior.homeCount= homeCount;
-        aiBehavior.awayCount= homeCount;
+        aiBehavior.awayCount= awayCount;
         
         Frame=frame;
         currentState?._Update();

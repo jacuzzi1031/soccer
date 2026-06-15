@@ -1,58 +1,90 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerStatePassing: PlayerSimState
 {
-    private float _elapsedTicks;
-    private float _animationTicks=0.05f;
-    private float playerRecoverTicks=0.3f;
-    private Vector2 passDestination;
+   private const int PASS_ANIMATION_FRAMES = 3;
+    private const int RECOVER_FRAMES = 18;
+
+    private int _elapsedFrames;
+    private bool _passTriggered;
+
+    private FixedVector2 passDestination;
     private bool overground;
-    public override void OnEnter() {
-        _elapsedTicks = 0f;
-        
-        Vector2 headingOffset = playerSim.HeadingRight ? Vector2.right * playerSim.Speed : Vector2.left * playerSim.Speed;
-        
+
+    public override void OnEnter()
+    {
+        _elapsedFrames = 0;
+        _passTriggered = false;
+
+        FixedVector2 headingOffset =
+            playerSim.HeadingRight
+                ? FixedVector2.Right * playerSim.Speed
+                : FixedVector2.Left * playerSim.Speed;
+
         if (stateData.passTarget == null)
         {
             overground = true;
-            passDestination = (Vector2)_ballSim.Position + headingOffset;
+            passDestination = _ballSim.Position + headingOffset;
         }
-        else {
-            var passTargetPosition = stateData.passTarget.Position;
-            var passTargetVelocity = stateData.passTarget.Velocity;
+        else
+        {
+            FixedVector2 passTargetPosition =
+                stateData.passTarget.Position;
+
+            FixedVector2 passTargetVelocity =
+                stateData.passTarget.Velocity;
+
             switch (stateData.InputType)
             {
                 case 0:
-                    passDestination = passTargetPosition + passTargetVelocity * 0.2f;
-                    overground = true;
-                    _ballSim.passTo(passDestination,true);
-                    break;
-                    
-                case 1:
-                    passDestination = passTargetPosition + passTargetVelocity * 0.2f;
-                    overground = false;
-                    _ballSim.passTo(passDestination,false);
-                    break;
-                    
-                case 2:
-                    passDestination = passTargetPosition + passTargetVelocity * 1.8f;
+                    passDestination =
+                        passTargetPosition +
+                        passTargetVelocity * (FixedFloat)0.2f;
+
                     overground = true;
 
+                    _ballSim.passTo(passDestination, true);
+                    _passTriggered = true;
+                    break;
+
+                case 1:
+                    passDestination =
+                        passTargetPosition +
+                        passTargetVelocity * (FixedFloat)0.2f;
+
+                    overground = false;
+
+                    _ballSim.passTo(passDestination, false);
+                    _passTriggered = true;
+                    break;
+
+                case 2:
+                    passDestination =
+                        passTargetPosition +
+                        passTargetVelocity * (FixedFloat)1.8f;
+
+                    overground = true;
                     break;
             }
         }
     }
 
-    public override void _Update(float deltaTime) {
-        _elapsedTicks+=deltaTime;
+    public override void _Update()
+    {
+        _elapsedFrames++;
 
-        if (_elapsedTicks >= _animationTicks)
+        if (!_passTriggered &&
+            _elapsedFrames >= PASS_ANIMATION_FRAMES)
         {
-            _ballSim.passTo(passDestination,overground);
+            _ballSim.passTo(passDestination, overground);
+            _passTriggered = true;
         }
-        if (_elapsedTicks >= playerRecoverTicks) {
+
+        if (_elapsedFrames >= RECOVER_FRAMES)
+        {
             playerSim.SwitchState(PlayerState.MOVING);
         }
     }

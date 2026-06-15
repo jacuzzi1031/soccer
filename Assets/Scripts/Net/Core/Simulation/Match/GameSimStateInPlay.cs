@@ -1,6 +1,6 @@
 
     public class GameSimStateInPlay: GameSimState {
-        public override void _Update(float deltaTime) {
+        public override void _Update() {
 
             _matchSystem.framesLeft--;
 

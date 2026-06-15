@@ -1,29 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
-public class PlayerStateVolleyKick : PlayerSimState
-{
-    private float _elapsedTicks;
-    // private float _durationTicks=0.2f;
-    private float _durationTicks=0.4f;
+public class PlayerStateVolleyKick : PlayerSimState{
+    private const int DURATION_FRAMES = 12;
+
+    private int _elapsedFrames;
 
     public override void OnEnter() {
-        _elapsedTicks = 0f;
+        _elapsedFrames = 0;
     }
 
-    public override void _Update(float deltaTime) {
-        _elapsedTicks+=deltaTime;
+    public override void _Update() {
+        _elapsedFrames++;
 
-        if (_elapsedTicks >= _durationTicks)
-        {
+        if (_elapsedFrames >= DURATION_FRAMES) {
             playerSim.SwitchState(PlayerState.MOVING);
         }
     }
+
     public override bool VolleyShot() {
-        Vector2 destination = playerSim.GetFarTargetPosition();
-        Vector2 direction = (destination - playerSim.Position).normalized;
-        _ballSim.shoot( playerSim.Power * BONUS_POWER*direction);
+        FixedVector2 destination =
+            playerSim.GetFarTargetPosition();
+
+        FixedVector2 direction =
+            (destination - playerSim.Position).normalized;
+
+        _ballSim.shoot(
+            direction * playerSim.Power * BONUS_POWER);
+
         return true;
     }
 

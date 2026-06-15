@@ -1,70 +1,106 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerStatePreppingShot: PlayerSimState
 {
-    Vector2 shotDirection = Vector2.zero;
-    private float timeStartShot;
-    private const float DURATION_MAX_BONUS=1.5f;
-    private const float EASE_REWARD_FACTOR = 2.0f;
-    private float pressRaw;
-    private bool hasTriggeredBonusEvent = false;
-    private float pressTime = 0f;
-    public override void OnEnter() {
-        hasTriggeredBonusEvent = false;
-        pressTime = 0f;
-        playerSim.Velocity = Vector2.zero;
-        shotDirection=_moveDirection.x>=0? Vector2.right:Vector2.left;
-    }
+    private FixedVector2 shotDirection = FixedVector2.Zero;
 
-    public override void OnExit() {
+    private const int MAX_BONUS_FRAMES = 90;
+    private const int BONUS_EVENT_FRAMES = 45;
+
+    private static readonly FixedFloat EASE_REWARD_FACTOR = (FixedFloat)2f;
+
+    private bool hasTriggeredBonusEvent;
+    private int pressFrames;
+    public override void OnEnter()
+    {
+        hasTriggeredBonusEvent = false;
+        pressFrames = 0;
+
+        playerSim.Velocity = FixedVector2.Zero;
+
+        shotDirection =
+            _moveDirection.x >= FixedFloat.Zero
+                ? FixedVector2.Right
+                : FixedVector2.Left;
     }
-    public override void _Update(float deltaTime) {
-        pressTime += deltaTime;
+    public override void _Update()
+    {
+        pressFrames++;
+
         shotDirection += _moveDirection;
 
-        if (!hasTriggeredBonusEvent && pressTime >= DURATION_MAX_BONUS * 0.5f)
+        if (!hasTriggeredBonusEvent &&
+            pressFrames >= BONUS_EVENT_FRAMES)
         {
             _eventBus.Publish(
-                new PlayStyleShowSignal(playerSim.playerId, PlayerState.PREPPING_SHOT)
+                new PlayStyleShowSignal(
+                    playerSim.playerId,
+                    PlayerState.PREPPING_SHOT)
             );
+
             hasTriggeredBonusEvent = true;
         }
     }
-    public override void OnShootRelease(bool hasBall,bool ballCanAirInteract)
+    public override void OnShootRelease(
+        bool hasBall,
+        bool ballCanAirInteract)
     {
-        if (!hasBall) {
+        if (!hasBall)
             return;
-        }
-        float durationPress = Mathf.Clamp(pressTime, 0f, DURATION_MAX_BONUS);
-        
-        float easeTime = durationPress / DURATION_MAX_BONUS;
-        float bonus = Mathf.Pow(easeTime, EASE_REWARD_FACTOR);
-        
-        float shotPower = playerSim.Power * (1f + 0.7f * bonus);
-        if (hasTriggeredBonusEvent) {
-            if (shotDirection.y > 0.1f) {
-                var Dir = playerSim.GetTopTargetPosition() - playerSim.Position;
-                shotDirection = Dir.normalized;
+
+        FixedFloat clampedFrames =
+            FixedFloat.Min(pressFrames, MAX_BONUS_FRAMES);
+
+        FixedFloat easeTime = clampedFrames / (FixedFloat)MAX_BONUS_FRAMES;
+
+        FixedFloat bonus =easeTime * easeTime;
+
+        FixedFloat shotPower =
+            playerSim.Power *
+            (FixedFloat.One + (FixedFloat)0.7f * bonus);
+
+        if (hasTriggeredBonusEvent)
+        {
+            if (shotDirection.y > (FixedFloat)0.1f)
+            {
+                FixedVector2 dir =
+                    playerSim.GetTopTargetPosition()
+                    - playerSim.Position;
+
+                shotDirection = dir.normalized;
             }
-            else if (shotDirection.y < -0.1f) {
-                var Dir = playerSim.GetBottomTargetPosition() - playerSim.Position;
-                shotDirection = Dir.normalized;
+            else if (shotDirection.y < (FixedFloat)(-0.1f))
+            {
+                FixedVector2 dir =
+                    playerSim.GetBottomTargetPosition()
+                    - playerSim.Position;
+
+                shotDirection = dir.normalized;
             }
-            else {
-                shotDirection = shotDirection.normalized;
+            else
+            {
+                shotDirection =
+                    shotDirection.normalized;
             }
         }
-        else {
-            shotDirection = shotDirection.normalized;
+        else
+        {
+            shotDirection =
+                shotDirection.normalized;
         }
-        
-        PlayerStateData data = PlayerStateData.Build()
-            .SetShotPower(shotPower)
-            .SetShotDirection(shotDirection)
-            .SetIsInstant(false);
-        playerSim.SwitchState(PlayerState.SHOOTING, data);
+
+        PlayerStateData data =
+            PlayerStateData.Build()
+                .SetShotPower(shotPower)
+                .SetShotDirection(shotDirection)
+                .SetIsInstant(false);
+
+        playerSim.SwitchState(
+            PlayerState.SHOOTING,
+            data);
     }
 
     public override bool CouldHurt() {

@@ -13,7 +13,7 @@ public class InputBuffer
         public int frame;
         public int seatIndex;
         public int inputType;
-        public Vector2 moveVector;
+        public Vector2D moveVector;
     }
 // frame -> [player0Cmd, player1Cmd]
     private readonly Dictionary<int, Command[]> buffer;
@@ -44,7 +44,7 @@ public class InputBuffer
         cmd.frame = msg.FrameId;
         cmd.seatIndex = seatIndex;          
         cmd.inputType = msg.InputType;
-        cmd.moveVector = DecodeMoveDir(msg.MoveVector);
+        cmd.moveVector = msg.MoveVector;
 
         frameCmds[seatIndex] = cmd;
     }

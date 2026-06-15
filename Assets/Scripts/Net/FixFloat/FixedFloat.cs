@@ -27,6 +27,7 @@ namespace Net.FixFloat
 
         public static readonly FixedFloat Zero = new FixedFloat(0L, true);
         public static readonly FixedFloat One = new FixedFloat(1);
+        public static readonly FixedFloat MinusOne = new FixedFloat(-1);
         public static readonly FixedFloat MaxValue = new FixedFloat(long.MaxValue, true);
         public static readonly FixedFloat MinValue = new FixedFloat(long.MinValue, true);
         /// <summary>
@@ -155,6 +156,15 @@ namespace Net.FixFloat
         {
             return FromRaw(value.scaledValue << moveCount);
         }
+        
+        public static FixedFloat operator %(
+            FixedFloat a,
+            FixedFloat b)
+        {
+            return new FixedFloat(
+                a.RawInt % b.RawInt
+            );
+        }
 
         #endregion
 
@@ -269,7 +279,11 @@ namespace Net.FixFloat
         {
             return a > b ? a : b;
         }
-
+        public static FixedFloat Clamp01(
+            FixedFloat value)
+        {
+            return Clamp(value, FixedFloat.Zero, FixedFloat.One);
+        }
         public static FixedFloat Clamp(
             FixedFloat value,
             FixedFloat min,
@@ -281,5 +295,10 @@ namespace Net.FixFloat
         }
 
         #endregion
+
+        public static FixedFloat Sign(FixedFloat value)
+        {
+            return value < Zero ? MinusOne : One;
+        }
     }
 }

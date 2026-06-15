@@ -15,6 +15,6 @@
         }
         public override void OnExit() {}
 
-        public override void _Update(float deltaTime) {
+        public override void _Update() {
         }
     }

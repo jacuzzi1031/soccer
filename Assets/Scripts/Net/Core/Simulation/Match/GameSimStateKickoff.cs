@@ -5,7 +5,7 @@
         public override void OnEnter() {
         }
 
-        public override void _Update(float deltaTime)
+        public override void _Update()
         {
         }
 

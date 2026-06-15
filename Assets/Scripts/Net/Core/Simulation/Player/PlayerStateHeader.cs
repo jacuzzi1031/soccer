@@ -1,31 +1,43 @@
 
+    using Net.FixFloat;
     using UnityEngine;
 
     public class PlayerStateHeader:PlayerSimState {
-        private float _elapsedTicks;
-        // private float _durationTicks=0.2f;
-        private float _durationTicks=0.4f;
-        public const float HEIGHT_START = 0.1f;
-        public const float HEIGHT_VELOCITY_START = 10f;
-        public override void OnEnter() {
-            _elapsedTicks = 0f;
+        private const int DURATION_FRAMES = 12;
+
+        private int _elapsedFrames;
+
+        public static readonly FixedFloat HEIGHT_START = (FixedFloat)0.1f;
+        public static readonly FixedFloat HEIGHT_VELOCITY_START = (FixedFloat)10f;
+
+        public override void OnEnter()
+        {
+            _elapsedFrames = 0;
+
             playerSim.Height = HEIGHT_START;
             playerSim.HeightVelocity = HEIGHT_VELOCITY_START;
         }
 
-        public override void _Update(float deltaTime) {
-            _elapsedTicks+=deltaTime;
+        public override void _Update()
+        {
+            _elapsedFrames++;
 
-            if (_elapsedTicks >= _durationTicks)
+            if (_elapsedFrames >= DURATION_FRAMES)
             {
                 playerSim.SwitchState(PlayerState.RECOVERING);
             }
         }
 
-        public override bool VolleyShot() {
-            Vector2 destination = playerSim.GetFarTargetPosition();
-            Vector2 direction = (destination - playerSim.Position).normalized;
-            _ballSim.shoot( playerSim.Power * BONUS_POWER*direction);
+        public override bool VolleyShot()
+        {
+            FixedVector2 destination = playerSim.GetFarTargetPosition();
+
+            FixedVector2 direction =
+                (destination - playerSim.Position).normalized;
+
+            _ballSim.shoot(
+                direction * playerSim.Power * BONUS_POWER);
+
             return true;
         }
         public override bool CanCarryBall() {
