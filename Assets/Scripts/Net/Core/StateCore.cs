@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameFrameSync;
 using Net.FixFloat;
 using UnityEngine;
 
@@ -38,9 +39,11 @@ public enum ControlScheme{ CPU,P1,P2};
 public struct SimulationCommand
 {
     public SimulationCommandType Type;  
-    public FixedVector2 Direction;            
+    public Vector2D moveVector;            
     public int SeatIndex;
     public bool isHome;
+    public FixedVector2 Direction
+        => new FixedVector2(moveVector).normalized;
 }
 public enum SimulationCommandType
 {

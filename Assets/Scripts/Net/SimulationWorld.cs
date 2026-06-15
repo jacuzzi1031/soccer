@@ -74,7 +74,7 @@ public class SimulationWorld
     {
         commandBuffer.Enqueue(new SimulationCommand {
             Type = type,
-            Direction = cmd.moveVector,
+            moveVector = cmd.moveVector,
             SeatIndex = cmd.seatIndex,
         });
     }

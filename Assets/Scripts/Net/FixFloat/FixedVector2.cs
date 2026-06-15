@@ -1,4 +1,6 @@
 //Script Define Symbols 添加 UNITY_ENV
+
+using GameFrameSync;
 #if UNITY_ENV
 using UnityEngine;
 #endif
@@ -12,7 +14,7 @@ namespace Net.FixFloat
     {
         public FixedFloat x;
         public FixedFloat y;
-
+        
         /// <summary>
         /// 平方长度
         /// </summary>
@@ -99,6 +101,11 @@ namespace Net.FixFloat
             x = (FixedFloat)vector.x;
             y = (FixedFloat)vector.y;
         }
+        public FixedVector2(Vector2D vector)
+        {
+            x = (FixedFloat)vector.X;
+            y = (FixedFloat)vector.Y;
+        }
         public static explicit operator FixedVector2(Vector2 v)
         {
             return new FixedVector2(
@@ -111,6 +118,7 @@ namespace Net.FixFloat
                 (FixedFloat)v.x,
                 (FixedFloat)v.y);
         }
+
 #endif
 
         public FixedFloat this[int index]

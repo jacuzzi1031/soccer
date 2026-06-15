@@ -20,7 +20,7 @@
         public virtual void OnExit() {
         
         }
-        public virtual void _Update(FixedFloat FixedDeltaTime) {
+        public virtual void _Update() {
             
         }
 

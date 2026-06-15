@@ -56,7 +56,7 @@
                         break;
                 }
             }
-            currentSimState._Update(SimulationContext.FixedDeltaTime);
+            currentSimState._Update();
         }
 
         //是否需要SimulationContext作为OnEnter的参数
