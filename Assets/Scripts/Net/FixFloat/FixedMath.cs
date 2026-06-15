@@ -101,30 +101,24 @@ namespace Net.FixFloat
         /// 牛顿迭代法求平方根
         /// 精度高于 Fast InvSqrt
         /// </summary>
-        public static FixedFloat BetterSqrt(
-            FixedFloat value,
-            int iteratorCount = 8)
+        public static FixedFloat BetterSqrt(FixedFloat value)
         {
-            if (value == FixedFloat.Zero)
+            if (value <= FixedFloat.Zero)
                 return FixedFloat.Zero;
+            
+            FixedFloat result = value >> 1;
+            if (result <= FixedFloat.Zero)
+                result = FixedFloat.One;
 
-            if (value < FixedFloat.Zero)
-                throw new ArgumentOutOfRangeException(nameof(value));
-
-            FixedFloat result = value;
-            FixedFloat previous;
-
-            int count = 0;
-
-            do
+            for (int i = 0; i < 16; i++)
             {
-                previous = result;
-                result = (result + value / result) >> 1;
-                count++;
+                FixedFloat next = (result + value / result) >> 1;
+                
+                if (FixedMath.Abs(next - result) <= FixedFloat.One)
+                    return next;
+
+                result = next;
             }
-            while (
-                previous != result &&
-                count < iteratorCount);
 
             return result;
         }

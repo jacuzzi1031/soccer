@@ -56,7 +56,6 @@ public class AIBehaviorField : AIBehavior
                 }
 
         }
-    
         moveDir = FixedVector2.ClampMagnitude(moveDir, FixedFloat.One);
     }
     
@@ -113,7 +112,15 @@ public class AIBehaviorField : AIBehavior
         FixedVector2 target = playerSim.GetCenterTargetPosition();
         var playerPos = playerSim.Position;
         FixedVector2 direction = (target - playerPos).normalized;
-    
+        var v = target - playerPos;
+
+        Debug.Log($"sqr={v.sqrMagnitude}");
+        Debug.Log($"mag={v.magnitude}");
+
+        var dir = v.normalized;
+
+        Debug.Log($"dir normalized={dir}");
+        Debug.Log($"dirMag={dir.magnitude}");
         FixedFloat weight = GetBiCircularWeight(playerPos, target, 30, (FixedFloat)0.2f, 150, 1);
         return direction * weight;
     }
@@ -185,7 +192,7 @@ public class AIBehaviorField : AIBehavior
     FixedVector2 GetSpawnSteeringForce() {
         var playerPos = playerSim.Position;
         var spawnPos = playerSim.spawnPosition;
-        FixedFloat weight = GetBiCircularWeight(playerPos, spawnPos, 30, 0, 100, 1);
+        FixedFloat weight = GetBiCircularWeight(playerPos, spawnPos, 45, 0, 150, 1);
         FixedVector2 direction = (spawnPos - playerPos).normalized;
         return direction * weight;
     }

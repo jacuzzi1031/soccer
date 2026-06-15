@@ -348,14 +348,29 @@ namespace Net.FixFloat
 
         #endregion
 
+        // public static FixedVector2 ClampMagnitude(
+        //     FixedVector2 vector,
+        //     FixedFloat maxLength)
+        // {
+        //     if (vector.sqrMagnitude <= maxLength * maxLength)
+        //         return vector;
+        //
+        //     return vector.normalized * maxLength;
+        // }
         public static FixedVector2 ClampMagnitude(
             FixedVector2 vector,
             FixedFloat maxLength)
         {
-            if (vector.sqrMagnitude <= maxLength * maxLength)
-                return vector;
+            FixedFloat sqrMax = maxLength * maxLength;
+            FixedFloat sqrMag = vector.sqrMagnitude;
 
-            return vector.normalized * maxLength;
+            if (sqrMag > sqrMax)
+            {
+                FixedFloat invMag = FixedMath.InvSqrt(sqrMag);
+                return vector * invMag * maxLength;
+            }
+
+            return vector;
         }
     }
     

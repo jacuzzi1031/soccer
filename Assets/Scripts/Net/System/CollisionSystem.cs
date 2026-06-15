@@ -57,8 +57,9 @@ public class CollisionSystem : ISimulationSystem{
     }
 
     private bool DistanceQualify(PlayerSim attacker, PlayerSim target) {
-        var attackOffset = attacker.HeadingRight ? attackRightOffset : attackLeftOffset;
-        FixedVector2 attckerPos = attacker.Position + attackOffset;
+        // var attackOffset = attacker.HeadingRight ? attackRightOffset : attackLeftOffset;
+        // FixedVector2 attckerPos = attacker.Position + attackOffset;
+        FixedVector2 attckerPos = attacker.Position;
         FixedFloat distSqr = (attacker.Position - target.Position).sqrMagnitude;
         if (distSqr < tacklingRadiusSqr) {
             return true;

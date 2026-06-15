@@ -142,7 +142,7 @@ public class PlayerSystem:ISimulationSystem
         }
     }
 
-    public FixedFloat playerProximitySqr = (FixedFloat)(55f * 55f);
+    public FixedFloat playerProximitySqr = (FixedFloat)(45f * 45f);
     private bool IsNearBall(FixedVector2 playerPosition) {
         var ballPos = _ballSim.Position;
         FixedFloat distSqr= (playerPosition-ballPos).sqrMagnitude;
