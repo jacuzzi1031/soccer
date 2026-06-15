@@ -86,7 +86,7 @@ public class CollisionSystem : ISimulationSystem{
             FixedFloat distSqr = (player.Position + playerForBallOffset - ball.Position).sqrMagnitude;
             if (distSqr < volleycaptureRadiusSqr && ball.height < MAX_CAPTURE_HEIGHT) {
                 bool hasVolleyShot = player.currentState.VolleyShot();
-                if (hasVolleyShot) continue;
+                if (hasVolleyShot) break;
             }
 
             if (distSqr < captureRadiusSqr && ball.height < MAX_CAPTURE_HEIGHT) {

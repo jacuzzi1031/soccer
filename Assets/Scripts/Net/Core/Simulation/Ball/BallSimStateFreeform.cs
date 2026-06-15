@@ -17,7 +17,6 @@ public class BallSimStateFreeform : BallSimState
     public override void _Update()
     {
         SetLockDuration();
-
         MoveVertical(BOUNCINESS);
         MoveHorizontal();
     }

@@ -57,7 +57,7 @@ namespace Net.FixFloat
 
             uint r = NextUInt() & ((1u << 20) - 1);
 
-            return r < probability.ToFloat();
+            return r < probability.ScaledValue;
         }
         public static FixedFloat Lerp(FixedFloat a, FixedFloat b, FixedFloat t)
         {

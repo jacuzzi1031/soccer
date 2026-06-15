@@ -392,7 +392,8 @@ public class PlayerSystem:ISimulationSystem
                 int eased = (x * x) / FP;         // bias = 2
                 int weight = FP - eased;          // 1 - ease
 
-                cpuPlayers[i].weightOnDutySteering = weight;
+                cpuPlayers[i].weightOnDutySteering =
+                    (FixedFloat)weight / FP;
             }
         }
     }

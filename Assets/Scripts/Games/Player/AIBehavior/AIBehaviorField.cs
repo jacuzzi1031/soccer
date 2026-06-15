@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AIBehaviorField : AIBehavior
 {
-private static FixedFloat PASS_PROBABILITY = (FixedFloat)0.05f;
+    private static FixedFloat PASS_PROBABILITY = (FixedFloat)0.05f;
     private static FixedFloat  SHOT_DISTANCE = (FixedFloat)150f;
     private static FixedFloat SHOT_PROBABILITY = (FixedFloat)0.3f;
     private static FixedFloat SPREAD_ASSIST_FACTOR = (FixedFloat)0.8f;
@@ -41,8 +41,7 @@ private static FixedFloat PASS_PROBABILITY = (FixedFloat)0.05f;
             //依次上抢
             moveDir += GetOnDutySteeringForce();
     
-            if (moveDir.sqrMagnitude < (FixedFloat)0.95f)
-            {
+
                 if (IsBallPossessedByOpponent())
                 {
                     //上抢同时维持阵型
@@ -55,7 +54,7 @@ private static FixedFloat PASS_PROBABILITY = (FixedFloat)0.05f;
                     
                     moveDir += GetDensityAroundBallSteeringForce();
                 }
-            }
+
         }
     
         moveDir = FixedVector2.ClampMagnitude(moveDir, FixedFloat.One);
@@ -115,7 +114,7 @@ private static FixedFloat PASS_PROBABILITY = (FixedFloat)0.05f;
         var playerPos = playerSim.Position;
         FixedVector2 direction = (target - playerPos).normalized;
     
-        FixedFloat weight = GetBiCircularWeight(playerPos, target, 100, 0, 150, 1);
+        FixedFloat weight = GetBiCircularWeight(playerPos, target, 30, (FixedFloat)0.2f, 150, 1);
         return direction * weight;
     }
     FixedVector2 GetCarrierReboundShotForce()
@@ -177,7 +176,7 @@ private static FixedFloat PASS_PROBABILITY = (FixedFloat)0.05f;
     {
         var playerPos = playerSim.Position;
         var carrierPos = ballSim.Position;
-        FixedFloat weight = GetBiCircularWeight(playerPos, carrierPos, 50, 1, 120, 0);
+        FixedFloat weight = GetBiCircularWeight(playerPos, carrierPos, 200, 1, 500, (FixedFloat)0.2f);
         FixedVector2 direction = (carrierPos - playerPos).normalized;
     
         return direction * weight;
@@ -196,7 +195,7 @@ private static FixedFloat PASS_PROBABILITY = (FixedFloat)0.05f;
         int count = playerSim.isHome?homeCount:awayCount;
         if (count == 0) return FixedVector2.Zero;
     
-        FixedFloat weight = (count - 1) * (FixedFloat)0.8f;
+        FixedFloat weight =(FixedFloat)( 1 - (1f / count));
         FixedVector2 direction = (playerSim.Position - ballSim.Position).normalized;
     
         return direction * weight;

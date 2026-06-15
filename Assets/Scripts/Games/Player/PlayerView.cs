@@ -303,7 +303,6 @@ public class PlayerView : MonoBehaviour {
         float speed = playerSim.Velocity.magnitude.ToFloat();
         animator.SetFloat(SpeedHash, speed);
         AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
-
         if (!info.IsName("movement"))
         {
             if (runParticles.isPlaying)

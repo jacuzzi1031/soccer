@@ -170,7 +170,7 @@ public class BallView : MonoBehaviour
         Rollback
     }
     private BallAnimState _currentState;
-    const float idleThreshold = 0.01f;
+    const float idleThreshold = 0.0001f;
     public void SetBallAnimationFromVelocity()
     {
         BallAnimState newState;
