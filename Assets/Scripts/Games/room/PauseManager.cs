@@ -22,11 +22,9 @@ public class PauseManager : MonoBehaviour {
     public void TogglePauseGame() {
         isGamePaused=!isGamePaused;
         if (isGamePaused) {
-            // Time.timeScale = 0f;
             OnGamePaused?.Invoke();
         }
         else {
-            // Time.timeScale = 1f;
             OnGameUnpaused?.Invoke();
         }
     }

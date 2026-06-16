@@ -3,18 +3,10 @@ using System.Collections.Generic;
 using Net.FixFloat;
 using UnityEngine;
 
-public class AIBehaviorField : AIBehavior
+namespace Games.Player.AIBehavior{
+    public class AIBehaviorField : AIBehavior
 {
-    private static FixedFloat PASS_PROBABILITY = (FixedFloat)0.05f;
-    private static FixedFloat  SHOT_DISTANCE = (FixedFloat)150f;
-    private static FixedFloat SHOT_PROBABILITY = (FixedFloat)0.3f;
-    private static FixedFloat SPREAD_ASSIST_FACTOR = (FixedFloat)0.8f;
-    private static FixedFloat TACKLE_DISTANCE = (FixedFloat)15f;
-    private static FixedFloat TACKLE_PROBABILITY = (FixedFloat)0.3f;
 
-    private static FixedFloat GoalYOffset     = (FixedFloat)10f;
-    private static FixedFloat GoalYRangeSlack = (FixedFloat)10f;
-    private static FixedFloat ReboundOffsetX  = (FixedFloat)100f;
     public override void PerformAIMovement()
     {
         moveDir = FixedVector2.Zero;
@@ -28,7 +20,9 @@ public class AIBehaviorField : AIBehavior
         {
             //队友禁区跑位
             if (TeammateIntoShootingScope()) {
-                moveDir += GetCarrierReboundShotForce();
+                if (playerSim.playerId > 3) {
+                    moveDir += GetCarrierReboundShotForce();
+                }
             }
             else {
                 //队友推进
@@ -38,25 +32,44 @@ public class AIBehaviorField : AIBehavior
         //对手持球或者无人持球
         else
         {
-            //依次上抢
-            moveDir += GetOnDutySteeringForce();
-    
-
-                if (IsBallPossessedByOpponent())
+            moveDir += GetOnDutySteeringForce(role);
+            if (IsBallPossessedByOpponent()) {
+                switch(playerSim.playerId)
                 {
-                    //上抢同时维持阵型
-                    moveDir += GetSpawnSteeringForce();
+                    case 1:
+                    case 2:
+                       
+                        moveDir += GetSpawnSteeringForce();
+                        break;
+                    case 3:
+                        moveDir += GetAttackHoldForce(role);
+                        break;
+                    case 4:
+                    case 5:
+                        moveDir += GetAttackHoldForce(role);
+                        break;
                 }
-                else if (ballSim.carrier == null)
-                {
-                    ////无人持球范围内全力上抢
-                    moveDir += GetBallProximitySteeringForce();
-                    
-                    moveDir += GetDensityAroundBallSteeringForce();
-                }
+            }
+            else if (ballSim.carrier == null)
+            {
+                // ////无人持球范围内全力上抢
+                // moveDir += GetBallProximitySteeringForce();
+                //
+                // moveDir += GetDensityAroundBallSteeringForce();
+            }
 
         }
         moveDir = FixedVector2.ClampMagnitude(moveDir, FixedFloat.One);
+    }
+    protected FixedVector2 GetAttackHoldForce()
+    {
+        FixedVector2 target =
+            GetAttackTarget(ReboundOffsetX);
+
+        FixedVector2 dir =
+            (target - playerSim.Position).normalized;
+
+        return dir;
     }
     
 
@@ -101,143 +114,86 @@ public class AIBehaviorField : AIBehavior
         }
     }
     
-    FixedVector2 GetOnDutySteeringForce()
-    {
-        return playerSim.weightOnDutySteering *
-               (ballSim.Position - playerSim.Position).normalized;
-    }
     
-    FixedVector2 GetCarrierSteeringForce()
-    {
-        FixedVector2 target = playerSim.GetCenterTargetPosition();
-        var playerPos = playerSim.Position;
-        FixedVector2 direction = (target - playerPos).normalized;
-        var v = target - playerPos;
+    
 
-        Debug.Log($"sqr={v.sqrMagnitude}");
-        Debug.Log($"mag={v.magnitude}");
-
-        var dir = v.normalized;
-
-        Debug.Log($"dir normalized={dir}");
-        Debug.Log($"dirMag={dir.magnitude}");
-        FixedFloat weight = GetBiCircularWeight(playerPos, target, 30, (FixedFloat)0.2f, 150, 1);
-        return direction * weight;
-    }
+    
+   
     FixedVector2 GetCarrierReboundShotForce()
     {
+        FixedVector2 target = GetAttackTarget(ReboundOffsetX);
 
-    
-        FixedVector2 carrierPos = ballSim.carrier.Position;
-        FixedVector2 playerPos  = playerSim.Position;
-    
-        FixedVector2 topPos    =playerSim.GetTopTargetPosition();
-        FixedVector2 bottomPos = playerSim.GetBottomTargetPosition();
-        FixedVector2 centerPos = playerSim.GetCenterTargetPosition();
-    
-        FixedVector2 target = centerPos;
-    
-        bool outOfGoalYRange =
-            carrierPos.y > topPos.y + GoalYRangeSlack ||
-            carrierPos.y < bottomPos.y - GoalYRangeSlack;
-    
-        if (!outOfGoalYRange)
-        {
-            FixedFloat distToTop    = FixedFloat.Abs(carrierPos.y - topPos.y);
-            FixedFloat distToBottom = FixedFloat.Abs(carrierPos.y - bottomPos.y);
-    
-            target.y = distToTop > distToBottom
-                ? topPos.y + GoalYOffset
-                : bottomPos.y - GoalYOffset;
-        }
-    
-        target.x = centerPos.x - FixedFloat.Sign(centerPos.x) * ReboundOffsetX;
-    
-        FixedVector2 direction = (target - playerPos).normalized;
-    
+        FixedVector2 direction =
+            (target - playerSim.Position).normalized;
+
         FixedFloat weight = GetBiCircularWeight(
-            playerPos,
+            playerSim.Position,
             target,
             1,
             0,
             20,
-            1
-        );
-    
+            1);
+
         return direction * weight;
     }
     
     
     FixedVector2 GetAssistFormationSteeringForce()
     {
-        FixedVector2 spawnDiff = ballSim.spawnPosition - playerSim.spawnPosition;
-        FixedVector2 destination = ballSim.Position - spawnDiff * SPREAD_ASSIST_FACTOR;
+        int playerId = playerSim.playerId;
+
+        // 后场球员维持阵型
+        if (playerId <= 2)
+        {
+            FixedVector2 spawnDiff = ballSim.spawnPosition - playerSim.spawnPosition;
+            FixedVector2 destination = ballSim.Position - spawnDiff * SPREAD_ASSIST_FACTOR;
     
-        FixedVector2 direction = (destination - playerSim.Position).normalized;
-        FixedFloat weight = GetBiCircularWeight(playerSim.Position, destination, 60, (FixedFloat)0.2f, (FixedFloat)120, (FixedFloat)1);
+            FixedVector2 direction = (destination - playerSim.Position).normalized;
+            FixedFloat weight = GetBiCircularWeight(playerSim.Position, destination, 30, (FixedFloat)0.2f, (FixedFloat)60, (FixedFloat)1);
     
-        return direction * weight;
+            return direction * weight;
+        }
+
+        FixedVector2 attackTarget;
+
+        // 中场跑弧顶
+        if (playerId == 3)
+        {
+            attackTarget = GetAttackTarget(ReboundOffsetX*2);
+        }
+        // 前锋直接冲更深的位置
+        else
+        {
+            attackTarget = GetAttackTarget(ReboundOffsetX );
+        }
+
+        FixedVector2 attackDir =
+            (attackTarget - playerSim.Position).normalized;
+
+        FixedFloat attackWeight = GetBiCircularWeight(
+            playerSim.Position,
+            attackTarget,
+            100,
+            0,
+            150,
+            1);
+        return attackDir * attackWeight;
     }
     //无人持球全力抢球
-    FixedVector2 GetBallProximitySteeringForce()
-    {
-        var playerPos = playerSim.Position;
-        var carrierPos = ballSim.Position;
-        FixedFloat weight = GetBiCircularWeight(playerPos, carrierPos, 200, 1, 500, (FixedFloat)0.2f);
-        FixedVector2 direction = (carrierPos - playerPos).normalized;
-    
-        return direction * weight;
-    }
+
     //防守维持阵型
-    FixedVector2 GetSpawnSteeringForce() {
-        var playerPos = playerSim.Position;
-        var spawnPos = playerSim.spawnPosition;
-        FixedFloat weight = GetBiCircularWeight(playerPos, spawnPos, 45, 0, 150, 1);
-        FixedVector2 direction = (spawnPos - playerPos).normalized;
-        return direction * weight;
-    }
-    //一个队不一拥而上
-    FixedVector2 GetDensityAroundBallSteeringForce()
-    {
-        int count = playerSim.isHome?homeCount:awayCount;
-        if (count == 0) return FixedVector2.Zero;
+
+
     
-        FixedFloat weight =(FixedFloat)( 1 - (1f / count));
-        FixedVector2 direction = (playerSim.Position - ballSim.Position).normalized;
+
     
-        return direction * weight;
-    }
+
     
-    bool IsBallCarriedByTeammate()
-    {
-        return ballSim.carrier != null && ballSim.carrier.isHome == playerSim.isHome;
-    }
+
     
-    bool IsBallPossessedByOpponent()
-    {
-        return ballSim.carrier != null && ballSim.carrier.isHome != playerSim.isHome;
-    }
-    
-    bool HasOpponentsNearby()
-    {
-        int count=playerSim.isHome?awayCount:homeCount;
-        return count>0;
-    }
-    
-    // UTILS: Bicircular Weight
-    FixedFloat GetBiCircularWeight(FixedVector2 pos, FixedVector2 target, FixedFloat r1, FixedFloat w1, FixedFloat r2, FixedFloat w2)
-    {
-        FixedFloat d = FixedVector2.Distance(pos, target);
-    
-        if (d < r1) return w1;
-        if (d > r2) return w2;
-    
-        FixedFloat t = (d - r1) / (r2 - r1);
-        return FixedMath.Lerp(w1, w2, t);
-    }
-    
-    private bool TeammateIntoShootingScope() {
-        FixedVector2 target = playerSim.GetCenterTargetPosition();
-        return FixedVector2.Distance(ballSim.carrier.Position, target) < SHOT_DISTANCE;
-    }
+
+
 }
+}
+
+

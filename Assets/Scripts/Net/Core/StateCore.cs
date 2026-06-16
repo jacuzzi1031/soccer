@@ -31,7 +31,7 @@ public enum Role {
     GOALIE,
     DEFENSE,
     MIDFIELD,
-    OFFENSE
+    ATTACKER
 }
 public enum BallState {CARRIED, FREEFORM, SHOT,RESET}
 public enum ControlScheme{ CPU,P1,P2};

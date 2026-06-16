@@ -12,13 +12,14 @@
 
         public override void OnKickoffStart(int seatIndex) {
             bool homeKickoff = _matchSystem.resetAndHomeKickoff();
-            bool isHome =
-                homeKickoff &&
-                seatIndex == 0;
-
+            bool isHome = homeKickoff && seatIndex == 0 
+                          //单机模式
+                          ||_matchSystem.matchPlayerCount==1;
             bool isAway =
                 !homeKickoff &&
                 seatIndex == 1;
+            
+            
 
             if (!isHome && !isAway)
                 return;

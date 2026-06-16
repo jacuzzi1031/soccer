@@ -17,11 +17,13 @@
         private RoomMatchType _currentMatchType;
         public int goalsHome;
         public int goalsAway;
-        public MatchSystem(SimEventBus eventBus,CommandBuffer commandBuffer,RoomMatchType matchType) {
+        public int matchPlayerCount;
+        public MatchSystem(SimEventBus eventBus,CommandBuffer commandBuffer,RoomMatchType matchType,int playerCount) {
             _eventBus=eventBus;
             _commandBuffer=commandBuffer;
             _currentMatchType=matchType;
             goalsHome=0; goalsAway=0;
+            matchPlayerCount = playerCount;
             framesLeft = GAME_DURATION_FRAMES;
             SwitchGameState(MatchState.RESET);
         }

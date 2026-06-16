@@ -4,7 +4,7 @@ using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerStateTackling : PlayerSimState{
-    private static readonly FixedFloat GROUND_FRICTION = (FixedFloat)120f;
+    private static readonly FixedFloat tackle_FRICTION = (FixedFloat)140f;
 
     private const int PRIOR_RECOVERY_FRAMES = 30;
 
@@ -17,7 +17,7 @@ public class PlayerStateTackling : PlayerSimState{
     }
 
     public override void _Update() {
-        MoveHorizontal(GROUND_FRICTION);
+        MoveHorizontal(tackle_FRICTION);
 
         _elapsedFrames++;
 

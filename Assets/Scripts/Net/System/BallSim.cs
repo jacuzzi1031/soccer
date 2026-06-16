@@ -10,7 +10,7 @@ public class BallSim:ISimulationSystem
     public FixedVector2 Velocity;
     public FixedFloat height=(FixedFloat) 0.0f;
     public FixedFloat heightVelocity=(FixedFloat)0.0f;
-    private static FixedFloat KICKOFF_PASS_DISTANCE = (FixedFloat)40f;
+    private static FixedFloat KICKOFF_PASS_DISTANCE = (FixedFloat)35f;
     private static FixedFloat DURATION_PASS_LOCK =(FixedFloat) 0.1f;
     public static FixedFloat GRAVITY = (FixedFloat)20f;
     public FixedVector2 spawnPosition;
@@ -98,7 +98,7 @@ public class BallSim:ISimulationSystem
         FixedFloat intensity = FixedMath.BetterSqrt(2 * distance * frictionGround);
         Velocity = intensity * direction;
         carrier = null;
-        SwitchState(BallState.FREEFORM, BallStateData.Build().SetLockDuration((FixedFloat)0.7f));
+        SwitchState(BallState.FREEFORM, BallStateData.Build().SetLockDuration((FixedFloat)0.3f));
     }
 
     public void Stop()

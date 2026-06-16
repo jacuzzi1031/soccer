@@ -24,7 +24,7 @@ public class PlayerStateCelebrating: PlayerSimState {
             Celebrate();
         }
 
-        MoveHorizontal( AIR_FRICTION);
+        MoveHorizontal( GROUND_FRICTION);
     }
 
 

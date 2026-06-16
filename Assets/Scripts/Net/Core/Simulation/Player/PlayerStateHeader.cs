@@ -3,7 +3,7 @@
     using UnityEngine;
 
     public class PlayerStateHeader:PlayerSimState {
-        private const int DURATION_FRAMES = 12;
+        private const int DURATION_FRAMES = 16;
 
         private int _elapsedFrames;
 

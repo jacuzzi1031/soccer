@@ -42,7 +42,7 @@ public class PlayerStatePassing: PlayerSimState
                 case 0:
                     passDestination =
                         passTargetPosition +
-                        passTargetVelocity * (FixedFloat)0.2f;
+                        passTargetVelocity * (FixedFloat)0.6f;
 
                     overground = true;
 
@@ -53,7 +53,7 @@ public class PlayerStatePassing: PlayerSimState
                 case 1:
                     passDestination =
                         passTargetPosition +
-                        passTargetVelocity * (FixedFloat)0.2f;
+                        passTargetVelocity * (FixedFloat)0.6f;
 
                     overground = false;
 

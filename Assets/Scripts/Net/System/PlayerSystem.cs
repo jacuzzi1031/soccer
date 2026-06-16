@@ -23,7 +23,7 @@ public class PlayerSystem:ISimulationSystem
     public BallSim _ballSim;
     private int matchPlayerCount;
     private const int PassSwitchDelayFrames = 14;
-    private static readonly FixedFloat Cos45Deg = (FixedFloat)0.70710678f;
+    private static readonly FixedFloat Cos45Deg = (FixedFloat)0.258819045f;
     private static readonly FixedFloat minMoveDir = (FixedFloat)0.001;
     //for passing delay to swap / or by another scheduler
     private int _switchControlFrame = -1;
@@ -218,13 +218,13 @@ public class PlayerSystem:ISimulationSystem
         
         switch (inputType) {
             case 0:
-                passTarget = GetShortPassTarget(currentPlayer, team);
+                passTarget = GetShortPassTarget(currentPlayer, team,Direction);
                 break;
             case 1:
-                passTarget  = GetLongPassTarget(currentPlayer, team);
+                passTarget  = GetLongPassTarget(currentPlayer, team,Direction);
                 break;
             case 2:
-                passTarget = GetShortPassTarget(currentPlayer, team);
+                passTarget = GetThroughPassTarget(currentPlayer, team,Direction);
                 break;
         } 
         currentPlayer.currentState.OnPass(Direction,inputType,passTarget);
@@ -418,77 +418,141 @@ public class PlayerSystem:ISimulationSystem
         }
 
     }
-    public PlayerSim GetShortPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team)
-    {
-        return GetShortPassTarget(self, team, FixedVector2.Zero);
-    }
-    public PlayerSim GetShortPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, FixedVector2 moveDir)
-    { 
-        var list = GetEligibleTargets(self, team, moveDir);
-        return list.Count > 0 ? list[0] : null;
-    }
-
-    public static PlayerSim GetLongPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team) {
-        return GetLongPassTarget(self, team, FixedVector2.Zero);
-    }
-
-    public static PlayerSim GetLongPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, FixedVector2 moveDir)
-    {
-        var list = GetEligibleTargets(self, team, moveDir);
-
-        if (list.Count >= 2)
-            return list[1];
-        else if (list.Count == 1)
-            return list[0];
-        else
-            return null;
-    }
-    static List<PlayerSim> GetEligibleTargets(
+    public PlayerSim GetShortPassTarget(
         PlayerSim self,
         IReadOnlyList<PlayerSim> team,
         FixedVector2 moveDir)
     {
         if (moveDir.sqrMagnitude <= minMoveDir)
-            moveDir = self.HeadingRight ? FixedVector2.Right : FixedVector2.Left;
+            moveDir = self.HeadingRight
+                ? FixedVector2.Right
+                : FixedVector2.Left;
 
-        List<PlayerSim> list = new List<PlayerSim>();
+        moveDir = moveDir.normalized;
 
-        PlayerSim closest = null;
-        FixedFloat closestDist = FixedFloat.MaxValue;
+        PlayerSim best = null;
+        FixedFloat bestScore = FixedFloat.MinValue;
 
         for (int i = 0; i < team.Count; i++)
         {
             var p = team[i];
-            if (p == self) continue;
+            if (p == self)
+                continue;
 
-            FixedVector2 toTarget = p.Position - self.Position;
-            
+            var toTarget = p.Position - self.Position;
 
-            FixedFloat dist = (p.Position - self.Position).sqrMagnitude;
+            if (!IsWithinAngle(toTarget, moveDir))
+                continue;
 
-            if (dist < closestDist)
+            FixedFloat distance = toTarget.magnitude;
+
+            FixedFloat forward =
+                FixedVector2.Dot(toTarget, moveDir);
+
+            FixedFloat score =
+                forward * 2 - distance;
+
+            if (score > bestScore)
             {
-                closestDist = dist;
-                closest = p;
+                bestScore = score;
+                best = p;
             }
-
-            if (!IsWithinAngle(toTarget, moveDir)) continue;
-
-            list.Add(p);
         }
 
-        if (list.Count == 0 && closest != null)
-            list.Add(closest);
-        
-        list.Sort((a, b) =>
-        {
-            FixedFloat da = (a.Position - self.Position).sqrMagnitude;
-            FixedFloat db = (b.Position - self.Position).sqrMagnitude;
-            return da.CompareTo(db);
-        });
-
-        return list;
+        return best;
     }
+    
+    public static PlayerSim GetLongPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, FixedVector2 moveDir)
+    {
+        const int MaxDistance = 350;
+        const int MaxXDiff = 80;
+
+        if (moveDir.sqrMagnitude <= minMoveDir)
+            moveDir = self.HeadingRight
+                ? FixedVector2.Right
+                : FixedVector2.Left;
+
+        PlayerSim best = null;
+        FixedFloat bestYDiff = FixedFloat.MinValue;
+
+        for (int i = 0; i < team.Count; i++)
+        {
+            var p = team[i];
+            if (p == self)
+                continue;
+
+            FixedVector2 toTarget = p.Position - self.Position;
+
+            if (!IsWithinAngle(toTarget, moveDir))
+                continue;
+
+            FixedFloat dist = toTarget.magnitude;
+            if (dist > MaxDistance)
+                continue;
+
+            FixedFloat xDiff =
+                FixedMath.Abs(p.Position.x - self.Position.x);
+
+            if (xDiff > MaxXDiff)
+                continue;
+
+            FixedFloat yDiff =
+                FixedMath.Abs(p.Position.y - self.Position.y);
+
+            if (yDiff > bestYDiff)
+            {
+                bestYDiff = yDiff;
+                best = p;
+            }
+        }
+
+        return best;
+    }
+    static PlayerSim GetThroughPassTarget(
+        PlayerSim self,
+        IReadOnlyList<PlayerSim> team,
+        FixedVector2 moveDir)
+    {
+        const int MaxDistance = 350;
+
+        if (moveDir.sqrMagnitude <= minMoveDir)
+            moveDir = self.HeadingRight
+                ? FixedVector2.Right
+                : FixedVector2.Left;
+
+        moveDir = moveDir.normalized;
+
+        PlayerSim best = null;
+        FixedFloat bestForward = FixedFloat.MinValue;
+
+        for (int i = 0; i < team.Count; i++)
+        {
+            var p = team[i];
+            if (p == self)
+                continue;
+
+            FixedVector2 toTarget = p.Position - self.Position;
+
+            if (!IsWithinAngle(toTarget, moveDir))
+                continue;
+
+            FixedFloat dist = toTarget.magnitude;
+            if (dist > MaxDistance)
+                continue;
+
+            FixedFloat forward =
+                FixedVector2.Dot(toTarget, moveDir);
+
+            if (forward > bestForward)
+            {
+                bestForward = forward;
+                best = p;
+            }
+        }
+
+        return best;
+    }
+    
     static bool IsWithinAngle(FixedVector2 toTarget, FixedVector2 moveDir)
     {
         FixedFloat dot = FixedVector2.Dot(toTarget.normalized, moveDir.normalized);

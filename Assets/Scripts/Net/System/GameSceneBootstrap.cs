@@ -94,16 +94,16 @@ public class GameSceneBootstrap : MonoBehaviour{
         var countryHome = GameInterface.Interface.GameManager.playerSetup[0];
         var countryAway = GameInterface.Interface.GameManager.playerSetup[1];
 
-
+        int matchPlayerCount = GameInterface.Interface.GameFrameSyncManager.matchPlayerCount;
         var MatchSystem =
-            new MatchSystem(EventBus, commandBuffer, GameInterface.Interface.GameManager.currentMatchType);
+            new MatchSystem(EventBus, commandBuffer, GameInterface.Interface.GameManager.currentMatchType,matchPlayerCount);
         MatchController = new MatchController(MatchSystem, EventBus, countryHome, countryAway);
 
         var BallSim = new BallSim((FixedVector2)ballView.spawnPosition, EventBus, commandBuffer);
         ballView.InjectSim(BallSim);
 
 
-        int matchPlayerCount = GameInterface.Interface.GameFrameSyncManager.matchPlayerCount;
+
         var PlayerSystem = new PlayerSystem(EventBus, commandBuffer, matchPlayerCount);
 
         var simConfig = new SimulationConfig();

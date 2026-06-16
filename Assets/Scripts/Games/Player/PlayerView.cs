@@ -22,7 +22,6 @@ public class PlayerView : MonoBehaviour {
     [HideInInspector] public Vector2 KickoffPosition;
     [HideInInspector] public Goal ownGoal;
     [HideInInspector] private AIBehaviorFactory aiBehaviorFactory=new AIBehaviorFactory();
-    private AIBehavior currentAIBehavior;
     [HideInInspector]public Goal targetGoal;
     [HideInInspector]public BallView ballView;
     [HideInInspector] public SkinColor skinColor;

@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerStateBicycleKick : PlayerSimState
 {
     private int _elapsedFrames;
-    private int _durationFrames=12;
+    private int _durationFrames=16;
 
     public override void OnEnter() {
         _elapsedFrames = 0;

@@ -16,6 +16,7 @@ public class PlayerSimState
     public static FixedFloat BONUS_POWER =(FixedFloat)1.4f;
     protected FixedVector2 Direction;
     protected static FixedFloat AIR_FRICTION = (FixedFloat)25f;
+    protected static FixedFloat GROUND_FRICTION = (FixedFloat)75f;
     public FixedFloat diveDirY;
     private static readonly FixedFloat STOP_THRESHOLD = (FixedFloat)0.0001f;
     public int HashRandom(int seed)

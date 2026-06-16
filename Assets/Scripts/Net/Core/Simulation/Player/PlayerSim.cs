@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Games.Player.AIBehavior;
 using Net.FixFloat;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -25,7 +26,7 @@ public class PlayerSim {
     public string country;
     public FixedFloat Power;
     public FixedFloat Speed;
-    public Role role = Role.MIDFIELD;
+    public Role role;
     public FixedFloat weightOnDutySteering;
     public bool initialFacingRight;
     public SimEventBus _eventBus;

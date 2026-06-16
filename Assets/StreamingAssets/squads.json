@@ -4,7 +4,7 @@
 		"name": "H. LLORIS",
 		"skin": 0,
 		"role": 0,
-		"speed": 75,
+		"speed": 70,
 		"power": 100,
 	}, {
 		"name": "J. KOUNDE",
@@ -43,7 +43,7 @@
 		"name": "E. MARTINEZ",
 		"skin": 0,
 		"role": 0,
-		"speed": 85,
+		"speed": 70,
 		"power": 100,
 	}, {
 		"name": "N. MOLINA",
@@ -82,7 +82,7 @@
 		"name": "A. BECKER",
 		"skin": 0,
 		"role": 0,
-		"speed": 80,
+		"speed": 70,
 		"power": 100,
 	}, {
 		"name": "T. SILVA",
@@ -121,7 +121,7 @@
 		"name": "J. PICKFORD",
 		"skin": 0,
 		"role": 0,
-		"speed": 80,
+		"speed": 70,
 		"power": 100,
 	}, {
 		"name": "H. MAGUIRE",
@@ -160,7 +160,7 @@
 		"name": "M. NEUER",
 		"skin": 0,
 		"role": 0,
-		"speed": 75,
+		"speed": 70,
 		"power": 100,
 	}, {
 		"name": "A. RUDIGER",
@@ -199,7 +199,7 @@
 		"name": "G. DONNARUMMA",
 		"skin": 0,
 		"role": 0,
-		"speed": 75,
+		"speed": 70,
 		"power": 100,
 	}, {
 		"name": "F. DIMARCO",
@@ -238,7 +238,7 @@
 		"name": "U. SIMON",
 		"skin": 0,
 		"role": 0,
-		"speed": 80,
+		"speed": 70,
 		"power": 100,
 	}, {
 		"name": "J. ALBA",
@@ -316,7 +316,7 @@
 		"name": "D.S. CLAIR",
 		"skin": 1,
 		"role": 0,
-		"speed": 75,
+		"speed": 70,
 		"power": 100,
 	}, {
 		"name": "A. JOHNSTON",
