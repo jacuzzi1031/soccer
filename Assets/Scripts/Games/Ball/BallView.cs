@@ -217,7 +217,7 @@ public class BallView : MonoBehaviour
         float height = Mathf.Lerp(prevHeight, targetHeight, t);
 
         transform.position = pos;
-        ballSprite.localPosition =  height * 25f*Vector3.up;
+        ballSprite.localPosition =  height * 20f*Vector3.up;
     }
 
     private void ConsumeStateChange() {

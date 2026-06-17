@@ -15,7 +15,7 @@ public class BoundarySystem : ISimulationSystem{
     public List<PlayerSim> goalies = new List<PlayerSim>();
     public BallSim ball;
     public CommandBuffer commandBuffer;
-
+    public SimEventBus _eventBus;
     public static readonly FixedFloat BOUNCINESS =
         (FixedFloat)0.8f;
 
@@ -23,6 +23,10 @@ public class BoundarySystem : ISimulationSystem{
 
     public FixedVector2 playerInnerOffset =
         new FixedVector2(0, (FixedFloat)8f);
+
+    public BoundarySystem(SimEventBus eventBus) {
+        _eventBus = eventBus;
+    }
 
     public void Tick(SimulationContext context) {
         foreach (var player in team) {
@@ -72,11 +76,11 @@ public class BoundarySystem : ISimulationSystem{
         }
 
         foreach (var goalKeeper in goalies) {
-            ResolveBallGoalieCollision(goalKeeper.Position, ball.Position, ball.Velocity);
+            ResolveBallGoalieCollision(goalKeeper.playerId,goalKeeper.Position, ball.Position, ball.Velocity);
         }
     }
 
-    void ResolveBallGoalieCollision(FixedVector2 center, FixedVector2 ballPos, FixedVector2 ballVelocity) {
+    void ResolveBallGoalieCollision(int goalKeeperId,FixedVector2 center, FixedVector2 ballPos, FixedVector2 ballVelocity) {
         FixedFloat halfHeight = playerVerticalOffset;
         FixedFloat radius = playerRadius;
 
@@ -93,7 +97,7 @@ public class BoundarySystem : ISimulationSystem{
             FixedVector2 normal = (ballPos - closest).normalized;
 
             ballVelocity = FixedVector2.Reflect(ballVelocity, normal);
-
+            _eventBus.Publish( new PlayStyleShowSignal( goalKeeperId, PlayerState.DIVING) );
             // 推出重叠
             FixedFloat penetration = combinedRadius - dist;
             ballPos += normal * penetration;

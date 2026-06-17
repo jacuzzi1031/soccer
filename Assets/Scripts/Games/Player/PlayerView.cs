@@ -257,7 +257,6 @@ public class PlayerView : MonoBehaviour {
                 break;
             case PlayerState.PASSING:
                 animator.Play("kick");
-                GameInterface.Interface.EventSystem.Publish(new PlayStyleShowEvent(playerId,PlayerState.PASSING));
                 break;
             case PlayerState.PREPPING_SHOT:
                 animator.Play("pre_kick");

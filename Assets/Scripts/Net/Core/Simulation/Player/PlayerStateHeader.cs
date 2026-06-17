@@ -34,7 +34,7 @@
 
             FixedVector2 direction =
                 (destination - playerSim.Position).normalized;
-
+            _eventBus.Publish( new PlayStyleShowSignal( playerSim.playerId, PlayerState.HEADER) );
             _ballSim.shoot(
                 direction * playerSim.Power * BONUS_POWER);
 

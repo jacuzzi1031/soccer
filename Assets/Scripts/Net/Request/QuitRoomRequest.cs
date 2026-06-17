@@ -43,7 +43,16 @@ public class QuitRoomRequest : BaseRequest
 
     public void SendQuitRoomRequest()
     {
-        string roomCode = GameInterface.Interface.RoomManager.CurrentRoomInfo.roomCode;
+        var roomCode = GameInterface.Interface?
+            .RoomManager?
+            .CurrentRoomInfo?
+            .roomCode;
+
+        if (string.IsNullOrEmpty(roomCode))
+        {
+            Debug.LogWarning("CurrentRoomInfo is null, skip quit room request.");
+            return;
+        }
 
         roomCode = CharsetUtil.DefaultToUTF8(roomCode);
 

@@ -23,13 +23,15 @@ public class PlayerSystem:ISimulationSystem
     public BallSim _ballSim;
     private int matchPlayerCount;
     private const int PassSwitchDelayFrames = 14;
-    private static readonly FixedFloat Cos45Deg = (FixedFloat)0.258819045f;
+    private static readonly FixedFloat Cos75Deg = (FixedFloat)0.258819045f;
     private static readonly FixedFloat minMoveDir = (FixedFloat)0.001;
     //for passing delay to swap / or by another scheduler
     private int _switchControlFrame = -1;
     private PlayerSim _fromPlayer;
     private PlayerSim _toPlayer;
     private ControlScheme _scheme;
+    private static FixedFloat MaxPassDistance = 350;
+    private static FixedFloat MaxXDiff = 80;
 	public PlayerSystem(SimEventBus eventBus,CommandBuffer commandBuffer,int MatchPlayerCount) {
         _eventBus = eventBus;
         _commandBuffer=commandBuffer;
@@ -64,6 +66,9 @@ public class PlayerSystem:ISimulationSystem
                     break;
                 case SimulationCommandType.ResetAndAwayKickoff:
                     HandleResetTeams(false);
+                    break;
+                case SimulationCommandType.KickoffEnd:
+                    OnKickoffEnd();
                     break;
                 case SimulationCommandType.Swap:
                     HandleSwap(command.SeatIndex,context.BallCarrierId,context.BallPosition);
@@ -265,6 +270,11 @@ public class PlayerSystem:ISimulationSystem
                 player.SwitchState(PlayerState.MOVING);
             }
         }
+        // 由于已经设置了currentControlplayer=当前player了，不能通过SwitchControlTo 设置ControlScheme
+        currentHomePlayer.controlScheme = ControlScheme.P1;
+        if (matchPlayerCount == 2) {
+            currentAwayPlayer.controlScheme = ControlScheme.P2;
+        }
     }
 
     private void HandleResetTeams(bool isHomeKickoff) {
@@ -321,16 +331,17 @@ public class PlayerSystem:ISimulationSystem
         for (int i = 0; i < teamAway.Count; i++) {
             teamAway[i].controlScheme = ControlScheme.CPU;
         }
-
+        
         SwitchControlTo(currentHomePlayer,teamHome[^1], ControlScheme.P1);
-        
-        
         if (matchPlayerCount==2) {
             SwitchControlTo(currentAwayPlayer,teamAway[^1], ControlScheme.P2);
         }
     }
-
     private void SwitchControlTo(PlayerSim oldPlayer,PlayerSim newPlayer, ControlScheme controlScheme) {
+        if (oldPlayer!=null&&oldPlayer.playerId == newPlayer.playerId)
+        {
+            return;
+        }
         int oldId = -1;
         if (oldId == newPlayer.playerId) {
             return;
@@ -400,10 +411,7 @@ public class PlayerSystem:ISimulationSystem
     public void Stop()
     {
     }
-    public void OnPlayerBecomesCarrier(int playerPlayerId,bool isHome,bool ballFirstPlayerCarryBall) {
-        if (!ballFirstPlayerCarryBall) {
-            OnKickoffEnd();
-        }
+    public void OnPlayerBecomesCarrier(int playerPlayerId,bool isHome) {
         PlayerSim currentPlayer=isHome?currentHomePlayer:currentAwayPlayer;
         if (currentPlayer==null||currentPlayer.playerId == playerPlayerId) {
             return;
@@ -416,7 +424,6 @@ public class PlayerSystem:ISimulationSystem
                 break;
             }
         }
-
     }
     public PlayerSim GetShortPassTarget(
         PlayerSim self,
@@ -464,9 +471,6 @@ public class PlayerSystem:ISimulationSystem
     
     public static PlayerSim GetLongPassTarget(PlayerSim self, IReadOnlyList<PlayerSim> team, FixedVector2 moveDir)
     {
-        const int MaxDistance = 350;
-        const int MaxXDiff = 80;
-
         if (moveDir.sqrMagnitude <= minMoveDir)
             moveDir = self.HeadingRight
                 ? FixedVector2.Right
@@ -487,13 +491,17 @@ public class PlayerSystem:ISimulationSystem
                 continue;
 
             FixedFloat dist = toTarget.magnitude;
-            if (dist > MaxDistance)
+            if (dist > MaxPassDistance)
                 continue;
+            
+            FixedFloat xOffset = p.Position.x - self.Position.x;
+            
+            bool isInFront =
+                (moveDir.x > FixedFloat.Zero && xOffset > FixedFloat.Zero) ||
+                (moveDir.x < FixedFloat.Zero && xOffset < FixedFloat.Zero);
 
-            FixedFloat xDiff =
-                FixedMath.Abs(p.Position.x - self.Position.x);
-
-            if (xDiff > MaxXDiff)
+            FixedFloat xDiff = FixedMath.Abs(xOffset);
+            if (!isInFront && xDiff > MaxXDiff)
                 continue;
 
             FixedFloat yDiff =
@@ -513,7 +521,7 @@ public class PlayerSystem:ISimulationSystem
         IReadOnlyList<PlayerSim> team,
         FixedVector2 moveDir)
     {
-        const int MaxDistance = 350;
+        
 
         if (moveDir.sqrMagnitude <= minMoveDir)
             moveDir = self.HeadingRight
@@ -537,7 +545,7 @@ public class PlayerSystem:ISimulationSystem
                 continue;
 
             FixedFloat dist = toTarget.magnitude;
-            if (dist > MaxDistance)
+            if (dist > MaxPassDistance)
                 continue;
 
             FixedFloat forward =
@@ -556,6 +564,6 @@ public class PlayerSystem:ISimulationSystem
     static bool IsWithinAngle(FixedVector2 toTarget, FixedVector2 moveDir)
     {
         FixedFloat dot = FixedVector2.Dot(toTarget.normalized, moveDir.normalized);
-        return dot >  Cos45Deg; 
+        return dot >  Cos75Deg; 
     }
 }

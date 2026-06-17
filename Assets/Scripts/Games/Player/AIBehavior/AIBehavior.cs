@@ -161,12 +161,23 @@ namespace Games.Player.AIBehavior{
         {
             return ballSim.carrier != null && ballSim.carrier.isHome != playerSim.isHome;
         }
-        protected FixedVector2 GetSpawnSteeringForce() {
+        protected FixedVector2 GetSpawnSteeringForce(Role role) {
+            FixedFloat factor=FixedFloat.One;
+            switch (role) {
+                case Role.ATTACKER:
+                    factor = (FixedFloat)1.5f;
+                    break;
+                case Role.MIDFIELD:
+                    break;
+                case Role.DEFENSE:
+                    factor = (FixedFloat)0.8f;
+                    break;
+            }
             var playerPos = playerSim.Position;
             var spawnPos = playerSim.spawnPosition;
-            FixedFloat weight = GetBiCircularWeight(playerPos, spawnPos, 20, (FixedFloat)0.3f, 50, 1);
+            FixedFloat weight = GetBiCircularWeight(playerPos, spawnPos, 20, (FixedFloat)0.2f, 50, 1);
             FixedVector2 direction = (spawnPos - playerPos).normalized;
-            return direction * weight;
+            return factor*direction * weight;
         }
         protected FixedVector2 GetAttackHoldForce(Role role) {
             
@@ -198,11 +209,12 @@ namespace Games.Player.AIBehavior{
         {
             int count = playerSim.isHome?homeCount:awayCount;
             if (count == 0) return FixedVector2.Zero;
-    
+            
             FixedFloat weight =(FixedFloat)( 1 - (1f / count));
             FixedVector2 direction = (playerSim.Position - ballSim.Position).normalized;
-    
-            return direction * weight;
+            
+            return (FixedFloat)1.5f*weight*direction;
+            
         }
         protected bool HasOpponentsNearby()
         {

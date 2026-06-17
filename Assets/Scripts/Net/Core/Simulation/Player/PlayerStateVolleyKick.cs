@@ -26,7 +26,11 @@ public class PlayerStateVolleyKick : PlayerSimState{
 
         FixedVector2 direction =
             (destination - playerSim.Position).normalized;
-
+        _eventBus.Publish(
+            new PlayStyleShowSignal(
+                playerSim.playerId,
+                PlayerState.VOLLEY_KICK)
+        );
         _ballSim.shoot(
             direction * playerSim.Power * BONUS_POWER);
 

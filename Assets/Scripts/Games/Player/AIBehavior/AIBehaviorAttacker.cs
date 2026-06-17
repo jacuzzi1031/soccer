@@ -27,8 +27,6 @@ namespace Games.Player.AIBehavior{
             {
                 //依次上抢
                 moveDir += GetOnDutySteeringForce(role);
-                //一个队不一拥而上
-                moveDir += GetDensityAroundBallSteeringForce();
                 if (IsBallPossessedByOpponent()) {
                     //留在前场
                     moveDir += GetAttackHoldForce(role);
@@ -39,6 +37,9 @@ namespace Games.Player.AIBehavior{
                     moveDir += GetBallProximitySteeringForce();
 
                 }
+                //一个队不一拥而上
+                moveDir += GetDensityAroundBallSteeringForce();
+                
             }
             moveDir = FixedVector2.ClampMagnitude(moveDir, FixedFloat.One);
         }

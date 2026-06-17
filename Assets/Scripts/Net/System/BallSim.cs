@@ -12,7 +12,7 @@ public class BallSim:ISimulationSystem
     public FixedFloat heightVelocity=(FixedFloat)0.0f;
     private static FixedFloat KICKOFF_PASS_DISTANCE = (FixedFloat)35f;
     private static FixedFloat DURATION_PASS_LOCK =(FixedFloat) 0.1f;
-    public static FixedFloat GRAVITY = (FixedFloat)20f;
+    public static FixedFloat GRAVITY = (FixedFloat)40f;
     public FixedVector2 spawnPosition;
     public BallSimState currentState;
     public BallSimStateFactory stateFactory=new BallSimStateFactory();
@@ -52,6 +52,9 @@ public class BallSim:ISimulationSystem
             {
                 case SimulationCommandType.KickoffStart:
                     kickoffPass(Position + FixedVector2.Down * KICKOFF_PASS_DISTANCE);
+                    break;
+                case SimulationCommandType.KickoffEnd:
+                    firstPlayerCarryBall = true;
                     break;
                 case SimulationCommandType.ResetAndHomeKickoff:
                 case SimulationCommandType.ResetAndAwayKickoff:

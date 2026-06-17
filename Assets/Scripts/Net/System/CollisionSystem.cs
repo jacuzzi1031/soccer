@@ -16,8 +16,8 @@ public class CollisionSystem : ISimulationSystem{
     public FixedFloat volleycaptureRadiusSqr;
 
     //实际  ballView height*2.5f
-    private static readonly FixedFloat MAX_CAPTURE_HEIGHT = (FixedFloat)0.6f;
-    private static readonly FixedFloat BALL_CONTROL_HEIGHT_MAX = (FixedFloat)0.5f;
+    private static readonly FixedFloat MAX_CAPTURE_HEIGHT = (FixedFloat)0.75f;
+    private static readonly FixedFloat BALL_CONTROL_HEIGHT_MAX = (FixedFloat)0.55f;
 
     public FixedVector2 playerForBallOffset = new FixedVector2( FixedFloat.Zero, (FixedFloat)4f);
 
@@ -33,6 +33,13 @@ public class CollisionSystem : ISimulationSystem{
 
     public FixedFloat tacklingRadiusSqr;
     public FixedFloat ballRadiusSqr;
+    public SimEventBus _eventBus;
+    public CommandBuffer _commandBuffer;
+
+    public CollisionSystem(SimEventBus eventBus,CommandBuffer commandBuffer) {
+        _eventBus = eventBus;
+        _commandBuffer = commandBuffer;
+    }
 
     public void Tick(SimulationContext context) {
         DetectBallForPlayer(context);
@@ -49,6 +56,7 @@ public class CollisionSystem : ISimulationSystem{
                 if (!DistanceQualify(attacker, target))
                     continue;
                 if (target.currentState.CouldHurt()) {
+                    _eventBus.Publish( new PlayStyleShowSignal( attacker.playerId, PlayerState.TACKLING) );
                     target.SwitchState(PlayerState.HURT,
                         PlayerStateData.Build().SetMoveDir(attacker.Velocity.normalized));
                 }
@@ -98,12 +106,13 @@ public class CollisionSystem : ISimulationSystem{
                 ball.carrier = player;
                 ball.SwitchState(BallState.CARRIED);
 
-                context._simulationModel.PlayerSystem.OnPlayerBecomesCarrier(player.playerId, player.isHome,
-                    ball.firstPlayerCarryBall);
+                context._simulationModel.PlayerSystem.OnPlayerBecomesCarrier(player.playerId, player.isHome);
                 if (!ball.firstPlayerCarryBall) {
-                    ball.firstPlayerCarryBall = true;
+                    _commandBuffer.Enqueue(new SimulationCommand
+                    {
+                        Type = SimulationCommandType.KickoffEnd
+                    });
                 }
-
                 break;
             }
         }
@@ -120,8 +129,8 @@ public class CollisionSystem : ISimulationSystem{
         playerRadius = simConfig.PlayerRadius;
         ballCaptureRadius = simConfig.ballCaptureRadius;
         captureRadiusSqr = (playerRadius + ballCaptureRadius) * (playerRadius + ballCaptureRadius);
-        volleycaptureRadiusSqr = (simConfig.playervolleyRadius + ballCaptureRadius) *
-                                 (simConfig.playervolleyRadius + ballCaptureRadius);
+        volleycaptureRadiusSqr = (simConfig.playervolleyRadius + ballCaptureRadius - (FixedFloat)2f) *
+                                 (simConfig.playervolleyRadius + ballCaptureRadius - (FixedFloat)2f);
         tacklingRadiusSqr = (playerRadius + (FixedFloat)4f) * (playerRadius +(FixedFloat) 4f);
         ballRadiusSqr = (ballRadius + (FixedFloat)4f) * (ballRadius + (FixedFloat)4f);
         lines = lineSegments;

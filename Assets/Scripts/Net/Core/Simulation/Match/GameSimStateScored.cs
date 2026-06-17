@@ -15,7 +15,7 @@
             {
                 _matchSystem.goalsAway++;
             }
-
+            _matchSystem.SetLastScoredIsHome(stateData.scoringIsHome);
             _elapsedFrames = 0;
             _eventBus.Publish(new OnScoreChangedSignal());
         }

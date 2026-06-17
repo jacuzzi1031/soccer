@@ -22,6 +22,7 @@ public class PlayerStateBicycleKick : PlayerSimState
     public override bool VolleyShot() {
         FixedVector2 destination = playerSim.GetFarTargetPosition();
         FixedVector2 direction = (destination - playerSim.Position).normalized;
+        _eventBus.Publish( new PlayStyleShowSignal( playerSim.playerId, PlayerState.BICYCLE_KICK) );
         _ballSim.shoot( playerSim.Power * BONUS_POWER*direction);
         return true;
     }

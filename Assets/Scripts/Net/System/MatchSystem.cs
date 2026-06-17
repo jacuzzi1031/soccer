@@ -18,6 +18,7 @@
         public int goalsHome;
         public int goalsAway;
         public int matchPlayerCount;
+        public bool lastScoredIsHome = false;
         public MatchSystem(SimEventBus eventBus,CommandBuffer commandBuffer,RoomMatchType matchType,int playerCount) {
             _eventBus=eventBus;
             _commandBuffer=commandBuffer;
@@ -32,14 +33,11 @@
             if (_currentMatchType != RoomMatchType.UltimateTeam) {
                 return true;
             }
-            //比赛初始
-            if (_currentMatchType == RoomMatchType.UltimateTeam && goalsHome == 0 && goalsAway == 0) {
+            //UltimateTeam模式
+            if (!lastScoredIsHome) {
                 return true;
             }
-            //which score
-            
             return false;
-            
         }
         public void Tick(SimulationContext context)
         {
@@ -84,5 +82,8 @@
 
         public bool getWinnerIsHome() {
             return goalsHome > goalsAway;
+        }
+        public void SetLastScoredIsHome(bool ishome) {
+            lastScoredIsHome = ishome;
         }
     }

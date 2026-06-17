@@ -7,7 +7,9 @@
         [SerializeField] private Sprite volleyKickSprite; 
         [SerializeField] private Sprite bicycleKickSprite; 
         [SerializeField] private Sprite farReachSprite; 
+        [SerializeField] private Sprite shortpassSrpite; 
         [SerializeField] private Sprite longpassSrpite; 
+        [SerializeField] private Sprite incisivepassSrpite; 
         [SerializeField] private Sprite powershotSprite; 
         [SerializeField] private Sprite headerSprite; 
         [SerializeField] private Sprite slidetackleSprite; 
@@ -23,7 +25,9 @@
                 case PlayerState.HEADER: return headerSprite;
                 case PlayerState.BICYCLE_KICK: return bicycleKickSprite;
                 case PlayerState.DIVING: return farReachSprite;
-                case PlayerState.PASSING: return longpassSrpite;
+                case PlayerState.SHORTPASS: return shortpassSrpite;
+                case PlayerState.LONGPASS: return longpassSrpite;
+                case PlayerState.INCISIVEPASS: return incisivepassSrpite;
                 case PlayerState.PREPPING_SHOT:
                 case PlayerState.SHOOTING: return powershotSprite;
                 case PlayerState.TACKLING: return slidetackleSprite;

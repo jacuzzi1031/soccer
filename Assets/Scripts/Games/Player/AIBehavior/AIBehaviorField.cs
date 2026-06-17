@@ -39,7 +39,7 @@ namespace Games.Player.AIBehavior{
                     case 1:
                     case 2:
                        
-                        moveDir += GetSpawnSteeringForce();
+                        moveDir += GetSpawnSteeringForce(role);
                         break;
                     case 3:
                         moveDir += GetAttackHoldForce(role);

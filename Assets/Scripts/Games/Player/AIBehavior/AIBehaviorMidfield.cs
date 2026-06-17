@@ -27,17 +27,17 @@ namespace Games.Player.AIBehavior{
             {
                 //依次上抢
                 moveDir += GetOnDutySteeringForce(role);
-                //一个队不一拥而上
-                moveDir += GetDensityAroundBallSteeringForce();
+
                 if (IsBallPossessedByOpponent()) {
-                    moveDir += GetSpawnSteeringForce();
+                    moveDir += GetSpawnSteeringForce(role);
                 }
                 else if (ballSim.carrier == null)
                 {
                     ////无人持球范围内全力上抢
                     moveDir += GetBallProximitySteeringForce();
-
                 }
+                //一个队不一拥而上
+                moveDir += GetDensityAroundBallSteeringForce();
             }
             moveDir = FixedVector2.ClampMagnitude(moveDir, FixedFloat.One);
         }

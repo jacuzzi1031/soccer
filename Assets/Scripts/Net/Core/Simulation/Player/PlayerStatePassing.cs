@@ -37,38 +37,45 @@ public class PlayerStatePassing: PlayerSimState
             FixedVector2 passTargetVelocity =
                 stateData.passTarget.Velocity;
 
+            FixedFloat predictTime;
+            bool? overground = null;
+            PlayerState playStyle;
+
             switch (stateData.InputType)
             {
                 case 0:
-                    passDestination =
-                        passTargetPosition +
-                        passTargetVelocity * (FixedFloat)0.6f;
-
+                    predictTime = (FixedFloat)0.2f;
                     overground = true;
-
-                    _ballSim.passTo(passDestination, true);
-                    _passTriggered = true;
+                    playStyle = PlayerState.SHORTPASS;
                     break;
 
                 case 1:
-                    passDestination =
-                        passTargetPosition +
-                        passTargetVelocity * (FixedFloat)0.6f;
-
+                    predictTime = (FixedFloat)0.2f;
                     overground = false;
-
-                    _ballSim.passTo(passDestination, false);
-                    _passTriggered = true;
+                    playStyle = PlayerState.LONGPASS;
                     break;
 
                 case 2:
-                    passDestination =
-                        passTargetPosition +
-                        passTargetVelocity * (FixedFloat)1.8f;
-
+                    predictTime = (FixedFloat)1.8f;
                     overground = true;
+                    playStyle = PlayerState.INCISIVEPASS;
                     break;
+
+                default:
+                    return;
             }
+
+            passDestination = passTargetPosition + passTargetVelocity * predictTime;
+
+            if (overground.HasValue)
+            {
+                _ballSim.passTo(passDestination, overground.Value);
+                _passTriggered = true;
+            }
+
+            _eventBus.Publish(
+                new PlayStyleShowSignal(playerSim.playerId, playStyle)
+            );
         }
     }
 

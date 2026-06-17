@@ -107,8 +107,8 @@ public class GameSceneBootstrap : MonoBehaviour{
         var PlayerSystem = new PlayerSystem(EventBus, commandBuffer, matchPlayerCount);
 
         var simConfig = new SimulationConfig();
-        var CollisionSystem = new CollisionSystem();
-        var BoundarySystem = new BoundarySystem();
+        var CollisionSystem = new CollisionSystem(EventBus,commandBuffer);
+        var BoundarySystem = new BoundarySystem(EventBus);
         PlayerManager.Instance.InitializeSquads((home, away) => {
                 PlayerSystem.RegisterTeams(home, away, BallSim, goalHomePos, goalAwayPos, goalHomeArea, goalAwayArea);
                 CollisionSystem.RegisterTeams(home, away, simConfig, BallSim, playerLines);

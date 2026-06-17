@@ -26,6 +26,9 @@ public enum PlayerState
     TACKLING,
     VOLLEY_KICK,
     HEADER,
+    SHORTPASS,
+    LONGPASS,
+    INCISIVEPASS
 }
 public enum Role {
     GOALIE,
