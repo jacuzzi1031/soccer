@@ -24,31 +24,37 @@ namespace GameFrameSync {
     static GameFrameSyncReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChNHYW1lRnJhbWVTeW5jLnByb3RvEg1HYW1lRnJhbWVTeW5jIuQBChBSZXNG",
-            "cmFtZVN5bmNEYXRhEg8KB2ZyYW1lSWQYASABKAUSPwoVcGxheWVyc0ZyYW1l",
-            "SW5wdXREYXRhGAIgAygLMiAuR2FtZUZyYW1lU3luYy5SZXNGcmFtZUlucHV0",
-            "RGF0YRI7ChFyZXFGcmFtZUlucHV0RGF0YRgDIAEoCzIgLkdhbWVGcmFtZVN5",
-            "bmMuUmVxRnJhbWVJbnB1dERhdGESLwoLbWVzc2FnZVR5cGUYBiABKA4yGi5H",
-            "YW1lRnJhbWVTeW5jLk1lc3NhZ2VUeXBlEhAKCHJvb21Db2RlGAcgASgJIqMB",
-            "ChBSZXFGcmFtZVN5bmNEYXRhEg8KB2ZyYW1lSWQYASABKAUSOwoRcmVxRnJh",
-            "bWVJbnB1dERhdGEYAyABKAsyIC5HYW1lRnJhbWVTeW5jLlJlcUZyYW1lSW5w",
-            "dXREYXRhEi8KC21lc3NhZ2VUeXBlGAYgASgOMhouR2FtZUZyYW1lU3luYy5N",
-            "ZXNzYWdlVHlwZRIQCghyb29tQ29kZRgHIAEoCSKiAQoRUmVxRnJhbWVJbnB1",
-            "dERhdGESDwoHZnJhbWVJZBgBIAEoBRIRCglzZWF0SW5kZXgYAiABKAUSEQoJ",
-            "aW5wdXRUeXBlGAMgASgFEikKCHBvc2l0aW9uGAQgASgLMhcuR2FtZUZyYW1l",
-            "U3luYy5WZWN0b3IyRBIrCgptb3ZlVmVjdG9yGAggASgLMhcuR2FtZUZyYW1l",
-            "U3luYy5WZWN0b3IyRCKiAQoRUmVzRnJhbWVJbnB1dERhdGESDwoHZnJhbWVJ",
-            "ZBgBIAEoBRIRCglzZWF0SW5kZXgYAiABKAUSEQoJaW5wdXRUeXBlGAMgASgF",
-            "EikKCHBvc2l0aW9uGAQgASgLMhcuR2FtZUZyYW1lU3luYy5WZWN0b3IyRBIr",
-            "Cgptb3ZlVmVjdG9yGAggASgLMhcuR2FtZUZyYW1lU3luYy5WZWN0b3IyRCIr",
-            "CghWZWN0b3IzRBIJCgF4GAEgASgREgkKAXkYAiABKBESCQoBehgDIAEoESIg",
-            "CghWZWN0b3IyRBIJCgF4GAEgASgREgkKAXkYAiABKBEqJQoLTWVzc2FnZVR5",
-            "cGUSDQoJRnJhbWVTeW5jEAASBwoDQUNLEAJiBnByb3RvMw=="));
+            "ChNHYW1lRnJhbWVTeW5jLnByb3RvEg1HYW1lRnJhbWVTeW5jIhwKCVJlc0Rl",
+            "c3luYxIPCgdmcmFtZUlkGAEgASgFIo4CChBSZXNGcmFtZVN5bmNEYXRhEg8K",
+            "B2ZyYW1lSWQYASABKAUSPwoVcGxheWVyc0ZyYW1lSW5wdXREYXRhGAIgAygL",
+            "MiAuR2FtZUZyYW1lU3luYy5SZXNGcmFtZUlucHV0RGF0YRI7ChFyZXFGcmFt",
+            "ZUlucHV0RGF0YRgDIAEoCzIgLkdhbWVGcmFtZVN5bmMuUmVxRnJhbWVJbnB1",
+            "dERhdGESKAoGRGVzeW5jGAQgASgLMhguR2FtZUZyYW1lU3luYy5SZXNEZXN5",
+            "bmMSLwoLbWVzc2FnZVR5cGUYBiABKA4yGi5HYW1lRnJhbWVTeW5jLk1lc3Nh",
+            "Z2VUeXBlEhAKCHJvb21Db2RlGAcgASgJIjUKC1JlcUNoZWNrc3VtEg8KB2Zy",
+            "YW1lSWQYASABKAUSFQoNY2hlY2tzdW1WYWx1ZRgCIAEoBCLRAQoQUmVxRnJh",
+            "bWVTeW5jRGF0YRIPCgdmcmFtZUlkGAEgASgFEiwKCENoZWNrc3VtGAIgASgL",
+            "MhouR2FtZUZyYW1lU3luYy5SZXFDaGVja3N1bRI7ChFyZXFGcmFtZUlucHV0",
+            "RGF0YRgDIAEoCzIgLkdhbWVGcmFtZVN5bmMuUmVxRnJhbWVJbnB1dERhdGES",
+            "LwoLbWVzc2FnZVR5cGUYBiABKA4yGi5HYW1lRnJhbWVTeW5jLk1lc3NhZ2VU",
+            "eXBlEhAKCHJvb21Db2RlGAcgASgJIqIBChFSZXFGcmFtZUlucHV0RGF0YRIP",
+            "CgdmcmFtZUlkGAEgASgFEhEKCXNlYXRJbmRleBgCIAEoBRIRCglpbnB1dFR5",
+            "cGUYAyABKAUSKQoIcG9zaXRpb24YBCABKAsyFy5HYW1lRnJhbWVTeW5jLlZl",
+            "Y3RvcjJEEisKCm1vdmVWZWN0b3IYCCABKAsyFy5HYW1lRnJhbWVTeW5jLlZl",
+            "Y3RvcjJEIqIBChFSZXNGcmFtZUlucHV0RGF0YRIPCgdmcmFtZUlkGAEgASgF",
+            "EhEKCXNlYXRJbmRleBgCIAEoBRIRCglpbnB1dFR5cGUYAyABKAUSKQoIcG9z",
+            "aXRpb24YBCABKAsyFy5HYW1lRnJhbWVTeW5jLlZlY3RvcjJEEisKCm1vdmVW",
+            "ZWN0b3IYCCABKAsyFy5HYW1lRnJhbWVTeW5jLlZlY3RvcjJEIisKCFZlY3Rv",
+            "cjNEEgkKAXgYASABKBESCQoBeRgCIAEoERIJCgF6GAMgASgRIiAKCFZlY3Rv",
+            "cjJEEgkKAXgYASABKBESCQoBeRgCIAEoESozCgtNZXNzYWdlVHlwZRINCglG",
+            "cmFtZVN5bmMQABIMCghjaGVja3N1bRABEgcKA0FDSxACYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameFrameSync.MessageType), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResFrameSyncData), global::GameFrameSync.ResFrameSyncData.Parser, new[]{ "FrameId", "PlayersFrameInputData", "ReqFrameInputData", "MessageType", "RoomCode" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqFrameSyncData), global::GameFrameSync.ReqFrameSyncData.Parser, new[]{ "FrameId", "ReqFrameInputData", "MessageType", "RoomCode" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResDesync), global::GameFrameSync.ResDesync.Parser, new[]{ "FrameId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResFrameSyncData), global::GameFrameSync.ResFrameSyncData.Parser, new[]{ "FrameId", "PlayersFrameInputData", "ReqFrameInputData", "Desync", "MessageType", "RoomCode" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqChecksum), global::GameFrameSync.ReqChecksum.Parser, new[]{ "FrameId", "ChecksumValue" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqFrameSyncData), global::GameFrameSync.ReqFrameSyncData.Parser, new[]{ "FrameId", "Checksum", "ReqFrameInputData", "MessageType", "RoomCode" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqFrameInputData), global::GameFrameSync.ReqFrameInputData.Parser, new[]{ "FrameId", "SeatIndex", "InputType", "Position", "MoveVector" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResFrameInputData), global::GameFrameSync.ResFrameInputData.Parser, new[]{ "FrameId", "SeatIndex", "InputType", "Position", "MoveVector" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.Vector3D), global::GameFrameSync.Vector3D.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
@@ -61,12 +67,211 @@ namespace GameFrameSync {
   #region Enums
   public enum MessageType {
     [pbr::OriginalName("FrameSync")] FrameSync = 0,
+    [pbr::OriginalName("checksum")] Checksum = 1,
     [pbr::OriginalName("ACK")] Ack = 2,
   }
 
   #endregion
 
   #region Messages
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ResDesync : pb::IMessage<ResDesync>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ResDesync> _parser = new pb::MessageParser<ResDesync>(() => new ResDesync());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ResDesync> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[0]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ResDesync() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ResDesync(ResDesync other) : this() {
+      frameId_ = other.frameId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ResDesync Clone() {
+      return new ResDesync(this);
+    }
+
+    /// <summary>Field number for the "frameId" field.</summary>
+    public const int FrameIdFieldNumber = 1;
+    private int frameId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int FrameId {
+      get { return frameId_; }
+      set {
+        frameId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ResDesync);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ResDesync other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (FrameId != other.FrameId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (FrameId != 0) hash ^= FrameId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (FrameId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(FrameId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (FrameId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(FrameId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (FrameId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrameId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ResDesync other) {
+      if (other == null) {
+        return;
+      }
+      if (other.FrameId != 0) {
+        FrameId = other.FrameId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            FrameId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            FrameId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class ResFrameSyncData : pb::IMessage<ResFrameSyncData>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -82,7 +287,7 @@ namespace GameFrameSync {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[0]; }
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -105,6 +310,7 @@ namespace GameFrameSync {
       frameId_ = other.frameId_;
       playersFrameInputData_ = other.playersFrameInputData_.Clone();
       reqFrameInputData_ = other.reqFrameInputData_ != null ? other.reqFrameInputData_.Clone() : null;
+      desync_ = other.desync_ != null ? other.desync_.Clone() : null;
       messageType_ = other.messageType_;
       roomCode_ = other.roomCode_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -151,6 +357,18 @@ namespace GameFrameSync {
       }
     }
 
+    /// <summary>Field number for the "Desync" field.</summary>
+    public const int DesyncFieldNumber = 4;
+    private global::GameFrameSync.ResDesync desync_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::GameFrameSync.ResDesync Desync {
+      get { return desync_; }
+      set {
+        desync_ = value;
+      }
+    }
+
     /// <summary>Field number for the "messageType" field.</summary>
     public const int MessageTypeFieldNumber = 6;
     private global::GameFrameSync.MessageType messageType_ = global::GameFrameSync.MessageType.FrameSync;
@@ -193,6 +411,7 @@ namespace GameFrameSync {
       if (FrameId != other.FrameId) return false;
       if(!playersFrameInputData_.Equals(other.playersFrameInputData_)) return false;
       if (!object.Equals(ReqFrameInputData, other.ReqFrameInputData)) return false;
+      if (!object.Equals(Desync, other.Desync)) return false;
       if (MessageType != other.MessageType) return false;
       if (RoomCode != other.RoomCode) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -205,6 +424,7 @@ namespace GameFrameSync {
       if (FrameId != 0) hash ^= FrameId.GetHashCode();
       hash ^= playersFrameInputData_.GetHashCode();
       if (reqFrameInputData_ != null) hash ^= ReqFrameInputData.GetHashCode();
+      if (desync_ != null) hash ^= Desync.GetHashCode();
       if (MessageType != global::GameFrameSync.MessageType.FrameSync) hash ^= MessageType.GetHashCode();
       if (RoomCode.Length != 0) hash ^= RoomCode.GetHashCode();
       if (_unknownFields != null) {
@@ -234,6 +454,10 @@ namespace GameFrameSync {
         output.WriteRawTag(26);
         output.WriteMessage(ReqFrameInputData);
       }
+      if (desync_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Desync);
+      }
       if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
         output.WriteRawTag(48);
         output.WriteEnum((int) MessageType);
@@ -261,6 +485,10 @@ namespace GameFrameSync {
         output.WriteRawTag(26);
         output.WriteMessage(ReqFrameInputData);
       }
+      if (desync_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Desync);
+      }
       if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
         output.WriteRawTag(48);
         output.WriteEnum((int) MessageType);
@@ -285,6 +513,9 @@ namespace GameFrameSync {
       size += playersFrameInputData_.CalculateSize(_repeated_playersFrameInputData_codec);
       if (reqFrameInputData_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(ReqFrameInputData);
+      }
+      if (desync_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Desync);
       }
       if (MessageType != global::GameFrameSync.MessageType.FrameSync) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MessageType);
@@ -313,6 +544,12 @@ namespace GameFrameSync {
           ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
         }
         ReqFrameInputData.MergeFrom(other.ReqFrameInputData);
+      }
+      if (other.desync_ != null) {
+        if (desync_ == null) {
+          Desync = new global::GameFrameSync.ResDesync();
+        }
+        Desync.MergeFrom(other.Desync);
       }
       if (other.MessageType != global::GameFrameSync.MessageType.FrameSync) {
         MessageType = other.MessageType;
@@ -352,6 +589,13 @@ namespace GameFrameSync {
               ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
             }
             input.ReadMessage(ReqFrameInputData);
+            break;
+          }
+          case 34: {
+            if (desync_ == null) {
+              Desync = new global::GameFrameSync.ResDesync();
+            }
+            input.ReadMessage(Desync);
             break;
           }
           case 48: {
@@ -396,12 +640,254 @@ namespace GameFrameSync {
             input.ReadMessage(ReqFrameInputData);
             break;
           }
+          case 34: {
+            if (desync_ == null) {
+              Desync = new global::GameFrameSync.ResDesync();
+            }
+            input.ReadMessage(Desync);
+            break;
+          }
           case 48: {
             MessageType = (global::GameFrameSync.MessageType) input.ReadEnum();
             break;
           }
           case 58: {
             RoomCode = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ReqChecksum : pb::IMessage<ReqChecksum>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ReqChecksum> _parser = new pb::MessageParser<ReqChecksum>(() => new ReqChecksum());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ReqChecksum> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ReqChecksum() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ReqChecksum(ReqChecksum other) : this() {
+      frameId_ = other.frameId_;
+      checksumValue_ = other.checksumValue_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ReqChecksum Clone() {
+      return new ReqChecksum(this);
+    }
+
+    /// <summary>Field number for the "frameId" field.</summary>
+    public const int FrameIdFieldNumber = 1;
+    private int frameId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int FrameId {
+      get { return frameId_; }
+      set {
+        frameId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "checksumValue" field.</summary>
+    public const int ChecksumValueFieldNumber = 2;
+    private ulong checksumValue_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong ChecksumValue {
+      get { return checksumValue_; }
+      set {
+        checksumValue_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ReqChecksum);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ReqChecksum other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (FrameId != other.FrameId) return false;
+      if (ChecksumValue != other.ChecksumValue) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (FrameId != 0) hash ^= FrameId.GetHashCode();
+      if (ChecksumValue != 0UL) hash ^= ChecksumValue.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (FrameId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(FrameId);
+      }
+      if (ChecksumValue != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(ChecksumValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (FrameId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(FrameId);
+      }
+      if (ChecksumValue != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(ChecksumValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (FrameId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrameId);
+      }
+      if (ChecksumValue != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(ChecksumValue);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ReqChecksum other) {
+      if (other == null) {
+        return;
+      }
+      if (other.FrameId != 0) {
+        FrameId = other.FrameId;
+      }
+      if (other.ChecksumValue != 0UL) {
+        ChecksumValue = other.ChecksumValue;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            FrameId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            ChecksumValue = input.ReadUInt64();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            FrameId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            ChecksumValue = input.ReadUInt64();
             break;
           }
         }
@@ -426,7 +912,7 @@ namespace GameFrameSync {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[1]; }
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -447,6 +933,7 @@ namespace GameFrameSync {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ReqFrameSyncData(ReqFrameSyncData other) : this() {
       frameId_ = other.frameId_;
+      checksum_ = other.checksum_ != null ? other.checksum_.Clone() : null;
       reqFrameInputData_ = other.reqFrameInputData_ != null ? other.reqFrameInputData_.Clone() : null;
       messageType_ = other.messageType_;
       roomCode_ = other.roomCode_;
@@ -468,6 +955,18 @@ namespace GameFrameSync {
       get { return frameId_; }
       set {
         frameId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "Checksum" field.</summary>
+    public const int ChecksumFieldNumber = 2;
+    private global::GameFrameSync.ReqChecksum checksum_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::GameFrameSync.ReqChecksum Checksum {
+      get { return checksum_; }
+      set {
+        checksum_ = value;
       }
     }
 
@@ -523,6 +1022,7 @@ namespace GameFrameSync {
         return true;
       }
       if (FrameId != other.FrameId) return false;
+      if (!object.Equals(Checksum, other.Checksum)) return false;
       if (!object.Equals(ReqFrameInputData, other.ReqFrameInputData)) return false;
       if (MessageType != other.MessageType) return false;
       if (RoomCode != other.RoomCode) return false;
@@ -534,6 +1034,7 @@ namespace GameFrameSync {
     public override int GetHashCode() {
       int hash = 1;
       if (FrameId != 0) hash ^= FrameId.GetHashCode();
+      if (checksum_ != null) hash ^= Checksum.GetHashCode();
       if (reqFrameInputData_ != null) hash ^= ReqFrameInputData.GetHashCode();
       if (MessageType != global::GameFrameSync.MessageType.FrameSync) hash ^= MessageType.GetHashCode();
       if (RoomCode.Length != 0) hash ^= RoomCode.GetHashCode();
@@ -558,6 +1059,10 @@ namespace GameFrameSync {
       if (FrameId != 0) {
         output.WriteRawTag(8);
         output.WriteInt32(FrameId);
+      }
+      if (checksum_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Checksum);
       }
       if (reqFrameInputData_ != null) {
         output.WriteRawTag(26);
@@ -585,6 +1090,10 @@ namespace GameFrameSync {
         output.WriteRawTag(8);
         output.WriteInt32(FrameId);
       }
+      if (checksum_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Checksum);
+      }
       if (reqFrameInputData_ != null) {
         output.WriteRawTag(26);
         output.WriteMessage(ReqFrameInputData);
@@ -610,6 +1119,9 @@ namespace GameFrameSync {
       if (FrameId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrameId);
       }
+      if (checksum_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Checksum);
+      }
       if (reqFrameInputData_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(ReqFrameInputData);
       }
@@ -633,6 +1145,12 @@ namespace GameFrameSync {
       }
       if (other.FrameId != 0) {
         FrameId = other.FrameId;
+      }
+      if (other.checksum_ != null) {
+        if (checksum_ == null) {
+          Checksum = new global::GameFrameSync.ReqChecksum();
+        }
+        Checksum.MergeFrom(other.Checksum);
       }
       if (other.reqFrameInputData_ != null) {
         if (reqFrameInputData_ == null) {
@@ -667,6 +1185,13 @@ namespace GameFrameSync {
             break;
           case 8: {
             FrameId = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            if (checksum_ == null) {
+              Checksum = new global::GameFrameSync.ReqChecksum();
+            }
+            input.ReadMessage(Checksum);
             break;
           }
           case 26: {
@@ -707,6 +1232,13 @@ namespace GameFrameSync {
             FrameId = input.ReadInt32();
             break;
           }
+          case 18: {
+            if (checksum_ == null) {
+              Checksum = new global::GameFrameSync.ReqChecksum();
+            }
+            input.ReadMessage(Checksum);
+            break;
+          }
           case 26: {
             if (reqFrameInputData_ == null) {
               ReqFrameInputData = new global::GameFrameSync.ReqFrameInputData();
@@ -744,7 +1276,7 @@ namespace GameFrameSync {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[2]; }
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1108,7 +1640,7 @@ namespace GameFrameSync {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[3]; }
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1472,7 +2004,7 @@ namespace GameFrameSync {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[4]; }
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1744,7 +2276,7 @@ namespace GameFrameSync {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[5]; }
+      get { return global::GameFrameSync.GameFrameSyncReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

@@ -13,7 +13,7 @@ public class BallSimStateShot : BallSimState
 
     public override void OnEnter()
     {
-        ballSim.height = SHOT_HEIGHT;
+        ballSim.Height = SHOT_HEIGHT;
         shotFrameCount = 0;
     }
 

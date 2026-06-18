@@ -93,13 +93,13 @@ public class CollisionSystem : ISimulationSystem{
             }
 
             FixedFloat distSqr = (player.Position + playerForBallOffset - ball.Position).sqrMagnitude;
-            if (distSqr < volleycaptureRadiusSqr && ball.height < MAX_CAPTURE_HEIGHT) {
+            if (distSqr < volleycaptureRadiusSqr && ball.Height < MAX_CAPTURE_HEIGHT) {
                 bool hasVolleyShot = player.currentState.VolleyShot();
                 if (hasVolleyShot) break;
             }
 
-            if (distSqr < captureRadiusSqr && ball.height < MAX_CAPTURE_HEIGHT) {
-                if (ball.height > BALL_CONTROL_HEIGHT_MAX) {
+            if (distSqr < captureRadiusSqr && ball.Height < MAX_CAPTURE_HEIGHT) {
+                if (ball.Height > BALL_CONTROL_HEIGHT_MAX) {
                     player.SwitchState(PlayerState.CHEST_CONTROL);
                 }
 

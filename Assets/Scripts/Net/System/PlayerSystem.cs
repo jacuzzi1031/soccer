@@ -10,8 +10,8 @@ using UnityEngine;
 /// </summary>
 public class PlayerSystem:ISimulationSystem
 {
-    private List<PlayerSim> teamHome;
-    private List<PlayerSim> teamAway;
+    public List<PlayerSim> teamHome;
+    public List<PlayerSim> teamAway;
     private PlayerSim currentHomePlayer;
     private PlayerSim currentAwayPlayer;
     private int weightCacheIntervalFrames=12;

@@ -67,8 +67,8 @@ public class BallView : MonoBehaviour
         prevPos = pos;
         targetPos = pos;
 
-        prevHeight = ballSim.height.ToFloat();
-        targetHeight = ballSim.height.ToFloat();
+        prevHeight = ballSim.Height.ToFloat();
+        targetHeight = ballSim.Height.ToFloat();
 
         transform.position = pos;
     }
@@ -205,7 +205,7 @@ public class BallView : MonoBehaviour
             targetPos = ballSim.Position.ToVector2();
 
             prevHeight = targetHeight;
-            targetHeight = ballSim.height.ToFloat();
+            targetHeight = ballSim.Height.ToFloat();
 
             interpTimer = 0f;
             lastConsumedFrame = ballSim.Frame;

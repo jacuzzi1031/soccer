@@ -4,19 +4,32 @@ package GameFrameSync;
 enum MessageType
 {
   FrameSync = 0;
+    checksum=1;
   ACK = 2;
+}
+message ResDesync
+{
+  int32 frameId = 1;
 }
 message ResFrameSyncData
 {
   int32 frameId = 1;
   repeated ResFrameInputData playersFrameInputData = 2;
   ReqFrameInputData reqFrameInputData = 3;
+  ResDesync Desync=4;
   MessageType messageType = 6;
   string roomCode = 7;
+}
+message ReqChecksum
+{
+  int32 frameId = 1;
+
+  uint64 checksumValue = 2;
 }
 message ReqFrameSyncData
 {
   int32 frameId = 1;
+  ReqChecksum Checksum=2;
   ReqFrameInputData reqFrameInputData = 3;
   MessageType messageType = 6;
   string roomCode = 7;

@@ -32,7 +32,7 @@ public class BallSimState
         FixedVector2 velocity = FixedVector2.MoveTowards(
             ballSim.Velocity,
             FixedVector2.Zero,
-            (ballSim.height > 0 ? ballSim.frictionAir : ballSim.frictionGround) * dt
+            (ballSim.Height > 0 ? ballSim.frictionAir : ballSim.frictionGround) * dt
         );
 
         if (velocity == FixedVector2.Zero)
@@ -50,8 +50,8 @@ public class BallSimState
     }
     public void MoveVertical(FixedFloat bounciness)
     {   
-        FixedFloat height = ballSim.height;
-        FixedFloat heightVelocity = ballSim.heightVelocity;
+        FixedFloat height = ballSim.Height;
+        FixedFloat heightVelocity = ballSim.HeightVelocity;
         FixedVector2 velocity = ballSim.Velocity;
 
         if (height > FixedFloat.Zero || heightVelocity > FixedFloat.Zero)
@@ -73,8 +73,8 @@ public class BallSimState
             }
         }
 
-        ballSim.height = height;
-        ballSim.heightVelocity = heightVelocity;
+        ballSim.Height = height;
+        ballSim.HeightVelocity = heightVelocity;
         ballSim.Velocity = velocity;
     }
 }

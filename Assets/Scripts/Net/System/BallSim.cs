@@ -8,8 +8,8 @@ public class BallSim:ISimulationSystem
 {
     public FixedVector2 Position;
     public FixedVector2 Velocity;
-    public FixedFloat height=(FixedFloat) 0.0f;
-    public FixedFloat heightVelocity=(FixedFloat)0.0f;
+    public FixedFloat Height=(FixedFloat) 0.0f;
+    public FixedFloat HeightVelocity=(FixedFloat)0.0f;
     private static FixedFloat KICKOFF_PASS_DISTANCE = (FixedFloat)35f;
     private static FixedFloat DURATION_PASS_LOCK =(FixedFloat) 0.1f;
     public static FixedFloat GRAVITY = (FixedFloat)40f;
@@ -61,7 +61,7 @@ public class BallSim:ISimulationSystem
                     firstPlayerCarryBall = false;
                     Position = spawnPosition;
                     Velocity = FixedVector2.Zero;
-                    height=FixedFloat.Zero;
+                    Height=FixedFloat.Zero;
                     _eventBus.Publish(new BallBacktoSpawnPositionSignal());
                     SwitchState(BallState.RESET);
                     break;
@@ -86,11 +86,11 @@ public class BallSim:ISimulationSystem
         // 如果是高空的，视为水平是匀速，速度为原本速度intensity  x=Vx*t  t=x/Vx
         // 垂直方向终点y=0,Vy=gt/2  代入t Vy=gx/2Vx 高度增加 /2->/1.85 也会有更快速度，飞到球员脸上而不是脚下
         if (!overground) {
-            heightVelocity = GRAVITY * distance / (2 * intensity);
+            HeightVelocity = GRAVITY * distance / (2 * intensity);
         }
         else
         {
-            heightVelocity = FixedFloat.Zero;
+            HeightVelocity = FixedFloat.Zero;
         }
         carrier = null;
         SwitchState(BallState.FREEFORM, BallStateData.Build().SetLockDuration(lockDuration));
@@ -117,7 +117,7 @@ public class BallSim:ISimulationSystem
     public void Tumble(FixedVector2 tumbleVelocity) {
         Velocity = tumbleVelocity*3;
         carrier = null;
-        heightVelocity = TUMBLE_HEIGHT_VELOCITY;
+        HeightVelocity = TUMBLE_HEIGHT_VELOCITY;
         SwitchState(BallState.FREEFORM, BallStateData.Build().SetLockDuration(DURATION_TUMBLE_LOCK));
     }
 }
