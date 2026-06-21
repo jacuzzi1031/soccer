@@ -52,7 +52,6 @@ public class SimulationWorld
         {
             SendChecksum(frame);
         }
-        
     }
     private void SaveSnapshot(int frame)
     {
@@ -109,64 +108,75 @@ public class SimulationWorld
         }
         return snapshot;
     }
+    private ObjectPool<ReqChecksum> _checksumPool =
+        new ObjectPool<ReqChecksum>(() => new ReqChecksum());
+
+    private ObjectPool<ReqFrameSyncData> _syncDataPool =
+        new ObjectPool<ReqFrameSyncData>(() => new ReqFrameSyncData());
     private void SendChecksum(int frame)
     {
-        ReqFrameSyncData req =
-            new ReqFrameSyncData();
+        var req = _syncDataPool.Allocate();
 
-        req.MessageType =MessageType.Checksum;
+        req.MessageType = MessageType.Checksum;
 
-        req.Checksum =
-            new ReqChecksum();
+        var checksum = _checksumPool.Allocate();
 
-        req.Checksum.FrameId = frame;
+        checksum.FrameId = frame;
+        checksum.SeatIndex=GameInterface.Interface.RoomManager.localSeatIndex;
+        checksum.ChecksumValue = ComputeChecksum();
 
-        req.Checksum.ChecksumValue =
-            ComputeChecksum();
+        req.Checksum = checksum;
+        req.RoomCode = GameInterface.Interface.RoomManager.CurrentRoomInfo.roomCode;
+        GameInterface.Interface.UdpListener.Send(req);
 
-        GameInterface.Interface
-            .UdpListener
-            .Send(req);
+        _checksumPool.Release(checksum);
+        _syncDataPool.Release(req);
     }
     private ulong ComputeChecksum()
     {
-        byte[] data =
-            SerializeDeterministicState();
+        const ulong Offset = 14695981039346656037UL;
+        const ulong Prime = 1099511628211UL;
 
-        // return XXHash64.Hash(data);
-        return new ulong();
-    }
-    public byte[] SerializeDeterministicState()
-    {
-        using var ms = new MemoryStream();
-        using var bw = new BinaryWriter(ms);
+        ulong hash = Offset;
+
+        void Add(ulong value)
+        {
+            hash ^= value;
+            hash *= Prime;
+        }
+
         var models = context._simulationModel;
-        FixedGameState snapshot=new FixedGameState();
-        bw.Write(context.Frame);
 
-        bw.Write(models.BallSim.Position.x.ScaledValue);
-        bw.Write(models.BallSim.Position.y.ScaledValue);
-        bw.Write(models.BallSim.HeightVelocity.ScaledValue);
-        bw.Write(models.BallSim.Height.ScaledValue);
-        bw.Write((int)models.BallSim.ballState);
-        foreach (var player in models.PlayerSystem.teamHome) {
-            bw.Write(player.playerId);
-            bw.Write(player.Position.x.ScaledValue);
-            bw.Write(player.Position.y.ScaledValue);
-            bw.Write(player.HeightVelocity.ScaledValue);
-            bw.Write(player.Height.ScaledValue);
-            bw.Write((int)player.playerState);
-            bw.Write(player.HeadingRight);
+        Add((ulong)context.Frame);
+
+        Add((ulong)models.BallSim.Position.x.ScaledValue);
+        Add((ulong)models.BallSim.Position.y.ScaledValue);
+        Add((ulong)models.BallSim.HeightVelocity.ScaledValue);
+        Add((ulong)models.BallSim.Height.ScaledValue);
+        Add((ulong)(int)models.BallSim.ballState);
+
+        foreach (var player in models.PlayerSystem.teamHome)
+        {
+            Add((ulong)player.playerId);
+            Add((ulong)player.Position.x.ScaledValue);
+            Add((ulong)player.Position.y.ScaledValue);
+            Add((ulong)player.HeightVelocity.ScaledValue);
+            Add((ulong)player.Height.ScaledValue);
+            Add((ulong)(int)player.playerState);
+            Add(player.HeadingRight ? 1UL : 0UL);
         }
-        foreach (var player in models.PlayerSystem.teamAway) {
-            bw.Write(player.playerId);
-            bw.Write(player.Position.x.ScaledValue);
-            bw.Write(player.Position.y.ScaledValue);
-            bw.Write(player.HeightVelocity.ScaledValue);
-            bw.Write(player.Height.ScaledValue);
-            bw.Write((int)player.playerState);
+
+        foreach (var player in models.PlayerSystem.teamAway)
+        {
+            Add((ulong)player.playerId);
+            Add((ulong)player.Position.x.ScaledValue);
+            Add((ulong)player.Position.y.ScaledValue);
+            Add((ulong)player.HeightVelocity.ScaledValue);
+            Add((ulong)player.Height.ScaledValue);
+            Add((ulong)(int)player.playerState);
         }
-        return ms.ToArray();
+
+        return hash;
     }
 
     private void DispatchCommand(InputBuffer.Command cmd)

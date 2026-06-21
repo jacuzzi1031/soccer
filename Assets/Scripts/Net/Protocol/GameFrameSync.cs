@@ -31,29 +31,30 @@ namespace GameFrameSync {
             "ZUlucHV0RGF0YRgDIAEoCzIgLkdhbWVGcmFtZVN5bmMuUmVxRnJhbWVJbnB1",
             "dERhdGESKAoGRGVzeW5jGAQgASgLMhguR2FtZUZyYW1lU3luYy5SZXNEZXN5",
             "bmMSLwoLbWVzc2FnZVR5cGUYBiABKA4yGi5HYW1lRnJhbWVTeW5jLk1lc3Nh",
-            "Z2VUeXBlEhAKCHJvb21Db2RlGAcgASgJIjUKC1JlcUNoZWNrc3VtEg8KB2Zy",
-            "YW1lSWQYASABKAUSFQoNY2hlY2tzdW1WYWx1ZRgCIAEoBCLRAQoQUmVxRnJh",
-            "bWVTeW5jRGF0YRIPCgdmcmFtZUlkGAEgASgFEiwKCENoZWNrc3VtGAIgASgL",
-            "MhouR2FtZUZyYW1lU3luYy5SZXFDaGVja3N1bRI7ChFyZXFGcmFtZUlucHV0",
-            "RGF0YRgDIAEoCzIgLkdhbWVGcmFtZVN5bmMuUmVxRnJhbWVJbnB1dERhdGES",
-            "LwoLbWVzc2FnZVR5cGUYBiABKA4yGi5HYW1lRnJhbWVTeW5jLk1lc3NhZ2VU",
-            "eXBlEhAKCHJvb21Db2RlGAcgASgJIqIBChFSZXFGcmFtZUlucHV0RGF0YRIP",
-            "CgdmcmFtZUlkGAEgASgFEhEKCXNlYXRJbmRleBgCIAEoBRIRCglpbnB1dFR5",
-            "cGUYAyABKAUSKQoIcG9zaXRpb24YBCABKAsyFy5HYW1lRnJhbWVTeW5jLlZl",
-            "Y3RvcjJEEisKCm1vdmVWZWN0b3IYCCABKAsyFy5HYW1lRnJhbWVTeW5jLlZl",
-            "Y3RvcjJEIqIBChFSZXNGcmFtZUlucHV0RGF0YRIPCgdmcmFtZUlkGAEgASgF",
-            "EhEKCXNlYXRJbmRleBgCIAEoBRIRCglpbnB1dFR5cGUYAyABKAUSKQoIcG9z",
-            "aXRpb24YBCABKAsyFy5HYW1lRnJhbWVTeW5jLlZlY3RvcjJEEisKCm1vdmVW",
-            "ZWN0b3IYCCABKAsyFy5HYW1lRnJhbWVTeW5jLlZlY3RvcjJEIisKCFZlY3Rv",
-            "cjNEEgkKAXgYASABKBESCQoBeRgCIAEoERIJCgF6GAMgASgRIiAKCFZlY3Rv",
-            "cjJEEgkKAXgYASABKBESCQoBeRgCIAEoESozCgtNZXNzYWdlVHlwZRINCglG",
-            "cmFtZVN5bmMQABIMCghjaGVja3N1bRABEgcKA0FDSxACYgZwcm90bzM="));
+            "Z2VUeXBlEhAKCHJvb21Db2RlGAcgASgJIkgKC1JlcUNoZWNrc3VtEg8KB2Zy",
+            "YW1lSWQYASABKAUSEQoJc2VhdEluZGV4GAIgASgFEhUKDWNoZWNrc3VtVmFs",
+            "dWUYAyABKAQi0QEKEFJlcUZyYW1lU3luY0RhdGESDwoHZnJhbWVJZBgBIAEo",
+            "BRIsCghDaGVja3N1bRgCIAEoCzIaLkdhbWVGcmFtZVN5bmMuUmVxQ2hlY2tz",
+            "dW0SOwoRcmVxRnJhbWVJbnB1dERhdGEYAyABKAsyIC5HYW1lRnJhbWVTeW5j",
+            "LlJlcUZyYW1lSW5wdXREYXRhEi8KC21lc3NhZ2VUeXBlGAYgASgOMhouR2Ft",
+            "ZUZyYW1lU3luYy5NZXNzYWdlVHlwZRIQCghyb29tQ29kZRgHIAEoCSKiAQoR",
+            "UmVxRnJhbWVJbnB1dERhdGESDwoHZnJhbWVJZBgBIAEoBRIRCglzZWF0SW5k",
+            "ZXgYAiABKAUSEQoJaW5wdXRUeXBlGAMgASgFEikKCHBvc2l0aW9uGAQgASgL",
+            "MhcuR2FtZUZyYW1lU3luYy5WZWN0b3IyRBIrCgptb3ZlVmVjdG9yGAggASgL",
+            "MhcuR2FtZUZyYW1lU3luYy5WZWN0b3IyRCKiAQoRUmVzRnJhbWVJbnB1dERh",
+            "dGESDwoHZnJhbWVJZBgBIAEoBRIRCglzZWF0SW5kZXgYAiABKAUSEQoJaW5w",
+            "dXRUeXBlGAMgASgFEikKCHBvc2l0aW9uGAQgASgLMhcuR2FtZUZyYW1lU3lu",
+            "Yy5WZWN0b3IyRBIrCgptb3ZlVmVjdG9yGAggASgLMhcuR2FtZUZyYW1lU3lu",
+            "Yy5WZWN0b3IyRCIrCghWZWN0b3IzRBIJCgF4GAEgASgREgkKAXkYAiABKBES",
+            "CQoBehgDIAEoESIgCghWZWN0b3IyRBIJCgF4GAEgASgREgkKAXkYAiABKBEq",
+            "QQoLTWVzc2FnZVR5cGUSDQoJRnJhbWVTeW5jEAASDAoIY2hlY2tzdW0QARIH",
+            "CgNBQ0sQAhIMCghkaXNtYXRjaBADYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameFrameSync.MessageType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResDesync), global::GameFrameSync.ResDesync.Parser, new[]{ "FrameId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResFrameSyncData), global::GameFrameSync.ResFrameSyncData.Parser, new[]{ "FrameId", "PlayersFrameInputData", "ReqFrameInputData", "Desync", "MessageType", "RoomCode" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqChecksum), global::GameFrameSync.ReqChecksum.Parser, new[]{ "FrameId", "ChecksumValue" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqChecksum), global::GameFrameSync.ReqChecksum.Parser, new[]{ "FrameId", "SeatIndex", "ChecksumValue" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqFrameSyncData), global::GameFrameSync.ReqFrameSyncData.Parser, new[]{ "FrameId", "Checksum", "ReqFrameInputData", "MessageType", "RoomCode" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ReqFrameInputData), global::GameFrameSync.ReqFrameInputData.Parser, new[]{ "FrameId", "SeatIndex", "InputType", "Position", "MoveVector" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameFrameSync.ResFrameInputData), global::GameFrameSync.ResFrameInputData.Parser, new[]{ "FrameId", "SeatIndex", "InputType", "Position", "MoveVector" }, null, null, null, null),
@@ -69,6 +70,7 @@ namespace GameFrameSync {
     [pbr::OriginalName("FrameSync")] FrameSync = 0,
     [pbr::OriginalName("checksum")] Checksum = 1,
     [pbr::OriginalName("ACK")] Ack = 2,
+    [pbr::OriginalName("dismatch")] Dismatch = 3,
   }
 
   #endregion
@@ -698,6 +700,7 @@ namespace GameFrameSync {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ReqChecksum(ReqChecksum other) : this() {
       frameId_ = other.frameId_;
+      seatIndex_ = other.seatIndex_;
       checksumValue_ = other.checksumValue_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -720,8 +723,20 @@ namespace GameFrameSync {
       }
     }
 
+    /// <summary>Field number for the "seatIndex" field.</summary>
+    public const int SeatIndexFieldNumber = 2;
+    private int seatIndex_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int SeatIndex {
+      get { return seatIndex_; }
+      set {
+        seatIndex_ = value;
+      }
+    }
+
     /// <summary>Field number for the "checksumValue" field.</summary>
-    public const int ChecksumValueFieldNumber = 2;
+    public const int ChecksumValueFieldNumber = 3;
     private ulong checksumValue_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -748,6 +763,7 @@ namespace GameFrameSync {
         return true;
       }
       if (FrameId != other.FrameId) return false;
+      if (SeatIndex != other.SeatIndex) return false;
       if (ChecksumValue != other.ChecksumValue) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -757,6 +773,7 @@ namespace GameFrameSync {
     public override int GetHashCode() {
       int hash = 1;
       if (FrameId != 0) hash ^= FrameId.GetHashCode();
+      if (SeatIndex != 0) hash ^= SeatIndex.GetHashCode();
       if (ChecksumValue != 0UL) hash ^= ChecksumValue.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -780,8 +797,12 @@ namespace GameFrameSync {
         output.WriteRawTag(8);
         output.WriteInt32(FrameId);
       }
-      if (ChecksumValue != 0UL) {
+      if (SeatIndex != 0) {
         output.WriteRawTag(16);
+        output.WriteInt32(SeatIndex);
+      }
+      if (ChecksumValue != 0UL) {
+        output.WriteRawTag(24);
         output.WriteUInt64(ChecksumValue);
       }
       if (_unknownFields != null) {
@@ -798,8 +819,12 @@ namespace GameFrameSync {
         output.WriteRawTag(8);
         output.WriteInt32(FrameId);
       }
-      if (ChecksumValue != 0UL) {
+      if (SeatIndex != 0) {
         output.WriteRawTag(16);
+        output.WriteInt32(SeatIndex);
+      }
+      if (ChecksumValue != 0UL) {
+        output.WriteRawTag(24);
         output.WriteUInt64(ChecksumValue);
       }
       if (_unknownFields != null) {
@@ -814,6 +839,9 @@ namespace GameFrameSync {
       int size = 0;
       if (FrameId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrameId);
+      }
+      if (SeatIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SeatIndex);
       }
       if (ChecksumValue != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(ChecksumValue);
@@ -832,6 +860,9 @@ namespace GameFrameSync {
       }
       if (other.FrameId != 0) {
         FrameId = other.FrameId;
+      }
+      if (other.SeatIndex != 0) {
+        SeatIndex = other.SeatIndex;
       }
       if (other.ChecksumValue != 0UL) {
         ChecksumValue = other.ChecksumValue;
@@ -860,6 +891,10 @@ namespace GameFrameSync {
             break;
           }
           case 16: {
+            SeatIndex = input.ReadInt32();
+            break;
+          }
+          case 24: {
             ChecksumValue = input.ReadUInt64();
             break;
           }
@@ -887,6 +922,10 @@ namespace GameFrameSync {
             break;
           }
           case 16: {
+            SeatIndex = input.ReadInt32();
+            break;
+          }
+          case 24: {
             ChecksumValue = input.ReadUInt64();
             break;
           }

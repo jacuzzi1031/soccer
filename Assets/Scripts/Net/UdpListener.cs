@@ -17,6 +17,7 @@ public class UdpListener : IDisposable
     public bool Disposed { get; private set; }
     public IPEndPoint RemoteEp { get; private set; }
     public event Action<ResFrameSyncData> OnReceiveFrameSync;
+    public event Action<ResFrameSyncData> OnReceiveFrameDismatch;
 
     public UdpListener()
     {
@@ -68,6 +69,9 @@ public class UdpListener : IDisposable
                 OnReceiveFrameSync?.Invoke(resFrameSyncData);
 
                 SendAck();
+            }else if (resFrameSyncData.MessageType is MessageType.Dismatch) {
+                OnReceiveFrameDismatch?.Invoke(resFrameSyncData);
+                
             }
             
             StartReceive(e);
