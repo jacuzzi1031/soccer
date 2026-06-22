@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Net.Core.Simulation.SimSignal;
 using Net.FixFloat;
 using UnityEngine;
 
@@ -33,5 +34,9 @@ public sealed class SimulationContext
         Frame = frame;
         _commands=commands;
         MatchState = _simulationModel.MatchSystem.currentState;
+    }
+
+    public void Restore(FixedGameState snapshotState) {
+        throw new System.NotImplementedException();
     }
 }

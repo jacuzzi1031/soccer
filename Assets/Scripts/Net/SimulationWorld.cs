@@ -13,8 +13,10 @@ public class SimulationWorld
     private CommandBuffer commandBuffer;
     private SimEventBus eventBus;
     public InputBuffer InputBuffer;
-    private Dictionary<int, FixedGameState> _snapshots = new();
-    public const int SNAPSHOT_INTERVAL = 300;
+    private Dictionary<int, SnapshotData> _snapshots = new();
+    public const int SNAPSHOT_INTERVAL = 30;
+    public const int CHECKSUM_INTERVAL = 120;
+
     public SimulationWorld(
         List<ISimulationSystem> systems,
         SimulationContext context,
@@ -28,45 +30,62 @@ public class SimulationWorld
         this.eventBus = eventBus;
         this.InputBuffer = inputBuffer;
     }
-
-    public void Step(int frame)
+    public void Step(
+        int frame,
+        bool isRollback = false)
     {
-        InputBuffer.ConsumeFrame(frame, DispatchCommand);
+        var cmds = InputBuffer.GetFrameCommands(frame);
+        
+        ExecuteFrame(frame, cmds);
 
-        context.BuildFrom(frame,commandBuffer.Consume());
+        if (!isRollback)
+        {
+            if(frame % SNAPSHOT_INTERVAL == 0)
+                SaveSnapshot(frame);
+
+            if(frame % CHECKSUM_INTERVAL == 0)
+                SendChecksum(frame);
+        }
+    }
+    private void ExecuteFrame(
+        int frame,
+        InputBuffer.Command[] cmds) {
+        
+        if (cmds != null)
+        {
+            foreach (var cmd in cmds)
+            {
+                if(cmd != null)
+                    DispatchCommand(cmd);
+            }
+        }
+        context.BuildFrom(frame, commandBuffer.Consume());
 
         for (int i = 0; i < systems.Count; i++)
         {
             systems[i].Tick(context);
         }
-        
         eventBus.Flush();
-        
-        //for checksum and rollback
-        if (frame % SNAPSHOT_INTERVAL == 0)
-        {
-            SaveSnapshot(frame);
-        }
-
-        if (frame % 120 == 0)
-        {
-            SendChecksum(frame);
-        }
     }
     private void SaveSnapshot(int frame)
     {
-        _snapshots[frame] = ExtractGameState();
+        var fixedGameState = ExtractGameState(frame);
+        _snapshots[frame] =  new SnapshotData
+        {
+            Frame = frame,
+            State = fixedGameState
+        };
 
-        int expireFrame = frame - SNAPSHOT_INTERVAL * 10;
+        int expireFrame = frame - SNAPSHOT_INTERVAL * 20;
         _snapshots.Remove(expireFrame);
     }
-    private FixedGameState ExtractGameState()
+    private FixedGameState ExtractGameState(int frame)
     {
         var models = context._simulationModel;
 
         var snapshot = new FixedGameState
         {
-            Frame = context.Frame,
+            Frame = frame,
             Ball = new FixedBallState
             {
                 ballPosition = models.BallSim.Position,
@@ -177,6 +196,46 @@ public class SimulationWorld
         }
 
         return hash;
+    }
+    private int FindNearestSnapshot(int frame)
+    {
+        int snapshotFrame =
+            frame - (frame % SNAPSHOT_INTERVAL);
+
+        while (snapshotFrame >= 0)
+        {
+            if (_snapshots.ContainsKey(snapshotFrame))
+                return snapshotFrame;
+
+            snapshotFrame -= SNAPSHOT_INTERVAL;
+        }
+
+        return -1;
+    }
+    public int LoadNearestSnapshot(int desyncFrame)
+    {
+        int snapshotFrame = FindNearestSnapshot(desyncFrame);
+
+        if (snapshotFrame < 0)
+        {
+            Debug.LogError(
+                $"Rollback failed. No snapshot found. desyncFrame={desyncFrame}");
+            return -1;
+        }
+
+        if (!_snapshots.TryGetValue(snapshotFrame, out var snapshot))
+        {
+            Debug.LogError(
+                $"Rollback failed. Snapshot missing. frame={snapshotFrame}");
+            return -1;
+        }
+
+        context.Restore(snapshot.State);
+
+        Debug.Log(
+            $"Rollback restore snapshot. desync={desyncFrame}, snapshot={snapshotFrame}");
+
+        return snapshotFrame;
     }
 
     private void DispatchCommand(InputBuffer.Command cmd)

@@ -18,7 +18,7 @@ public class SimulationClock : MonoBehaviour
     private bool _waitingStart;
 
     private SimulationWorld world;
-
+    const int ROLLBACK_STEPS_PER_FRAME = 16;
 
     public int CurrentFrame => currentFrame;
 
@@ -27,6 +27,40 @@ public class SimulationClock : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
+
+    private  void Start() {
+        GameInterface.Interface.UdpListener.OnReceiveFrameDismatch += HandleMismatch;
+    }
+    private void OnDestroy()
+    {
+        if (GameInterface.Interface?.UdpListener != null)
+        {
+            GameInterface.Interface.UdpListener.OnReceiveFrameDismatch -= HandleMismatch;
+        }
+    }
+    private bool _isRollbacking;
+    private int rollbackTargetFrame;
+    private void HandleMismatch(ResFrameSyncData res)
+    {
+        if (_isRollbacking)
+            return;
+
+        rollbackTargetFrame = currentFrame;
+
+        int snapshotFrame =
+            world.LoadNearestSnapshot(
+                res.Desync.FrameId);
+
+        if (snapshotFrame < 0)
+        {
+            Debug.LogError(
+                $"Rollback aborted. No snapshot for frame {res.Desync.FrameId}");
+            return;
+        }
+        currentFrame = snapshotFrame;
+        _isRollbacking = true;
+    }
+
 
     public void SetWorld(SimulationWorld simulationWorld)
     {
@@ -65,15 +99,30 @@ public class SimulationClock : MonoBehaviour
             Step();
             accumulator -= FRAME_DT;
         }
+        if (_isRollbacking)
+        {
+            int count = ROLLBACK_STEPS_PER_FRAME;
+
+            while (_isRollbacking && count-- > 0)
+            {
+                Step();
+            }
+        }
     }
 
     private void Step()
     {
-        UploadLocalInput(currentFrame+INPUT_DELAY);
+        if (!_isRollbacking) {
+            UploadLocalInput(currentFrame+INPUT_DELAY);
+        }
         if (currentFrame <= GameInterface.Interface.GameFrameSyncManager._latestServerFrame)
         {
-            world?.Step(currentFrame);
+            world?.Step(currentFrame,_isRollbacking);
             currentFrame++;
+        }
+
+        if (_isRollbacking && currentFrame > rollbackTargetFrame) {
+            _isRollbacking = false;
         }
     }
     private const int INPUT_DELAY = 8;

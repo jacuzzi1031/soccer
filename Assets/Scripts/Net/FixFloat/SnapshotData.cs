@@ -2,6 +2,11 @@ using System.Collections.Generic;
 using Net.FixFloat;
 
 namespace Net.Core.Simulation.SimSignal{
+    public class SnapshotData
+    {
+        public int Frame;
+        public FixedGameState State;
+    }
     public class FixedGameState{
         public int Frame;
 
@@ -26,5 +31,7 @@ namespace Net.Core.Simulation.SimSignal{
         public FixedFloat ballHeightVelocity;
         public BallState ballState;
         public int ballCarrierId;
+        // 状态内所处帧数
+        public int stateFrame;
     }
 }

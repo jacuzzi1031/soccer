@@ -126,7 +126,6 @@ public class GameSceneBootstrap : MonoBehaviour{
         if (InputBuffer == null) {
             Debug.LogError("Input buffer is null");
         }
-
         var world = new SimulationWorld(
             new List<ISimulationSystem> { MatchSystem, PlayerSystem, BallSim, CollisionSystem, BoundarySystem },
             simulationContext,
