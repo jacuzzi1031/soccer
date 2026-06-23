@@ -32,6 +32,8 @@ public class PlayerSystem:ISimulationSystem
     private ControlScheme _scheme;
     private static FixedFloat MaxPassDistance = 350;
     private static FixedFloat MaxXDiff = 80;
+    private Dictionary<int, PlayerSim> _playerMap =
+        new Dictionary<int, PlayerSim>();
 	public PlayerSystem(SimEventBus eventBus,CommandBuffer commandBuffer,int MatchPlayerCount) {
         _eventBus = eventBus;
         _commandBuffer=commandBuffer;
@@ -47,6 +49,15 @@ public class PlayerSystem:ISimulationSystem
         teamHome = home;
         teamAway = away;
         _ballSim=ballSim;
+        foreach (var player in teamHome)
+        {
+            _playerMap[player.playerId] = player;
+        }
+
+        foreach (var player in teamAway)
+        {
+            _playerMap[player.playerId] = player;
+        }
         foreach (var homePlayer in teamHome) {
             homePlayer.SetEventBusAndCommandBuffer(_eventBus,_commandBuffer,_ballSim,goalAwayPos,goalHomeArea,matchPlayerCount);
         }
@@ -54,6 +65,11 @@ public class PlayerSystem:ISimulationSystem
             awayPlayer.SetEventBusAndCommandBuffer(_eventBus,_commandBuffer,_ballSim,goalHomePos,goalAwayArea,matchPlayerCount);
         }
         ResetControlSchemesSim();
+    }
+    public PlayerSim GetPlayer(int playerId)
+    {
+        _playerMap.TryGetValue(playerId, out var player);
+        return player;
     }
     public void Tick(SimulationContext context)
     {

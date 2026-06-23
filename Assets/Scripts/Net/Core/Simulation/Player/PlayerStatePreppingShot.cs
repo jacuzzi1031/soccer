@@ -13,11 +13,10 @@ public class PlayerStatePreppingShot: PlayerSimState
     private static readonly FixedFloat EASE_REWARD_FACTOR = (FixedFloat)2f;
 
     private bool hasTriggeredBonusEvent;
-    private int pressFrames;
     public override void OnEnter()
     {
         hasTriggeredBonusEvent = false;
-        pressFrames = 0;
+        stateFrame = 0;
 
         playerSim.Velocity = FixedVector2.Zero;
 
@@ -28,12 +27,12 @@ public class PlayerStatePreppingShot: PlayerSimState
     }
     public override void _Update()
     {
-        pressFrames++;
+        stateFrame++;
 
         shotDirection += _moveDirection;
 
         if (!hasTriggeredBonusEvent &&
-            pressFrames >= BONUS_EVENT_FRAMES)
+            stateFrame >= BONUS_EVENT_FRAMES)
         {
             _eventBus.Publish(
                 new PlayStyleShowSignal(
@@ -52,7 +51,7 @@ public class PlayerStatePreppingShot: PlayerSimState
             return;
 
         FixedFloat clampedFrames =
-            FixedFloat.Min(pressFrames, MAX_BONUS_FRAMES);
+            FixedFloat.Min(stateFrame, MAX_BONUS_FRAMES);
 
         FixedFloat easeTime = clampedFrames / (FixedFloat)MAX_BONUS_FRAMES;
 

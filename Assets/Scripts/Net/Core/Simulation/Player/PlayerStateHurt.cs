@@ -9,8 +9,7 @@ public class PlayerStateHurt: PlayerSimState
     private static readonly FixedFloat BALL_TUMBLE_SPEED = (FixedFloat)20f;
 
     private const int DURATION_HURT_FRAMES = 60;
-
-    private int _hurtFrames;
+    
 
     public override void OnEnter()
     {
@@ -22,16 +21,16 @@ public class PlayerStateHurt: PlayerSimState
         _ballSim.Tumble(
             tumbleDir * BALL_TUMBLE_SPEED);
 
-        _hurtFrames = 0;
+        stateFrame = 0;
     }
 
     public override void _Update()
     {
-        _hurtFrames++;
+        stateFrame++;
 
         MoveHorizontal( AIR_FRICTION);
 
-        if (_hurtFrames >= DURATION_HURT_FRAMES)
+        if (stateFrame >= DURATION_HURT_FRAMES)
         {
             playerSim.SwitchState(PlayerState.RECOVERING);
         }

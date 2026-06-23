@@ -4,7 +4,6 @@ using Net.FixFloat;
 using UnityEngine;
 
 public class PlayerStateCelebrating: PlayerSimState {
-    private int startCelebratingFrame;
     private int initialDelayFrames;
 
     private const int CELEBRATING_HEIGHT = 50;
@@ -15,12 +14,12 @@ public class PlayerStateCelebrating: PlayerSimState {
         // 0.2s = 12帧, 0.3s = 18帧
         initialDelayFrames = 12 + (r % 19); // 0~18 → 12~30
 
-        startCelebratingFrame = 0;
+        stateFrame = 0;
     }
     public override void _Update() {
-        startCelebratingFrame++;
+        stateFrame++;
 
-        if (playerSim.Height == 0 && startCelebratingFrame > initialDelayFrames) {
+        if (playerSim.Height == 0 && stateFrame > initialDelayFrames) {
             Celebrate();
         }
 

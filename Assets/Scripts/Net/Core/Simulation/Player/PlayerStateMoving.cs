@@ -8,16 +8,15 @@ public class PlayerStateMoving: PlayerSimState
     private FixedVector2 moveDir;
     private FixedFloat goalieSpeed = (FixedFloat)34f;
     private bool couldCarrer;
-    private int _elapsedFrames;
     private int couldCarryFrames = 24;
     public override void OnEnter() {
-        _elapsedFrames = 0;
+        stateFrame = 0;
         couldCarrer = false;
     }
 
     public override void _Update() {
-        if (!couldCarrer && _elapsedFrames < couldCarryFrames) {
-            _elapsedFrames++;
+        if (!couldCarrer && stateFrame < couldCarryFrames) {
+            stateFrame++;
         }
         else {
             couldCarrer = true;

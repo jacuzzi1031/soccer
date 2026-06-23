@@ -8,7 +8,7 @@ public class PlayerStatePassing: PlayerSimState
    private const int PASS_ANIMATION_FRAMES = 3;
     private const int RECOVER_FRAMES = 18;
 
-    private int _elapsedFrames;
+
     private bool _passTriggered;
 
     private FixedVector2 passDestination;
@@ -16,7 +16,7 @@ public class PlayerStatePassing: PlayerSimState
 
     public override void OnEnter()
     {
-        _elapsedFrames = 0;
+        stateFrame = 0;
         _passTriggered = false;
 
         FixedVector2 headingOffset =
@@ -81,16 +81,16 @@ public class PlayerStatePassing: PlayerSimState
 
     public override void _Update()
     {
-        _elapsedFrames++;
+        stateFrame++;
 
         if (!_passTriggered &&
-            _elapsedFrames >= PASS_ANIMATION_FRAMES)
+            stateFrame >= PASS_ANIMATION_FRAMES)
         {
             _ballSim.passTo(passDestination, overground);
             _passTriggered = true;
         }
 
-        if (_elapsedFrames >= RECOVER_FRAMES)
+        if (stateFrame >= RECOVER_FRAMES)
         {
             playerSim.SwitchState(PlayerState.MOVING);
         }

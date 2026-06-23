@@ -7,11 +7,10 @@ public class PlayerStateTackling : PlayerSimState{
     private static readonly FixedFloat tackle_FRICTION = (FixedFloat)140f;
 
     private const int PRIOR_RECOVERY_FRAMES = 30;
-
-    private int _elapsedFrames;
+    
 
     public override void OnEnter() {
-        _elapsedFrames = 0;
+        stateFrame = 0;
 
         // playerSim.Velocity = _moveDirection * playerSim.Speed;
     }
@@ -19,9 +18,9 @@ public class PlayerStateTackling : PlayerSimState{
     public override void _Update() {
         MoveHorizontal(tackle_FRICTION);
 
-        _elapsedFrames++;
+        stateFrame++;
 
-        if (_elapsedFrames >= PRIOR_RECOVERY_FRAMES) {
+        if (stateFrame >= PRIOR_RECOVERY_FRAMES) {
             playerSim.SwitchState(PlayerState.RECOVERING);
         }
     }

@@ -19,6 +19,7 @@ public class PlayerSimState
     protected static FixedFloat GROUND_FRICTION = (FixedFloat)75f;
     public FixedFloat diveDirY;
     private static readonly FixedFloat STOP_THRESHOLD = (FixedFloat)0.0001f;
+    public int stateFrame = 0;
     public int HashRandom(int seed)
     {
         uint x = (uint)seed;
@@ -32,7 +33,7 @@ public class PlayerSimState
         PlayerSim contextPlayerView,
         PlayerStateData contextData,
         SimEventBus eventBus,
-        CommandBuffer commandBuffer,BallSim ballSim
+        CommandBuffer commandBuffer,BallSim ballSim,int stateFrame=0
     )
     {
         playerSim = contextPlayerView;
@@ -40,6 +41,7 @@ public class PlayerSimState
         _eventBus = eventBus;
         _commandBuffer=commandBuffer;
         _ballSim=ballSim;
+        this.stateFrame = stateFrame;
     }
     public virtual void _Update() {
     }

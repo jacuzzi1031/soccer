@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GameFrameSync;
+using UnityEngine;
 using UnityEngine.Pool;
 
 public class InputBuffer
@@ -45,7 +46,8 @@ public class InputBuffer
             frameCmds = new Command[maxPlayers];
             buffer.Add(msg.FrameId, frameCmds);
         }
-
+        if(msg.InputType!=0)
+            Debug.Log("inputbuffer push  FrameId:" + msg.FrameId+" seatIndex:"+msg.SeatIndex+" inputType:"+msg.InputType);
         // 同一玩家同一帧输入被覆盖（补包/修正）
         if (frameCmds[seatIndex] != null)
         {

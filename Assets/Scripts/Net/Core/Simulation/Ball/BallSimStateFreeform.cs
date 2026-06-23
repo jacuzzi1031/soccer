@@ -5,17 +5,19 @@ using UnityEngine;
 
 public class BallSimStateFreeform : BallSimState
 {
-    private FixedFloat lockDurationCheckTimer = FixedFloat.Zero;
     private bool canCarried = false;
-
+    private int lockDurationFrames;
     public override void OnEnter()
     {
         canCarried = false;
-        lockDurationCheckTimer = FixedFloat.Zero;
+        stateFrame = 0;
+        lockDurationFrames =
+            (int)(stateData.LockDuration / SimulationConfig.DeltaTime);
     }
 
     public override void _Update()
     {
+        stateFrame++;
         SetLockDuration();
         MoveVertical(BOUNCINESS);
         MoveHorizontal();
@@ -25,12 +27,10 @@ public class BallSimStateFreeform : BallSimState
     {
         if (!canCarried)
         {
-            lockDurationCheckTimer += SimulationConfig.DeltaTime;
 
-            if (lockDurationCheckTimer >= stateData.LockDuration)
+            if (stateFrame >= lockDurationFrames)
             {
                 canCarried = true;
-                lockDurationCheckTimer = FixedFloat.Zero;
             }
         }
     }

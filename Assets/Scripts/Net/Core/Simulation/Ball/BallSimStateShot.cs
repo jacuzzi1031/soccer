@@ -8,20 +8,18 @@ public class BallSimStateShot : BallSimState
     private static readonly FixedFloat SHOT_HEIGHT = (FixedFloat)0.25f;
     private const int DURATION_SHOT_FRAMES = 60;
     
-    private int shotFrameCount;
-    
 
     public override void OnEnter()
     {
         ballSim.Height = SHOT_HEIGHT;
-        shotFrameCount = 0;
+        stateFrame = 0;
     }
 
     public override void _Update()
     {
-        shotFrameCount++;
+        stateFrame++;
 
-        if (shotFrameCount >= DURATION_SHOT_FRAMES)
+        if (stateFrame >= DURATION_SHOT_FRAMES)
         {
             ballSim.SwitchState(BallState.FREEFORM);
         }

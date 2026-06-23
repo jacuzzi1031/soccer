@@ -92,6 +92,16 @@ public class PlayerSim {
         currentState.Setup(this, data ?? PlayerStateData.Build(),_eventBus,_commandBuffer,_ballSim);
         currentState.OnEnter();
     }
+    public void restoreState(PlayerState id,int stateFrame, PlayerStateData data = null) {
+        if (playerState == id) return;
+        if (currentState != null) {
+            currentState.OnExit();
+        }
+        playerState = id;
+        currentState = stateFactory.GetFreshState(id);
+        currentState.Setup(this, data ?? PlayerStateData.Build(),_eventBus,_commandBuffer,_ballSim,stateFrame);
+
+    }
     public bool IsReadyForKickoff() {
         return currentState != null && currentState.IsReadyForKickoff();
     }

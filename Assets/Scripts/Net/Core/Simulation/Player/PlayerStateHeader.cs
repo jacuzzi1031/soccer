@@ -4,15 +4,14 @@
 
     public class PlayerStateHeader:PlayerSimState {
         private const int DURATION_FRAMES = 16;
-
-        private int _elapsedFrames;
+        
 
         public static readonly FixedFloat HEIGHT_START = (FixedFloat)0.1f;
         public static readonly FixedFloat HEIGHT_VELOCITY_START = (FixedFloat)10f;
 
         public override void OnEnter()
         {
-            _elapsedFrames = 0;
+            stateFrame = 0;
 
             playerSim.Height = HEIGHT_START;
             playerSim.HeightVelocity = HEIGHT_VELOCITY_START;
@@ -20,9 +19,9 @@
 
         public override void _Update()
         {
-            _elapsedFrames++;
+            stateFrame++;
 
-            if (_elapsedFrames >= DURATION_FRAMES)
+            if (stateFrame >= DURATION_FRAMES)
             {
                 playerSim.SwitchState(PlayerState.RECOVERING);
             }

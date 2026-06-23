@@ -13,6 +13,8 @@ namespace Net.Core.Simulation.SimSignal{
         public FixedBallState Ball;
 
         public List<FixedPlayerState> Players;
+        
+        //TODO  FixedPlayerStateData,ballStateData
     }
 
     public class FixedPlayerState{
@@ -23,6 +25,7 @@ namespace Net.Core.Simulation.SimSignal{
         public FixedFloat playerHeightVelocity;
         public PlayerState playerState;
         public bool HeadingRight;
+        public int stateFrame;
     }
     public class FixedBallState{
         public FixedVector2 ballPosition;

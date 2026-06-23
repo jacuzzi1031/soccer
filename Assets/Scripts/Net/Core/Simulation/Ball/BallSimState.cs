@@ -11,10 +11,11 @@ public class BallSimState
     public PlayerView carrier=null;
     protected BallStateData stateData = new BallStateData();
     public static  FixedFloat BOUNCINESS = (FixedFloat)0.8f;
-    protected int stateFrame;
-    public void Setup(BallSim contextBallSim,BallStateData ContextBallStateData,SimEventBus eventBus){
+    public int stateFrame=0;
+    public void Setup(BallSim contextBallSim,BallStateData ContextBallStateData,SimEventBus eventBus,int stateFrame=0){
         ballSim = contextBallSim;
         stateData = ContextBallStateData;
+        this.stateFrame = stateFrame;
     }
     public virtual void _Update() {
     }

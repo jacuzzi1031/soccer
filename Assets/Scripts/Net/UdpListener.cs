@@ -65,7 +65,7 @@ public class UdpListener : IDisposable
             ResFrameSyncData resFrameSyncData = ResFrameSyncData.Parser.ParseFrom(e.Buffer, 0, length);
 
             if (resFrameSyncData.MessageType is MessageType.FrameSync)
-            {
+            {   
                 OnReceiveFrameSync?.Invoke(resFrameSyncData);
 
                 SendAck();

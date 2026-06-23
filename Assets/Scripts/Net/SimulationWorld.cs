@@ -93,7 +93,8 @@ public class SimulationWorld
                 ballHeight = models.BallSim.Height,
                 ballHeightVelocity = models.BallSim.HeightVelocity,
                 ballState = models.BallSim.ballState,
-                ballCarrierId = models.BallSim.BallCarrierId
+                ballCarrierId = models.BallSim.BallCarrierId,
+                stateFrame=models.BallSim.currentState.stateFrame,
             },
             Players = new List<FixedPlayerState>()
         };
@@ -108,7 +109,8 @@ public class SimulationWorld
                 playerHeight = player.Height,
                 playerHeightVelocity = player.HeightVelocity,
                 playerState = player.playerState,
-                HeadingRight = player.HeadingRight
+                HeadingRight = player.HeadingRight,
+                stateFrame=player.currentState.stateFrame
             });
         }
 
@@ -122,7 +124,8 @@ public class SimulationWorld
                 playerHeight = player.Height,
                 playerHeightVelocity = player.HeightVelocity,
                 playerState = player.playerState,
-                HeadingRight = player.HeadingRight
+                HeadingRight = player.HeadingRight,
+                stateFrame=player.currentState.stateFrame,
             });
         }
         return snapshot;
@@ -209,7 +212,6 @@ public class SimulationWorld
 
             snapshotFrame -= SNAPSHOT_INTERVAL;
         }
-
         return -1;
     }
     public int LoadNearestSnapshot(int desyncFrame)

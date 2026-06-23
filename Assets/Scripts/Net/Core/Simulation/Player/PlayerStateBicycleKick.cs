@@ -5,17 +5,16 @@ using UnityEngine;
 
 public class PlayerStateBicycleKick : PlayerSimState
 {
-    private int _elapsedFrames;
     private int _durationFrames=16;
 
     public override void OnEnter() {
-        _elapsedFrames = 0;
+        stateFrame = 0;
     }
 
     public override void _Update() {
-        _elapsedFrames++;
+        stateFrame++;
 
-        if (_elapsedFrames >= _durationFrames) {
+        if (stateFrame >= _durationFrames) {
             playerSim.SwitchState(PlayerState.RECOVERING);
         }
     }

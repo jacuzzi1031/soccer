@@ -43,6 +43,13 @@ public class BallSim:ISimulationSystem
         currentState.Setup(this, data ?? new BallStateData(),_eventBus);
         currentState.OnEnter();
     }
+    public void restoreState(BallState type,int stateFrame, BallStateData data = null) {
+
+        currentState?.OnExit();
+        ballState = type;
+        currentState = stateFactory.GetFreshState(type);
+        currentState.Setup(this, data ?? new BallStateData(),_eventBus,stateFrame);
+    }
 
     public void Tick(SimulationContext context) {
         Frame=context.Frame;

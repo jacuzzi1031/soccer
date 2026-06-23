@@ -6,16 +6,16 @@ using UnityEngine;
 public class PlayerStateVolleyKick : PlayerSimState{
     private const int DURATION_FRAMES = 16;
 
-    private int _elapsedFrames;
+
 
     public override void OnEnter() {
-        _elapsedFrames = 0;
+        stateFrame = 0;
     }
 
     public override void _Update() {
-        _elapsedFrames++;
+        stateFrame++;
 
-        if (_elapsedFrames >= DURATION_FRAMES) {
+        if (stateFrame >= DURATION_FRAMES) {
             playerSim.SwitchState(PlayerState.MOVING);
         }
     }

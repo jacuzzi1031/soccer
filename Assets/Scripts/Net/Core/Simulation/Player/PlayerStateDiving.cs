@@ -7,9 +7,7 @@ using UnityEngine;
 public class PlayerStateDiving: PlayerSimState
 {
     private const int DURATION_FRAMES = 30;
-
-    private int _elapsedFrames;
-    public FixedFloat timeStartDive;
+    
 
     public override void OnEnter()
     {
@@ -47,12 +45,12 @@ public class PlayerStateDiving: PlayerSimState
 
         diveDirY = playerSim.Velocity.y;
 
-        _elapsedFrames = 0;
+        stateFrame = 0;
     }
 
     public override void _Update()
     {
-        _elapsedFrames++;
+        stateFrame++;
 
         if (FixedFloat.Abs(playerSim.Velocity.y) < (FixedFloat)0.1f)
         {
@@ -65,7 +63,7 @@ public class PlayerStateDiving: PlayerSimState
         playerSim.Position +=
             playerSim.Velocity * SimulationConfig.DeltaTime;
 
-        if (_elapsedFrames >= DURATION_FRAMES)
+        if (stateFrame >= DURATION_FRAMES)
         {
             playerSim.SwitchState(PlayerState.RECOVERING);
         }

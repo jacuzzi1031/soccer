@@ -36,7 +36,53 @@ public sealed class SimulationContext
         MatchState = _simulationModel.MatchSystem.currentState;
     }
 
-    public void Restore(FixedGameState snapshotState) {
-        throw new System.NotImplementedException();
+    public void Restore(FixedGameState snapshotState)
+    {
+
+        //Ball
+        var ball = _simulationModel.BallSim;
+        var snapshotStateBall = snapshotState.Ball;
+
+        ball.Position = snapshotStateBall.ballPosition;
+        ball.Velocity = snapshotStateBall.ballVelocity;
+        ball.Height = snapshotStateBall.ballHeight;
+        ball.HeightVelocity = snapshotStateBall.ballHeightVelocity;
+        if (ball.BallCarrierId >= 0)
+        {
+            var carrier = _simulationModel.PlayerSystem.GetPlayer(ball.BallCarrierId);
+
+            if (carrier != null)
+            {
+                ball.carrier = carrier;
+            }
+        }
+        else
+        {
+            ball.carrier = null;
+        }
+
+        ball.restoreState( snapshotStateBall.ballState, snapshotStateBall.stateFrame );
+
+        //Players
+        foreach (var playerState in snapshotState.Players)
+        {
+            var player = _simulationModel.PlayerSystem.GetPlayer(playerState.playerId);
+
+            if (player == null)
+                continue;
+
+            player.Position = playerState.playerPosition;
+            player.Velocity = playerState.playerVelocity;
+            player.Height = playerState.playerHeight;
+            player.HeightVelocity = playerState.playerHeightVelocity;
+            player.HeadingRight = playerState.HeadingRight;
+
+            player.restoreState(
+                playerState.playerState,
+                playerState.stateFrame
+            );
+        }
+        
+ 
     }
 }

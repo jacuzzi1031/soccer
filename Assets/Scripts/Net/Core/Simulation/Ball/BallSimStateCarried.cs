@@ -21,6 +21,8 @@ public class BallSimStateCarried : BallSimState
 
     public override void _Update()
     {
+        
+        //只影响动画，不需要记录stateFrame
         dribbleTime += SimulationConfig.DeltaTime;
 
         FixedFloat vx = FixedFloat.Zero;
