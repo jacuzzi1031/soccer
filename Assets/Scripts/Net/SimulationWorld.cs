@@ -38,7 +38,7 @@ public class SimulationWorld
         
         ExecuteFrame(frame, cmds);
 
-        if (!isRollback)
+        if (!isRollback&&frame>20)
         {
             if(frame % SNAPSHOT_INTERVAL == 0)
                 SaveSnapshot(frame);
@@ -138,9 +138,7 @@ public class SimulationWorld
     private void SendChecksum(int frame)
     {
         var req = _syncDataPool.Allocate();
-
-        req.MessageType = MessageType.Checksum;
-
+        
         var checksum = _checksumPool.Allocate();
 
         checksum.FrameId = frame;
@@ -149,7 +147,7 @@ public class SimulationWorld
 
         req.Checksum = checksum;
         req.RoomCode = GameInterface.Interface.RoomManager.CurrentRoomInfo.roomCode;
-        GameInterface.Interface.UdpListener.Send(req);
+        GameInterface.Interface.UdpListener.SendChecksum(req);
 
         _checksumPool.Release(checksum);
         _syncDataPool.Release(req);

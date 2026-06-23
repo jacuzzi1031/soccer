@@ -10,6 +10,8 @@ public class PlayerStateCelebrating: PlayerSimState {
 
     public override void OnEnter() {
         int r = HashRandom(playerSim.playerId);
+        //test for checksum dismatch
+        // int r = HashRandom(playerSim.playerId+1);
 
         // 0.2s = 12帧, 0.3s = 18帧
         initialDelayFrames = 12 + (r % 19); // 0~18 → 12~30

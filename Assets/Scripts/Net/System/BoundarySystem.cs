@@ -101,7 +101,7 @@ public class BoundarySystem : ISimulationSystem{
             // 推出重叠
             FixedFloat penetration = combinedRadius - dist;
             ballPos += normal * penetration;
-            ball.Velocity = ballVelocity * (FixedFloat)1.1f;
+            ball.Velocity = ballVelocity * (FixedFloat)0.9f;
             ball.Position = ballPos;
         }
     }

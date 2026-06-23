@@ -11,8 +11,6 @@ public class RoomManager : BaseManager
     
     public bool IsHome=>localSeatIndex==0;
     public bool JoinedRoom { get; private set; }
-    private Dictionary<int, int> _playerIdToRoomIndex
-        = new Dictionary<int, int>();
     public event Action<RoomPlayerInfo> OnRoomPlayerJoin;
     public event Action<RoomPlayerInfo,RoomPlayerInfo> OnRoomPlayerQuit;
     public event Action<RoomPlayerInfo,int,string> OnRoomPlayerSelectCountryChanged;

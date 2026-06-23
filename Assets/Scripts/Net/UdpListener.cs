@@ -54,30 +54,45 @@ public class UdpListener : IDisposable
     private void ReceiveCallback(object sender, SocketAsyncEventArgs e)
     {
         if (Disposed) return;
-        if (e.SocketError == SocketError.Success) {
-            int length = e.BytesTransferred;
-            if (length <= 0)
-            {
-                StartReceive(e);
-                return;
-            }
-            RemoteEp = (IPEndPoint)e.RemoteEndPoint;
-            ResFrameSyncData resFrameSyncData = ResFrameSyncData.Parser.ParseFrom(e.Buffer, 0, length);
 
-            if (resFrameSyncData.MessageType is MessageType.FrameSync)
-            {   
-                OnReceiveFrameSync?.Invoke(resFrameSyncData);
-
-                SendAck();
-            }else if (resFrameSyncData.MessageType is MessageType.Dismatch) {
-                OnReceiveFrameDismatch?.Invoke(resFrameSyncData);
-                
-            }
-            
-            StartReceive(e);
-        }else
+        try
         {
-            Debug.LogError("接收消息出错" + e.SocketError);
+            if (e.SocketError == SocketError.Success)
+            {
+                int length = e.BytesTransferred;
+
+                if (length > 0)
+                {
+                    var msg =
+                        ResFrameSyncData.Parser.ParseFrom(
+                            e.Buffer,
+                            0,
+                            length);
+                    switch (msg.MessageType)
+                    {
+                        case MessageType.FrameSync:
+                            OnReceiveFrameSync?.Invoke(msg);
+                            SendAck();
+                            break;
+
+                        case MessageType.Dismatch:
+                            OnReceiveFrameDismatch?.Invoke(msg);
+                            break;
+
+                        case MessageType.Checksum:
+                            Debug.Log("Receive Checksum");
+                            break;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex);
+        }
+        finally
+        {
+            StartReceive(e);
         }
     }
 
@@ -93,6 +108,25 @@ public class UdpListener : IDisposable
 
             _mCurrentDataSequence++;
 
+            _mSocket.SendTo(data, RemoteEp);
+        }
+        catch (SocketException e)
+        {
+            Debug.LogError("UDP SocketError:" + e);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Exception:" + e);
+        }
+    }
+
+    // ReSharper disable Unity.PerformanceAnalysis
+    public void SendChecksum(ReqFrameSyncData req) {
+        if (Disposed) return;
+        req.MessageType=MessageType.Checksum;
+        try
+        {
+            byte[] data = Serialize(req);
             _mSocket.SendTo(data, RemoteEp);
         }
         catch (SocketException e)

@@ -12,6 +12,7 @@ public class RoomVisual : MonoBehaviour {
     [SerializeField] private RoomPlayer roomPlayerPrefab;
     private bool[] _mRoomPlayerPositionAvailable;
 
+
     public void Awake() {
         Instance=this;
     }
@@ -24,6 +25,7 @@ public class RoomVisual : MonoBehaviour {
         GameInterface.Interface.RoomManager.OnRoomPlayerSelectCountryChanged+= OnSelectCountryChanged;
         GameInterface.Interface.RoomManager.OnRoomPlayerCountryConfirmed += OnCountryConfirmed;
         SpawnRoomPlayers();
+        
     }
     private void OnDestroy() {
         GameInterface.Interface.RoomManager.OnRoomPlayerQuit -= OnRoomPlayerQuit;

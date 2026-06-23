@@ -16,7 +16,7 @@ public class CollisionSystem : ISimulationSystem{
     public FixedFloat volleycaptureRadiusSqr;
 
     //实际  ballView height*2.5f
-    private static readonly FixedFloat MAX_CAPTURE_HEIGHT = (FixedFloat)0.75f;
+    private static readonly FixedFloat MAX_CAPTURE_HEIGHT = (FixedFloat)0.8f;
     private static readonly FixedFloat BALL_CONTROL_HEIGHT_MAX = (FixedFloat)0.55f;
 
     public FixedVector2 playerForBallOffset = new FixedVector2( FixedFloat.Zero, (FixedFloat)4f);
@@ -129,8 +129,8 @@ public class CollisionSystem : ISimulationSystem{
         playerRadius = simConfig.PlayerRadius;
         ballCaptureRadius = simConfig.ballCaptureRadius;
         captureRadiusSqr = (playerRadius + ballCaptureRadius) * (playerRadius + ballCaptureRadius);
-        volleycaptureRadiusSqr = (simConfig.playervolleyRadius + ballCaptureRadius - (FixedFloat)2f) *
-                                 (simConfig.playervolleyRadius + ballCaptureRadius - (FixedFloat)2f);
+        volleycaptureRadiusSqr = (simConfig.playervolleyRadius + ballCaptureRadius - (FixedFloat)1.5f) *
+                                 (simConfig.playervolleyRadius + ballCaptureRadius - (FixedFloat)1.5f);
         tacklingRadiusSqr = (playerRadius + (FixedFloat)4f) * (playerRadius +(FixedFloat) 4f);
         ballRadiusSqr = (ballRadius + (FixedFloat)4f) * (ballRadius + (FixedFloat)4f);
         lines = lineSegments;
