@@ -107,8 +107,8 @@ namespace SocketProtocol {
             "ChVMb2FkR2FtZVNjZW5lQ29tcGxldGUQDhITCg9DaGFuZ2VHYW1lU3RhdGUQ",
             "DxIPCgtDaGFuZ2VSb3VuZBAQEhMKD0NoYW5nZU9wZXJhdGlvbhAREg8KC1Nl",
             "dEdhbWVPdmVyEBISDgoKT25UaW1lU3luYxATKlAKDVJvb21NYXRjaFR5cGUS",
-            "CAoETm9uZRAAEgwKCFRyYWluaW5nEAESFQoRVHJhaW5pbmdXaXRoRW5lbXkQ",
-            "AhIQCgxVbHRpbWF0ZVRlYW0QAyozCgpSZXR1cm5Db2RlEg4KClJldHVybk5v",
+            "CAoETm9uZRAAEhAKDFVsdGltYXRlVGVhbRABEgwKCFRyYWluaW5nEAISFQoR",
+            "VHJhaW5pbmdXaXRoRW5lbXkQAyozCgpSZXR1cm5Db2RlEg4KClJldHVybk5v",
             "bmUQABILCgdTdWNjZXNzEAESCAoERmFpbBACKmgKCUdhbWVTdGF0ZRIOCgpO",
             "b3RTdGFydGVkEAASCwoHSU5fUExBWRABEgoKBlNDT1JFRBACEgkKBVJFU0VU",
             "EAMSCwoHS0lDS09GRhAEEgwKCE9WRVJUSU1FEAUSDAoIR0FNRU9WRVIQBmIG",
@@ -185,9 +185,9 @@ namespace SocketProtocol {
 
   public enum RoomMatchType {
     [pbr::OriginalName("None")] None = 0,
-    [pbr::OriginalName("Training")] Training = 1,
-    [pbr::OriginalName("TrainingWithEnemy")] TrainingWithEnemy = 2,
-    [pbr::OriginalName("UltimateTeam")] UltimateTeam = 3,
+    [pbr::OriginalName("UltimateTeam")] UltimateTeam = 1,
+    [pbr::OriginalName("Training")] Training = 2,
+    [pbr::OriginalName("TrainingWithEnemy")] TrainingWithEnemy = 3,
   }
 
   public enum ReturnCode {

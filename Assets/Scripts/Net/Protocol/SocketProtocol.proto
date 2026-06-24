@@ -45,9 +45,9 @@ enum ActionCode
 enum RoomMatchType
 {
   None=0;
-  Training=1;
-  TrainingWithEnemy=2;
-  UltimateTeam=3;
+  UltimateTeam=1;
+  Training=2;
+  TrainingWithEnemy=3;
 }
 
 enum ReturnCode
