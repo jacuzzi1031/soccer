@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using GameFrameSync;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -112,9 +113,11 @@ public class InputBuffer
     
     public void Clear()
     {
+        var frameCmdsList = buffer.Values.ToArray();
+
         var commands = new List<Command>();
 
-        foreach (var frameCmds in buffer.Values)
+        foreach (var frameCmds in frameCmdsList)
         {
             for (int i = 0; i < frameCmds.Length; i++)
             {

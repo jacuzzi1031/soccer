@@ -93,7 +93,7 @@ public class BallSim:ISimulationSystem
         // 如果是高空的，视为水平是匀速，速度为原本速度intensity  x=Vx*t  t=x/Vx
         // 垂直方向终点y=0,Vy=gt/2  代入t Vy=gx/2Vx 高度增加 /2->/1.85 也会有更快速度，飞到球员脸上而不是脚下
         if (!overground) {
-            HeightVelocity = GRAVITY * distance / (2 * intensity);
+            HeightVelocity = GRAVITY * distance / (new FixedFloat(2.1f) * intensity);
         }
         else
         {

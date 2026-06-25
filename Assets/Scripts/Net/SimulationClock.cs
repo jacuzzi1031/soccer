@@ -44,7 +44,7 @@ public class SimulationClock : MonoBehaviour
     {
         if (_isRollbacking)
             return;
-
+        if(world==null) return;
         rollbackTargetFrame = currentFrame;
 
         int snapshotFrame =
