@@ -33,8 +33,6 @@
 
 https://github.com/nicolasbize/soccer-course-assets
 
-https://www.futbin.com
-
 Copyright (c) 2025 Nicolas Bize
 
 Licensed under the MIT License.
