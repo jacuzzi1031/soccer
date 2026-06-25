@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Net.Core.Simulation.SimSignal;
 using Net.FixFloat;
 using UnityEngine;
 
@@ -51,6 +52,7 @@ public class BoundarySystem : ISimulationSystem{
                 bool isHome = line.Start.x > 0;
                 commandBuffer.Enqueue(new SimulationCommand
                     { Type = SimulationCommandType.TeamScoring, isHome = isHome });
+                _eventBus.Publish(new TeamScoringSignal());
                 break;
             }
             else if (goalTriggered && context.ResetBall) {
@@ -98,6 +100,7 @@ public class BoundarySystem : ISimulationSystem{
 
             ballVelocity = FixedVector2.Reflect(ballVelocity, normal);
             _eventBus.Publish( new PlayStyleShowSignal( goalKeeperId, PlayerState.DIVING) );
+            _eventBus.Publish( new goalKeeperBounceBallSignal() );
             // 推出重叠
             FixedFloat penetration = combinedRadius - dist;
             ballPos += normal * penetration;

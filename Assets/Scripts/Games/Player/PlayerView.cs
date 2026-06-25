@@ -228,6 +228,7 @@ public class PlayerView : MonoBehaviour {
         {
             case PlayerState.BICYCLE_KICK:
                 animator.Play("bicycle_kick");
+                SoundManager.Instance.Play(SoundManager.Instance.audioRefs.POWERSHOT);
                 break;
             case PlayerState.CELEBRATING:
                 animator.Play("celebrate");
@@ -245,6 +246,7 @@ public class PlayerView : MonoBehaviour {
                 break;
             case PlayerState.HURT:
                 animator.Play("hurt");
+                SoundManager.Instance.Play(SoundManager.Instance.audioRefs.HURT);
                 break;
             case PlayerState.MOURNING:
                 animator.Play("mourn");
@@ -257,6 +259,7 @@ public class PlayerView : MonoBehaviour {
                 break;
             case PlayerState.PASSING:
                 animator.Play("kick");
+                SoundManager.Instance.Play(SoundManager.Instance.audioRefs.PASS);
                 break;
             case PlayerState.PREPPING_SHOT:
                 animator.Play("pre_kick");
@@ -268,19 +271,24 @@ public class PlayerView : MonoBehaviour {
             case PlayerState.SHOOTING:
                 if (playerSim.currentState.stateData.IsInstant) {
                     animator.Play("instant_kick");
+                    SoundManager.Instance.Play(SoundManager.Instance.audioRefs.SHOT);
                 }
                 else {
                     animator.Play("kick");
+                    SoundManager.Instance.Play(SoundManager.Instance.audioRefs.POWERSHOT);
                 }
                 break;
             case PlayerState.TACKLING:
                 animator.Play("tackle");
+                SoundManager.Instance.Play(SoundManager.Instance.audioRefs.TACKLING);
                 break;
             case PlayerState.VOLLEY_KICK:
                 animator.Play("volley_kick");
+                SoundManager.Instance.Play(SoundManager.Instance.audioRefs.POWERSHOT);
                 break;
             case PlayerState.HEADER:
                 animator.Play("header");
+                SoundManager.Instance.Play(SoundManager.Instance.audioRefs.POWERSHOT);
                 break;
         }
 

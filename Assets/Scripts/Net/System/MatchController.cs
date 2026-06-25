@@ -47,6 +47,13 @@ public class MatchController
         _eventBus.Subscribe<BallBacktoSpawnPositionSignal>(OnballBacktoSpawnPosition);
         _eventBus.Subscribe<GameOverSignal>(OnGameOver);
         _eventBus.Subscribe<OnScoreChangedSignal>(OnScoreChanged);
+        _eventBus.Subscribe<goalKeeperBounceBallSignal>(OnGoalKeeperBounceBall);
+    }
+
+    private void OnGoalKeeperBounceBall(goalKeeperBounceBallSignal obj) {
+        Invoker.Instance.DelegateList.Add(() => {
+            SoundManager.Instance.Play(SoundManager.Instance.audioRefs.BOUNCE);
+        });
     }
 
     private void OnScoreChanged(OnScoreChangedSignal obj) {
@@ -73,7 +80,7 @@ public class MatchController
 
     private void OnTeamScoring(TeamScoringSignal obj) {
         Invoker.Instance.DelegateList.Add(() => {
-            GameInterface.Interface.EventSystem.Publish(new OnTeamScoringEvent(obj.isHome));
+            SoundManager.Instance.Play(SoundManager.Instance.audioRefs.WHISTLE);
         });
     }
 
