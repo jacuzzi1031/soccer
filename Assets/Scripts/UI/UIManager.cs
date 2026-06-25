@@ -495,38 +495,28 @@ public class UIManager : BaseManager
     {
         if (_uiPanelAddressDict.TryGetValue(uiPanelType, out string address))
         {
-            AsyncOperationHandle<GameObject> handle =
-                Addressables.InstantiateAsync(address, _canvas);
-
+            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
             handle.Completed += (op) =>
             {
                 if (op.Status == AsyncOperationStatus.Succeeded)
                 {
-                    GameObject uiGameObject = op.Result;
+                    GameObject uiPrefab = op.Result;
+                    GameObject uiGameObject = GameObject.Instantiate(uiPrefab, _canvas);
 
-                    BaseUIPanel baseUIPanel =
-                        uiGameObject.GetComponent<BaseUIPanel>();
-
+                    BaseUIPanel baseUIPanel = uiGameObject.GetComponent<BaseUIPanel>();
                     baseUIPanel.UIType = uiPanelType;
                     _uiPanelDict[uiPanelType] = baseUIPanel;
 
-                    CanvasGroup canvasGroup =
-                        uiGameObject.GetComponent<CanvasGroup>();
-
-                    if (canvasGroup != null)
-                    {
-                        canvasGroup.alpha = 0f;
-                        canvasGroup.blocksRaycasts = false;
-                    }
+                    CanvasGroup canvasGroup = uiGameObject.GetComponent<CanvasGroup>();
+                    canvasGroup.alpha = 0f;
+                    canvasGroup.blocksRaycasts = false;
 
                     baseUIPanel.OnInit();
-
                     onComplete?.Invoke(baseUIPanel);
                 }
                 else
                 {
-                    Debug.LogError(
-                        $"Failed to instantiate UI Panel for {uiPanelType}, Address: {address}");
+                    Debug.LogError($"Failed to load UI Panel for {uiPanelType}, Address: {address}");
                 }
             };
         }

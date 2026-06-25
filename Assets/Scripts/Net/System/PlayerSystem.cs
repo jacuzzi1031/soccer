@@ -30,7 +30,7 @@ public class PlayerSystem:ISimulationSystem
     private PlayerSim _fromPlayer;
     private PlayerSim _toPlayer;
     private ControlScheme _scheme;
-    private static FixedFloat MaxPassDistance = 350;
+    private static FixedFloat MaxPassDistance = 200;
     private static FixedFloat MaxXDiff = 80;
     private Dictionary<int, PlayerSim> _playerMap =
         new Dictionary<int, PlayerSim>();
