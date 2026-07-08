@@ -145,10 +145,10 @@ namespace Games.Player.AIBehavior{
         protected FixedVector2 GetOnDutySteeringForce(Role role) {
             switch (role) {
                 case Role.ATTACKER:
-                    SteeringForceFactor = (FixedFloat)0.6f;
+                    SteeringForceFactor = (FixedFloat)0.8f;
                     break;
                 case Role.MIDFIELD:
-                    SteeringForceFactor = (FixedFloat)0.8f;
+                    SteeringForceFactor = (FixedFloat)0.9f;
                     break;
                 case Role.DEFENSE:
                     SteeringForceFactor = FixedFloat.One;
@@ -170,7 +170,7 @@ namespace Games.Player.AIBehavior{
                 case Role.MIDFIELD:
                     break;
                 case Role.DEFENSE:
-                    factor = (FixedFloat)0.8f;
+                    factor = (FixedFloat)1.2f;
                     break;
             }
             var playerPos = playerSim.Position;
@@ -199,7 +199,7 @@ namespace Games.Player.AIBehavior{
         {
             var playerPos = playerSim.Position;
             var carrierPos = ballSim.Position;
-            FixedFloat weight = GetBiCircularWeight(playerPos, carrierPos, 20, 1, 120, 0);
+            FixedFloat weight = GetBiCircularWeight(playerPos, carrierPos, 20, 1, 100, 0);
             FixedVector2 direction = (carrierPos - playerPos).normalized;
     
             return direction * weight;

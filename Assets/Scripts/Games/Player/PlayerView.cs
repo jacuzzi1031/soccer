@@ -353,6 +353,7 @@ public class PlayerView : MonoBehaviour {
         playerId=playerid;
         playStyleRenderer.enabled=false;
         transform.position = contextPosition;
+        prevPos = contextPosition;
         KickoffPosition = contextKickoffPosition;
         ballView = contextBallView;
         ownGoal = contextOwnGoal;

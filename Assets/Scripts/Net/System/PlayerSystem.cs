@@ -447,9 +447,22 @@ public class PlayerSystem:ISimulationSystem
         FixedVector2 moveDir)
     {
         if (moveDir.sqrMagnitude <= minMoveDir)
-            moveDir = self.HeadingRight
-                ? FixedVector2.Right
-                : FixedVector2.Left;
+        {
+            if (self.Position.y > FixedFloat.Zero)
+            {
+                // 右半场：Heading 与 Down 的 45°
+                moveDir = self.HeadingRight
+                    ? (FixedVector2.Right + FixedVector2.Down).normalized
+                    : (FixedVector2.Left + FixedVector2.Down).normalized;
+            }
+            else
+            {
+                // 左半场：Heading 与 Up 的 45°
+                moveDir = self.HeadingRight
+                    ? (FixedVector2.Right + FixedVector2.Up).normalized
+                    : (FixedVector2.Left + FixedVector2.Up).normalized;
+            }
+        }
 
         moveDir = moveDir.normalized;
 
@@ -459,7 +472,7 @@ public class PlayerSystem:ISimulationSystem
         for (int i = 0; i < team.Count; i++)
         {
             var p = team[i];
-            if (p == self)
+            if (p == self||p.role==Role.GOALIE)
                 continue;
 
             var toTarget = p.Position - self.Position;
