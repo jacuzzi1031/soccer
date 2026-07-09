@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Net.FixFloat;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class BallSim:ISimulationSystem
 {
@@ -75,7 +76,6 @@ public class BallSim:ISimulationSystem
             }
         }
         currentState?._Update();
-        
     }
 
     public void shoot(FixedVector2 ShotVelocity) {

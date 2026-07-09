@@ -1,20 +1,15 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Newtonsoft.Json;
-public class DataLoader : MonoBehaviour
+public class DataLoaderManager : BaseManager
 {
-    public static DataLoader Instance{get; private set;}
-    [HideInInspector] public List<string> countries = new List<string> { "DEFAULT" };
+    public List<string> countries = new List<string> { "DEFAULT" };
     public Dictionary<string, List<PlayerResource>> squads = new Dictionary<string, List<PlayerResource>>();
 
-    void Awake()
-    {   
-        Instance = this;
+    public override void OnInit() {
         LoadJson();
     }
-
     private void LoadJson()
     {
         string jsonPath = Path.Combine(Application.streamingAssetsPath, "squads.json");

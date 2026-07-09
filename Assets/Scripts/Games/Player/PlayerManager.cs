@@ -90,7 +90,7 @@ public class PlayerManager : MonoBehaviour
     }
     public List<PlayerSim> SpawnPlayerViewsAndSims(string country, Goal ownGoal, bool isHome)
     {
-        List<PlayerResource> playerResources = DataLoader.Instance.GetSquad(country);
+        List<PlayerResource> playerResources = GameInterface.Interface.DataLoaderManager.GetSquad(country);
         List<PlayerSim> playerSims = new List<PlayerSim>();
 
         Transform kickoffParent = null;
@@ -165,7 +165,7 @@ public class PlayerManager : MonoBehaviour
 
 
         List<PlayerSim> playerSims = new List<PlayerSim>();
-        List<PlayerResource> playerResources = DataLoader.Instance.GetSquad(country);
+        List<PlayerResource> playerResources = GameInterface.Interface.DataLoaderManager.GetSquad(country);
         for (int i = 0; i < (withopponent ? 2 : 1); i++) {
             Vector2 spawnPosition = spawns.GetChild(i).position;
             Goal targetGoal = (ownGoal == goalAway) ? goalHome : goalAway;

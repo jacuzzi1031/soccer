@@ -384,46 +384,101 @@ public class PlayerSystem:ISimulationSystem
             Scheme = controlScheme
         });
     }
+// 两个Buffer一直复用
+    private readonly List<PlayerSim> homeCpuPlayers = new(6);
+    private readonly List<PlayerSim> awayCpuPlayers = new(6);
+    private void SetOnDutyWeights(FixedVector2 ballPosition)
+    {
+        ProcessSquad(teamHome, homeCpuPlayers, ballPosition);
+        ProcessSquad(teamAway, awayCpuPlayers, ballPosition);
+    }
+    private void ProcessSquad(
+        List<PlayerSim> squad,
+        List<PlayerSim> cpuPlayers,
+        FixedVector2 ballPosition)
+    {
+        cpuPlayers.Clear();
 
-    private void SetOnDutyWeights(FixedVector2 ballPosition) {
-        List<List<PlayerSim>> squads = new List<List<PlayerSim>> { teamHome, teamAway };
+        // 收集CPU球员，并预计算距离
+        for (int i = 0; i < squad.Count; i++)
+        {
+            PlayerSim p = squad[i];
 
-        foreach (var squad in squads)
-        {   
-            List<PlayerSim> cpuPlayers= new List<PlayerSim>();
-            for (int j = 0; j < squad.Count; j++)
-            {
-                var p = squad[j];
-                if (p.controlScheme == ControlScheme.CPU &&
-                    p.role != Role.GOALIE)
-                {
-                    cpuPlayers.Add(p);
-                }
-            }
-            cpuPlayers.Sort((p1, p2) =>
-            {
-                FixedFloat d1 = (p1.spawnPosition - ballPosition).sqrMagnitude;
-                FixedFloat d2 = (p2.spawnPosition - ballPosition).sqrMagnitude;
+            if (p.controlScheme != ControlScheme.CPU ||
+                p.role == Role.GOALIE)
+                continue;
 
-                int cmp = d1.CompareTo(d2);
-                if (cmp != 0)
-                    return cmp;
-                //tie-breaker = 当主要排序条件“相等或几乎相等”时，用一个“永远一致的次级规则”来打破平局。
-                return p1.playerId.CompareTo(p2.playerId);
-            });
+            p.cachedDistanceToBall =
+                (p.spawnPosition - ballPosition).sqrMagnitude;
 
+            cpuPlayers.Add(p);
+        }
+        //原来sort会闭包有ballPosition
+        cpuPlayers.Sort(ComparePlayerDistance);
 
-            for (int i = 0; i < cpuPlayers.Count; i++)
-            {
-                int x = i * FP / 10;              // 0 ~ 1000
-                int eased = (x * x) / FP;         // bias = 2
-                int weight = FP - eased;          // 1 - ease
+        int count = cpuPlayers.Count;
 
-                cpuPlayers[i].weightOnDutySteering =
-                    (FixedFloat)weight / FP;
-            }
+        if (count == 0)
+            return;
+
+        for (int i = 0; i < count; i++)
+        {
+            int x = i * FP / 10;
+            int eased = (x * x) / FP;
+            int weight = FP - eased;
+
+            cpuPlayers[i].weightOnDutySteering =
+                (FixedFloat)weight / FP;
         }
     }
+    private static int ComparePlayerDistance(PlayerSim p1, PlayerSim p2)
+    {
+        int cmp = p1.cachedDistanceToBall.CompareTo(p2.cachedDistanceToBall);
+
+        if (cmp != 0)
+            return cmp;
+
+        return p1.playerId.CompareTo(p2.playerId);
+    }
+    // private void SetOnDutyWeights(FixedVector2 ballPosition) {
+    //     List<List<PlayerSim>> squads = new List<List<PlayerSim>> { teamHome, teamAway };
+    //
+    //     foreach (var squad in squads)
+    //     {   
+    //         List<PlayerSim> cpuPlayers= new List<PlayerSim>();
+    //         for (int j = 0; j < squad.Count; j++)
+    //         {
+    //             var p = squad[j];
+    //             if (p.controlScheme == ControlScheme.CPU &&
+    //                 p.role != Role.GOALIE)
+    //             {
+    //                 cpuPlayers.Add(p);
+    //             }
+    //         }
+    //         cpuPlayers.Sort((p1, p2) =>
+    //         {
+    //             FixedFloat d1 = (p1.spawnPosition - ballPosition).sqrMagnitude;
+    //             FixedFloat d2 = (p2.spawnPosition - ballPosition).sqrMagnitude;
+    //
+    //             int cmp = d1.CompareTo(d2);
+    //             if (cmp != 0)
+    //                 return cmp;
+    //             //tie-breaker = 当主要排序条件“相等或几乎相等”时，用一个“永远一致的次级规则”来打破平局。
+    //             return p1.playerId.CompareTo(p2.playerId);
+    //         });
+    //
+    //
+    //         for (int i = 0; i < cpuPlayers.Count; i++)
+    //         {
+    //             int x = i * FP / 10;              // 0 ~ 1000
+    //             int eased = (x * x) / FP;         // bias = 2
+    //             int weight = FP - eased;          // 1 - ease
+    //
+    //             cpuPlayers[i].weightOnDutySteering =
+    //                 (FixedFloat)weight / FP;
+    //         }
+    //     }
+    // }
     public void Stop()
     {
     }

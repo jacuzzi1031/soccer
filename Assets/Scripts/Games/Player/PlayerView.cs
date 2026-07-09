@@ -139,7 +139,7 @@ public class PlayerView : MonoBehaviour {
         
         mat.SetInt("_SkinColor", Mathf.Clamp((int)skinColor, 0, skinPaletteTex.height - 1));
 
-        var countries = DataLoader.Instance.GetCountries();
+        var countries = GameInterface.Interface.DataLoaderManager.GetCountries();
         int teamIndex = countries.IndexOf(country);
         teamIndex = Mathf.Clamp(teamIndex, 0, teamPaletteTex.height - 1);
         mat.SetInt("_TeamColor", teamIndex);

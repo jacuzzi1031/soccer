@@ -36,6 +36,7 @@ public class PlayerSim {
     public int Frame { get;private set;}
     public BallSim _ballSim;
     public List<FixedVector2> targetGoalPosition;
+    public FixedFloat cachedDistanceToBall;
     
 
     public PlayerSim(int nextPlayerId,PlayerResource contextPlayerData, FixedVector2 contextplayerPosition, FixedVector2 contextkickoffPosition, string contextcountry, bool contextisHome,bool ContextInitialFacingRight) {

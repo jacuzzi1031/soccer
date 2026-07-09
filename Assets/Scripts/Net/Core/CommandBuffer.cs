@@ -13,7 +13,7 @@ public sealed class CommandBuffer
         _writeBuffer.Add(cmd);
     }
     
-    public IReadOnlyList<SimulationCommand> Consume()
+    public List<SimulationCommand> Consume()
     {
         var temp = _readBuffer;
         _readBuffer = _writeBuffer;

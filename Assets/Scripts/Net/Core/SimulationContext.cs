@@ -24,11 +24,11 @@ public sealed class SimulationContext
     public bool BallCanAirInteract => _simulationModel.BallSim.CanAirInteract();
 
     // 获取玩家列表
-    private IReadOnlyList<SimulationCommand> _commands;
-    public IReadOnlyList<SimulationCommand> Commands => _commands;
+    private List<SimulationCommand> _commands;
+    public List<SimulationCommand> Commands => _commands;
     public void BuildFrom(
         int frame,
-        IReadOnlyList<SimulationCommand> commands
+        List<SimulationCommand> commands
     )
     {
         Frame = frame;

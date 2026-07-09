@@ -25,7 +25,6 @@ public class RoomVisual : MonoBehaviour {
         GameInterface.Interface.RoomManager.OnRoomPlayerSelectCountryChanged+= OnSelectCountryChanged;
         GameInterface.Interface.RoomManager.OnRoomPlayerCountryConfirmed += OnCountryConfirmed;
         SpawnRoomPlayers();
-        
     }
     private void OnDestroy() {
         GameInterface.Interface.RoomManager.OnRoomPlayerQuit -= OnRoomPlayerQuit;

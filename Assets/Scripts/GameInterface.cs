@@ -21,6 +21,7 @@ public class GameInterface : MonoBehaviour
     public UdpListener UdpListener { get; private set; }
     public RequestManager RequestManager { get; private set; }
     public GameFrameSyncManager GameFrameSyncManager { get; private set; }
+    public DataLoaderManager DataLoaderManager { get; private set; }
     
     [Header("UI")] [SerializeField] private UIPanelSoListSo uiPanelSoListSo;
     [Header("网络")] [SerializeField] private string serverIP;
@@ -46,10 +47,12 @@ public class GameInterface : MonoBehaviour
         RoomManager=new RoomManager();
         RequestManager = new RequestManager();
         GameFrameSyncManager = new GameFrameSyncManager();
+        DataLoaderManager =new DataLoaderManager();
         RoomManager.OnInit();
         RequestManager.OnInit();
         GameFrameSyncManager.OnInit();
         GameManager.OnInit();
+        DataLoaderManager.OnInit();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)

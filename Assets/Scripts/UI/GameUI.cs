@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI timeText;
     private MatchController _matchController;
-
+    private readonly StringBuilder _sb = new StringBuilder();
     private string lastBallCarrier = "";
     private static Dictionary<string, Sprite> flagSpritesDict =
         new Dictionary<string, Sprite>();
@@ -134,24 +135,40 @@ public class GameUI : MonoBehaviour
         {
             timeText.color = Color.white;
         }
+        
+        
+        int totalSeconds = (_matchController.FramesLeft + FPS - 1) / FPS;
 
-        timeText.text = GetTimeText(_matchController.FramesLeft);
+        if (totalSeconds == _lastTotalSeconds)
+            return;
+
+        _lastTotalSeconds = totalSeconds;
+
+        timeText.text = GetTimeText(totalSeconds);
     }
     private const int FPS = 60;
-
-    public static string GetTimeText(int framesLeft)
+    private int _lastTotalSeconds = -1;
+    public string GetTimeText(int totalSeconds)
     {
-        if (framesLeft <= 0)
-        {
+        if (totalSeconds <= 0)
             return "00 : 00";
-        }
-
-        int totalSeconds = (framesLeft + FPS - 1) / FPS; // Ceil
 
         int minutes = totalSeconds / 60;
         int seconds = totalSeconds % 60;
 
-        return $"{minutes:00} : {seconds:00}";
+        _sb.Clear();
+
+        if (minutes < 10)
+            _sb.Append('0');
+        _sb.Append(minutes);
+
+        _sb.Append(" : ");
+
+        if (seconds < 10)
+            _sb.Append('0');
+        _sb.Append(seconds);
+
+        return _sb.ToString();
     }
 
     private void OnBallPossessed(OnBallPossessedEvent obj)
