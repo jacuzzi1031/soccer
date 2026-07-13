@@ -17,12 +17,22 @@ public class RoomListUI : BaseUIPanel
     [SerializeField] private Button closeButton;
 
     private SearchRoomRequest _mSearchRoomRequest;
-    private List<RoomTabUI> _activeRoomTabs = new List<RoomTabUI>();
     private int _searchVersion = 0;
+    
+    private ObjectPool<RoomTabUI> _roomTabPool;
+    private List<RoomTabUI> _activeTabs = new List<RoomTabUI>();
+    private const float ITEM_WIDTH = 480f;
+    private const float ITEM_HEIGHT = 48f;
+    private const float ITEM_SPACING = 2f;
     public override void OnInit()
     {
         _mSearchRoomRequest = GameInterface.Interface.RequestManager.GetRequest<SearchRoomRequest>();
         base.OnInit();
+        _roomTabPool = new ObjectPool<RoomTabUI>(() =>
+        {
+            GameObject go = Instantiate(roomTabPrefab, roomTabsContainer);
+            return go.GetComponent<RoomTabUI>();
+        });
     }
 
     private void Start()
@@ -73,32 +83,91 @@ public class RoomListUI : BaseUIPanel
             roomInfo.RoomMatchType = roomMatchType;
         });
     }
-    private void ClearRoomList()
-    {
-        for (int i = roomTabsContainer.childCount - 1; i >= 0; i--)
-        {
-            Destroy(roomTabsContainer.GetChild(i).gameObject);
-        }
-
-        _activeRoomTabs.Clear();
-    }
+    
     private void UpdateRoomList(List<RoomInfo> roomInfoList)
     {
-        ClearRoomList();
-
-        foreach (var roomInfo in roomInfoList)
+        // 不够就申请
+        while (_activeTabs.Count < roomInfoList.Count)
         {
-            GameObject go = Instantiate(roomTabPrefab, roomTabsContainer);
-            RoomTabUI roomTabUI = go.GetComponent<RoomTabUI>();
-            roomTabUI.SetRoomTab(roomInfo);
+            RoomTabUI tab = _roomTabPool.Allocate();
+
+            tab.gameObject.SetActive(true);
+            tab.RectTransform.SetParent(roomTabsContainer, false);
+
+            _activeTabs.Add(tab);
         }
 
-        LayoutRebuilder.ForceRebuildLayoutImmediate(roomTabsContainer);
+        // 多出来就回收
+        while (_activeTabs.Count > roomInfoList.Count)
+        {
+            RoomTabUI tab = _activeTabs[^1];
+
+            tab.gameObject.SetActive(false);
+
+            _roomTabPool.Release(tab);
+
+            _activeTabs.RemoveAt(_activeTabs.Count - 1);
+        }
+
+        // 更新数据和位置
+        for (int i = 0; i < roomInfoList.Count; i++)
+        {
+            RoomTabUI tab = _activeTabs[i];
+
+            tab.RectTransform.sizeDelta =
+                new Vector2(ITEM_WIDTH, ITEM_HEIGHT);
+
+            tab.RectTransform.anchoredPosition =
+                new Vector2(0, -i * (ITEM_HEIGHT + ITEM_SPACING));
+
+            tab.SetRoomTab(roomInfoList[i]);
+        }
+
+        // 更新Content高度
+        float totalHeight = roomInfoList.Count * (ITEM_HEIGHT + ITEM_SPACING);
+
+        if (roomInfoList.Count > 0)
+            totalHeight -= ITEM_SPACING;
+
+        roomTabsContainer.sizeDelta =
+            new Vector2(roomTabsContainer.sizeDelta.x, totalHeight);
     }
+    
+    // private void ClearRoomList()
+    // {
+    //     for (int i = roomTabsContainer.childCount - 1; i >= 0; i--)
+    //     {
+    //         Destroy(roomTabsContainer.GetChild(i).gameObject);
+    //     }
+    //
+    //     _activeRoomTabs.Clear();
+    // }
+    // private void UpdateRoomList(List<RoomInfo> roomInfoList)
+    // {
+    //     ClearRoomList();
+    //
+    //     foreach (var roomInfo in roomInfoList)
+    //     {
+    //         GameObject go = Instantiate(roomTabPrefab, roomTabsContainer);
+    //         RoomTabUI roomTabUI = go.GetComponent<RoomTabUI>();
+    //         roomTabUI.SetRoomTab(roomInfo);
+    //     }
+    //
+    //     LayoutRebuilder.ForceRebuildLayoutImmediate(roomTabsContainer);
+    // }
     public override void OnHide()
     {
         _searchVersion++;
-        ClearRoomList();
         base.OnHide();
+    }
+
+    public void OnDestroy() {
+        foreach (var tab in _activeTabs)
+        {
+            tab.gameObject.SetActive(false);
+            _roomTabPool.Release(tab);
+        }
+
+        _activeTabs.Clear();
     }
 }

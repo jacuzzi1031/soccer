@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,9 +11,13 @@ public class RoomTabUI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private TextMeshProUGUI roomName;
     [SerializeField] private TextMeshProUGUI roomMatchTypeText;
     [SerializeField] private TextMeshProUGUI roomPlayers;
-
+    public RectTransform RectTransform { get; private set; }
     private JoinRoomRequest _mJoinRoomRequest;
     private string _mRoomCode;
+
+    private void Awake() {
+        RectTransform = GetComponent<RectTransform>();
+    }
 
     private void Start()
     {
@@ -27,7 +32,7 @@ public class RoomTabUI : MonoBehaviour, IPointerClickHandler
         {
             RoomMatchType.Training           => "训练模式",
             RoomMatchType.TrainingWithEnemy  => "对抗训练",
-            RoomMatchType.UltimateTeam       => "锦标赛",
+            RoomMatchType.UltimateTeam       => "正式比赛",
             _                            => "未知模式"
         };
         roomPlayers.text = $"{roomInfo.currentPlayers}/{roomInfo.maxPlayer}";

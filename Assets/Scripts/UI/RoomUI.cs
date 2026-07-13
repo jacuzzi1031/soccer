@@ -30,7 +30,6 @@ public class RoomUI : MonoBehaviour
     private RoomPlayerConfirmCountryRequest _mRoomPlayerConfirmCountryRequest;
     private void Awake() {
         Instance = this;
-        UpdateRoomName();
     }
     public void OnCountrySelect(int selectorid,int selectIndex) {
         if (selectIndex != localIndex) {
@@ -50,26 +49,31 @@ public class RoomUI : MonoBehaviour
         {
             RoomMatchType.Training           => "训练模式",
             RoomMatchType.TrainingWithEnemy  => "对抗训练",
-            RoomMatchType.UltimateTeam       => "锦标赛",
+            RoomMatchType.UltimateTeam       => "正式比赛",
             _                            => "未知模式"
         };
     }
     public void Start()
     {
+        UpdateRoomName();
         exitButton.onClick.AddListener(() => {
                 QuitRoomRequest quitRoomRequest = GameInterface.Interface.RequestManager.GetRequest<QuitRoomRequest>();
                 quitRoomRequest.SendQuitRoomRequest();
             }
             );
         BuildGrid();
-        // Start之后Layout Rebuild,所以为了selectCursor需要
+        //为了CreateSelector中selector.MoveTo(items[0].transform);
         LayoutRebuilder.ForceRebuildLayoutImmediate(
             gridParent.GetComponent<RectTransform>()
         );
         localIndex = 0;
+        }
+
+    public void OnEnable() {
         GameInput.Instance.OnShootAction+= ConfirmCountryFromKeyboard;
         _mRoomPlayerSelectCountryRequest = GameInterface.Interface.RequestManager.GetRequest<RoomPlayerSelectCountryRequest>();
         _mRoomPlayerConfirmCountryRequest = GameInterface.Interface.RequestManager.GetRequest<RoomPlayerConfirmCountryRequest>();
+
     }
 
     public void OnDestroy() {

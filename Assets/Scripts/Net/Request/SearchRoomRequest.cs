@@ -6,6 +6,7 @@ using UnityEngine;
 public class SearchRoomRequest : BaseRequest
 {
     private Action<List<RoomInfo>> _mOnSearchRoomSuccess;
+    private readonly List<RoomInfo> roomInfoList = new();
 
     public SearchRoomRequest()
     {
@@ -16,7 +17,7 @@ public class SearchRoomRequest : BaseRequest
     protected override void HandleServerSuccessResponse(MainPack pack)
     {
         Debug.Log("搜索房间成功!");
-        List<RoomInfo> roomInfoList = new List<RoomInfo>();
+        roomInfoList.Clear();
         foreach (var roomInfoPack in pack.SearchRoomResultPack.RoomInfoList)
         {
             roomInfoList.Add(new RoomInfo(roomInfoPack));

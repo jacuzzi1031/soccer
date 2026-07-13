@@ -28,7 +28,6 @@ public class SignInRequest : BaseRequest
     {
         string errorMessage = pack.ReturnMessage.ErrorMessage;
         Debug.Log(errorMessage);
-        Debug.Log("Sign In Fail!");
         base.HandleServerFailResponse(pack);
     }
 

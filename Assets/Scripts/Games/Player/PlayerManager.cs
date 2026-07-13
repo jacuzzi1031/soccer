@@ -145,7 +145,7 @@ public class PlayerManager : MonoBehaviour
                 initialFacingRight
             );
             
-            PlayerView playerView = SpawnPlayer(
+            SpawnPlayer(
                 playerPosition,
                 kickoffPosition,
                 ownGoal,
@@ -181,7 +181,7 @@ public class PlayerManager : MonoBehaviour
                 isHome,
                 initialFacingRight
             );
-            PlayerView playerView = SpawnPlayer(
+            SpawnPlayer(
                 spawnPosition,
                 kickoffPosition,
                 ownGoal,
@@ -196,7 +196,7 @@ public class PlayerManager : MonoBehaviour
 
         return playerSims;
     }
-    public PlayerView SpawnPlayer(
+    public void SpawnPlayer(
         Vector2 playerPosition,
         Vector2 kickoffPosition,
         Goal ownGoal,
@@ -212,7 +212,5 @@ public class PlayerManager : MonoBehaviour
 
         playersById[nextPlayerId] = playerView;
         nextPlayerId++;
-
-        return playerView;
     }
 }
