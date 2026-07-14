@@ -48,7 +48,7 @@ public class PlayerStateMoving: PlayerSimState
         {
             playerSim.SwitchState(PlayerState.PREPPING_SHOT);
         }
-        else if (ballCanAirInteract) {
+        else {
             InstantShot();
         }
     }
@@ -65,7 +65,7 @@ public class PlayerStateMoving: PlayerSimState
     private void InstantShot() {
         if (playerSim.IsFacingTargetGoal())
         {
-            if (_ballSim.Height <= (FixedFloat)0.3f) {
+            if (_ballSim.Height <= (FixedFloat)0.6f) {
                 playerSim.SwitchState(PlayerState.VOLLEY_KICK);
             }
             else {

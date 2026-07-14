@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BallSimStateShot : BallSimState
 {
-    private static readonly FixedFloat SHOT_HEIGHT = (FixedFloat)0.25f;
+    private static readonly FixedFloat SHOT_HEIGHT = (FixedFloat)0.4f;
     private const int DURATION_SHOT_FRAMES = 60;
     
 

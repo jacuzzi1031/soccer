@@ -10,7 +10,8 @@ public class BallSimState
     protected BallSim ballSim=null;
     public PlayerView carrier=null;
     protected BallStateData stateData = new BallStateData();
-    public static  FixedFloat BOUNCINESS = (FixedFloat)0.8f;
+    public static  FixedFloat BOUNCINESS = (FixedFloat)0.7f;
+    public static  FixedFloat CARRIED_BOUNCINESS = (FixedFloat)0.1f;
     public int stateFrame=0;
     public void Setup(BallSim contextBallSim,BallStateData ContextBallStateData,SimEventBus eventBus,int stateFrame=0){
         ballSim = contextBallSim;
@@ -45,9 +46,12 @@ public class BallSimState
         ballSim.Velocity = velocity;
         ballSim.Position += velocity * dt;
     }
-
+    public void CarriedMoveVertical() {
+        MoveVertical(CARRIED_BOUNCINESS);
+    }
     public void MoveVertical() {
-        MoveVertical(FixedFloat.Zero);
+        // C# 的 const 只能用于少数内置类型 自定义类都不能声明为 编译期常量const ，只能是 static readonly
+        MoveVertical(BOUNCINESS);
     }
     public void MoveVertical(FixedFloat bounciness)
     {   

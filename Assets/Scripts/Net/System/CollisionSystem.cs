@@ -16,8 +16,9 @@ public class CollisionSystem : ISimulationSystem{
     public FixedFloat volleycaptureRadiusSqr;
 
     //实际  ballView height*2.5f
-    private static readonly FixedFloat MAX_CAPTURE_HEIGHT = (FixedFloat)0.8f;
-    private static readonly FixedFloat BALL_CONTROL_HEIGHT_MAX = (FixedFloat)0.55f;
+    private static readonly FixedFloat MAX_CAPTURE_HEIGHT = (FixedFloat)1.5f;
+    private static readonly FixedFloat MAX_VOLLEY_HEIGHT = (FixedFloat)1.7f;
+    private static readonly FixedFloat BALL_CONTROL_HEIGHT_MAX = (FixedFloat)1f;
 
     public FixedVector2 playerForBallOffset = new FixedVector2( FixedFloat.Zero, (FixedFloat)4f);
 
@@ -93,7 +94,7 @@ public class CollisionSystem : ISimulationSystem{
             }
 
             FixedFloat distSqr = (player.Position + playerForBallOffset - ball.Position).sqrMagnitude;
-            if (distSqr < volleycaptureRadiusSqr && ball.Height < MAX_CAPTURE_HEIGHT) {
+            if (distSqr < volleycaptureRadiusSqr && ball.Height < MAX_VOLLEY_HEIGHT) {
                 bool hasVolleyShot = player.currentState.VolleyShot();
                 if (hasVolleyShot) break;
             }
@@ -102,11 +103,10 @@ public class CollisionSystem : ISimulationSystem{
                 if (ball.Height > BALL_CONTROL_HEIGHT_MAX) {
                     player.SwitchState(PlayerState.CHEST_CONTROL);
                 }
-
                 ball.carrier = player;
                 ball.SwitchState(BallState.CARRIED);
 
-                context._simulationModel.PlayerSystem.OnPlayerBecomesCarrier(player.playerId, player.isHome);
+                context._simulationModel.PlayerSystem.OnPlayerBecomesCarrier(player);
                 if (!ball.firstPlayerCarryBall) {
                     _commandBuffer.Enqueue(new SimulationCommand
                     {
@@ -129,8 +129,8 @@ public class CollisionSystem : ISimulationSystem{
         playerRadius = simConfig.PlayerRadius;
         ballCaptureRadius = simConfig.ballCaptureRadius;
         captureRadiusSqr = (playerRadius + ballCaptureRadius) * (playerRadius + ballCaptureRadius);
-        volleycaptureRadiusSqr = (simConfig.playervolleyRadius + ballCaptureRadius - (FixedFloat)1.5f) *
-                                 (simConfig.playervolleyRadius + ballCaptureRadius - (FixedFloat)1.5f);
+        volleycaptureRadiusSqr = (simConfig.playervolleyRadius + ballCaptureRadius + (FixedFloat)1.5f) *
+                                 (simConfig.playervolleyRadius + ballCaptureRadius + (FixedFloat)1.5f);
         tacklingRadiusSqr = (playerRadius + (FixedFloat)4f) * (playerRadius +(FixedFloat) 4f);
         ballRadiusSqr = (ballRadius + (FixedFloat)4f) * (ballRadius + (FixedFloat)4f);
         lines = lineSegments;

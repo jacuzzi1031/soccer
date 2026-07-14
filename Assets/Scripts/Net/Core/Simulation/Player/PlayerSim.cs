@@ -135,7 +135,7 @@ public class PlayerSim {
     }
 
     public bool CanCarryBall() {
-        return currentState.CanCarryBall();
+        return currentState.CanCarryBall()&&role!=Role.GOALIE;
     }
 
     public void SetHeadingRight(FixedVector2 moveDir) {

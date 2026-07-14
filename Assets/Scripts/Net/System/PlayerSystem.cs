@@ -482,19 +482,12 @@ public class PlayerSystem:ISimulationSystem
     public void Stop()
     {
     }
-    public void OnPlayerBecomesCarrier(int playerPlayerId,bool isHome) {
-        PlayerSim currentPlayer=isHome?currentHomePlayer:currentAwayPlayer;
-        if (currentPlayer==null||currentPlayer.playerId == playerPlayerId) {
+    public void OnPlayerBecomesCarrier(PlayerSim carrier) {
+        PlayerSim currentPlayer=carrier.isHome?currentHomePlayer:currentAwayPlayer;
+        if (currentPlayer==null||currentPlayer.playerId == carrier.playerId) {
             return;
         }
-        List<PlayerSim>team=isHome?teamHome:teamAway;
-        ControlScheme controlScheme=isHome?ControlScheme.P1:ControlScheme.P2;
-        foreach (var player in team) {
-            if (player.playerId == playerPlayerId) {
-                SwitchControlTo(currentPlayer,player,controlScheme);
-                break;
-            }
-        }
+        SwitchControlTo(currentPlayer,carrier,currentPlayer.controlScheme);
     }
     public PlayerSim GetShortPassTarget(
         PlayerSim self,

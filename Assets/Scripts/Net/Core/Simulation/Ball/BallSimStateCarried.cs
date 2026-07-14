@@ -7,6 +7,10 @@ public class BallSimStateCarried : BallSimState
 {
     public override void OnEnter() {
         ballSim.Velocity=FixedVector2.Zero;
+        ballSim.HeightVelocity *= (FixedFloat)0.2f;
+        if (ballSim.Height > FixedFloat.One) {
+            ballSim.Height-=(FixedFloat)0.25f;
+        }
     }
     private FixedFloat dribbleTime = FixedFloat.Zero;
 
@@ -45,8 +49,7 @@ public class BallSimStateCarried : BallSimState
                     : -OFFSET_FROM_PLAYER.x + vx,
                 OFFSET_FROM_PLAYER.y
             );
-
-        MoveVertical();
+        CarriedMoveVertical();
     }
     public override void OnExit() {
     }

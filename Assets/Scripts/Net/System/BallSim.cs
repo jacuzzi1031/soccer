@@ -28,6 +28,7 @@ public class BallSim:ISimulationSystem
     public const int INVALID_PLAYER_ID = -1;
     public int BallCarrierId => carrier?.playerId ?? INVALID_PLAYER_ID;
     public bool firstPlayerCarryBall;
+    public bool CanGoalieBounce = true;
     public BallSim(FixedVector2 ContextSpawnPosition,SimEventBus eventBus,CommandBuffer commandBuffer)
     {
         spawnPosition = ContextSpawnPosition;

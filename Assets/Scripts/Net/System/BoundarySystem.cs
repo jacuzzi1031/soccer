@@ -81,7 +81,10 @@ public class BoundarySystem : ISimulationSystem{
             ResolveBallGoalieCollision(goalKeeper.playerId,goalKeeper.Position, ball.Position, ball.Velocity);
         }
     }
-
+    public static readonly FixedFloat GOALIE_BOUNCE_RELEASE = (FixedFloat)2f;
+    public static readonly FixedFloat BOUNCE_FACTOR = (FixedFloat)0.9f;
+    public static readonly FixedFloat MIN_SPEED = (FixedFloat)30f;
+    public static readonly FixedFloat MAX_SPEED = (FixedFloat)140f;
     void ResolveBallGoalieCollision(int goalKeeperId,FixedVector2 center, FixedVector2 ballPos, FixedVector2 ballVelocity) {
         FixedFloat halfHeight = playerVerticalOffset;
         FixedFloat radius = playerRadius;
@@ -94,8 +97,15 @@ public class BoundarySystem : ISimulationSystem{
 
         FixedFloat dist = FixedVector2.Distance(ballPos, closest);
         FixedFloat combinedRadius = ballRadius + radius;
-
+        // 已经离开碰撞区，重新允许触发
+        if (!ball.CanGoalieBounce &&
+            dist > combinedRadius + GOALIE_BOUNCE_RELEASE)
+        {
+            ball.CanGoalieBounce = true;
+        }
         if (dist < combinedRadius) {
+            if (!ball.CanGoalieBounce)
+                return;
             FixedVector2 normal = (ballPos - closest).normalized;
 
             ballVelocity = FixedVector2.Reflect(ballVelocity, normal);
@@ -104,7 +114,10 @@ public class BoundarySystem : ISimulationSystem{
             // 推出重叠
             FixedFloat penetration = combinedRadius - dist;
             ballPos += normal * penetration;
-            ball.Velocity = ballVelocity * (FixedFloat)0.9f;
+            FixedFloat speed = ballVelocity.magnitude * BOUNCE_FACTOR;
+            speed = FixedMath.Clamp(speed, MIN_SPEED, MAX_SPEED);
+
+            ball.Velocity = ballVelocity.normalized*speed;
             ball.Position = ballPos;
         }
     }

@@ -163,8 +163,12 @@ public class TcpClient : IDisposable
             // GameInterface.Interface.UdpListener.UdpListenPort = pack.ClientPack.UdpListenPort;
             return;
         }
-
-        OnServerResponse?.Invoke(pack);
+        // 这里切回主线程，之后再切容易忘了，比如 HandleServerSuccessResponse 就不能直接 调用UIManager，Unity API 都要求主线程。
+        Invoker.Instance.DelegateList.Add(() =>
+        {
+            OnServerResponse?.Invoke(pack);
+        });
+        // OnServerResponse?.Invoke(pack);
     }
     private void CheckHeartbeatTimeout(object state, ElapsedEventArgs e)
     {

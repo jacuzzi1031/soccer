@@ -19,7 +19,7 @@ public class BallSimStateFreeform : BallSimState
     {
         stateFrame++;
         SetLockDuration();
-        MoveVertical(BOUNCINESS);
+        MoveVertical();
         MoveHorizontal();
     }
 
