@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countryId: 1
   countryName: ARGENTINA
-  flagSprite: {fileID: 21300000, guid: 79d4152c099a51549951b168d5d0a421, type: 3}
+  flagSprite: {fileID: 21300000, guid: eeeb918a552647244b26f0f14e8a641f, type: 3}

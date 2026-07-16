@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countryId: 0
   countryName: FRANCE
-  flagSprite: {fileID: 21300000, guid: 9ed7eb210c006254ca92776698b26848, type: 3}
+  flagSprite: {fileID: 21300000, guid: 0a3fb566a5adef34e9460f16900ea897, type: 3}

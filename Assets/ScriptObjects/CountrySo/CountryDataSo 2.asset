@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CountryDataSo 2
   m_EditorClassIdentifier: 
   countryId: 2
-  countryName: BRAZIL
-  flagSprite: {fileID: 21300000, guid: 8ff19ef5ba7370f4082da64547a06eeb, type: 3}
+  countryName: MOROCCO
+  flagSprite: {fileID: 21300000, guid: 2b13d03b0a4478d47a35bc8c2a22f472, type: 3}

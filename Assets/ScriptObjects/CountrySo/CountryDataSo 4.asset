@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CountryDataSo 4
   m_EditorClassIdentifier: 
   countryId: 4
-  countryName: GERMANY
-  flagSprite: {fileID: 21300000, guid: 06d6e6c40d291734786cd10f0d217111, type: 3}
+  countryName: BELGIUM
+  flagSprite: {fileID: 21300000, guid: 9bdc513c2f79a76418864307b211a33c, type: 3}

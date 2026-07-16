@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countryId: 3
   countryName: ENGLAND
-  flagSprite: {fileID: 21300000, guid: 3e6f6a43d05e52147967b61975013f20, type: 3}
+  flagSprite: {fileID: 21300000, guid: 81b8b22953f12154ea4b4dde7856a0d2, type: 3}
