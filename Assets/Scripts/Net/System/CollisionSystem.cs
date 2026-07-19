@@ -96,7 +96,10 @@ public class CollisionSystem : ISimulationSystem{
             FixedFloat distSqr = (player.Position + playerForBallOffset - ball.Position).sqrMagnitude;
             if (distSqr < volleycaptureRadiusSqr && ball.Height < MAX_VOLLEY_HEIGHT) {
                 bool hasVolleyShot = player.currentState.VolleyShot();
-                if (hasVolleyShot) break;
+                if (hasVolleyShot) {
+                    _eventBus.Publish( new PlayVolleyShotSignal( player.fullName) );
+                    break;
+                }
             }
 
             if (distSqr < captureRadiusSqr && ball.Height < MAX_CAPTURE_HEIGHT) {

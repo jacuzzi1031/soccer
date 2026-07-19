@@ -48,6 +48,13 @@ public class MatchController
         _eventBus.Subscribe<GameOverSignal>(OnGameOver);
         _eventBus.Subscribe<OnScoreChangedSignal>(OnScoreChanged);
         _eventBus.Subscribe<goalKeeperBounceBallSignal>(OnGoalKeeperBounceBall);
+        _eventBus.Subscribe<PlayVolleyShotSignal>(OnPlayVolleyShot);
+    }
+
+    private void OnPlayVolleyShot(PlayVolleyShotSignal obj) {
+        Invoker.Instance.DelegateList.Add(() => {
+            GameInterface.Interface.EventSystem.Publish(new PlayerVolleyShotEvent(obj.PlayerName));
+        });
     }
 
     private void OnGoalKeeperBounceBall(goalKeeperBounceBallSignal obj) {

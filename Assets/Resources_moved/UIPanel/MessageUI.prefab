@@ -131,8 +131,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u6D88\u606F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9764cea85c3f11d4c9cb7ffca158f266, type: 2}
+  m_sharedMaterial: {fileID: 7080818655784594147, guid: 9764cea85c3f11d4c9cb7ffca158f266, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

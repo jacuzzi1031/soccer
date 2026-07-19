@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Net.Core.Simulation.SimSignal;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -64,7 +65,10 @@ public class GameUI : MonoBehaviour
         GameInterface.Interface.EventSystem.Subscribe<OnGameOverEvent>(OnGameOver);
         
         GameInterface.Interface.EventSystem.Subscribe<MatchStartEvent>(OnMatchStart);
+        GameInterface.Interface.EventSystem.Subscribe<PlayerVolleyShotEvent>(OnVolleyShot);
     }
+
+
 
     private void OnMatchStart(MatchStartEvent obj) {
         _matchStarted = true;
@@ -175,6 +179,9 @@ public class GameUI : MonoBehaviour
     {
         playerText.text = obj.PlayerName;
         lastBallCarrier = obj.PlayerName;
+    }
+    private void OnVolleyShot(PlayerVolleyShotEvent obj) {
+        lastBallCarrier = obj.playerName;
     }
 
     private void OnBallReleased(OnBallReleasedEvent obj)

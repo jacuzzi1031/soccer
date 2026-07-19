@@ -53,8 +53,10 @@ public class PlayerStateMoving: PlayerSimState
         }
     }
     public override void OnShootRelease(bool hasBall,bool ballCanAirInteract) {
+        if (!ballCanAirInteract) return;
         if (!hasBall&&ballCanAirInteract) {
             InstantShot();
+            return;
         }
         PlayerStateData data = PlayerStateData.Build()
             .SetShotPower(playerSim.Power)

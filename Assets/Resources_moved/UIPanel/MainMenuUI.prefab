@@ -217,8 +217,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u9000\u51FA"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ade6bcdada56cf84394310774c7e6c4d, type: 2}
-  m_sharedMaterial: {fileID: 5944053472621393589, guid: ade6bcdada56cf84394310774c7e6c4d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9764cea85c3f11d4c9cb7ffca158f266, type: 2}
+  m_sharedMaterial: {fileID: 7080818655784594147, guid: 9764cea85c3f11d4c9cb7ffca158f266, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -997,8 +997,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u5F00\u59CB"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ade6bcdada56cf84394310774c7e6c4d, type: 2}
-  m_sharedMaterial: {fileID: 5944053472621393589, guid: ade6bcdada56cf84394310774c7e6c4d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9764cea85c3f11d4c9cb7ffca158f266, type: 2}
+  m_sharedMaterial: {fileID: 7080818655784594147, guid: 9764cea85c3f11d4c9cb7ffca158f266, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1292,9 +1292,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playButton: {fileID: 6819436643583303733}
   quitButton: {fileID: 2483757911020239753}
-  trainButton: {fileID: 0}
-  trainWithEnemyButton: {fileID: 0}
-  championShipButton: {fileID: 0}
   startAnimation: {fileID: 4988506643650590950}
 --- !u!95 &4988506643650590950
 Animator:
