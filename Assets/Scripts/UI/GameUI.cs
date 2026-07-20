@@ -232,7 +232,7 @@ public class GameUI : MonoBehaviour
         var winner = _matchController.Winner;
         scoreInfoText.text =
             GetFinalScoreInfo(winner, goalsHome, goalsAway);
-
+        scoreText.text = $"{goalsHome} - {goalsAway}";
         animator.Play("GameOver");
         GameSceneBootstrap.Instance.EndMatch();
     }

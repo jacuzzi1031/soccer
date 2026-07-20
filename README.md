@@ -2,12 +2,20 @@
 
 # Unity 2D 足球游戏
 
-基于 Unity 开发的多人在线 2D 足球游戏，通过 SimulationWorld 驱动 MatchSystem、PlayerSystem、BallSim 等 SimulationSystem 执行固定 Tick 演算，其中 PlayerSystem 管理 List<PlayerSim> 球员状态，BallSim 负责足球状态模拟。基于 Fixed Point 数学框架、自定义物理系统以及 CommandBuffer / EventBus 管理确定性状态更新；Unity 表现层通过 View 注入模拟状态进行渲染。网络层通过 TCP / UDP 同步输入，并结合 Checksum 校验、Snapshot / Rollback 恢复机制保证客户端游戏状态一致。
+基于 Unity 开发的2D 足球游戏，支持双人实时对战，采用确定性帧同步（Deterministic Lockstep）同步方案，保证多客户端演算一致。
+
+SimulationWorld 作为核心驱动，以固定 Tick 推进 MatchSystem、PlayerSystem、PlayerSim、BallSim 等演算系统。
+
+模拟层采用 Fixed Point 定点数学、自研物理系统以及 CommandBuffer/EventBus 状态管理机制，避免浮点误差和逻辑耦合，保证多端演算一致。
+
+ Unity 表现层根据模拟状态进行插值渲染和动画更新，实现逻辑模拟与视觉表现分离。
+
+网络层使用 TCP 处理连接与房间管理，UDP 同步帧输入，并结合 Checksum、Snapshot、Rollback 机制处理状态校验与异常恢复。
 
 
 ## 技术栈
 
-Unity / C# / Socket TCP UDP / Protobuf / Fixed Point / Deterministic Lockstep
+Unity / C# / TCP UDP Socket / Protobuf / Fixed Point / Deterministic Lockstep
 
 
 ## 游戏操作

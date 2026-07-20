@@ -20,7 +20,7 @@ public class EventSystem
     {
         // string key = GetKey(handler);
 
-        var @event = typeof(T); //@event.FullName == "Namespace.ChangeGameStateEvent"
+        var @event = typeof(T); 
 
         if (_mEventPool.TryGetValue(@event, out var eventList))
         {

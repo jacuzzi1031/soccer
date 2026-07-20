@@ -16,8 +16,8 @@ public class CollisionSystem : ISimulationSystem{
     public FixedFloat volleycaptureRadiusSqr;
 
     //实际  ballView height*2.5f
-    private static readonly FixedFloat MAX_CAPTURE_HEIGHT = (FixedFloat)1.5f;
-    private static readonly FixedFloat MAX_VOLLEY_HEIGHT = (FixedFloat)1.7f;
+    private static readonly FixedFloat MAX_CAPTURE_HEIGHT = (FixedFloat)1.3f;
+    private static readonly FixedFloat MAX_VOLLEY_HEIGHT = (FixedFloat)1.5f;
     private static readonly FixedFloat BALL_CONTROL_HEIGHT_MAX = (FixedFloat)1f;
 
     public FixedVector2 playerForBallOffset = new FixedVector2( FixedFloat.Zero, (FixedFloat)4f);

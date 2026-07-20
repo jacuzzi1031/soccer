@@ -1,9 +1,8 @@
-//Script Define Symbols 添加 UNITY_ENV
+
 
 using GameFrameSync;
-#if UNITY_ENV
 using UnityEngine;
-#endif
+
 
 namespace Net.FixFloat
 {
@@ -62,14 +61,12 @@ namespace Net.FixFloat
             this.x = x;
             this.y = y;
         }
-        #if UNITY_ENV
         public Vector2 ToVector2()
         {
             return new Vector2(
                 x.RawFloat,
                 y.RawFloat);
         }
-        #endif
         public static FixedVector2 MoveTowards(
             FixedVector2 current,
             FixedVector2 target,
@@ -89,8 +86,7 @@ namespace Net.FixFloat
 
             return current + delta / dist * maxDistanceDelta;
         }
-
-#if UNITY_ENV
+        
         public FixedVector2(Vector2 vector)
         {
             x = (FixedFloat)vector.x;
@@ -118,8 +114,6 @@ namespace Net.FixFloat
                 (FixedFloat)v.x,
                 (FixedFloat)v.y);
         }
-
-#endif
 
         public FixedFloat this[int index]
         {
@@ -252,8 +246,7 @@ namespace Net.FixFloat
                 y.ScaledValue
             };
         }
-
-#if UNITY_ENV
+        
         public Vector2 ConvertUnityVector2()
         {
             return new Vector2(
@@ -267,7 +260,6 @@ namespace Net.FixFloat
                 y.RawFloat,
                 0f);
         }
-#endif
 
         #endregion
 

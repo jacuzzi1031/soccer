@@ -13,14 +13,7 @@ namespace Games.Player.AIBehavior{
             //队友持球
             else if (IsBallCarriedByTeammate())
             {
-                //队友禁区跑位
-                if (TeammateIntoShootingScope()) {
-                        moveDir += GetCarrierReboundShotForce();
-                }
-                else {
-                    //队友推进
-                    moveDir += GetCarrierAssistForce();
-                }
+                moveDir += GetCarrierAssistForce();
             }
             //对手持球或者无人持球
             else
@@ -43,7 +36,7 @@ namespace Games.Player.AIBehavior{
         }
         FixedVector2 GetCarrierAssistForce()
         {
-            FixedVector2 target = GetDefenseTarget(ReboundOffsetX*(FixedFloat)1.5f);
+            FixedVector2 target = GetDefenseTarget(ReboundOffsetX*(FixedFloat)3f);
 
             FixedVector2 direction =
                 (target - playerSim.Position).normalized;

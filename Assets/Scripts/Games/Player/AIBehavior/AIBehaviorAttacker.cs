@@ -45,7 +45,7 @@ namespace Games.Player.AIBehavior{
         }
         FixedVector2 GetCarrierAssistForce()
         {
-            FixedVector2 target = GetAttackTarget(ReboundOffsetX*(FixedFloat)1.5f);
+            FixedVector2 target = GetAttackTarget(ReboundOffsetX*(FixedFloat)1.8f);
 
             FixedVector2 direction =
                 (target - playerSim.Position).normalized;

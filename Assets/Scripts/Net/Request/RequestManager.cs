@@ -30,7 +30,6 @@ public class RequestManager : BaseManager
         RegisterRequest(new QuitRoomRequest());
         RegisterRequest(new ReadyStartGameResponse());
         RegisterRequest(new LoadGameSceneCompleteRequest());
-        RegisterRequest(new GameStateChangeResponse());
         RegisterRequest(new RoomPlayerSelectCountryRequest());
         RegisterRequest(new TimeSyncRequest());
     }

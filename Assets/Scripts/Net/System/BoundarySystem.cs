@@ -83,7 +83,7 @@ public class BoundarySystem : ISimulationSystem{
     }
     public static readonly FixedFloat GOALIE_BOUNCE_RELEASE = (FixedFloat)2f;
     public static readonly FixedFloat BOUNCE_FACTOR = (FixedFloat)0.9f;
-    public static readonly FixedFloat MIN_SPEED = (FixedFloat)30f;
+    public static readonly FixedFloat MIN_SPEED = (FixedFloat)80f;
     public static readonly FixedFloat MAX_SPEED = (FixedFloat)140f;
     void ResolveBallGoalieCollision(int goalKeeperId,FixedVector2 center, FixedVector2 ballPos, FixedVector2 ballVelocity) {
         FixedFloat halfHeight = playerVerticalOffset;

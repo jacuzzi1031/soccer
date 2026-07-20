@@ -12,8 +12,7 @@
                 }
                 else
                 {
-                    bool isHome=_matchSystem.goalsHome>_matchSystem.goalsAway;
-                    _matchSystem.SwitchGameState(MatchState.GAMEOVER,GameStateData.Build().SetIsHomeScoring(isHome));
+                    _matchSystem.SwitchGameState(MatchState.GAMEOVER);
                 }
             }
         }

@@ -7,8 +7,8 @@
         }
         public GameSimState currentSimState;
         public MatchState currentState;
-        public const int GAME_DURATION_FRAMES =
-            2 * 60 * 60; // 7200帧
+
+        public const int GAME_DURATION_FRAMES = 2 * 60 * 60; 
 
         public int framesLeft;
         private GameSimStateFactory _gameSimStateFactory=new GameSimStateFactory();

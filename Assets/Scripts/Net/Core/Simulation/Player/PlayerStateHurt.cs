@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerStateHurt: PlayerSimState
 {
     private static readonly FixedFloat HURT_HEIGHT_VELOCITY = (FixedFloat)50f;
-    private static readonly FixedFloat BALL_TUMBLE_SPEED = (FixedFloat)20f;
+    private static readonly FixedFloat BALL_TUMBLE_SPEED = (FixedFloat)80f;
 
     private const int DURATION_HURT_FRAMES = 60;
     

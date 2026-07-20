@@ -32,6 +32,7 @@ public class PlayerSystem:ISimulationSystem
     private PlayerSim _toPlayer;
     private ControlScheme _scheme;
     private static FixedFloat MaxPassDistance = 200;
+    private static FixedFloat MaxLongPassDistance = 350;
     private static FixedFloat MaxXDiff = 80;
     private Dictionary<int, PlayerSim> _playerMap =
         new Dictionary<int, PlayerSim>();
@@ -583,7 +584,7 @@ public class PlayerSystem:ISimulationSystem
                 continue;
 
             FixedFloat dist = toTarget.magnitude;
-            if (dist > MaxPassDistance)
+            if (dist > MaxLongPassDistance)
                 continue;
             
             FixedFloat xOffset = p.Position.x - self.Position.x;

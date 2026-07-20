@@ -31,15 +31,9 @@ enum ActionCode
   PlayerSelectCountry=8;
   QuitRoom = 9;
   StartGame = 10;
-  FinishOperation = 11;
-  ReadyStartGame = 12;
-  UpdatePlayerCoin = 13;
-  LoadGameSceneComplete = 14;
-  ChangeGameState = 15;
-  ChangeRound =16;
-  ChangeOperation = 17;
-  SetGameOver = 18;
-  OnTimeSync=19;
+  ReadyStartGame = 11;
+  LoadGameSceneComplete = 12;
+  OnTimeSync=13;
 }
 
 enum RoomMatchType
@@ -101,21 +95,8 @@ message MainPack
   RoomPlayerSelectCountryPack RoomPlayerSelectCountryPack=16;
   JoinRoomResultPack joinRoomResultPack = 17;
   RoomPlayerInfoPack roomPlayerInfoPack = 18;
-  FinishOperationPack finishOperationPack = 19;
-  PlayerScoreBoardPack playerScoreBoardPack = 20;
-  RoundPack roundPack = 21;
-  ChangeOperationPack changeOperationPack = 22;
-  GameOverPack gameOverPack = 23;
-  GameState currentGameState = 24;
-  repeated int32 recipeIdArray = 25;
-  int32 deliverRecipeId = 26;
-  SyncTimePack syncTimePack=27;
-  SyncTimeForOffsetPack syncTimeForOffsetPack=28;
-}
-
-message PlayerCoinPack
-{
-  int32 coin = 1;
+  SyncTimePack syncTimePack=19;
+  SyncTimeForOffsetPack syncTimeForOffsetPack=20;
 }
 
 message SignInPack
@@ -189,42 +170,6 @@ message RoomPlayerInfoPack
   string username = 3;
   string nickname = 4;
   bool ready = 5;
-}
-message FinishOperationPack
-{
-  repeated int32 totalScore = 1;
-  int32 operationLeft = 2;
-}
-
-message ChangeOperationPack
-{
-  int32 currentOperationPlayerId = 1;
-  int32 operationLeft = 2;
-}
-
-message PlayerScoreBoardPack
-{
-  int32 playerId = 1;
-  int32 operationLeft = 2;
-  repeated int32 scoreArray = 3;
-}
-
-message RoundPack
-{
-  int32 currentRound = 1;
-  int32 operationPlayerId = 2;
-  string message = 3;
-}
-
-message GameOverPack
-{
-  repeated PlayerScorePack playerScorePack = 1;
-}
-
-message PlayerScorePack
-{
-  int32 playerId = 1;
-  repeated int32 scoreArray = 2;
 }
 
 message ClientPack
