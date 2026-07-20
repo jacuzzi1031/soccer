@@ -184,10 +184,10 @@ namespace Games.Player.AIBehavior{
             FixedVector2 target=FixedVector2.Zero;
             switch (role) {
                 case Role.ATTACKER:
-                    target=GetDefenseTarget(ReboundOffsetX*2);
+                    target=GetDefenseTarget(ReboundOffsetX*(FixedFloat)3);
                     break;
                 case Role.MIDFIELD:
-                    target=GetDefenseTarget(ReboundOffsetX*3);
+                    target=GetDefenseTarget(ReboundOffsetX*(FixedFloat)4);
                     break;
             }
             FixedVector2 dir =

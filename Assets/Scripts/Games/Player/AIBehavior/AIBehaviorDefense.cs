@@ -61,7 +61,7 @@ namespace Games.Player.AIBehavior{
         }
         FixedVector2 fallback()
         {
-            FixedVector2 target = GetDefenseTarget(ReboundOffsetX*(FixedFloat)4f);
+            FixedVector2 target = GetDefenseTarget(ReboundOffsetX*(FixedFloat)6f);
 
             FixedVector2 direction =
                 (target - playerSim.Position).normalized;
@@ -96,8 +96,7 @@ namespace Games.Player.AIBehavior{
                 FixedVector2 target = playerSim.GetCenterTargetPosition();
             
             
-                if (FixedVector2.Distance(playerPos, target) < SHOT_DISTANCE &&
-                    FixedMath.Roll(SHOT_PROBABILITY) )
+                if (FixedMath.Roll(SHOT_PROBABILITY) )
                 {
                     FixedVector2 direction = (playerSim.GetFarTargetPosition() - playerPos).normalized;
     

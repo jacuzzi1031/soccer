@@ -12,6 +12,7 @@ public class PlayerSystem:ISimulationSystem
 {
     public List<PlayerSim> teamHome;
     public List<PlayerSim> teamAway;
+    public List<PlayerSim> currentTeam;
     private PlayerSim currentHomePlayer;
     private PlayerSim currentAwayPlayer;
     private int weightCacheIntervalFrames=12;
@@ -353,33 +354,47 @@ public class PlayerSystem:ISimulationSystem
             SwitchControlTo(currentAwayPlayer,teamAway[^1], ControlScheme.P2);
         }
     }
-    private void SwitchControlTo(PlayerSim oldPlayer,PlayerSim newPlayer, ControlScheme controlScheme) {
-        if (oldPlayer!=null&&oldPlayer.playerId == newPlayer.playerId)
+    private void SwitchControlTo(PlayerSim oldPlayer, PlayerSim newPlayer, ControlScheme controlScheme)
+    {
+        if (oldPlayer != null && oldPlayer.playerId == newPlayer.playerId)
         {
             return;
         }
-        int oldId = -1;
-        if (oldId == newPlayer.playerId) {
-            return;
+        if (oldPlayer != null)
+        {
+            oldPlayer.controlScheme = ControlScheme.CPU;
         }
-        if (oldPlayer != null) {
-            oldPlayer.controlScheme=ControlScheme.CPU;
-            oldId = oldPlayer.playerId;
-        }
-        newPlayer.controlScheme=controlScheme;
+        newPlayer.controlScheme = controlScheme;
+
+
         if (controlScheme == ControlScheme.P1)
         {
             currentHomePlayer = newPlayer;
-            currentHomePlayer.controlScheme = ControlScheme.P1;
+            foreach (var player in teamHome)
+            {
+                if (player != newPlayer &&
+                    player.controlScheme == ControlScheme.P1)
+                {
+                    player.controlScheme = ControlScheme.CPU;
+                }
+            }
         }
         else
         {
             currentAwayPlayer = newPlayer;
-            currentAwayPlayer.controlScheme = ControlScheme.P2;
+
+            foreach (var player in teamAway)
+            {
+                if (player != newPlayer &&
+                    player.controlScheme == ControlScheme.P2)
+                {
+                    player.controlScheme = ControlScheme.CPU;
+                }
+            }
         }
         _eventBus.Publish(new ControllerChangedSignal
         {
-            OldPlayerId = oldId,
+            OldPlayerId = oldPlayer?.playerId ?? -1,
             NewPlayerId = newPlayer.playerId,
             Scheme = controlScheme
         });
