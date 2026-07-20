@@ -56,7 +56,7 @@ public class GameInput : MonoBehaviour {
 
 
 
-    public PlayerInputActions playerInputActions;
+    private PlayerInputActions playerInputActions;
 
 
     private void Awake() {
@@ -257,8 +257,6 @@ public class GameInput : MonoBehaviour {
         inputAction.PerformInteractiveRebinding(bindingIndex)
             .OnComplete(callback => {
                 callback.Dispose();
-                UnityEngine.EventSystems.EventSystem.current
-                    .SetSelectedGameObject(null);
                 playerInputActions.Player.Enable();
                 onActionRebound();
 
