@@ -31,11 +31,8 @@ public class MatchController
         _matchSystem=matchSystem;
         _eventBus = EventBus;
         SubscribeSimSignal();
-        
-                
-        Invoker.Instance.DelegateList.Add(() => {
-            GameInterface.Interface.EventSystem.Publish(new MatchStartEvent());
-        });
+        GameInterface.Interface.EventSystem.Publish(new MatchStartEvent());
+
     }
 
     private void SubscribeSimSignal() {
@@ -52,21 +49,21 @@ public class MatchController
     }
 
     private void OnPlayVolleyShot(PlayVolleyShotSignal obj) {
-        Invoker.Instance.DelegateList.Add(() => {
+
             GameInterface.Interface.EventSystem.Publish(new PlayerVolleyShotEvent(obj.PlayerName));
-        });
+
     }
 
     private void OnGoalKeeperBounceBall(goalKeeperBounceBallSignal obj) {
-        Invoker.Instance.DelegateList.Add(() => {
+
             SoundManager.Instance.Play(SoundManager.Instance.audioRefs.BOUNCE);
-        });
+
     }
 
     private void OnScoreChanged(OnScoreChangedSignal obj) {
-        Invoker.Instance.DelegateList.Add(() => {
+
             GameInterface.Interface.EventSystem.Publish(new OnScoreChangedEvent());
-        });
+
     }
 
     public bool HasSomeoneScored()
@@ -74,55 +71,52 @@ public class MatchController
         return GoalsHome > 0 || GoalsAway > 0;
     }
     private void OnGameOver(GameOverSignal obj) {
-        Invoker.Instance.DelegateList.Add(() => {
+
             GameInterface.Interface.EventSystem.Publish(new OnGameOverEvent());
-        });
+
     }
 
     private void OnballBacktoSpawnPosition(BallBacktoSpawnPositionSignal obj) {
-        Invoker.Instance.DelegateList.Add(() => {
+
             GameInterface.Interface.EventSystem.Publish(new BallBacktoSpawnPositionEvent());
-        });
+
     }
 
     private void OnTeamScoring(TeamScoringSignal obj) {
-        Invoker.Instance.DelegateList.Add(() => {
+
             SoundManager.Instance.Play(SoundManager.Instance.audioRefs.WHISTLE);
-        });
+
     }
 
     private void OnPlayStyleShow(PlayStyleShowSignal obj) {
-        Invoker.Instance.DelegateList.Add(() => {
+
             GameInterface.Interface.EventSystem.Publish(new PlayStyleShowEvent(obj.playerId,obj.playerState));
-        });
+
     }
 
     private void OnKickoffStart(KickoffStartSignal obj) {
-        Invoker.Instance.DelegateList.Add(() => {
+
             SoundManager.Instance.Play(SoundManager.Instance.audioRefs.WHISTLE);
-        });
+
     }
 
     private void OnTeamReset(TeamResetSignal obj) {
-        Invoker.Instance.DelegateList.Add(() =>
-        {
+
             GameInterface.Interface.EventSystem.Publish(new OnTeamResetEvent());
             MusicManager.Instance.Play(
                 MusicManager.Instance.Refs.GAMEPLAY
             );
-        });
     }
     
 
     void OnControllerChanged(ControllerChangedSignal s)
     {
         //不只是顺序，而是「确定性边界 + 执行域隔离」
-        Invoker.Instance.DelegateList.Add(() =>
-        {
+
             GameInterface.Interface.EventSystem.Publish(
                 new OnControlSwitchEvent(s.OldPlayerId, s.NewPlayerId,s.Scheme)
             );
-        });
+
     }
     
 

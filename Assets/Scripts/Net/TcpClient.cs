@@ -164,7 +164,7 @@ public class TcpClient : IDisposable
             return;
         }
         // 这里切回主线程，之后再切容易忘了，比如 HandleServerSuccessResponse 就不能直接 调用UIManager，Unity API 都要求主线程。
-        Invoker.Instance.DelegateList.Add(() =>
+        Invoker.Instance.Enqueue(() =>
         {
             OnServerResponse?.Invoke(pack);
         });
@@ -200,7 +200,7 @@ public class TcpClient : IDisposable
         _mLastPongTime = DateTime.Now;
 
         // 重连后，完成登录操作
-        Invoker.Instance.DelegateList.Add(ReSignInByAuthorization);
+        Invoker.Instance.Enqueue(ReSignInByAuthorization);
     }
     private void HandleReconnect(object sender, ElapsedEventArgs e)
     {

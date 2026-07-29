@@ -65,7 +65,7 @@ public class SimulationWorld
         {
             systems[i].Tick(context);
         }
-        eventBus.Flush();
+        eventBus.FlushEvents();
     }
     private void SaveSnapshot(int frame)
     {

@@ -61,10 +61,7 @@ public class SignUpUI : BaseUIPanel
         _mSignUpRequest.SendSignUpRequest(username, nickname, password,
             () =>
             {
-                Invoker.Instance.DelegateList.Add(() =>
-                {
                     GameInterface.Interface.UIManager.PushUIPanel(UIPanelType.SignInUI, ShowUIPanelType.MoveFadeIn);
-                });
             });
     }
 }

@@ -1,4 +1,4 @@
 
-    public class MatchStartEvent:IEvent {
+    public struct MatchStartEvent:IEvent {
         
     }

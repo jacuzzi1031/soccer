@@ -33,19 +33,17 @@ public class RoomVisual : MonoBehaviour {
         GameInterface.Interface.RoomManager.OnRoomPlayerCountryConfirmed -= OnCountryConfirmed;
     }
     private void OnSelectCountryChanged(RoomPlayerInfo roomPlayerInfo, int countryIndex, string countryName) {
-        Invoker.Instance.DelegateList.Add(() =>
-        {
+
             RoomPlayer roomPlayer = _mRoomPlayerInfoToRoomPlayerDict[roomPlayerInfo];
             if (roomPlayer.HasComfirmed) return;
         
             roomPlayer.ApplyAppearance(countryName);
             RoomUI.Instance.OnCountrySelect(roomPlayer.RoomIndex, countryIndex);
-        });
+
     }
     private void OnCountryConfirmed(RoomPlayerInfo info, string countryName)
     {
-        Invoker.Instance.DelegateList.Add(() =>
-        {
+
             RoomPlayer rp = _mRoomPlayerInfoToRoomPlayerDict[info];
             if (rp.HasComfirmed)
                 return;
@@ -57,7 +55,7 @@ public class RoomVisual : MonoBehaviour {
                 .SetMatchCountry(rp.RoomIndex, countryName);
 
             SpawnCPUIfNeeded(countryName,info.seatIndex);
-        });
+
     }
     private void SpawnCPUIfNeeded(string excludeCountry,int excludeSeatIndex)
     {
@@ -93,8 +91,7 @@ public class RoomVisual : MonoBehaviour {
 
     private void OnRoomPlayerQuit(RoomPlayerInfo roomPlayerInfoForRemove,RoomPlayerInfo roomPlayerInfoForReset)
     {
-        Invoker.Instance.DelegateList.Add(() =>
-        {
+
             RoomPlayer roomPlayer = _mRoomPlayerInfoToRoomPlayerDict[roomPlayerInfoForRemove];
             _mRoomPlayerInfoToRoomPlayerDict.Remove(roomPlayerInfoForRemove);
             int playerIndex = roomPlayer.RoomIndex;
@@ -107,7 +104,7 @@ public class RoomVisual : MonoBehaviour {
                 //本地设置为false，Quit服务端也要设置false
                 roomPlayerForReset.SetComfirmed(false);
             }
-        });
+
     }
     private void SpawnRoomPlayers()
     {
@@ -121,15 +118,14 @@ public class RoomVisual : MonoBehaviour {
     }
     private void OnRoomPlayerJoin(RoomPlayerInfo info)
     {
-        Invoker.Instance.DelegateList.Add(() =>
-        {
+
             int index = info.seatIndex;
             if (index < 0) return;
 
             RoomUI.Instance.CreateSelector(index);
             RoomPlayer rp = SpawnRoomPlayer(index, info.nickname);
             _mRoomPlayerInfoToRoomPlayerDict[info] = rp;
-        });
+
     }
     private RoomPlayer SpawnRoomPlayer(int seatIndex, string nickname)
     {

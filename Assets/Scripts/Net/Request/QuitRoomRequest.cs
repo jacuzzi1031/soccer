@@ -23,7 +23,7 @@ public class QuitRoomRequest : BaseRequest
 
         if (localPlayerId == playerId)
         {
-            Invoker.Instance.DelegateList.Add(() => {
+
                 GameInterface.Interface.SceneLoader.LoadSceneAsync(Scene.MainMenuScene,
                     () =>
                     {
@@ -32,7 +32,7 @@ public class QuitRoomRequest : BaseRequest
                         GameInterface.Interface.UIManager.PushUIPanelAppend(UIPanelType.RoomListUI,
                             ShowUIPanelType.FadeIn);
                     });
-            });
+
         }
         else {
             SendQuitRoomRequest();

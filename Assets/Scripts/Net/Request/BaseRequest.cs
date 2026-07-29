@@ -30,8 +30,7 @@ public class BaseRequest
 
     protected virtual void HandleServerSuccessResponse(MainPack pack)
     {
-        Invoker.Instance.DelegateList.Add(() =>
-        {
+
             if (pack.ReturnMessage != null)
             {
                 if (!string.IsNullOrEmpty(pack.ReturnMessage.SuccessMessage))
@@ -41,13 +40,11 @@ public class BaseRequest
             }
 
             OnServerSuccessResponse?.Invoke();
-        });
     }
 
     protected virtual void HandleServerFailResponse(MainPack pack)
     {
-        Invoker.Instance.DelegateList.Add(() =>
-        {
+
             if (pack.ReturnMessage != null)
             {
                 if (!string.IsNullOrEmpty(pack.ReturnMessage.ErrorMessage))
@@ -57,7 +54,7 @@ public class BaseRequest
             }
             //都是RequestManager注册的实例，只有自己独立的一份
             OnServerFailResponse?.Invoke();
-        });
+
     }
 
     protected void SendRequest(MainPack pack)

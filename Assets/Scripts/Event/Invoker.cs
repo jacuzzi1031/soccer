@@ -7,7 +7,7 @@ public class Invoker : MonoBehaviour
 {
     public static Invoker Instance { get; private set; }
 
-    public List<Action> DelegateList { get; private set; }
+    private readonly List<Action> _delegateList = new();
 
     private void Awake()
     {
@@ -18,13 +18,18 @@ public class Invoker : MonoBehaviour
         }
 
         Instance = this;
-        DelegateList = new List<Action>();
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
     {
-        DelegateList.Clear();
+        _delegateList.Clear();
+    }
+
+    public void Enqueue(Action action)
+    {
+        _delegateList.Add(action);
     }
 
     private void Update()
@@ -32,16 +37,16 @@ public class Invoker : MonoBehaviour
         Execute();
     }
 
-    // ReSharper disable Unity.PerformanceAnalysis
     private void Execute()
     {
-        if (DelegateList.Count == 0) return;
-        for (int i = 0; i < DelegateList.Count; i++)
+        if (_delegateList.Count == 0)
+            return;
+
+        for (int i = 0; i < _delegateList.Count; i++)
         {
             try
             {
-                // Debug.Log("Invoker Execute!!!!!");
-                DelegateList[i]?.Invoke();
+                _delegateList[i]?.Invoke();
             }
             catch (Exception e)
             {
@@ -49,6 +54,6 @@ public class Invoker : MonoBehaviour
             }
         }
 
-        DelegateList.Clear();
+        _delegateList.Clear();
     }
 }

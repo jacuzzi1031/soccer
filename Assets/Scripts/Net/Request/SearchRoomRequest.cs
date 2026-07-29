@@ -23,7 +23,7 @@ public class SearchRoomRequest : BaseRequest
             roomInfoList.Add(new RoomInfo(roomInfoPack));
         }
         
-        Invoker.Instance.DelegateList.Add(() => _mOnSearchRoomSuccess?.Invoke(roomInfoList));
+        _mOnSearchRoomSuccess?.Invoke(roomInfoList);
 
         base.HandleServerSuccessResponse(pack);
     }

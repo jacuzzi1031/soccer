@@ -51,6 +51,7 @@ public class UIManager : BaseManager
     private int _currentLayer;
     private readonly Dictionary<UIPanelType, BaseUIPanel> _uiPanelDict = new();
     private readonly Dictionary<UIPanelType, string> _uiPanelAddressDict = new();
+    private readonly Dictionary<UIPanelType, AsyncOperationHandle<GameObject>> _handleDict = new();
 
     private readonly Stack<BaseUIPanel> _uiPanelStack = new();
     private readonly LinkedList<BaseUIPanel> _uiPanelList = new();
@@ -113,6 +114,18 @@ public class UIManager : BaseManager
     {
         GameInterface.Interface.EventSystem.Unsubscribe<PlayerSignInEvent>(OnPlayerSignIn);
         GameInterface.Interface.EventSystem.Unsubscribe<PlayerEnterRoomEvent>(OnPlayerEnterRoom);
+        
+
+        foreach (var pair in _handleDict)
+        {
+            if (pair.Value.IsValid())
+            {
+                Addressables.Release(pair.Value);
+            }
+        }
+        _uiPanelDict.Clear();
+        _handleDict.Clear();
+        
         base.OnDestroy();
     }
 
@@ -496,6 +509,7 @@ public class UIManager : BaseManager
         if (_uiPanelAddressDict.TryGetValue(uiPanelType, out string address))
         {
             AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
+            _handleDict[uiPanelType] = handle;
             handle.Completed += (op) =>
             {
                 if (op.Status == AsyncOperationStatus.Succeeded)
